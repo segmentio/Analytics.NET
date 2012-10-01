@@ -15,10 +15,7 @@ namespace Segmentio.Test
         [TestMethod]
         public void TestMethod1()
         {
-            Segmentio.Secure = false;
-            Segmentio.Host = "192.168.1.139:81";
-
-            Segmentio.initialize(API_KEY);
+            Segmentio.Initialize(API_KEY);
 
             string sessionId = "sdkfjh2khsdjhf32";
             string userId = "ilya@segment.io";

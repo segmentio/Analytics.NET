@@ -40,7 +40,7 @@ namespace Segmentio
         /// as instructed on our site
         /// </summary>
         /// <param name="apiKey"></param>
-        public static void initialize(string apiKey)
+        public static void Initialize(string apiKey)
         {
             if (Client == null)
             {

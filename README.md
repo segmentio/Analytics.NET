@@ -27,7 +27,7 @@ You can create seperate Segmentio clients, but the easiest and recommended way i
 
 ```csharp
 string apiKey = isProduction ? PRODUCTION_API_KEY : DEVELOPMENT_API_KEY;
-Segmentio.initialize(apiKey);
+Segmentio.Initialize(apiKey);
 ```
 
 #### Identify a Visitor

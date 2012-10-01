@@ -1,4 +1,4 @@
-Segmentio.NET
+ÔªøSegmentio.NET
 =============
 
 [Segment.io](https://segment.io) is a segmentation-focused analytics platform. If you haven't yet,
@@ -52,12 +52,12 @@ is logged in, you can use null here.
 in your system. Note: it can be null if the visitor is not logged in. By explicitly identifying a user, you tie all of
 their actions to their identity. This makes it possible for you to run things like segment-based email campaigns.
 
-**traits** (object) is a dictionary with keys like ìSubscription Planî or ìFavorite Genreî. You can segment your 
+**traits** (object) is a dictionary with keys like ‚ÄúSubscription Plan‚Äù or ‚ÄúFavorite Genre‚Äù. You can segment your 
 visitors by any trait you record. Once you record a trait, no need to send it again, so the traits argument is optional.
 
 #### Track an Action
 
-Whenever a user triggers an event on your site, youíll want to track it so that you can analyze and segment by those events later.
+Whenever a user triggers an event on your site, you‚Äôll want to track it so that you can analyze and segment by those events later.
 
 ```csharp
 Segmentio.Client.Identify(sessionId, userId, "Played a Song", new Dictionary<string, object>() {
@@ -74,9 +74,9 @@ is logged in, you can use null here. Either this or the userId must be supplied.
 in your system. Note: it can be null if the visitor is not logged in. By explicitly identifying a visitor, you tie all of
 their actions to their identity. This makes it possible for you to run things like segment-based email campaigns. Either this or the sessionId must be supplied.
 
-**event** (string) is a human readable description like "Played a Song", "Printed a Report" or "Updated Status". Youíll be able to segment by when and how many times each event was triggered.
+**event** (string) is a human readable description like "Played a Song", "Printed a Report" or "Updated Status". You‚Äôll be able to segment by when and how many times each event was triggered.
 
-**properties** (object) is a dictionary with items that describe the event in more detail. This argument is optional, but highly recommendedóyouíll find these properties extremely useful later.
+**properties** (object) is a dictionary with items that describe the event in more detail. This argument is optional, but highly recommended‚Äîyou‚Äôll find these properties extremely useful later.
 
 #### Importing Previous Data
 

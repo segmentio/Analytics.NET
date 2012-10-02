@@ -37,7 +37,7 @@ Identifying a user ties all of their actions to an ID you recognize and records 
 ```csharp
 string sessionId = "auto_generated_session_id";
 string userId = "user@gmail.com";
-Dictionary<string, object>() traits = new Dictionary<string, object>() {
+Traits traits = new Traits() {
     { "Subscription Plan", "Free" },
     { "Friends", 30 } 
 };
@@ -52,7 +52,7 @@ is logged in, you can use null here.
 in your system. Note: it can be null if the user is not logged in. By explicitly identifying a user, you tie all of
 their actions to their identity. This makes it possible for you to run things like segment-based email campaigns.
 
-**traits** (object) is a dictionary with keys like “Subscription Plan” or “Favorite Genre”. You can segment your 
+**traits** (Segmentio.Model.Traits) is a dictionary with keys like “Subscription Plan” or “Favorite Genre”. You can segment your 
 users by any trait you record. Once you record a trait, no need to send it again, so the traits argument is optional.
 
 #### Track an Action
@@ -60,7 +60,7 @@ users by any trait you record. Once you record a trait, no need to send it again
 Whenever a user triggers an event on your site, you’ll want to track it so that you can analyze and segment by those events later.
 
 ```csharp
-Segmentio.Client.Identify(sessionId, userId, "Played a Song", new Dictionary<string, object>() {
+Segmentio.Client.Identify(sessionId, userId, "Played a Song", new Properties() {
     { "Artist", "The Beatles" },
     { "Song", "Eleanor Rigby" } 
 });
@@ -76,9 +76,29 @@ their actions to their identity. This makes it possible for you to run things li
 
 **event** (string) is a human readable description like "Played a Song", "Printed a Report" or "Updated Status". You’ll be able to segment by when and how many times each event was triggered.
 
-**properties** (object) is a dictionary with items that describe the event in more detail. This argument is optional, but highly recommended—you’ll find these properties extremely useful later.
+**properties** (Segmentio.Model.Properties) is a dictionary with items that describe the event in more detail. This argument is optional, but highly recommended—you’ll find these properties extremely useful later.
 
-#### Importing Previous Data
+#### Troubleshooting
+
+Use events to receive successful or failed events.
+```csharp
+Segmentio.Initialize(API_KEY);
+
+Segmentio.Client.Succeeded += Client_Succeeded;
+Segmentio.Client.Failed += Client_Failed;
+
+void Client_Failed(BaseAction action, System.Exception e)
+{
+    Console.WriteLine(String.Format("Action {0} failed : {1}", action.GetAction(), e.Message));
+}
+
+void Client_Succeeded(BaseAction action)
+{
+    Console.WriteLine(String.Format("Action {0} succeeded.", action.GetAction()));
+}
+```
+
+#### Importing Historical Data
 
 You can import previous data by using the Identify / Track override that accepts a timestamp. If you are tracking things that are 
 happening now, we prefer that you leave the timestamp out and let our servers timestamp your requests. 

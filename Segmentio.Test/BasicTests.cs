@@ -15,9 +15,6 @@ namespace Segmentio.Test
         [TestMethod]
         public void TestMethod1()
         {
-            Segmentio.Secure = false;
-            Segmentio.Host = "192.168.1.139:81";
-
             Segmentio.Initialize(API_KEY);
 
             Segmentio.Client.Succeeded += Client_Succeeded;

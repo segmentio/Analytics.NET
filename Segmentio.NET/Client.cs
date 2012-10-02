@@ -25,7 +25,7 @@ namespace Segmentio
 
         #region Events
 
-        public delegate void FailedHandler(BaseAction action, string reason);
+        public delegate void FailedHandler(BaseAction action, System.Exception e);
         public delegate void SucceededHandler(BaseAction action);
 
         public event FailedHandler Failed;
@@ -75,30 +75,31 @@ namespace Segmentio
 
         #region Utils
 
-        private Dictionary<string, object> clean(Dictionary<string, object> properties)
+        private void clean(ApiDictionary properties)
         {
-            Dictionary<string, object> cleaned = new Dictionary<string,object>();
-
             if (properties != null)
             {
+                List<string> toRemove = new List<string>();
+
                 foreach (var pair in properties)
                 {
                     if (pair.Value is string || pair.Value is bool || IsNumeric(pair.Value))
                     {
-                        cleaned.Add(pair.Key, pair.Value);
+                        // good case
                     }
                     else if (pair.Value is DateTime)
                     {
-                        cleaned.Add(pair.Key, ((DateTime)pair.Value).ToString("o"));
+                        // this is good
                     }
                     else
                     {
-                        // do nothing here, this parameter is invalid and just gets removed
+                        // remove this parameter
+                        toRemove.Add(pair.Key);
                     }
                 }
-            }
 
-            return cleaned;
+                foreach (string removal in toRemove) properties.Remove(removal);
+            }
         }
 
         private static bool IsNumeric(object expression)
@@ -152,7 +153,7 @@ namespace Segmentio
         /// { String, Integer, Boolean, Double, or Date are acceptable types for a value. } 
         /// So, traits array could be: "Subscription Plan", "Premium", 
         /// "Friend Count", 13 , and so forth.  </param>
-        public void Identify(string sessionId, string userId, Dictionary<String, object> traits)
+        public void Identify(string sessionId, string userId, Traits traits)
         {
             Identify(sessionId, userId, traits, null, null);
         }
@@ -181,8 +182,7 @@ namespace Segmentio
         /// Examples are userAgent, and IP address of the visitor. 
         /// Feel free to pass in null if you don't have this information.</param>
         /// 
-        public void Identify(string sessionId, string userId, Dictionary<String, object> traits,
-            Context context)
+        public void Identify(string sessionId, string userId, Traits traits, Context context)
         {
             Identify(sessionId, userId, traits, context, null);
         }
@@ -216,7 +216,7 @@ namespace Segmentio
         /// if it just happened, leave it null.</param>
         /// 
         /// 
-        public void Identify(string sessionId, string userId, Dictionary<String, object> traits, 
+        public void Identify(string sessionId, string userId, Traits traits, 
             Context context, DateTime? timestamp)
         {
             if (!_initialized) throw new NotInitializedException();
@@ -224,7 +224,7 @@ namespace Segmentio
             if (String.IsNullOrEmpty(sessionId) && String.IsNullOrEmpty(userId))
                 throw new InvalidOperationException("Please supply either a valid sessionId or userId (or both) to Identify.");
 
-            traits = clean(traits);
+            clean(traits);
 
             Identify identify = new Identify(sessionId, userId, traits, context, timestamp);
             
@@ -276,8 +276,7 @@ namespace Segmentio
         /// in more detail. This argument is optional, but highly recommended — 
         /// you’ll find these properties extremely useful later.</param>
         /// 
-        public void Track(string sessionId, string userId, string eventName,
-            Dictionary<string, object> properties)
+        public void Track(string sessionId, string userId, string eventName, Properties properties)
         {
             Track(sessionId, userId, eventName, properties, null);
         }
@@ -309,8 +308,7 @@ namespace Segmentio
         /// can be used to designate when the identification happened. Careful with this one,
         /// if it just happened, leave it null.</param>
         /// 
-        public void Track(string sessionId, string userId, string eventName,
-            Dictionary<string, object> properties, DateTime? timestamp)
+        public void Track(string sessionId, string userId, string eventName, Properties properties, DateTime? timestamp)
         {
             if (!_initialized) throw new NotInitializedException();
 
@@ -320,7 +318,7 @@ namespace Segmentio
             if (String.IsNullOrEmpty(eventName))
                 throw new InvalidOperationException("Please supply a valid eventName to Track.");
 
-            properties = clean(properties);
+            clean(properties);
 
             Track track = new Track(sessionId, userId, eventName, properties, timestamp);
 
@@ -336,9 +334,9 @@ namespace Segmentio
             if (Succeeded != null) Succeeded(action);
         }
 
-        internal void RaiseFailure(BaseAction action, string reason)
+        internal void RaiseFailure(BaseAction action, System.Exception e)
         {
-            if (Failed != null) Failed(action, reason);
+            if (Failed != null) Failed(action, e);
         }
 
         #endregion

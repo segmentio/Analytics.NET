@@ -8,27 +8,26 @@ namespace Segmentio.Model
     [DataContract]
     public class Identify : BaseAction
     {
-        [DataMember]
-        private string action = "identify";
+        [DataMember(Name="action")]
+        private string Action = "identify";
 
-        [DataMember]
-        private Context context { get; set; }
+        [DataMember(Name="context")]
+        private Context Context { get; set; }
 
-        [DataMember]
-        private Dictionary<string, object> traits { get; set; }
+        [DataMember(Name="traits")]
+        private Traits Traits { get; set; }
 
         internal Identify(string sessionId, string userId, 
-            Dictionary<string, object> traits, 
-            Context context, DateTime? timestamp) 
+            Traits traits, Context context, DateTime? timestamp) 
             : base(sessionId, userId, timestamp)
         {   
-            this.traits = traits ?? new Dictionary<string, object>();
-            this.context = context;
+            this.Traits = Traits ?? new Traits();
+            this.Context = context;
         }
 
         public override string GetAction()
         {
-            return action;
+            return Action;
         }
     }
 }

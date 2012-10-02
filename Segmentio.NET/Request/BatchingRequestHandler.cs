@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Net;
 using System.Runtime.Serialization.Json;
 using System.IO;
+using System.Web.Script.Serialization;
 
 using Segmentio.Model;
 using Segmentio.Trigger;
+using Segmentio.Exception;
 
 namespace Segmentio.Request
 {
@@ -88,6 +90,7 @@ namespace Segmentio.Request
                 MakeRequest(batch);
 
                 lastFlush = DateTime.Now;
+                client.Statistics.Flushed += 1;
             }
         }
 
@@ -99,14 +102,23 @@ namespace Segmentio.Request
 
                 DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Batch));
 
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    serializer.WriteObject(stream, batch);
+                    stream.Position = 0;
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        string json = reader.ReadToEnd();
+                        Console.WriteLine(json);
+                    }
+                }
+
                 // Create a request
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
 
                 request.ContentType = "application/json";
                 request.Method = "POST";
-                // disable following 302 redirect
-                request.AllowAutoRedirect = false;
-                // do not use hte expect 100-continue behavior
+                // do not use the expect 100-continue behavior
                 request.ServicePoint.Expect100Continue = false;
                 // buffer the data before sending, ok since we send all in one shot
                 request.AllowWriteStreamBuffering = true;
@@ -125,7 +137,7 @@ namespace Segmentio.Request
                 foreach (BaseAction action in batch.batch)
                 {
                     client.Statistics.Failed += 1;
-                    client.RaiseFailure(action, e.Message);
+                    client.RaiseFailure(action, e);
                 }
             }
         }
@@ -152,19 +164,12 @@ namespace Segmentio.Request
                     {
                         string responseStr = String.Format("Status Code {0}. ", response.StatusCode);
 
-                        using (Stream responseStream = response.GetResponseStream())
-                        {
-                            using (StreamReader reader = new StreamReader(responseStream))
-                            {
-                                responseStr += reader.ReadToEnd();
-                            }
-                        }
-
+                        responseStr += ReadResponse(response);
 
                         foreach (BaseAction action in state.Batch.batch)
                         {
                             client.Statistics.Failed += 1;
-                            client.RaiseFailure(action, responseStr);
+                            client.RaiseFailure(action, new APIException("Unexpected Status Code", responseStr));
                         }
                     }
                 }
@@ -174,8 +179,39 @@ namespace Segmentio.Request
                 foreach (BaseAction action in state.Batch.batch)
                 {
                     client.Statistics.Failed += 1;
-                    client.RaiseFailure(action, e.Message);
+                    client.RaiseFailure(action, ParseException(e));
                 }
+            }
+        }
+
+        private System.Exception ParseException(WebException e) {
+
+            if (e.Response != null && ((HttpWebResponse)e.Response).StatusCode == HttpStatusCode.BadRequest)
+            {
+                return new APIException("Bad Request", ReadResponse(e.Response));
+            }
+            else
+            {
+                return e;
+            }
+        }
+
+
+        private string ReadResponse(WebResponse response)
+        {
+            if (response != null)
+            {
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    using (StreamReader reader = new StreamReader(responseStream))
+                    {
+                        return reader.ReadToEnd();
+                    }
+                }
+            }
+            else
+            {
+                return null;
             }
         }
     }

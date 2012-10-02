@@ -8,26 +8,26 @@ namespace Segmentio.Model
     [DataContract]
     public class Track : BaseAction
     {
-        [DataMember]
-        private string action = "track";
+        [DataMember(Name="action")]
+        private string Action = "track";
 
         [DataMember(Name="event")]
-        private string eventName { get; set; }
+        private string EventName { get; set; }
 
-        [DataMember]
-        private Dictionary<string, object> properties { get; set; }
+        [DataMember(Name="properties")]
+        private Properties Properties { get; set; }
 
         internal Track(string sessionId, string userId, string eventName, 
-            Dictionary<string, object> properties, DateTime? timestamp) 
+            Properties properties, DateTime? timestamp) 
             : base(sessionId, userId, timestamp)
         {
-            this.eventName = eventName;
-            this.properties = properties ?? new Dictionary<string, object>();
+            this.EventName = eventName;
+            this.Properties = properties ?? new Properties();
         }
 
         public override string GetAction()
         {
-            return action;
+            return Action;
         }
     }
 }

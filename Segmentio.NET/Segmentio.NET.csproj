@@ -36,19 +36,23 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client.cs" />
+    <Compile Include="Exception\BadParameter.cs" />
     <Compile Include="Exception\NotInitializedException.cs" />
+    <Compile Include="Model\ApiDictionary.cs" />
     <Compile Include="Model\BaseAction.cs" />
     <Compile Include="Model\Batch.cs" />
     <Compile Include="Model\Context.cs" />
     <Compile Include="Model\Identify.cs" />
     <Compile Include="Model\Location.cs" />
+    <Compile Include="Model\Properties.cs" />
+    <Compile Include="Model\Traits.cs" />
     <Compile Include="Request\BatchingRequestHandler.cs" />
     <Compile Include="Request\BatchState.cs" />
     <Compile Include="Request\IRequestHandler.cs" />

@@ -15,7 +15,13 @@ namespace Segmentio.Test
         [TestMethod]
         public void TestMethod1()
         {
+            Segmentio.Secure = false;
+            Segmentio.Host = "192.168.1.140:81";
+
             Segmentio.Initialize(API_KEY);
+
+            Segmentio.Client.Succeeded += Client_Succeeded;
+            Segmentio.Client.Failed += Client_Failed;
 
             string sessionId = "sdkfjh2khsdjhf32";
             string userId = "ilya@segment.io";
@@ -25,7 +31,7 @@ namespace Segmentio.Test
 
             for (int i = 0; i < trials; i += 1)
             {
-                Segmentio.Client.Identify(sessionId, userId, new Dictionary<string, object>() {
+                Segmentio.Client.Identify(sessionId, userId, new Traits() {
                 { "Subscription Plan", "Free" },
                 { "Friends", 30 },
                 { "Joined", DateTime.Now },
@@ -39,7 +45,7 @@ namespace Segmentio.Test
                     DateTime.Now
                 );
 
-                Segmentio.Client.Track(sessionId, userId, "Ran .NET test", new Dictionary<string, object>() {
+                Segmentio.Client.Track(sessionId, userId, "Ran .NET test", new Properties() {
                     { "Success", true },
                     { "When", DateTime.Now }
                 }, DateTime.Now);
@@ -51,6 +57,16 @@ namespace Segmentio.Test
 
             Assert.IsTrue(Segmentio.Client.Statistics.Succeeded > 0);
             Assert.IsTrue(Segmentio.Client.Statistics.Failed == 0);
+        }
+
+        void Client_Failed(BaseAction action, System.Exception e)
+        {
+            Console.WriteLine(String.Format("Action {0} failed : {1}", action.GetAction(), e.Message));
+        }
+
+        void Client_Succeeded(BaseAction action)
+        {
+            Console.WriteLine(String.Format("Action {0} succeeded.", action.GetAction()));
         }
 
     }

@@ -78,6 +78,8 @@ their actions to their identity. This makes it possible for you to run things li
 
 **properties** (Segmentio.Model.Properties) is a dictionary with items that describe the event in more detail. This argument is optional, but highly recommended—you’ll find these properties extremely useful later.
 
+### Advanced
+
 #### Troubleshooting
 
 Use events to receive successful or failed events.

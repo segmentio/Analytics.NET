@@ -6,7 +6,7 @@ register for a project [here](https://segment.io).
 
 This is an official C#/.NET client that wraps the [Segment.io REST API](https://segment.io/docs) .
 
-You can use this driver to identify and track your users' events into your Segment.io project.
+You can use this driver to identify your users and track their events into your Segment.io project.
 
 ## Design
 
@@ -23,7 +23,7 @@ For now, build the binary and include it with your .NET project.
 
 #### Initialize the client
 
-You can create seperate Segmentio clients, but the easiest and recommended way is to use the static Segmentio singleton client. 
+You can create separate Segmentio clients, but the easiest and recommended way is to use the static Segmentio singleton client. 
 
 ```csharp
 string apiKey = isProduction ? PRODUCTION_API_KEY : DEVELOPMENT_API_KEY;
@@ -60,7 +60,7 @@ users by any trait you record. Once you record a trait, no need to send it again
 Whenever a user triggers an event on your site, you’ll want to track it so that you can analyze and segment by those events later.
 
 ```csharp
-Segmentio.Client.Identify(sessionId, userId, "Played a Song", new Properties() {
+Segmentio.Client.Track(sessionId, userId, "Played a Song", new Properties() {
     { "Artist", "The Beatles" },
     { "Song", "Eleanor Rigby" } 
 });

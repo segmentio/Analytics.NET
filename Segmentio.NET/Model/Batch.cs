@@ -1,24 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Runtime.Serialization;
+
+using Newtonsoft.Json;
 
 namespace Segmentio.Model
 {
-    [DataContract]
     internal class Batch
     {
-        [DataMember]
-        internal string apiKey { get; set; }
 
-        [DataMember]
+        [JsonProperty(PropertyName = "apiKey")]
+        internal string ApiKey { get; set; }
+
+        [JsonProperty(PropertyName = "batch")]
         internal List<BaseAction> batch { get; set; }
 
         internal Batch() { }
 
         internal Batch(string apiKey, List<BaseAction> batch)
         {
-            this.apiKey = apiKey;
+            this.ApiKey = apiKey;
             this.batch = batch;
         }
     }

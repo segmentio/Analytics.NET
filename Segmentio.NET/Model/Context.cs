@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
+
+using Newtonsoft.Json;
 
 namespace Segmentio.Model
 {
-    [DataContract]
     public class Context
     {
-        [DataMember]
+        [JsonProperty(PropertyName = "language")]
         internal string language;
 
-        [DataMember]
+        [JsonProperty(PropertyName = "ip")]
         internal string ip;
 
-        [DataMember]
+        [JsonProperty(PropertyName = "location")]
         internal Location location;
 
         /// <summary>

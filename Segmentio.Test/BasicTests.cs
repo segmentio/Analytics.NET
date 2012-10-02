@@ -16,7 +16,7 @@ namespace Segmentio.Test
         public void TestMethod1()
         {
             Segmentio.Secure = false;
-            Segmentio.Host = "192.168.1.140:81";
+            Segmentio.Host = "192.168.1.139:81";
 
             Segmentio.Initialize(API_KEY);
 
@@ -32,18 +32,18 @@ namespace Segmentio.Test
             for (int i = 0; i < trials; i += 1)
             {
                 Segmentio.Client.Identify(sessionId, userId, new Traits() {
-                { "Subscription Plan", "Free" },
-                { "Friends", 30 },
-                { "Joined", DateTime.Now },
-                { "Cool", true },
-                { "Revenue", 40.32 },
-                { "Don't Submit This, Kids", new UnauthorizedAccessException() } },
-                    new Context()
-                        .SetIp("12.212.12.49")
-                        .SetLocation(new Location("US", "CA"))
-                        .SetLanguage("en-us"),
-                    DateTime.Now
-                );
+                    { "Subscription Plan", "Free" },
+                    { "Friends", 30 },
+                    { "Joined", DateTime.Now },
+                    { "Cool", true },
+                    { "Revenue", 40.32 },
+                    { "Don't Submit This, Kids", new UnauthorizedAccessException() } },
+                        new Context()
+                            .SetIp("12.212.12.49")
+                            .SetLocation(new Location("US", "CA"))
+                            .SetLanguage("en-us"),
+                        DateTime.Now
+                    );
 
                 Segmentio.Client.Track(sessionId, userId, "Ran .NET test", new Properties() {
                     { "Success", true },

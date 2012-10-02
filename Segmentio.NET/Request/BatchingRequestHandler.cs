@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Net;
 using System.Runtime.Serialization.Json;
 using System.IO;
-using System.Web.Script.Serialization;
+
+using Newtonsoft.Json;
 
 using Segmentio.Model;
 using Segmentio.Trigger;
@@ -100,21 +101,10 @@ namespace Segmentio.Request
             {
                 Uri uri = new Uri(Segmentio._Protocol + Segmentio._Host + Segmentio._Endpoints["batch"]);
 
-                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Batch));
-
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    serializer.WriteObject(stream, batch);
-                    stream.Position = 0;
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        string json = reader.ReadToEnd();
-                        Console.WriteLine(json);
-                    }
-                }
+                string json = JsonConvert.SerializeObject(batch);
 
                 // Create a request
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+                HttpWebRequest request = (HttpWebRequest) WebRequest.Create(uri);
 
                 request.ContentType = "application/json";
                 request.Method = "POST";
@@ -124,8 +114,10 @@ namespace Segmentio.Request
                 request.AllowWriteStreamBuffering = true;
                 using (var requestStream = request.GetRequestStream())
                 {
-                    // serialize the report to request
-                    serializer.WriteObject(requestStream, batch);
+                    using (StreamWriter writer = new StreamWriter(requestStream))
+                    {
+                        writer.Write(json);
+                    }
                 }
 
                 BatchState state = new BatchState(request, batch);

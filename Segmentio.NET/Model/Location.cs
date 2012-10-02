@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
+
+using Newtonsoft.Json;
 
 namespace Segmentio.Model
 {
-    [DataContract]
     public class Location
     {
-        [DataMember]
-        public string region { get; set; }
+        [JsonProperty(PropertyName = "region")]
+        public string Region { get; set; }
 
-        [DataMember]
-        public string countryCode { get; set; }
+        [JsonProperty(PropertyName = "countryCode")]
+        public string CountryCode { get; set; }
 
         internal Location() { }
 
@@ -22,7 +22,7 @@ namespace Segmentio.Model
         /// Spec: ISO 3166-1 alpha-2. http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 </param>
         public Location(string countryCode)
         {
-            this.countryCode = countryCode;
+            this.CountryCode = countryCode;
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Segmentio.Model
         public Location(string countryCode, string region)
             : this(countryCode)
         {
-            this.region = region;
+            this.Region = region;
         }
 
     }

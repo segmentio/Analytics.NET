@@ -1,31 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Runtime.Serialization;
+
+using Newtonsoft.Json;
 
 namespace Segmentio.Model
 {
-    [KnownType(typeof(Identify))]
-    [KnownType(typeof(Track))]
-    [DataContract]
     public abstract class BaseAction
     {
 
         public BaseAction(string sessionId, string userId, DateTime? timestamp)
         {
-            this.sessionId = sessionId;
-            this.userId = userId;
-            if (timestamp.HasValue) this.timestamp = timestamp.Value.ToString("o");
+            this.SessionId = sessionId;
+            this.UserId = userId;
+            if (timestamp.HasValue) this.Timestamp = timestamp.Value.ToString("o");
         }
+        
+        [JsonProperty(PropertyName="timestamp")]
+        public string Timestamp { get; private set; }
 
-        [DataMember]
-        public string timestamp { get; private set; }
+        [JsonProperty(PropertyName = "sessionId")]
+        public string SessionId { get; private set; }
 
-        [DataMember]
-        public string sessionId { get; private set; }
-
-        [DataMember]
-        public string userId { get; private set; }
+        [JsonProperty(PropertyName = "userId")]
+        public string UserId { get; private set; }
 
         /// <summary>
         /// Returns the string name representing this action based on the Segment.io REST API.

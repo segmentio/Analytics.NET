@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Runtime.Serialization;
+
+using Newtonsoft.Json;
 
 namespace Segmentio.Model
 {
-    [DataContract]
     public class Track : BaseAction
     {
-        [DataMember(Name="action")]
+        [JsonProperty(PropertyName = "action")]
         private string Action = "track";
 
-        [DataMember(Name="event")]
+        [JsonProperty(PropertyName = "event")]
         private string EventName { get; set; }
 
-        [DataMember(Name="properties")]
+        [JsonProperty(PropertyName = "properties")]
         private Properties Properties { get; set; }
 
         internal Track(string sessionId, string userId, string eventName, 

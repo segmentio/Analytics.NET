@@ -53,9 +53,11 @@ you can use here, but if you don't have one (like if you're sending from a deskt
 **userId** (string) is best as an email, but any unique ID will work. This is how you recognize a signed-in user
 in your system. Note: userId can be null if the user is not logged in, but then you must provide a sessionId. By explicitly identifying a user, you tie all of
 their actions to their identity. This makes it possible for you to run things like segment-based email campaigns.
+More on usage [here](#sessionid-and-userid).
 
 **traits** (Segmentio.Model.Traits) is a dictionary with keys like “Subscription Plan” or “Favorite Genre”. You can segment your 
 users by any trait you record. Once you record a trait, no need to send it again, so the traits argument is optional.
+More on accepted value types [here](#allowed-traitproperty-values)
 
 #### Track an Action
 
@@ -75,11 +77,14 @@ you can use here.  If you don't have one, you can use null.
 **userId** (string) is usually an email, but any unique ID will work. This is how you recognize a signed-in user
 in your system. Note: it can be null if the user is not logged in, but then a sessionId must be provided. By explicitly identifying a user, you tie all of
 their actions to their identity. This makes it possible for you to run things like segment-based email campaigns. Either this or the sessionId must be supplied.
-More on that [here](#sessionid-and-userid).
+More on usage [here](#sessionid-and-userid).
 
-**event** (string) is a human readable description like "Played a Song", "Printed a Report" or "Updated Status". You’ll be able to segment by when and how many times each event was triggered.
+**event** (string) is a human readable description like "Played a Song", "Printed a Report" or "Updated Status". 
+You’ll be able to segment by when and how many times each event was triggered.
 
-**properties** (Segmentio.Model.Properties) is a dictionary with items that describe the event in more detail. This argument is optional, but highly recommended—you’ll find these properties extremely useful later.
+**properties** (Segmentio.Model.Properties) is a dictionary with items that describe the event in more detail. 
+This argument is optional, but highly recommended—you’ll find these properties extremely useful later.
+More on accepted value types [here](#allowed-traitproperty-values).
 
 ### Advanced
 
@@ -117,6 +122,23 @@ Segmentio.Client.Identify(Session.SessionID, User.Email, traits);
 ```csharp
 // we don't have a session ID here, just provide a userId
 Segmentio.Client.Identify(null, User.Email, traits);
+```
+#### Allowed Trait/Property Values
+
+**Accepted**:      string, int, double, bool, DateTime
+**NOT Accepted **: arrays, lists, complex objects, exceptions, etc ...
+
+```csharp
+Segmentio.Client.Track(sessionId, userId, "Played a Song", new Properties() {
+    { "Artist", "The Beatles" },                     // strings allowed
+    { "Plays", 10 },                                 // ints allowed
+    { "Duration", 126.3 },                           // double allowed
+    { "DRM", false },                                // bool allowed
+    { "Started", DateTime.Now },                     // DateTime allowed
+    { "Comments", new List<string>() { "A", "B" } }, // Lists / Arrays NOT ALLOWED, will be removed
+    { "Exception", new Exception("TROLOLOL") },      // Complex Objects NOT ALLOWED, will be removed
+});
+
 ```
 
 #### Importing Historical Data

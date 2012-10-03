@@ -126,7 +126,6 @@ Segmentio.Client.Identify(null, User.Email, traits);
 #### Allowed Trait/Property Values
 
 **Allowed**:      string, int, double, bool, DateTime
-
 **NOT Allowed**: arrays, lists, complex objects, exceptions, etc ...
 
 ```csharp

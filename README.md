@@ -57,7 +57,7 @@ More on usage [here](#sessionid-and-userid).
 
 **traits** (Segmentio.Model.Traits) is a dictionary with keys like “Subscription Plan” or “Favorite Genre”. You can segment your 
 users by any trait you record. Once you record a trait, no need to send it again, so the traits argument is optional.
-More on accepted value types [here](#allowed-traitproperty-values)
+More on accepted value types [here](#allowed-traitproperty-values).
 
 #### Track an Action
 
@@ -126,6 +126,7 @@ Segmentio.Client.Identify(null, User.Email, traits);
 #### Allowed Trait/Property Values
 
 **Allowed**:      string, int, double, bool, DateTime
+
 **NOT Allowed**: arrays, lists, complex objects, exceptions, etc ...
 
 ```csharp

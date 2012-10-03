@@ -48,7 +48,7 @@ Segmentio.Client.Identify(sessionId, userId, traits);
 You must provide a *sessionId* or a *userId*. Send both when possible.
 
 **sessionId** (string) is a unique id associated with each user's session. Most web frameworks provide a session id 
-you can use here, but if you don't have one, you can use null. 
+you can use here, but if you don't have one (like if you're sending from a desktop app), you can use null. 
 
 **userId** (string) is best as an email, but any unique ID will work. This is how you recognize a signed-in user
 in your system. Note: userId can be null if the user is not logged in, but then you must provide a sessionId. By explicitly identifying a user, you tie all of

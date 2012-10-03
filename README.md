@@ -45,12 +45,13 @@ Traits traits = new Traits() {
 Segmentio.Client.Identify(sessionId, userId, traits);
 ```
 
-**sessionId** (string) is a unique id associated with an anonymous user before they are logged in. If the user
-is logged in, you can use null here.
+**sessionId** (string) is a unique id associated with each user's session. Most web frameworks provide a session id 
+you can use here.  If you don't have one, you can use null. 
 
 **userId** (string) is usually an email, but any unique ID will work. This is how you recognize a signed-in user
-in your system. Note: it can be null if the user is not logged in. By explicitly identifying a user, you tie all of
-their actions to their identity. This makes it possible for you to run things like segment-based email campaigns.
+in your system. Note: it can be null if the user is not logged in (but then a sessiondId must be provided). 
+By explicitly identifying a user, you tie all of their actions to their identity. This makes it 
+possible for you to run things like segment-based email campaigns.
 
 **traits** (Segmentio.Model.Traits) is a dictionary with keys like “Subscription Plan” or “Favorite Genre”. You can segment your 
 users by any trait you record. Once you record a trait, no need to send it again, so the traits argument is optional.
@@ -71,8 +72,9 @@ Segmentio.Client.Track(sessionId, userId, "Played a Song", new Properties() {
 is logged in, you can use null here. Either this or the userId must be supplied.
 
 **userId** (string) is usually an email, but any unique ID will work. This is how you recognize a signed-in user
-in your system. Note: it can be null if the user is not logged in. By explicitly identifying a user, you tie all of
+in your system. Note: it can be null if the user is not logged in, but then a sessionId must be provided. By explicitly identifying a user, you tie all of
 their actions to their identity. This makes it possible for you to run things like segment-based email campaigns. Either this or the sessionId must be supplied.
+More on that [here](#sessionid-and-userid).
 
 **event** (string) is a human readable description like "Played a Song", "Printed a Report" or "Updated Status". You’ll be able to segment by when and how many times each event was triggered.
 
@@ -98,6 +100,22 @@ void Client_Succeeded(BaseAction action)
 {
     Console.WriteLine(String.Format("Action {0} succeeded.", action.GetAction()));
 }
+```
+
+#### SessionId and UserId
+**Web Framework**
+```csharp
+// user is not logged in, we only have a session ID
+Segmentio.Client.Identify(Session.SessionID, null, traits);
+...
+// user logs in, so we want to tie all their previous actions to their new identity
+Segmentio.Client.Identify(Session.SessionID, User.Email, traits);
+```
+
+**Desktop App, Or Other**
+```csharp
+// we don't have a session ID here, just provide a userId
+Segmentio.Client.Identify(null, User.Email, traits);
 ```
 
 #### Importing Historical Data

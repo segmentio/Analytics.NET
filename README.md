@@ -49,9 +49,9 @@ Segmentio.Client.Identify(sessionId, userId, traits);
 you can use here.  If you don't have one, you can use null. 
 
 **userId** (string) is usually an email, but any unique ID will work. This is how you recognize a signed-in user
-in your system. Note: it can be null if the user is not logged in (but then a sessiondId must be provided). 
-By explicitly identifying a user, you tie all of their actions to their identity. This makes it 
-possible for you to run things like segment-based email campaigns.
+in your system. Note: it can be null if the user is not logged in, but then a sessionId must be provided. By explicitly identifying a user, you tie all of
+their actions to their identity. This makes it possible for you to run things like segment-based email campaigns. Either this or the sessionId must be supplied.
+More on that [here](#sessionid-and-userid).
 
 **traits** (Segmentio.Model.Traits) is a dictionary with keys like “Subscription Plan” or “Favorite Genre”. You can segment your 
 users by any trait you record. Once you record a trait, no need to send it again, so the traits argument is optional.
@@ -68,8 +68,8 @@ Segmentio.Client.Track(sessionId, userId, "Played a Song", new Properties() {
 
 ```
 
-**sessionId** (string) is a unique id associated with an anonymous user before they are logged in. If the user
-is logged in, you can use null here. Either this or the userId must be supplied.
+**sessionId** (string) is a unique id associated with each user's session. Most web frameworks provide a session id 
+you can use here.  If you don't have one, you can use null. 
 
 **userId** (string) is usually an email, but any unique ID will work. This is how you recognize a signed-in user
 in your system. Note: it can be null if the user is not logged in, but then a sessionId must be provided. By explicitly identifying a user, you tie all of

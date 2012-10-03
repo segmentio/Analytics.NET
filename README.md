@@ -125,16 +125,21 @@ Segmentio.Client.Identify(null, User.Email, traits);
 ```
 #### Allowed Trait/Property Values
 
-**Accepted**:      string, int, double, bool, DateTime
-**NOT Accepted **: arrays, lists, complex objects, exceptions, etc ...
+**Allowed**:      string, int, double, bool, DateTime
+
+**NOT Allowed **: arrays, lists, complex objects, exceptions, etc ...
 
 ```csharp
 Segmentio.Client.Track(sessionId, userId, "Played a Song", new Properties() {
+
+    // Allowed
     { "Artist", "The Beatles" },                     // strings allowed
     { "Plays", 10 },                                 // ints allowed
     { "Duration", 126.3 },                           // double allowed
     { "DRM", false },                                // bool allowed
     { "Started", DateTime.Now },                     // DateTime allowed
+    
+    // NOT Allowed
     { "Comments", new List<string>() { "A", "B" } }, // Lists / Arrays NOT ALLOWED, will be removed
     { "Exception", new Exception("TROLOLOL") },      // Complex Objects NOT ALLOWED, will be removed
 });

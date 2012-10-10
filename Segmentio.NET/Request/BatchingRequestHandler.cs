@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Runtime.Serialization.Json;
 using System.IO;
+using System.Threading;
 
 using Newtonsoft.Json;
 
@@ -18,9 +19,26 @@ namespace Segmentio.Request
         private string apiKey;
         private Queue<BaseAction> queue;
         private DateTime lastFlush;
+        
+        private volatile bool flushActive;
 
-        private int batchIncrement;
-        private int maxSize;
+        /// <summary>
+        /// The amount of actions to flush to the server at a time.
+        /// </summary>
+        public int BatchIncrement { get; set; }
+        
+        /// <summary>
+        /// The max size of the queue to allow
+        /// This condition prevents high performance condition causing
+        /// this library to eat memory. 
+        /// </summary>
+        public int MaxSize { get; set; }
+
+        /// <summary>
+        /// The maximum amount of milliseconds to wait before calling
+        /// the HTTP flush a timeout failure.
+        /// </summary>
+        public int Timeout { get; set; }
 
         private Client client;
         private IFlushTrigger[] triggers;
@@ -31,8 +49,10 @@ namespace Segmentio.Request
 
             this.triggers = triggers;
             
-            this.batchIncrement = 50;
-            this.maxSize = 1000000;
+            this.BatchIncrement = 50;
+            this.MaxSize = 1000000;
+
+            this.Timeout = 3000;
         }
 
         public void Initialize(Client client, string apiKey)
@@ -45,7 +65,7 @@ namespace Segmentio.Request
         {
             int size = queue.Count;
 
-            if (size > maxSize)
+            if (size > MaxSize)
             {
                 // drop the message
                 // TODO: log it
@@ -64,19 +84,38 @@ namespace Segmentio.Request
             {
                 if (trigger.shouldFlush(lastFlush, size))
                 {
-                    Flush();
+                    AsyncFlush();
                     break;
                 }
             }
         }
 
+        /// <summary>
+        /// Queues a Flush on the Thread Pool
+        /// </summary>
+        public void AsyncFlush()
+        {
+            if (!flushActive)
+            {
+                flushActive = true;
+                ThreadPool.QueueUserWorkItem(o => this.Flush());
+            }
+        }
+
+        /// <summary>
+        /// Synchronizes over the queue and dequeues to create a batch JSON request.
+        /// These operations happen on the calling thread, but the actual HTTP request
+        /// is performed asynchronously on another thread.
+        /// </summary>
         public void Flush()
         {
+            flushActive = true;
+
             List<BaseAction> actions = new List<BaseAction>();
 
             lock (queue) 
             {
-                for (int i = 0; i < batchIncrement; i += 1)
+                for (int i = 0; i < BatchIncrement; i += 1)
                 {
                     if (queue.Count == 0) break;
 
@@ -93,6 +132,8 @@ namespace Segmentio.Request
                 lastFlush = DateTime.Now;
                 client.Statistics.Flushed += 1;
             }
+
+            flushActive = false;
         }
 
         private void MakeRequest(Batch batch)
@@ -106,6 +147,7 @@ namespace Segmentio.Request
                 // Create a request
                 HttpWebRequest request = (HttpWebRequest) WebRequest.Create(uri);
 
+                request.Timeout = Timeout;
                 request.ContentType = "application/json";
                 request.Method = "POST";
                 // do not use the expect 100-continue behavior

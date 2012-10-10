@@ -5,6 +5,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Segmentio;
 using Segmentio.Model;
 
+using System.Threading;
+
 namespace Segmentio.Test
 {
     [TestClass]
@@ -13,11 +15,8 @@ namespace Segmentio.Test
         private const string API_KEY = "fakeid";
 
         [TestMethod]
-        public void TestMethod1()
+        public void BasicFlushTest()
         {
-            Segmentio.Secure = false;
-            Segmentio.Host = "192.168.1.139:81";
-
             Segmentio.Initialize(API_KEY);
 
             Segmentio.Client.Succeeded += Client_Succeeded;
@@ -52,6 +51,11 @@ namespace Segmentio.Test
 
                 submitted += 2;
             }
+
+            // yes, I realize this is a race condition on this test passing 
+            // versus the speed with which the Thread Pool's threads can
+            // flush the queue to the server
+            Thread.Sleep(3000);
 
             Assert.IsTrue(Segmentio.Client.Statistics.Submitted == submitted);
 

@@ -7,11 +7,11 @@ namespace Segmentio
     public class Segmentio
     {
         internal static string _Protocol = "http://";
-        internal static string _Host = "api.segment.io";
+        internal static string _Host = "api2.segment.io";
         internal static Dictionary<string, string> _Endpoints = new Dictionary<string, string> {
-            { "track", "/v2/track" },
-            { "identify", "/v2/identify" },
-            { "batch", "/v2/import" }
+            { "track", "/v1/track" },
+            { "identify", "/v1/identify" },
+            { "batch", "/v1/import" }
         };
 
 

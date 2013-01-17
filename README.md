@@ -1,33 +1,52 @@
-﻿Segmentio.NET
+﻿Analytics.NET
 =============
 
-[Segment.io](https://segment.io) is a segmentation-focused analytics platform. If you haven't yet,
-register for a project [here](https://segment.io).
+Analytics.NET is a .NET / C# client for [Segment.io](https://segment.io). If you're using client-side javascript, check out [analytics.js](https://github.com/segmentio/analytics.js).
 
-This is an official C#/.NET client that wraps the [Segment.io REST API](https://segment.io/docs) .
+### .NET Analytics Made Simple
 
-You can use this driver to identify your users and track their events into your Segment.io project.
+[Segment.io](https://segment.io) is the cleanest, simplest API for recording analytics data.
 
-## Design
+Setting up a new analytics solution can be a real pain. The APIs from each analytics provider are slightly different in odd ways, code gets messy, and developers waste a bunch of time fiddling with long-abandoned client libraries. We want to save you that pain and give you an clean, efficient, extensible analytics setup.
 
-This client uses batching to efficiently record your events in aggregate, rather than making an HTTP
-request every time. This means that it is safe to use in your web server controllers, or in back-end services
-without worrying that it will make too many HTTP requests and slow down the system.
+[Segment.io](https://segment.io) wraps all those APIs in one beautiful, simple API. Then we route your analytics data wherever you want, whether it's Google Analytics, Mixpanel, Customer io, Chartbeat, or any of our other integrations. After you set up Segment.io you can swap or add analytics providers at any time with a single click. You won't need to touch code or push to production. You'll save valuable development time so that you can focus on what really matters: your product.
 
-Check out the source to see how the batching, and async HTTP requests are handled. Feedback is very welcome!
+```csharp
+Analytics.Initialize("YOUR_API_SECRET");
+Analytics.Track("user@gmail.com", "Played a Song");
+```
 
-## How to Use
+and turn on integrations with just one click at [Segment.io](https://segment.io).
 
-#### Install
-For now, build the binary and include it with your .NET project. 
+![](http://i.imgur.com/YnBWI.png)
+
+More on integrations [here](#integrations).
+
+### High Performance
+
+This client uses an internal queue to efficiently send your events in aggregate, rather than making an HTTP
+request every time. This means that it is safe to use in your high scale web server controllers, or in your backend services
+without worrying that it will make too many HTTP requests and slow down the program. You no longer need to use a message queue to have analytics.
+
+[Feedback is very welcome!](mailto:friends@segment.io)
+
+## Quick-start
+
+If you haven't yet, get an API secret [here](https://segment.io).
+
+Use NuGet to install:
+```bash
+Install-Package Analytics
+```
+
+or clone the directory and build the project yourself. 
 
 #### Initialize the client
 
-You can create separate Segmentio clients, but the easiest and recommended way is to use the static Segmentio singleton client. 
+You can create separate Analytics.NET clients, but the easiest and recommended way is to use the static Analytics singleton client. 
 
 ```csharp
-string apiKey = isProduction ? PRODUCTION_API_KEY : DEVELOPMENT_API_KEY;
-Segmentio.Initialize(apiKey);
+Analytics.Initialize("YOUR_API_SECRET");
 ```
 
 #### Identify a User
@@ -47,37 +66,30 @@ Segmentio.Client.Identify(sessionId, userId, traits);
 
 You must provide a *sessionId* or a *userId*. Send both when possible.
 
-**sessionId** (string) is a unique id associated with each user's session. Most web frameworks provide a session id 
-you can use here, but if you don't have one (like if you're sending from a desktop app), you can use null. 
+**sessionId** (string) is a unique id associated with an anonymous user **before** they are logged in. Even if the user
+is logged in, you can still send us the **sessionId** or you can use null.
 
-**userId** (string) is best as an email, but any unique ID will work. This is how you recognize a signed-in user
-in your system. Note: userId can be null if the user is not logged in, but then you must provide a sessionId. By explicitly identifying a user, you tie all of
-their actions to their identity. This makes it possible for you to run things like segment-based email campaigns.
-More on usage [here](#sessionid-and-userid).
+**userId** (string) is the user's id **after** they are logged in. It's the same id as which you would 
+recognize a signed-in user in your system. Note: you must provide either a `sessionId` or a `userId`.
 
-**traits** (Segmentio.Model.Traits) is a dictionary with keys like “Subscription Plan” or “Favorite Genre”. You can segment your 
-users by any trait you record. Once you record a trait, no need to send it again, so the traits argument is optional.
-More on accepted value types [here](#allowed-traitproperty-values).
+**traits** (Segmentio.Model.Traits) is a dictionary with keys like `subscriptionPlan` or `age`. You only need to record a trait once, no need to send it again.
 
 #### Track an Action
 
-Whenever a user triggers an event on your site, you’ll want to track it so that you can analyze and segment by those events later.
+Whenever a user triggers an event on your site, you’ll want to track it.
 
 ```csharp
 Segmentio.Client.Track(sessionId, userId, "Played a Song", new Properties() {
     { "Artist", "The Beatles" },
     { "Song", "Eleanor Rigby" } 
 });
-
 ```
 
 **sessionId** (string) is a unique id associated with each user's session. Most web frameworks provide a session id 
 you can use here.  If you don't have one, you can use null. 
 
-**userId** (string) is usually an email, but any unique ID will work. This is how you recognize a signed-in user
-in your system. Note: it can be null if the user is not logged in, but then a sessionId must be provided. By explicitly identifying a user, you tie all of
-their actions to their identity. This makes it possible for you to run things like segment-based email campaigns. Either this or the sessionId must be supplied.
-More on usage [here](#sessionid-and-userid).
+**userId** (string) is the user's id **after** they are logged in. It's the same id as which you would recognize a 
+signed-in user in your system. Note: you must provide either a `sessionId` or a `userId`.
 
 **event** (string) is a human readable description like "Played a Song", "Printed a Report" or "Updated Status". 
 You’ll be able to segment by when and how many times each event was triggered.
@@ -86,16 +98,98 @@ You’ll be able to segment by when and how many times each event was triggered.
 This argument is optional, but highly recommended—you’ll find these properties extremely useful later.
 More on accepted value types [here](#allowed-traitproperty-values).
 
+That's it, just two functions!
+
+## Integrations
+
+There are two main modes of analytics integration: client-side and server-side. You can use just one, or both.
+
+#### Client-side vs. Server-side
+
+* **Client-side analytics** - (via [analytics.js](https://github.com/segmentio/analytics.js)) works by loading in other integrations
+in the browser.
+
+* **Server-side analytics** - (via [analytics-node](https://github.com/segmentio/analytics-node) and other server-side libraries) works
+by sending the analytics request to [Segment.io](https://segment.io). Our servers then route the message to your desired integrations.
+
+Some analytics services have REST APIs while others only support client-side integrations.
+
+You can learn which integrations are supported server-side vs. client-side on your [project's integrations]((https://segment.io) page.
+
 ### Advanced
 
+### Batching Behavior
+
+By default, the client will flush:
+
++ the first time it gets a message
++ every message (control with `flushAt`)
++ if 10 seconds has passed since the last flush (control with `flushAfter`)
+
+#### Enable Batching
+
+Batching allows you to not send an HTTP request every time you submit a message.
+ In high scale environments, it's a good idea to set `flushAt` to about 25, meaning the client will flush every 25 messages.
+
+```csharp
+Analytics.Initialize("YOUR_API_SECRET", new Options().SetFlushAt(25));
+````
+
+#### Flush Whenever You Want
+
+At the end of your program, you may want to flush to make sure there's nothing left in the queue.
+
+```csharp
+Analytics.Flush();
+```
+
+#### Why Batch?
+
+This client is built to support high performance environments. That means it is safe to use Analytics.NET in a web server that is serving hundreds of requests per second.
+
+**How does the batching work?**
+
+Every action **does not** result in an HTTP request, but is instead queued in memory. Messages are flushed in batch in the background, which allows for much faster operation.
+
+**What happens if there are just too many messages?**
+
+If the client detects that it can't flush faster than it's receiving messages, it'll simply stop accepting messages. This means your program won't crash because of a backed up analytics queue.
+
+### Understanding the Client Options
+
+If you hate defaults, than you'll love how configurable the Analytics.NET is.
+Check out these gizmos:
+
+```csharp
+Analytics.Initialize("YOUR_API_SECRET", new Options()
+                                        .SetFlushAt(50)
+                                        .SetFlushAfter(TimeSpan.FromSeconds(10))
+                                        .SetMaxQueueSize(10000));
+```
+
+* **flushAt** (int) - Flush after this many messages are in the queue.
+* **flushAfter** (int) - Flush after this much time has passed since the last flush.
+* **maxQueueSize** (int) - Stop accepting messages into the queue after this many messages are backlogged in the queue.
+
+### Multiple Clients
+
+Different parts of your app may require different types of batching. In that case, you can initialize different `Analytics.NET` client instances. `Analytics.Initialize` becomes the `Client`'s constructor.
+
+```csharp
+Client client = new Client("testsecret", new Options()
+                                    .SetFlushAt(50)
+                                    .SetFlushAfter(TimeSpan.FromSeconds(10))
+                                    .SetMaxQueueSize(10000));
+client.Track(..);
+```
 #### Troubleshooting
 
 Use events to receive successful or failed events.
 ```csharp
-Segmentio.Initialize(API_KEY);
+Analytics.Initialize("YOUR_API_SECRET");
 
-Segmentio.Client.Succeeded += Client_Succeeded;
-Segmentio.Client.Failed += Client_Failed;
+Analytics.Client.Succeeded += Client_Succeeded;
+Analytics.Client.Failed += Client_Failed;
 
 void Client_Failed(BaseAction action, System.Exception e)
 {
@@ -112,16 +206,16 @@ void Client_Succeeded(BaseAction action)
 **Web Framework**
 ```csharp
 // user is not logged in, we only have a session ID
-Segmentio.Client.Identify(Session.SessionID, null, traits);
+Analytics.Client.Identify(Session.SessionID, null, traits);
 ...
 // user logs in, so we want to tie all their previous actions to their new identity
-Segmentio.Client.Identify(Session.SessionID, User.Email, traits);
+Analytics.Client.Identify(Session.SessionID, User.Email, traits);
 ```
 
 **Desktop App, Or Other**
 ```csharp
 // we don't have a session ID here, just provide a userId
-Segmentio.Client.Identify(null, User.Email, traits);
+Analytics.Client.Identify(null, User.Email, traits);
 ```
 #### Allowed Trait/Property Values
 
@@ -130,7 +224,7 @@ Segmentio.Client.Identify(null, User.Email, traits);
 **NOT Allowed**: arrays, lists, complex objects, exceptions, etc ...
 
 ```csharp
-Segmentio.Client.Track(sessionId, userId, "Played a Song", new Properties() {
+Analytics.Client.Track(sessionId, userId, "Played a Song", new Properties() {
 
     // Allowed
     { "Artist", "The Beatles" },                     // strings allowed
@@ -151,7 +245,25 @@ Segmentio.Client.Track(sessionId, userId, "Played a Song", new Properties() {
 You can import previous data by using the Identify / Track override that accepts a timestamp on each Identify / Track. If you are calling Identify and Track as things happen in real time, we recommend that you leave the timestamp out and let our servers timestamp your requests.
 
 
-#### License
+
+## Testing
+
+Go to `BasicTests.cs` in Visual Studio, right click the file and click "Run Tests".
+
+## License
+
+```
+WWWWWW||WWWWWW
+ W W W||W W W
+      ||
+    ( OO )__________
+     /  |           \
+    /o o|    MIT     \
+    \___/||_||__||_|| *
+         || ||  || ||
+        _||_|| _||_||
+       (__|__|(__|__|
+```
 
 (The MIT License)
 

@@ -13,7 +13,7 @@ Setting up a new analytics solution can be a real pain. The APIs from each analy
 
 ```csharp
 Analytics.Initialize("YOUR_API_SECRET");
-Analytics.Track("user@gmail.com", "Played a Song");
+Analytics.Client.Track("user@gmail.com", "Played a Song");
 ```
 
 and turn on integrations with just one click at [Segment.io](https://segment.io).

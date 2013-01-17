@@ -1,0 +1,38 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+using Newtonsoft.Json;
+
+namespace Analytics.Model
+{
+    public class Track : BaseAction
+    {
+        [JsonProperty(PropertyName = "action")]
+        private string Action = "track";
+        private DateTime? timestamp;
+
+        [JsonProperty(PropertyName = "event")]
+        private string EventName { get; set; }
+
+        [JsonProperty(PropertyName = "properties")]
+        private Properties Properties { get; set; }
+
+        [JsonProperty(PropertyName = "context")]
+        private Context Context { get; set; }
+
+        internal Track(string sessionId, string userId, string eventName, 
+            Properties properties, Context context, DateTime? timestamp) 
+            : base(sessionId, userId, timestamp)
+        {
+            this.EventName = eventName;
+            this.Context = context;
+            this.Properties = properties ?? new Properties();
+        }
+
+        public override string GetAction()
+        {
+            return Action;
+        }
+    }
+}

@@ -24,7 +24,6 @@ namespace Analytics.Test
             Analytics.Client.Succeeded += Client_Succeeded;
             Analytics.Client.Failed += Client_Failed;
 
-            string sessionId = "sdkfjh2khsdjhf32";
             string userId = "ilya@segment.io";
 
             int trials = 50;
@@ -34,7 +33,7 @@ namespace Analytics.Test
 
             for (int i = 0; i < trials; i += 1)
             {
-                Analytics.Client.Identify(sessionId, userId, new Traits() {
+                Analytics.Client.Identify(userId, new Traits() {
                     { "Subscription Plan", "Free" },
                     { "Friends", 30 },
                     { "Joined", DateTime.Now },
@@ -47,7 +46,7 @@ namespace Analytics.Test
                         DateTime.Now
                     );
 
-                Analytics.Client.Track(sessionId, userId, "Ran .NET test", new Properties() {
+                Analytics.Client.Track(userId, "Ran .NET test", new Properties() {
                     { "Success", true },
                     { "When", DateTime.Now }
                 }, DateTime.Now);

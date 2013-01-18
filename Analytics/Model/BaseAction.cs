@@ -9,18 +9,14 @@ namespace Analytics.Model
     public abstract class BaseAction
     {
 
-        public BaseAction(string sessionId, string userId, DateTime? timestamp)
+        public BaseAction(string userId, DateTime? timestamp)
         {
-            this.SessionId = sessionId;
             this.UserId = userId;
             if (timestamp.HasValue) this.Timestamp = timestamp.Value.ToString("o");
         }
-        
+
         [JsonProperty(PropertyName="timestamp")]
         public string Timestamp { get; private set; }
-
-        [JsonProperty(PropertyName = "sessionId")]
-        public string SessionId { get; private set; }
 
         [JsonProperty(PropertyName = "userId")]
         public string UserId { get; private set; }

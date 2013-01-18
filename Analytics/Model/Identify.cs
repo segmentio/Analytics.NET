@@ -18,10 +18,10 @@ namespace Analytics.Model
         [JsonProperty(PropertyName = "traits")]
         private Traits Traits { get; set; }
 
-        internal Identify(string sessionId, string userId, 
-            Traits traits, Context context, DateTime? timestamp) 
-            : base(sessionId, userId, timestamp)
-        {   
+        internal Identify(string userId,
+            Traits traits, DateTime? timestamp, Context context)
+            : base(userId, timestamp)
+        {
             this.Traits = traits ?? new Traits();
             this.Context = context;
         }

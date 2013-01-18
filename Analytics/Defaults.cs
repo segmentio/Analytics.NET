@@ -9,7 +9,7 @@ namespace Segmentio
     {
         public static string Host = "https://api.segment.io";
 
-        public static int FlushAt = 1;
+        public static int FlushAt = 20;
 
         /// <summary>
         /// Defaults to 10 seconds

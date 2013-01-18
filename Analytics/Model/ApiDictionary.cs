@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Serialization;
 
-namespace Analytics.Model
+namespace Segmentio.Model
 {
     public class ApiDictionary : Dictionary<string, object>
     {

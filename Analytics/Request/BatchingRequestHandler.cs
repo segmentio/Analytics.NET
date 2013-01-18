@@ -7,11 +7,11 @@ using System.Threading;
 
 using Newtonsoft.Json;
 
-using Analytics.Model;
-using Analytics.Trigger;
-using Analytics.Exception;
+using Segmentio.Model;
+using Segmentio.Trigger;
+using Segmentio.Exception;
 
-namespace Analytics.Request
+namespace Segmentio.Request
 {
     internal class BatchingRequestHandler : IRequestHandler
     {

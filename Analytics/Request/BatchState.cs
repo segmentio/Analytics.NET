@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Net;
 
-using Analytics.Model;
+using Segmentio.Model;
 
-namespace Analytics.Request
+namespace Segmentio.Request
 {
     internal class BatchState
     {

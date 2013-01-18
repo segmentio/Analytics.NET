@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Analytics.Exception
+namespace Segmentio.Exception
 {
     public class NotInitializedException : System.Exception
     {

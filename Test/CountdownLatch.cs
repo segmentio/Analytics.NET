@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Text;
 
-namespace Analytics.Test
+namespace Segmentio.Test
 {
     public class CountdownLatch
     {

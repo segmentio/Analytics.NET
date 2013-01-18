@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Analytics.Trigger
+namespace Segmentio.Trigger
 {
     /// <summary>
     /// Causes the queue to flush once the threshold amount of capacity has been reached

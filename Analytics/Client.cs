@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-using Analytics.Exception;
-using Analytics.Model;
-using Analytics.Request;
-using Analytics.Trigger;
-using Analytics.Stats;
+using Segmentio.Exception;
+using Segmentio.Model;
+using Segmentio.Request;
+using Segmentio.Trigger;
+using Segmentio.Stats;
 
-namespace Analytics
+namespace Segmentio
 {
     /// <summary>
     /// A Segment.io REST client

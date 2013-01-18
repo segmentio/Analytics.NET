@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-using Analytics.Model;
+using Segmentio.Model;
 
-namespace Analytics.Request
+namespace Segmentio.Request
 {
     internal interface IRequestHandler
     {

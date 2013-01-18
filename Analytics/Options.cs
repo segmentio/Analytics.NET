@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Analytics
+namespace Segmentio
 {
     /// <summary>
     /// Options required to initialize the client

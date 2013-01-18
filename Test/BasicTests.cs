@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using Analytics;
-using Analytics.Model;
+using Segmentio;
+using Segmentio.Model;
 
 using System.Threading;
 
-namespace Analytics.Test
+namespace Segmentio.Test
 {
     [TestClass]
     public class BasicTests

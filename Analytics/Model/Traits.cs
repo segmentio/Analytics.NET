@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Analytics.Model
+namespace Segmentio.Model
 {
     public class Traits : ApiDictionary
     {

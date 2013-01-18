@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Newtonsoft.Json;
 
-namespace Analytics.Model
+namespace Segmentio.Model
 {
     public class Context
     {

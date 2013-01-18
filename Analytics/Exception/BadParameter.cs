@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Analytics.Exception
+namespace Segmentio.Exception
 {
     public class APIException : System.Exception
     {

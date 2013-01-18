@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Analytics.Trigger
+namespace Segmentio.Trigger
 {
     /// <summary>
     /// Trigger that causes the queue to flush once the amount of milliseconds has passed since the last flush

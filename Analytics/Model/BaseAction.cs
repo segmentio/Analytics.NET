@@ -4,7 +4,7 @@ using System.Text;
 
 using Newtonsoft.Json;
 
-namespace Analytics.Model
+namespace Segmentio.Model
 {
     public abstract class BaseAction
     {

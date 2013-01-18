@@ -40,10 +40,10 @@ namespace Analytics.Test
                     { "Cool", true },
                     { "Revenue", 40.32 },
                     { "Don't Submit This, Kids", new UnauthorizedAccessException() } },
+                        new DateTime(),
                         new Context()
                             .SetIp("12.212.12.49")
-                            .SetLanguage("en-us"),
-                        DateTime.Now
+                            .SetLanguage("en-us")
                     );
 
                 Analytics.Client.Track(userId, "Ran .NET test", new Properties() {

@@ -38,12 +38,18 @@ namespace Segmentio.Test
                     { "Friends", 30 },
                     { "Joined", DateTime.Now },
                     { "Cool", true },
+                    { "Company", new Props() { { "name", "Initech, Inc " } } },
                     { "Revenue", 40.32 },
                     { "Don't Submit This, Kids", new UnauthorizedAccessException() } },
                         new DateTime(),
                         new Context()
                             .SetIp("12.212.12.49")
                             .SetLanguage("en-us")
+                            .SetProviders(new Providers() {
+                                { "all", false },
+                                { "Mixpanel", true },
+                                { "Salesforce", true }
+                            })
                     );
 
                 Analytics.Client.Track(userId, "Ran .NET test", new Properties() {

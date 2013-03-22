@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Segmentio.Model
 {
-    public class Properties : ApiDictionary
+    public class Properties : Props
     {
     }
 }

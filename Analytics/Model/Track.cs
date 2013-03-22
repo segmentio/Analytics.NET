@@ -10,7 +10,6 @@ namespace Segmentio.Model
     {
         [JsonProperty(PropertyName = "action")]
         private string Action = "track";
-        private DateTime? timestamp;
 
         [JsonProperty(PropertyName = "event")]
         private string EventName { get; set; }

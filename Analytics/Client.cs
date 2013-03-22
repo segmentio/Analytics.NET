@@ -87,42 +87,6 @@ namespace Segmentio
 
         #region Utils
 
-        private void clean(ApiDictionary properties)
-        {
-            if (properties != null)
-            {
-                List<string> toRemove = new List<string>();
-
-                foreach (var pair in properties)
-                {
-                    if (pair.Value is string || pair.Value is bool || IsNumeric(pair.Value))
-                    {
-                        // good case
-                    }
-                    else if (pair.Value is DateTime)
-                    {
-                        // this is good
-                    }
-                    else
-                    {
-                        // remove this parameter
-                        toRemove.Add(pair.Key);
-                    }
-                }
-
-                foreach (string removal in toRemove) properties.Remove(removal);
-            }
-        }
-
-        private static bool IsNumeric(object expression)
-        {
-            if (expression == null)
-                return false;
-
-            double number;
-            return Double.TryParse(Convert.ToString(expression, CultureInfo.InvariantCulture),
-                System.Globalization.NumberStyles.Any, NumberFormatInfo.InvariantInfo, out number);
-        }
 
         #endregion
 
@@ -223,8 +187,6 @@ namespace Segmentio
 
             if (String.IsNullOrEmpty(userId))
                 throw new InvalidOperationException("Please supply a valid userId to Identify.");
-
-            clean(traits);
 
             Identify identify = new Identify(userId, traits, timestamp, context);
 
@@ -335,8 +297,6 @@ namespace Segmentio
 
             if (String.IsNullOrEmpty(eventName))
                 throw new InvalidOperationException("Please supply a valid eventName to Track.");
-
-            clean(properties);
 
             Track track = new Track(userId, eventName, properties, timestamp, context);
 

@@ -5,13 +5,16 @@ using Newtonsoft.Json;
 
 namespace Segmentio.Model
 {
-    public class Context
+    public class Context : Props
     {
         [JsonProperty(PropertyName = "language")]
         internal string language;
 
         [JsonProperty(PropertyName = "ip")]
         internal string ip;
+
+		[JsonProperty(PropertyName = "providers")]
+		internal Providers providers;
 
         /// <summary>
         /// Provides additional information about a 
@@ -42,5 +45,15 @@ namespace Segmentio.Model
             return this;
         }
 
+		/// <summary>
+		/// Sets the enabled providers for this call.
+		/// </summary>
+		/// <param name="providers">The container object for provider info</param>
+		/// <returns>Context for chaining</returns>
+		public Context SetProviders(Providers providers)
+		{
+			this.providers = providers;
+			return this;
+		}
     }
 }

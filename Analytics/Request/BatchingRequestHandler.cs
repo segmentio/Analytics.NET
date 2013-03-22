@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Runtime.Serialization.Json;
@@ -20,6 +20,10 @@ namespace Segmentio.Request
         private Queue<BaseAction> queue;
         private DateTime lastFlush;
         
+		private JsonSerializerSettings settings = new JsonSerializerSettings() {
+
+		};
+
         private volatile bool flushActive;
 
         /// <summary>
@@ -142,9 +146,8 @@ namespace Segmentio.Request
             {
                 Uri uri = new Uri(client.Options.Host + "/v1/import");
 
-                string json = JsonConvert.SerializeObject(batch);
+				string json = JsonConvert.SerializeObject(batch, settings);
 
-                // Create a request
                 HttpWebRequest request = (HttpWebRequest) WebRequest.Create(uri);
 
                 request.Timeout = Timeout;

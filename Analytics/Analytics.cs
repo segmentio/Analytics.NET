@@ -6,6 +6,10 @@ namespace Segmentio
 {
     public class Analytics
     {
+        /// <summary>
+        /// Lock for thread-safety
+        /// </summary>
+        static readonly object padlock = new object();
 
         public static Client Client { get; private set; }
 
@@ -15,9 +19,14 @@ namespace Segmentio
         /// <param name="secret"></param>
         public static void Initialize(string secret)
         {
-            if (Client == null)
+            // avoiding double locking as recommended:
+            // http://www.yoda.arachsys.com/csharp/singleton.html
+            lock (padlock)
             {
-                Client = new Client(secret);
+                if (Client == null)
+                {
+                    Client = new Client(secret);
+                }
             }
         }
 
@@ -27,9 +36,12 @@ namespace Segmentio
         /// <param name="secret"></param>
         public static void Initialize(string secret, Options options)
         {
-            if (Client == null)
+            lock (padlock)
             {
-                Client = new Client(secret, options);
+                if (Client == null)
+                {
+                    Client = new Client(secret, options);
+                }
             }
         }
 

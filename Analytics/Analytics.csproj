@@ -68,6 +68,7 @@
     <Compile Include="Trigger\TimeSinceLastFlushedTrigger.cs" />
     <Compile Include="Model\Providers.cs" />
     <Compile Include="Model\Props.cs" />
+    <Compile Include="Model\Alias.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Track.cs" />

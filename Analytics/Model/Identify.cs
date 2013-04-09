@@ -11,19 +11,22 @@ namespace Segmentio.Model
 
         [JsonProperty(PropertyName = "action")]
         private string Action = "identify";
-
-        [JsonProperty(PropertyName = "context")]
-        private Context Context { get; set; }
+		
+		[JsonProperty(PropertyName = "userId")]
+		public string UserId { get; private set; }
 
         [JsonProperty(PropertyName = "traits")]
         private Traits Traits { get; set; }
 
         internal Identify(string userId,
-            Traits traits, DateTime? timestamp, Context context)
-            : base(userId, timestamp)
+		                  Traits traits, 
+		                  DateTime? timestamp,
+		                  Context context)
+	
+			: base(timestamp, context)
         {
+			this.UserId = userId;
             this.Traits = traits ?? new Traits();
-            this.Context = context;
         }
 
         public override string GetAction()

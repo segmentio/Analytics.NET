@@ -85,12 +85,9 @@ namespace Segmentio
 
         #endregion
 
-        #region Utils
-
-
-        #endregion
-
         #region Public Methods
+
+		#region Identify
 
         /// <summary>
         /// Identifying a visitor ties all of their actions to an ID you
@@ -188,10 +185,14 @@ namespace Segmentio
             if (String.IsNullOrEmpty(userId))
                 throw new InvalidOperationException("Please supply a valid userId to Identify.");
 
-            Identify identify = new Identify(userId, traits, timestamp, context);
+			Identify identify = new Identify(userId, traits, timestamp, context);
 
             requestHandler.Process(identify);
         }
+
+		#endregion
+
+		#region Track
 
         /// <summary>
         /// Whenever a user triggers an event on your site, you’ll want to track it.
@@ -298,10 +299,98 @@ namespace Segmentio
             if (String.IsNullOrEmpty(eventName))
                 throw new InvalidOperationException("Please supply a valid eventName to Track.");
 
-            Track track = new Track(userId, eventName, properties, timestamp, context);
+			Track track = new Track(userId, eventName, properties, timestamp, context);
 
             requestHandler.Process(track);
         }
+
+		#endregion
+
+		#region Alias
+
+		
+		/// <summary>
+		/// Aliases an anonymous user into an identified user.
+		/// </summary>
+		/// 
+		/// <param name="from">The anonymous user's id before they are logged in.</param>
+		/// 
+		/// <param name="to">the identified user's id after they're logged in.</param>
+		
+		/// <param name="timestamp">  If this event happened in the past, the timestamp
+		/// can be used to designate when the identification happened. Careful with this one,
+		/// if it just happened, leave it null.</param>
+		/// 
+		public void Alias(string from, string to)
+		{
+			Alias(from, to, null, null);
+		}
+
+		
+		/// <summary>
+		/// Aliases an anonymous user into an identified user.
+		/// </summary>
+		/// 
+		/// <param name="from">The anonymous user's id before they are logged in.</param>
+		/// 
+		/// <param name="to">the identified user's id after they're logged in.</param>
+		
+		/// <param name="timestamp">  If this event happened in the past, the timestamp
+		/// can be used to designate when the identification happened. Careful with this one,
+		/// if it just happened, leave it null.</param>
+		/// 
+		public void Alias(string from, string to, DateTime? timestamp)
+		{
+			Alias(from, to, timestamp, null);
+		}
+
+		/// <summary>
+		/// Aliases an anonymous user into an identified user.
+		/// </summary>
+		/// 
+		/// <param name="from">The anonymous user's id before they are logged in.</param>
+		/// 
+		/// <param name="to">the identified user's id after they're logged in.</param>
+		
+		/// <param name="context"> A dictionary with additional information thats related to the visit.
+		/// Examples are userAgent, and IP address of the visitor.
+		/// Feel free to pass in null if you don't have this information.</param>
+		/// 
+		public void Alias(string from, string to, Context context)
+		{
+			Alias(from, to, null, context);
+		}
+
+		/// <summary>
+		/// Aliases an anonymous user into an identified user.
+		/// </summary>
+		/// 
+		/// <param name="from">The anonymous user's id before they are logged in.</param>
+		/// 
+		/// <param name="to">the identified user's id after they're logged in.</param>
+		
+		/// <param name="timestamp">  If this event happened in the past, the timestamp
+		/// can be used to designate when the identification happened. Careful with this one,
+		/// if it just happened, leave it null.</param>
+		///
+		/// <param name="context"> A dictionary with additional information thats related to the visit.
+		/// Examples are userAgent, and IP address of the visitor.
+		/// Feel free to pass in null if you don't have this information.</param>
+		/// 
+		public void Alias(string from, string to, DateTime? timestamp, Context context)
+		{
+			if (String.IsNullOrEmpty(from))
+				throw new InvalidOperationException("Please supply a valid 'from' to Alias.");
+			
+			if (String.IsNullOrEmpty(to))
+				throw new InvalidOperationException("Please supply a valid 'to' to Alias.");
+			
+			Alias alias = new Alias(from, to, timestamp, context);
+			
+			requestHandler.Process(alias);
+		}
+
+		#endregion
 
         #endregion
 

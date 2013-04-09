@@ -10,6 +10,9 @@ namespace Segmentio.Model
     {
         [JsonProperty(PropertyName = "action")]
         private string Action = "track";
+		
+		[JsonProperty(PropertyName = "userId")]
+		public string UserId { get; private set; }
 
         [JsonProperty(PropertyName = "event")]
         private string EventName { get; set; }
@@ -17,15 +20,16 @@ namespace Segmentio.Model
         [JsonProperty(PropertyName = "properties")]
         private Properties Properties { get; set; }
 
-        [JsonProperty(PropertyName = "context")]
-        private Context Context { get; set; }
+        internal Track(string userId, 
+		               string eventName,
+            		   Properties properties, 
+		               DateTime? timestamp,
+		               Context context)
 
-        internal Track(string userId, string eventName,
-            Properties properties, DateTime? timestamp, Context context)
-            : base(userId, timestamp)
+            : base(timestamp, context)
         {
+			this.UserId = userId;
             this.EventName = eventName;
-            this.Context = context;
             this.Properties = properties ?? new Properties();
         }
 

@@ -189,7 +189,7 @@ namespace Segmentio
 
 			Identify identify = new Identify(userId, traits, timestamp, context);
 
-			_flushHandler.Process(identify);
+            Enqueue(identify);
         }
 
 		#endregion
@@ -303,7 +303,7 @@ namespace Segmentio
 
 			Track track = new Track(userId, eventName, properties, timestamp, context);
 
-			_flushHandler.Process(track);
+            Enqueue(track);
         }
 
 		#endregion
@@ -388,15 +388,14 @@ namespace Segmentio
 				throw new InvalidOperationException("Please supply a valid 'to' to Alias.");
 			
 			Alias alias = new Alias(from, to, timestamp, context);
-			
-			_flushHandler.Process(alias);
+
+            Enqueue(alias);
 		}
 
 		#endregion
 
-        #endregion
 
-        #region Flush
+        #region Other
 
         /// <summary>
         /// Blocks until all messages are flushed
@@ -407,7 +406,7 @@ namespace Segmentio
         }
 
 		/// <summary>
-		/// Disposes of the flushing thread and the message queue
+		/// Disposes of the flushing thread and the message queue. Note, this does not call Flush() first.
 		/// </summary>
 		/// <remarks>Call <see cref="Dispose"/> when you are finished using the <see cref="Segmentio.Client"/>. The
 		/// <see cref="Dispose"/> method leaves the <see cref="Segmentio.Client"/> in an unusable state. After calling
@@ -417,6 +416,19 @@ namespace Segmentio
 		{
 			_flushHandler.Dispose();
 		}
+
+        #endregion
+
+        #endregion
+
+        #region Private Methods
+
+        private void Enqueue(BaseAction action)
+        {
+            _flushHandler.Process(action);
+
+            this.Statistics.Submitted += 1;
+        }
 
         #endregion
 

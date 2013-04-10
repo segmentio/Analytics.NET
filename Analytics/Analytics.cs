@@ -45,5 +45,20 @@ namespace Segmentio
             }
         }
 
+        /// <summary>
+        /// Disposes of the current client and allows the creation of a new one
+        /// </summary>
+        public static void Reset()
+        {
+            lock (padlock)
+            {
+                if (Client != null)
+                {
+                    Client.Dispose();
+                    Client = null;
+                }
+            }
+        }
+
     }
 }

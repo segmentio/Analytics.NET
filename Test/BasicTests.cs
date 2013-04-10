@@ -14,72 +14,91 @@ namespace Segmentio.Test
     {
         private const string SECRET = "testsecret";
 
-        private CountdownLatch latch;
-
         [TestMethod]
-        public void BasicFlushTest()
+        public void SynchronousFlushTest()
         {
-            Analytics.Initialize(SECRET, new Options().SetFlushAt(25));
+            Analytics.Reset();
+
+            Analytics.Initialize(SECRET, new Options().SetAsync(false));
 
             Analytics.Client.Succeeded += Client_Succeeded;
             Analytics.Client.Failed += Client_Failed;
 
-            string userId = "ilya@segment.io";
+            int trials = 10;
 
-            int trials = 50;
-            int submitted = 0;
+            RunTests(Analytics.Client, trials);
 
-            latch = new CountdownLatch(trials * 2);
+            Assert.IsTrue(Analytics.Client.Statistics.Submitted == trials);
+            Assert.IsTrue(Analytics.Client.Statistics.Succeeded == trials);
+            Assert.IsTrue(Analytics.Client.Statistics.Failed == 0);
+        }
 
-            for (int i = 0; i < trials; i += 1)
-            {
-                Analytics.Client.Identify(userId, new Traits() {
-                    { "Subscription Plan", "Free" },
-                    { "Friends", 30 },
-                    { "Joined", DateTime.Now },
-                    { "Cool", true },
-                    { "Company", new Props() { { "name", "Initech, Inc " } } },
-                    { "Revenue", 40.32 },
-                    { "Don't Submit This, Kids", new UnauthorizedAccessException() } },
-                        new DateTime(),
-                        new Context()
-                            .SetIp("12.212.12.49")
-                            .SetLanguage("en-us")
-                            .SetProviders(new Providers() {
-                                { "all", false },
-                                { "Mixpanel", true },
-                                { "Salesforce", true }
-                            })
-                    );
+        [TestMethod]
+        public void AsynchronousFlushTest()
+        {
+            Analytics.Reset();
 
-                Analytics.Client.Track(userId, "Ran .NET test", new Properties() {
-                    { "Success", true },
-                    { "When", DateTime.Now }
-                }, DateTime.Now);
+            Analytics.Initialize(SECRET, new Options().SetAsync(true));
 
-                submitted += 2;
-            }
+            Analytics.Client.Succeeded += Client_Succeeded;
+            Analytics.Client.Failed += Client_Failed;
+
+            int trials = 10;
+
+            RunTests(Analytics.Client, trials);
 
             Analytics.Client.Flush();
 
-            latch.Wait();
-
-            Assert.IsTrue(Analytics.Client.Statistics.Submitted == submitted);
-
-            Assert.IsTrue(Analytics.Client.Statistics.Succeeded == submitted);
+            Assert.IsTrue(Analytics.Client.Statistics.Submitted == trials);
+            Assert.IsTrue(Analytics.Client.Statistics.Succeeded == trials);
             Assert.IsTrue(Analytics.Client.Statistics.Failed == 0);
+        }
+
+
+        [TestMethod]
+        public void PerformanceTest()
+        {
+            Analytics.Reset();
+
+            Analytics.Initialize(SECRET);
+
+            Analytics.Client.Succeeded += Client_Succeeded;
+            Analytics.Client.Failed += Client_Failed;
+
+            int trials = 100;
+
+            DateTime start = DateTime.Now;
+
+            RunTests(Analytics.Client, trials);
+
+            Analytics.Client.Flush();
+
+            TimeSpan duration = DateTime.Now.Subtract(start);
+
+            Assert.IsTrue(Analytics.Client.Statistics.Submitted == trials);
+            Assert.IsTrue(Analytics.Client.Statistics.Succeeded == trials);
+            Assert.IsTrue(Analytics.Client.Statistics.Failed == 0);
+
+            Assert.IsTrue(duration.CompareTo(TimeSpan.FromSeconds(5)) < 0);
+
+        }
+
+        private void RunTests(Client client, int trials)
+        {
+            for (int i = 0; i < trials; i += 1)
+            {
+                ActionRunner.Random(client);
+            }
         }
 
         void Client_Failed(BaseAction action, System.Exception e)
         {
             Console.WriteLine(String.Format("Action {0} failed : {1}", action.GetAction(), e.Message));
-            latch.Signal();
         }
 
         void Client_Succeeded(BaseAction action)
         {
             Console.WriteLine(String.Format("Action {0} succeeded.", action.GetAction()));
-            latch.Signal();
         }
 
     }

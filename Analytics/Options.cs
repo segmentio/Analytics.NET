@@ -16,24 +16,18 @@ namespace Segmentio
         /// </summary>
         internal string Host { get; set; }
 
-        /// <summary>
-        /// The amount of items that can be added to the queue without flushing
-        /// </summary>
-        internal int FlushAt { get; set; }
-
-        /// <summary>
-        /// The amount of time that can pass since the last flush
-        /// </summary>
-        internal TimeSpan FlushAfter { get; set; }
-
         internal int MaxQueueSize { get; set; }
+
+		internal bool Async { get; set; }
+
+		internal TimeSpan Timeout { get; set; }
 
         public Options()
         {
             this.Host = Defaults.Host;
-            this.FlushAt = Defaults.FlushAt;
-            this.FlushAfter = Defaults.FlushAfter;
+			this.Timeout = Defaults.Timeout;
             this.MaxQueueSize = Defaults.MaxQueueCapacity;
+			this.Async = Defaults.Async;
         }
 
         /// <summary>
@@ -41,9 +35,9 @@ namespace Segmentio
         /// </summary>
         /// <param name="flushAt"></param>
         /// <returns></returns>
+		[Obsolete("SetFlushAt is no longer needed, async flush will now happen continuously in the background.")]
         public Options SetFlushAt(int flushAt)
         {
-            this.FlushAt = flushAt;
             return this;
         }
 
@@ -52,20 +46,49 @@ namespace Segmentio
         /// </summary>
         /// <param name="flushAfter"></param>
         /// <returns></returns>
+		[Obsolete("SetFlushAfter is no longer needed, async flush will now happen continuously in the background.")]
         public Options SetFlushAfter(TimeSpan flushAfter)
         {
-            this.FlushAfter = flushAfter;
             return this;
         }
 
+		/// <summary>
+		/// Sets the maximum amount of timeout on the HTTP request flushes to the server.
+		/// </summary>
+		/// <param name="timeout"></param>
+		/// <returns></returns>
+		public Options SetTimeout(TimeSpan timeout)
+		{
+			this.Timeout = timeout;
+			return this;
+		}
+		
+		/// <summary>
+		/// Sets the maximum amount of items that can be in the queue before no more are accepted.
+		/// </summary>
+		/// <param name="maxQueueSize"></param>
+		/// <returns></returns>
+		public Options SetMaxQueueSize(int maxQueueSize)
+		{
+			this.MaxQueueSize = maxQueueSize;
+			return this;
+		}
+
         /// <summary>
-        /// Sets the maximum amount of items that can be in the queue before no more are accepted.
+        /// Sets whether the flushing to the server is synchronous or asynchronous.
+		/// 
+		/// True is the default and will allow your calls to Analytics.Client.Identify(...), Track(...), etc
+		/// to return immediately and to be queued to be flushed on a different thread.
+		/// 
+		/// False is convenient for testing but should not be used in production. False will cause the 
+		/// HTTP requests to happen immediately.
+		/// 
         /// </summary>
-        /// <param name="maxQueueSize"></param>
+		/// <param name="async">True for async flushing, false for blocking flushing</param>
         /// <returns></returns>
-        public Options SetMaxQueueSize(int maxQueueSize)
+        public Options SetAsync(bool async)
         {
-            this.MaxQueueSize = maxQueueSize;
+			this.Async = async;
             return this;
         }
     }

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
+using Segmentio.Flush;
+using Segmentio.Request;
 using Segmentio.Exception;
 using Segmentio.Model;
-using Segmentio.Request;
-using Segmentio.Trigger;
 using Segmentio.Stats;
 
 namespace Segmentio
@@ -14,11 +14,11 @@ namespace Segmentio
     /// <summary>
     /// A Segment.io REST client
     /// </summary>
-    public class Client
+    public class Client : IDisposable
     {
-        private IRequestHandler requestHandler;
-        private string secret;
-        private Options options;
+        private IFlushHandler _flushHandler;
+        private string _secret;
+        private Options _options;
 
         public Statistics Statistics { get; set; }
 
@@ -51,15 +51,17 @@ namespace Segmentio
                 throw new InvalidOperationException("Please supply a valid secret to initialize.");
 
             this.Statistics = new Statistics();
-            this.secret = secret;
-            this.options = options;
 
-            requestHandler = new BatchingRequestHandler(new IFlushTrigger[] {
-                new FlushAtTrigger(options.FlushAt),
-                new FlushAfterTrigger(options.FlushAfter)
-            });
+            this._secret = secret;
+            this._options = options;
 
-            requestHandler.Initialize(this, secret);
+			IRequestHandler requestHandler = new BlockingRequestHandler(this, options.Timeout);
+			IBatchFactory batchFactory = new SimpleBatchFactory(this._secret);
+
+			if (options.Async)
+				_flushHandler = new AsyncFlushHandler(batchFactory, requestHandler, options.MaxQueueSize);
+			else
+				_flushHandler = new BlockingFlushHandler(batchFactory, requestHandler);
         }
 
         #endregion
@@ -70,7 +72,7 @@ namespace Segmentio
         {
             get
             {
-                return secret;
+                return _secret;
             }
         }
 
@@ -79,7 +81,7 @@ namespace Segmentio
         {
             get
             {
-                return options;
+                return _options;
             }
         }
 
@@ -187,7 +189,7 @@ namespace Segmentio
 
 			Identify identify = new Identify(userId, traits, timestamp, context);
 
-            requestHandler.Process(identify);
+			_flushHandler.Process(identify);
         }
 
 		#endregion
@@ -301,7 +303,7 @@ namespace Segmentio
 
 			Track track = new Track(userId, eventName, properties, timestamp, context);
 
-            requestHandler.Process(track);
+			_flushHandler.Process(track);
         }
 
 		#endregion
@@ -387,7 +389,7 @@ namespace Segmentio
 			
 			Alias alias = new Alias(from, to, timestamp, context);
 			
-			requestHandler.Process(alias);
+			_flushHandler.Process(alias);
 		}
 
 		#endregion
@@ -397,12 +399,24 @@ namespace Segmentio
         #region Flush
 
         /// <summary>
-        /// Triggers a queue flush
+        /// Blocks until all messages are flushed
         /// </summary>
         public void Flush()
         {
-            requestHandler.Flush();
+			_flushHandler.Flush();
         }
+
+		/// <summary>
+		/// Disposes of the flushing thread and the message queue
+		/// </summary>
+		/// <remarks>Call <see cref="Dispose"/> when you are finished using the <see cref="Segmentio.Client"/>. The
+		/// <see cref="Dispose"/> method leaves the <see cref="Segmentio.Client"/> in an unusable state. After calling
+		/// <see cref="Dispose"/>, you must release all references to the <see cref="Segmentio.Client"/> so the garbage
+		/// collector can reclaim the memory that the <see cref="Segmentio.Client"/> was occupying.</remarks>
+		public void Dispose() 
+		{
+			_flushHandler.Dispose();
+		}
 
         #endregion
 

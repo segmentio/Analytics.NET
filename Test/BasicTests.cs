@@ -79,8 +79,7 @@ namespace Segmentio.Test
             Assert.IsTrue(Analytics.Client.Statistics.Succeeded == trials);
             Assert.IsTrue(Analytics.Client.Statistics.Failed == 0);
 
-            Assert.IsTrue(duration.CompareTo(TimeSpan.FromSeconds(5)) < 0);
-
+            Assert.IsTrue(duration.CompareTo(TimeSpan.FromSeconds(10)) < 0);
         }
 
         private void RunTests(Client client, int trials)

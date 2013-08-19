@@ -14,10 +14,16 @@ namespace Segmentio.Model
 
         [JsonProperty(PropertyName = "batch")]
         internal List<BaseAction> batch { get; set; }
+		
+		[JsonProperty(PropertyName = "context")]
+		internal Context context { get; set; }
 
-        internal Batch() { }
+        internal Batch() { 
+			this.context = new Context ();
+			this.context.Add ("library", "analytics-.NET");
+		}
 
-        internal Batch(string secret, List<BaseAction> batch)
+        internal Batch(string secret, List<BaseAction> batch) : this()
         {
             this.Secret = secret;
             this.batch = batch;

@@ -30,7 +30,7 @@ namespace Segmentio.Request
 			}
 			if (context.providers !=null && context.providers.Count!=0)
 			{
-				traits.Add("providers", JsonConvert.SerializeObject(context.providers));
+				traits.Add("providers", context.providers);
 			}
 
 			serializer.Serialize(writer, traits);

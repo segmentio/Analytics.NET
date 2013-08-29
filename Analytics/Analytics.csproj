@@ -57,6 +57,7 @@
     <Compile Include="Model\Properties.cs" />
     <Compile Include="Model\Traits.cs" />
     <Compile Include="Options.cs" />
+    <Compile Include="Request\ContextSerializer.cs" />
     <Compile Include="Request\IRequestHandler.cs" />
     <Compile Include="Analytics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

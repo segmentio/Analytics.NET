@@ -30,28 +30,6 @@ namespace Segmentio
 			this.Async = Defaults.Async;
         }
 
-        /// <summary>
-        /// Sets the amount of items that can be added to the queue before it flushes
-        /// </summary>
-        /// <param name="flushAt"></param>
-        /// <returns></returns>
-		[Obsolete("SetFlushAt is no longer needed, async flush will now happen continuously in the background.")]
-        public Options SetFlushAt(int flushAt)
-        {
-            return this;
-        }
-
-        /// <summary>
-        /// Sets the amount of milliseconds that can pass before the next flush
-        /// </summary>
-        /// <param name="flushAfter"></param>
-        /// <returns></returns>
-		[Obsolete("SetFlushAfter is no longer needed, async flush will now happen continuously in the background.")]
-        public Options SetFlushAfter(TimeSpan flushAfter)
-        {
-            return this;
-        }
-
 		/// <summary>
 		/// Sets the maximum amount of timeout on the HTTP request flushes to the server.
 		/// </summary>

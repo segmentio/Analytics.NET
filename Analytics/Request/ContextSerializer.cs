@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using Segmentio.Model;
+using Segment.Model;
 
-namespace Segmentio.Request
+namespace Segment.Request
 {
 	/// <summary>
 	/// json.net does not serialize the properites of classes like Context that inherit from Dictionary but then add on other properties.

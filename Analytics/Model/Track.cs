@@ -4,7 +4,7 @@ using System.Text;
 
 using Newtonsoft.Json;
 
-namespace Segmentio.Model
+namespace Segment.Model
 {
     public class Track : BaseAction
     {

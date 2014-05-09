@@ -1,6 +1,6 @@
 using System;
 
-namespace Segmentio.Model
+namespace Segment.Model
 {
 	/// <summary>
 	/// Providers is a context object that helps specify which providers this action should go to.

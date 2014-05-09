@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-using Segmentio.Flush;
-using Segmentio.Request;
-using Segmentio.Exception;
-using Segmentio.Model;
-using Segmentio.Stats;
+using Segment.Flush;
+using Segment.Request;
+using Segment.Exception;
+using Segment.Model;
+using Segment.Stats;
 
-namespace Segmentio
+namespace Segment
 {
     /// <summary>
     /// A Segment.io REST client
@@ -408,10 +408,10 @@ namespace Segmentio
 		/// <summary>
 		/// Disposes of the flushing thread and the message queue. Note, this does not call Flush() first.
 		/// </summary>
-		/// <remarks>Call <see cref="Dispose"/> when you are finished using the <see cref="Segmentio.Client"/>. The
-		/// <see cref="Dispose"/> method leaves the <see cref="Segmentio.Client"/> in an unusable state. After calling
-		/// <see cref="Dispose"/>, you must release all references to the <see cref="Segmentio.Client"/> so the garbage
-		/// collector can reclaim the memory that the <see cref="Segmentio.Client"/> was occupying.</remarks>
+		/// <remarks>Call <see cref="Dispose"/> when you are finished using the <see cref="Segment.Client"/>. The
+		/// <see cref="Dispose"/> method leaves the <see cref="Segment.Client"/> in an unusable state. After calling
+		/// <see cref="Dispose"/>, you must release all references to the <see cref="Segment.Client"/> so the garbage
+		/// collector can reclaim the memory that the <see cref="Segment.Client"/> was occupying.</remarks>
 		public void Dispose() 
 		{
 			_flushHandler.Dispose();

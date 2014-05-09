@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Newtonsoft.Json;
 
-namespace Segmentio.Model
+namespace Segment.Model
 {
     public class Context : Props
     {

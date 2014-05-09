@@ -1,6 +1,6 @@
 using System;
 
-namespace Segmentio
+namespace Segment
 {
 	public class Constants
 	{

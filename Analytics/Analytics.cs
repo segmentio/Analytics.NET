@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Segmentio
+namespace Segment
 {
     public class Analytics
     {

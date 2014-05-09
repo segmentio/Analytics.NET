@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Segmentio
+namespace Segment
 {
     public class Defaults
     {

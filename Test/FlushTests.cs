@@ -2,8 +2,8 @@
 using System;
 using System.Threading;
 
-using Segmentio;
-using Segmentio.Model;
+using Segment;
+using Segment.Model;
 
 namespace Segment.Test
 {

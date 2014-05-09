@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Segmentio;
-using Segmentio.Model;
+using Segment;
+using Segment.Model;
 
 namespace Segment.Test
 {

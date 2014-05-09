@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Segmentio.Stats
+namespace Segment.Stats
 {
     public class Statistics
     {

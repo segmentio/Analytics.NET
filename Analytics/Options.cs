@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Segmentio
+namespace Segment
 {
     /// <summary>
     /// Options required to initialize the client

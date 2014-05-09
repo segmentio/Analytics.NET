@@ -9,10 +9,10 @@ using System.Web;
 
 using Newtonsoft.Json;
 
-using Segmentio.Model;
-using Segmentio.Exception;
+using Segment.Model;
+using Segment.Exception;
 
-namespace Segmentio.Request
+namespace Segment.Request
 {
 	internal class BlockingRequestHandler : IRequestHandler
 	{

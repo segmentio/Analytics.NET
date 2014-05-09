@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace Segmentio.Flush
+namespace Segment.Flush
 {
 	/// <summary>
 	/// Implementation of a blocking queue

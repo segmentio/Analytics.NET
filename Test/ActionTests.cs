@@ -1,8 +1,8 @@
 ﻿using NUnit.Framework;
 using System;
 
-using Segmentio;
-using Segmentio.Model;
+using Segment;
+using Segment.Model;
 
 namespace Segment.Test
 {

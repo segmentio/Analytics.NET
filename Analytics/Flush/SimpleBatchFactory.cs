@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 
-using Segmentio.Model;
+using Segment.Model;
 
-namespace Segmentio.Flush
+namespace Segment.Flush
 {
 	internal class SimpleBatchFactory : IBatchFactory
 	{

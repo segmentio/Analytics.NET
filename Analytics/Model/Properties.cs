@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Segmentio.Model
+namespace Segment.Model
 {
     public class Properties : Props
     {

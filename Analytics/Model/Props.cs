@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Serialization;
 
-namespace Segmentio.Model
+namespace Segment.Model
 {
 	/// <summary>
 	/// An API object wrapper over Dictionary<string, object>

@@ -5,12 +5,12 @@ using System.Runtime.Serialization.Json;
 using System.IO;
 using System.Threading;
 
-using Segmentio;
-using Segmentio.Request;
-using Segmentio.Model;
-using Segmentio.Exception;
+using Segment;
+using Segment.Request;
+using Segment.Model;
+using Segment.Exception;
 
-namespace Segmentio.Flush
+namespace Segment.Flush
 {
     internal class AsyncFlushHandler : IFlushHandler
     {
@@ -153,11 +153,11 @@ namespace Segmentio.Flush
 		/// <summary>
 		/// Disposes of the flushing thread and the message queue
 		/// </summary>
-		/// <remarks>Call <see cref="Dispose"/> when you are finished using the <see cref="Segmentio.Flush.AsyncFlushHandler"/>. The
-		/// <see cref="Dispose"/> method leaves the <see cref="Segmentio.Flush.AsyncFlushHandler"/> in an unusable state.
+		/// <remarks>Call <see cref="Dispose"/> when you are finished using the <see cref="Segment.Flush.AsyncFlushHandler"/>. The
+		/// <see cref="Dispose"/> method leaves the <see cref="Segment.Flush.AsyncFlushHandler"/> in an unusable state.
 		/// After calling <see cref="Dispose"/>, you must release all references to the
-		/// <see cref="Segmentio.Flush.AsyncFlushHandler"/> so the garbage collector can reclaim the memory that the
-		/// <see cref="Segmentio.Flush.AsyncFlushHandler"/> was occupying.</remarks>
+		/// <see cref="Segment.Flush.AsyncFlushHandler"/> so the garbage collector can reclaim the memory that the
+		/// <see cref="Segment.Flush.AsyncFlushHandler"/> was occupying.</remarks>
 		public void Dispose() 
 		{
 			// tell the flushing thread to stop 

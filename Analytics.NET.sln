@@ -21,7 +21,7 @@ Global
 		{E79E6240-4954-41D0-BCE4-573B800EF006}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Test\Test.csproj
+		StartupItem = Analytics\Analytics.csproj
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

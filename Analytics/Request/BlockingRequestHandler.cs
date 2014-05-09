@@ -44,7 +44,7 @@ namespace Segment.Request
 		{
 			try
 			{
-				Uri uri = new Uri(_client.Options.Host + "/v1/import");
+				Uri uri = new Uri(_client.Config.Host + "/v1/import");
 				
 				string json = JsonConvert.SerializeObject(batch, settings);
 				

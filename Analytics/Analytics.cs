@@ -34,13 +34,13 @@ namespace Segment
         /// Initialized the default Segment.io client with your API writeKey.
         /// </summary>
         /// <param name="writeKey"></param>
-        public static void Initialize(string writeKey, Options options)
+		public static void Initialize(string writeKey, Config config)
         {
             lock (padlock)
             {
                 if (Client == null)
                 {
-                    Client = new Client(writeKey, options);
+                    Client = new Client(writeKey, config);
                 }
             }
         }

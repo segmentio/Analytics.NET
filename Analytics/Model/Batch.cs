@@ -8,7 +8,6 @@ namespace Segment.Model
 {
     internal class Batch
     {
-		[JsonProperty(PropertyName = "writeKey")]
         internal string WriteKey { get; set; }
 
         [JsonProperty(PropertyName = "batch")]

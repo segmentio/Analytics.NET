@@ -18,7 +18,7 @@ namespace Segment
     {
         private IFlushHandler _flushHandler;
         private string _writeKey;
-        private Options _options;
+		private Config _config;
 
         public Statistics Statistics { get; set; }
 
@@ -35,17 +35,17 @@ namespace Segment
         #region Initialization
 
         /// <summary>
-        /// Creates a new REST client with a specified API writeKey and default options
+        /// Creates a new REST client with a specified API writeKey and default config
         /// </summary>
         /// <param name="writeKey"></param>
-        public Client(string writeKey) : this(writeKey, new Options()) {}
+        public Client(string writeKey) : this(writeKey, new Config()) {}
 
         /// <summary>
-        /// Creates a new REST client with a specified API writeKey and default options
+        /// Creates a new REST client with a specified API writeKey and default config
         /// </summary>
         /// <param name="writeKey"></param>
-        /// <param name="options"></param>
-        public Client(string writeKey, Options options)
+        /// <param name="config"></param>
+		public Client(string writeKey, Config config)
         {
             if (String.IsNullOrEmpty(writeKey))
                 throw new InvalidOperationException("Please supply a valid writeKey to initialize.");
@@ -53,13 +53,13 @@ namespace Segment
             this.Statistics = new Statistics();
 
             this._writeKey = writeKey;
-            this._options = options;
+			this._config = config;
 
-			IRequestHandler requestHandler = new BlockingRequestHandler(this, options.Timeout);
+			IRequestHandler requestHandler = new BlockingRequestHandler(this, config.Timeout);
 			IBatchFactory batchFactory = new SimpleBatchFactory(this._writeKey);
 
-			if (options.Async)
-				_flushHandler = new AsyncFlushHandler(batchFactory, requestHandler, options.MaxQueueSize);
+			if (config.Async)
+				_flushHandler = new AsyncFlushHandler(batchFactory, requestHandler, config.MaxQueueSize);
 			else
 				_flushHandler = new BlockingFlushHandler(batchFactory, requestHandler);
         }
@@ -77,11 +77,11 @@ namespace Segment
         }
 
 
-        public Options Options
+		public Config Config
         {
             get
             {
-                return _options;
+				return _config;
             }
         }
 

@@ -19,7 +19,7 @@ namespace Segment.Test
 		[Test ()]
 		public void SynchronousFlushTest ()
 		{
-			Analytics.Initialize(Constants.WRITE_KEY, new Options().SetAsync(false));
+			Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false));
 			Analytics.Client.Succeeded += Client_Succeeded;
 			Analytics.Client.Failed += Client_Failed;
 
@@ -35,7 +35,7 @@ namespace Segment.Test
 		[Test ()]
 		public void AsynchronousFlushTest()
 		{
-			Analytics.Initialize(Constants.WRITE_KEY, new Options().SetAsync(true));
+			Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(true));
 
 			Analytics.Client.Succeeded += Client_Succeeded;
 			Analytics.Client.Failed += Client_Failed;
@@ -44,7 +44,7 @@ namespace Segment.Test
 
 			RunTests(Analytics.Client, trials);
 
-			Thread.Sleep (500); // cant use flush to wait during asynchronous flushing
+			Thread.Sleep (1000); // cant use flush to wait during asynchronous flushing
 
 			Assert.AreEqual(trials, Analytics.Client.Statistics.Submitted);
 			Assert.AreEqual(trials, Analytics.Client.Statistics.Succeeded);

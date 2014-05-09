@@ -13,7 +13,7 @@ namespace Segment.Test
 		public void Init()
 		{
 			Analytics.Reset();
-			Analytics.Initialize (Constants.WRITE_KEY, new Options().SetAsync(false));
+			Analytics.Initialize (Constants.WRITE_KEY, new Config().SetAsync(false));
 			Analytics.Client.Succeeded += Client_Succeeded;
 			Analytics.Client.Failed += Client_Failed;
 		}

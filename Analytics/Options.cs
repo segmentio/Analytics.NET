@@ -6,9 +6,9 @@ using System.Text;
 namespace Segment
 {
     /// <summary>
-    /// Options required to initialize the client
+    /// Config required to initialize the client
     /// </summary>
-    public class Options
+	public class Config
     {
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace Segment
 
 		internal TimeSpan Timeout { get; set; }
 
-        public Options()
+		public Config()
         {
             this.Host = Defaults.Host;
 			this.Timeout = Defaults.Timeout;
@@ -35,7 +35,7 @@ namespace Segment
 		/// </summary>
 		/// <param name="timeout"></param>
 		/// <returns></returns>
-		public Options SetTimeout(TimeSpan timeout)
+		public Config SetTimeout(TimeSpan timeout)
 		{
 			this.Timeout = timeout;
 			return this;
@@ -46,7 +46,7 @@ namespace Segment
 		/// </summary>
 		/// <param name="maxQueueSize"></param>
 		/// <returns></returns>
-		public Options SetMaxQueueSize(int maxQueueSize)
+		public Config SetMaxQueueSize(int maxQueueSize)
 		{
 			this.MaxQueueSize = maxQueueSize;
 			return this;
@@ -64,7 +64,7 @@ namespace Segment
         /// </summary>
 		/// <param name="async">True for async flushing, false for blocking flushing</param>
         /// <returns></returns>
-        public Options SetAsync(bool async)
+		public Config SetAsync(bool async)
         {
 			this.Async = async;
             return this;

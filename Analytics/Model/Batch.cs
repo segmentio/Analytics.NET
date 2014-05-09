@@ -8,19 +8,23 @@ namespace Segmentio.Model
 {
     internal class Batch
     {
+        internal string WriteKey { get; set; }
+
         [JsonProperty(PropertyName = "batch")]
         internal List<BaseAction> batch { get; set; }
 		
 		[JsonProperty(PropertyName = "context")]
 		internal Context context { get; set; }
 
-      	internal Batch() { 
+      	internal Batch() 
+		{ 
 			this.context = new Context ();
-			this.context.Add ("library", "analytics-.NET");
+			this.context.Add ("library", "Analytics.NET");
 		}
 
-        internal Batch(List<BaseAction> batch) : this()
+        internal Batch(string writeKey, List<BaseAction> batch) : this()
         {
+            this.WriteKey = writeKey;
             this.batch = batch;
         }
     }

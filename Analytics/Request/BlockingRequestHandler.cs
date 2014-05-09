@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Net;
 using System.Runtime.Serialization.Json;
@@ -48,7 +49,11 @@ namespace Segmentio.Request
 				string json = JsonConvert.SerializeObject(batch, settings);
 				
 				HttpWebRequest request = (HttpWebRequest) WebRequest.Create(uri);
-				
+
+				// Basic Authentication
+				// https://segment.io/docs/tracking-api/reference/#authentication
+				request.Headers["Authorization"] = BasicAuthHeader(batch.WriteKey, "");
+
 				request.Timeout = (int)Timeout.TotalMilliseconds;
 				request.ContentType = "application/json";
 				request.Method = "POST";
@@ -141,6 +146,12 @@ namespace Segmentio.Request
 			{
 				return null;
 			}
+		}
+
+		private string BasicAuthHeader(string user, string pass) 
+		{
+			string val = user + ":" + pass;
+			return  "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes(val));
 		}
 	}
 }

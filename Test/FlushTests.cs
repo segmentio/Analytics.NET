@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using System;
+using System.Threading;
 
 using Segmentio;
 using Segmentio.Model;
@@ -7,18 +8,18 @@ using Segmentio.Model;
 namespace Segment.Test
 {
 	[TestFixture ()]
-	public class BaseTest
+	public class FlushTests
 	{
-		// project segmentio/dotnet-test
-		private const string WRITE_KEY = "r7bxis28wy";
+		[SetUp] 
+		public void Init()
+		{
+			Analytics.Reset();
+		}
 
 		[Test ()]
 		public void SynchronousFlushTest ()
 		{
-			Analytics.Reset();
-
-			Analytics.Initialize(WRITE_KEY, new Options().SetAsync(false));
-
+			Analytics.Initialize(Constants.WRITE_KEY, new Options().SetAsync(false));
 			Analytics.Client.Succeeded += Client_Succeeded;
 			Analytics.Client.Failed += Client_Failed;
 
@@ -26,17 +27,15 @@ namespace Segment.Test
 
 			RunTests(Analytics.Client, trials);
 
-			Assert.IsTrue(Analytics.Client.Statistics.Submitted == trials);
-			Assert.IsTrue(Analytics.Client.Statistics.Succeeded == trials);
-			Assert.IsTrue(Analytics.Client.Statistics.Failed == 0);
+			Assert.AreEqual(trials, Analytics.Client.Statistics.Submitted);
+			Assert.AreEqual(trials, Analytics.Client.Statistics.Succeeded);
+			Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
 		}
 
 		[Test ()]
 		public void AsynchronousFlushTest()
 		{
-			Analytics.Reset();
-
-			Analytics.Initialize(WRITE_KEY, new Options().SetAsync(true));
+			Analytics.Initialize(Constants.WRITE_KEY, new Options().SetAsync(true));
 
 			Analytics.Client.Succeeded += Client_Succeeded;
 			Analytics.Client.Failed += Client_Failed;
@@ -45,20 +44,17 @@ namespace Segment.Test
 
 			RunTests(Analytics.Client, trials);
 
-			Analytics.Client.Flush();
+			Thread.Sleep (500); // cant use flush to wait during asynchronous flushing
 
-			Assert.IsTrue(Analytics.Client.Statistics.Submitted == trials);
-			Assert.IsTrue(Analytics.Client.Statistics.Succeeded == trials);
-			Assert.IsTrue(Analytics.Client.Statistics.Failed == 0);
+			Assert.AreEqual(trials, Analytics.Client.Statistics.Submitted);
+			Assert.AreEqual(trials, Analytics.Client.Statistics.Succeeded);
+			Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
 		}
-
 
 		[Test ()]
 		public void PerformanceTest()
 		{
-			Analytics.Reset();
-
-			Analytics.Initialize(WRITE_KEY);
+			Analytics.Initialize(Constants.WRITE_KEY);
 
 			Analytics.Client.Succeeded += Client_Succeeded;
 			Analytics.Client.Failed += Client_Failed;
@@ -73,9 +69,9 @@ namespace Segment.Test
 
 			TimeSpan duration = DateTime.Now.Subtract(start);
 
-			Assert.IsTrue(Analytics.Client.Statistics.Submitted == trials);
-			Assert.IsTrue(Analytics.Client.Statistics.Succeeded == trials);
-			Assert.IsTrue(Analytics.Client.Statistics.Failed == 0);
+			Assert.AreEqual(trials, Analytics.Client.Statistics.Submitted);
+			Assert.AreEqual(trials, Analytics.Client.Statistics.Succeeded);
+			Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
 
 			Assert.IsTrue(duration.CompareTo(TimeSpan.FromSeconds(10)) < 0);
 		}

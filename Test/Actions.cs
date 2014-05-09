@@ -12,41 +12,53 @@ namespace Segment.Test
 	{
 		private static Random random = new Random();
 
-		private static string userId = "test";
-
-		public static void Identify(Client client)
+		public static Properties Properties () 
 		{
-			client.Identify(userId, new Traits() {
+			return new Properties () {
+				{ "Success", true },
+				{ "When", DateTime.Now }
+			};
+		}
+
+		public static Traits Traits () 
+		{
+			return new Traits () {
 				{ "Subscription Plan", "Free" },
 				{ "Friends", 30 },
 				{ "Joined", DateTime.Now },
 				{ "Cool", true },
-				{ "Company", new Props() { { "name", "Initech, Inc " } } },
+				{ "Company", new Props () { { "name", "Initech, Inc " } } },
 				{ "Revenue", 40.32 },
-				{ "Don't Submit This, Kids", new UnauthorizedAccessException() } },
-				new DateTime(),
-				new Context()
-				.SetIp("12.212.12.49")
-				.SetLanguage("en-us")
-				.SetProviders(new Providers() {
-					{ "all", false },
-					{ "Mixpanel", true },
-					{ "Salesforce", true }
-				})
-			);
+				{ "Don't Submit This, Kids", new UnauthorizedAccessException () }
+			};
+		}
+
+		public static Context Context ()
+		{
+			return new Context ()
+				.SetIp ("12.212.12.49")
+				.SetLanguage ("en-us")
+				.SetProviders (new Providers () {
+				{ "all", false },
+				{ "Mixpanel", true },
+				{ "Salesforce", true }
+			});
+		}
+			
+		public static void Identify(Client client)
+		{
+			client.Identify("user", Traits(), new DateTime(), Context());
+			Analytics.Client.Flush();
 		}
 
 		public static void Track(Client client)
 		{
-			client.Track(userId, "Ran .NET test", new Properties() {
-				{ "Success", true },
-				{ "When", DateTime.Now }
-			}, DateTime.Now);
+			client.Track("user", "Ran .NET test", Properties(), DateTime.Now);
 		}
 
 		public static void Alias(Client client)
 		{
-			client.Alias("anonymous", userId);
+			client.Alias("from", "to");
 		}
 
 		public static void Random(Client client)

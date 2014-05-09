@@ -83,6 +83,81 @@ namespace Analytics.Test
 			string json = JsonConvert.SerializeObject(identify, settings);
 			Assert.IsTrue(json.Contains("\"providers\""));
 		}
+
+
+
+        [TestMethod]
+        public void SerializationOfTrackIncludesContextWithIPAddress()
+        {
+            var track = new Track(
+                "99",
+                "Ran .NET test",
+                new Properties() {
+                        { "Success", true },
+                        { "When", DateTime.Now }
+                    },
+                DateTime.Now,
+                        new Context()
+                            .SetIp("12.212.12.49")
+                );
+
+            var settings = new JsonSerializerSettings
+            {
+                Converters = new List<JsonConverter> { new ContextSerializer() }
+            };
+            string json = JsonConvert.SerializeObject(track, settings);
+            Assert.IsTrue(json.Contains("\"ip\":\"12.212.12.49\""));
+        }
+
+        [TestMethod]
+        public void SerializationOfTrackIncludesContextWithLanguage()
+        {
+            var track = new Track(
+                "99",
+                "Ran .NET test",
+                new Properties() {
+                        { "Success", true },
+                        { "When", DateTime.Now }
+                    },
+                DateTime.Now,
+                        new Context()
+                            .SetLanguage("fr")
+                );
+
+            var settings = new JsonSerializerSettings
+            {
+                Converters = new List<JsonConverter> { new ContextSerializer() }
+            };
+            string json = JsonConvert.SerializeObject(track, settings);
+            Assert.IsTrue(json.Contains("\"language\":\"fr\""));
+        }
+
+        [TestMethod]
+        public void SerializationOfTrackIncludesContextWithProviders()
+        {
+            var track = new Track(
+                "99", 
+                "Ran .NET test", 
+                new Properties() {
+                        { "Success", true },
+                        { "When", DateTime.Now }
+                    }, 
+                DateTime.Now,
+                        new Context()
+                            .SetProviders(new Providers() {
+                                    { "all", false },
+                                    { "Mixpanel", true },
+                                    { "Salesforce", true }
+                                })
+                );
+
+            var settings = new JsonSerializerSettings
+            {
+                Converters = new List<JsonConverter> { new ContextSerializer() }
+            };
+            string json = JsonConvert.SerializeObject(track, settings);
+            Assert.IsTrue(json.Contains("\"providers\""));
+        }
 	}
 
 	

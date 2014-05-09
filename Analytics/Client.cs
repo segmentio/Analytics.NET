@@ -110,7 +110,6 @@ namespace Segmentio
             Identify(userId, traits, null, null);
         }
 
-
         /// <summary>
         /// Identifying a visitor ties all of their actions to an ID you
         /// recognize and records visitor traits you can segment by.

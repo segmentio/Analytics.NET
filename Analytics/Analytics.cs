@@ -14,10 +14,10 @@ namespace Segmentio
         public static Client Client { get; private set; }
 
         /// <summary>
-        /// Initialized the default Segment.io client with your API secret.
+        /// Initialized the default Segment.io client with your API writeKey.
         /// </summary>
-        /// <param name="secret"></param>
-        public static void Initialize(string secret)
+        /// <param name="writeKey"></param>
+        public static void Initialize(string writeKey)
         {
             // avoiding double locking as recommended:
             // http://www.yoda.arachsys.com/csharp/singleton.html
@@ -25,22 +25,22 @@ namespace Segmentio
             {
                 if (Client == null)
                 {
-                    Client = new Client(secret);
+                    Client = new Client(writeKey);
                 }
             }
         }
 
         /// <summary>
-        /// Initialized the default Segment.io client with your API secret.
+        /// Initialized the default Segment.io client with your API writeKey.
         /// </summary>
-        /// <param name="secret"></param>
-        public static void Initialize(string secret, Options options)
+        /// <param name="writeKey"></param>
+        public static void Initialize(string writeKey, Options options)
         {
             lock (padlock)
             {
                 if (Client == null)
                 {
-                    Client = new Client(secret, options);
+                    Client = new Client(writeKey, options);
                 }
             }
         }

@@ -1,9 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2012 for Windows Desktop
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Analytics", "Analytics\Analytics.csproj", "{E79E6240-4954-41D0-BCE4-573B800EF006}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{E6BF709C-E887-49DF-8A14-976800A38365}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +13,9 @@ Global
 		{E79E6240-4954-41D0-BCE4-573B800EF006}.Debug|Any CPU.Build.0 = Release|Any CPU
 		{E79E6240-4954-41D0-BCE4-573B800EF006}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E79E6240-4954-41D0-BCE4-573B800EF006}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E6BF709C-E887-49DF-8A14-976800A38365}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E6BF709C-E887-49DF-8A14-976800A38365}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E6BF709C-E887-49DF-8A14-976800A38365}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E6BF709C-E887-49DF-8A14-976800A38365}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Analytics\Analytics.csproj
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

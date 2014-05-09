@@ -17,7 +17,7 @@ namespace Segmentio
     public class Client : IDisposable
     {
         private IFlushHandler _flushHandler;
-        private string _secret;
+        private string _writeKey;
         private Options _options;
 
         public Statistics Statistics { get; set; }
@@ -35,28 +35,28 @@ namespace Segmentio
         #region Initialization
 
         /// <summary>
-        /// Creates a new REST client with a specified API secret and default options
+        /// Creates a new REST client with a specified API writeKey and default options
         /// </summary>
-        /// <param name="secret"></param>
-        public Client(string secret) : this(secret, new Options()) {}
+        /// <param name="writeKey"></param>
+        public Client(string writeKey) : this(writeKey, new Options()) {}
 
         /// <summary>
-        /// Creates a new REST client with a specified API secret and default options
+        /// Creates a new REST client with a specified API writeKey and default options
         /// </summary>
-        /// <param name="secret"></param>
+        /// <param name="writeKey"></param>
         /// <param name="options"></param>
-        public Client(string secret, Options options)
+        public Client(string writeKey, Options options)
         {
-            if (String.IsNullOrEmpty(secret))
-                throw new InvalidOperationException("Please supply a valid secret to initialize.");
+            if (String.IsNullOrEmpty(writeKey))
+                throw new InvalidOperationException("Please supply a valid writeKey to initialize.");
 
             this.Statistics = new Statistics();
 
-            this._secret = secret;
+            this._writeKey = writeKey;
             this._options = options;
 
 			IRequestHandler requestHandler = new BlockingRequestHandler(this, options.Timeout);
-			IBatchFactory batchFactory = new SimpleBatchFactory(this._secret);
+			IBatchFactory batchFactory = new SimpleBatchFactory(this._writeKey);
 
 			if (options.Async)
 				_flushHandler = new AsyncFlushHandler(batchFactory, requestHandler, options.MaxQueueSize);
@@ -68,11 +68,11 @@ namespace Segmentio
 
         #region Properties
 
-        public string Secret
+        public string WriteKey
         {
             get
             {
-                return _secret;
+                return _writeKey;
             }
         }
 

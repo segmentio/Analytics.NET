@@ -6,6 +6,8 @@ namespace Segment
 {
     public class Analytics
     {
+		public static string VERSION = "1.0.0";
+
         /// <summary>
         /// Lock for thread-safety
         /// </summary>

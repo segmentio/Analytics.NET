@@ -14,10 +14,14 @@ namespace Segment.Model
 		[JsonProperty(PropertyName="timestamp")]
 		public string Timestamp { get; private set; }
 
+		[JsonProperty(PropertyName="messageId")]
+		public string MessageId { get; private set; }
+
 		public BaseAction(DateTime? timestamp, Options options)
 		{
 			if (timestamp.HasValue) this.Timestamp = timestamp.Value.ToString("o");
 			this.Options = options == null ? new Options() : options;
+			this.MessageId = Guid.NewGuid ().ToString();
         }
 
         /// <summary>

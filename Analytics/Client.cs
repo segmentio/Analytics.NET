@@ -228,6 +228,29 @@ namespace Segment
         }
 
 
+		/// <summary>
+		/// Whenever a user triggers an event on your site, you’ll want to track it
+		/// so that you can analyze and segment by those events later.
+		/// </summary>
+		///
+		/// <param name="userId">The visitor's identifier after they log in, or you know
+		/// who they are. By
+		/// explicitly identifying a user, you tie all of their actions to their identity.
+		/// This makes it possible for you to run things like segment-based email campaigns.</param>
+		///
+		/// <param name="eventName">The event name you are tracking. It is recommended
+		/// that it is in human readable form. For example, "Bought T-Shirt"
+		/// or "Started an exercise"</param>
+		///
+		/// <param name="timestamp">  If this event happened in the past, the timestamp
+		/// can be used to designate when the identification happened. Careful with this one,
+		/// if it just happened, leave it null.</param>
+		///
+		public void Track(string userId, string eventName, DateTime? timestamp)
+		{
+			Track(userId, eventName, null, null, timestamp);
+		}
+			
         /// <summary>
         /// Whenever a user triggers an event on your site, you’ll want to track it
         /// so that you can analyze and segment by those events later.
@@ -259,6 +282,34 @@ namespace Segment
         {
 			Track(userId, eventName, properties, null, timestamp);
         }
+
+
+		/// <summary>
+		/// Whenever a user triggers an event on your site, you’ll want to track it
+		/// so that you can analyze and segment by those events later.
+		/// </summary>
+		///
+		/// <param name="userId">The visitor's identifier after they log in, or you know
+		/// who they are. By
+		/// explicitly identifying a user, you tie all of their actions to their identity.
+		/// This makes it possible for you to run things like segment-based email campaigns.</param>
+		///
+		/// <param name="eventName">The event name you are tracking. It is recommended
+		/// that it is in human readable form. For example, "Bought T-Shirt"
+		/// or "Started an exercise"</param>
+		///
+		/// <param name="properties"> A dictionary with items that describe the event
+		/// in more detail. This argument is optional, but highly recommended —
+		/// you’ll find these properties extremely useful later.</param>
+		///
+		/// <param name="options"> Allows you to set an anonymousid, which integrations this message goes to,
+		/// or the context.</param>
+		/// 
+		///
+		public void Track(string userId, string eventName, Properties properties, Options options)
+		{
+			Track (userId, eventName, properties, options, null);
+		}
 
         /// <summary>
         /// Whenever a user triggers an event on your site, you’ll want to track it

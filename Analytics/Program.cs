@@ -15,11 +15,28 @@ namespace Segment
 					{ "hey", 123 }
 				});
 
+				analytics.Track ("user123", "Ran away");
 
-				analytics.Track("user", "Test Event", new Properties () {
-					{"Test Property",1969009135},
-					{"Test Property 2",499343901}
-				}, DateTime.Parse("2013-09-16T16:52:07.1694552Z"));
+				analytics.Track ("user123", "Came back", DateTime.Now);
+
+				analytics.Track ("user123", "Engaged a bear", new Properties () {
+					{ "bearWeight", 865 }
+				});
+
+				analytics.Track ("user123", "Is Not Alive", new Properties () {
+					{ "why", "bear attack" }
+				}, new Options()
+					.Integration("Salesforce", true)
+				);
+
+				analytics.Track ("user123", "Is Not Alive", new Properties () {
+					{ "why", "bear attack" }
+				}, new Options()
+					.Integration("Salesforce", true)
+					.SetAnonymousId("cookie-id")
+					.SetContext(new Context()
+						.SetIp("192.144.23.2"))
+				);
 
 				analytics.Flush ();
 			}

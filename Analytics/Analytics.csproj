@@ -53,7 +53,6 @@
     <Compile Include="Model\Identify.cs" />
     <Compile Include="Model\Properties.cs" />
     <Compile Include="Model\Traits.cs" />
-    <Compile Include="Options.cs" />
     <Compile Include="Request\ContextSerializer.cs" />
     <Compile Include="Request\IRequestHandler.cs" />
     <Compile Include="Analytics.cs" />
@@ -72,6 +71,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Model\Options.cs" />
     <Compile Include="Model\Dict.cs" />
+    <Compile Include="Config.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Track.cs" />

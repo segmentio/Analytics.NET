@@ -20,10 +20,10 @@ namespace Segment.Model
 
         internal Identify(string userId,
 		                  Traits traits, 
-		                  DateTime? timestamp,
-		                  Context context)
+						  Options options, 
+		                  DateTime? timestamp)
 	
-			: base(timestamp, context)
+			: base(timestamp, options)
         {
 			this.UserId = userId;
             this.Traits = traits ?? new Traits();

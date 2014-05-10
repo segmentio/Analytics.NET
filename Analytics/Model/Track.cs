@@ -23,10 +23,10 @@ namespace Segment.Model
         internal Track(string userId, 
 		               string eventName,
             		   Properties properties, 
-		               DateTime? timestamp,
-		               Context context)
+					   Options options,
+		               DateTime? timestamp)
 
-            : base(timestamp, context)
+			: base(timestamp, options)
         {
 			this.UserId = userId;
             this.EventName = eventName;

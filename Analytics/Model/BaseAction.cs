@@ -9,16 +9,15 @@ namespace Segment.Model
     public abstract class BaseAction
     {
 
+		public Options Options;
+
 		[JsonProperty(PropertyName="timestamp")]
 		public string Timestamp { get; private set; }
-		
-		[JsonProperty(PropertyName = "context")]
-		private Context Context { get; set; }
 
-		public BaseAction(DateTime? timestamp, Context context)
+		public BaseAction(DateTime? timestamp, Options options)
 		{
 			if (timestamp.HasValue) this.Timestamp = timestamp.Value.ToString("o");
-			this.Context = context;
+			this.Options = options == null ? new Options() : options;
         }
 
         /// <summary>

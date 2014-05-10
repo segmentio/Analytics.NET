@@ -131,7 +131,7 @@ namespace Segment
         ///
         public void Identify(string userId, Traits traits, DateTime? timestamp)
         {
-            Identify(userId, traits, timestamp, null);
+			Identify(userId, traits, null, timestamp);
         }
 
         /// <summary>
@@ -148,13 +148,12 @@ namespace Segment
         /// Pass in values in key-value format. String key, then its value
         /// { String, Integer, Boolean, Double, or Date are acceptable types for a value. } </param>
         ///
-        /// <param name="context"> A dictionary with additional information thats related to the visit.
-        /// Examples are userAgent, and IP address of the visitor.
-        /// Feel free to pass in null if you don't have this information.</param>
+		/// <param name="options"> Allows you to set an anonymousid, which integrations this message goes to,
+		/// or the context.</param>
         ///
-        public void Identify(string userId, Traits traits, Context context)
+		public void Identify(string userId, Traits traits, Options options)
         {
-            Identify(userId, traits, null, context);
+			Identify(userId, traits, options, null);
         }
 
         /// <summary>
@@ -171,25 +170,21 @@ namespace Segment
         /// Pass in values in key-value format. String key, then its value
         /// { String, Integer, Boolean, Double, or Date are acceptable types for a value. } </param>
         ///
+		/// <param name="options"> Allows you to set an anonymousid, which integrations this message goes to,
+		/// or the context.</param>
+		/// 
         /// <param name="timestamp">  If this event happened in the past, the timestamp
         /// can be used to designate when the identification happened. Careful with this one,
         /// if it just happened, leave it null.</param>
-
-        /// <param name="context"> A dictionary with additional information thats related to the visit.
-        /// Examples are userAgent, and IP address of the visitor.
-        /// Feel free to pass in null if you don't have this information.</param>
+		/// 
         ///
         ///
-        public void Identify(string userId, Traits traits,
-            DateTime? timestamp, Context context)
+		public void Identify(string userId, Traits traits, Options options, DateTime? timestamp)
         {
-
             if (String.IsNullOrEmpty(userId))
                 throw new InvalidOperationException("Please supply a valid userId to Identify.");
 
-			Identify identify = new Identify(userId, traits, timestamp, context);
-
-            Enqueue(identify);
+			Enqueue(new Identify(userId, traits, options, timestamp));
         }
 
 		#endregion
@@ -203,13 +198,13 @@ namespace Segment
         /// <param name="userId">The visitor's identifier after they log in, or you know
         /// who they are. </param>
         ///
-        /// <param name="eventName">The event name you are tracking. It is recommended
+		/// <param name="eventName">The event name you are tracking. It is recommended
         /// that it is in human readable form. For example, "Bought T-Shirt"
         /// or "Started an exercise"</param>
         ///
-        public void Track(string userId, string eventName)
+		public void Track(string userId, string eventName)
         {
-            Track(userId, eventName, null, null, null);
+			Track(userId, eventName, null, null, null);
         }
 
         /// <summary>
@@ -219,7 +214,7 @@ namespace Segment
         /// <param name="userId">The visitor's identifier after they log in, or you know
         /// who they are. </param>
         ///
-        /// <param name="eventName">The event name you are tracking. It is recommended
+		/// <param name="eventName">The event name you are tracking. It is recommended
         /// that it is in human readable form. For example, "Bought T-Shirt"
         /// or "Started an exercise"</param>
         ///
@@ -227,9 +222,9 @@ namespace Segment
         /// in more detail. This argument is optional, but highly recommended —
         /// you’ll find these properties extremely useful later.</param>
         ///
-        public void Track(string userId, string eventName, Properties properties)
+		public void Track(string userId, string eventName, Properties properties)
         {
-            Track(userId, eventName, properties, null, null);
+			Track(userId, eventName, properties, null, null);
         }
 
 
@@ -243,7 +238,7 @@ namespace Segment
         /// explicitly identifying a user, you tie all of their actions to their identity.
         /// This makes it possible for you to run things like segment-based email campaigns.</param>
         ///
-        /// <param name="eventName">The event name you are tracking. It is recommended
+		/// <param name="eventName">The event name you are tracking. It is recommended
         /// that it is in human readable form. For example, "Bought T-Shirt"
         /// or "Started an exercise"</param>
         ///
@@ -259,10 +254,10 @@ namespace Segment
         /// can be used to designate when the identification happened. Careful with this one,
         /// if it just happened, leave it null.</param>
         ///
-        public void Track(string userId, string eventName, Properties properties,
+		public void Track(string userId, string eventName, Properties properties,
            DateTime? timestamp)
         {
-            Track(userId, eventName, properties, timestamp, null);
+			Track(userId, eventName, properties, null, timestamp);
         }
 
         /// <summary>
@@ -275,35 +270,31 @@ namespace Segment
         /// explicitly identifying a user, you tie all of their actions to their identity.
         /// This makes it possible for you to run things like segment-based email campaigns.</param>
         ///
-        /// <param name="eventName">The event name you are tracking. It is recommended
+		/// <param name="eventName">The event name you are tracking. It is recommended
         /// that it is in human readable form. For example, "Bought T-Shirt"
         /// or "Started an exercise"</param>
         ///
         /// <param name="properties"> A dictionary with items that describe the event
         /// in more detail. This argument is optional, but highly recommended —
         /// you’ll find these properties extremely useful later.</param>
-        ///
+		///
+		/// <param name="options"> Allows you to set an anonymousid, which integrations this message goes to,
+		/// or the context.</param>
+		/// 
         /// <param name="timestamp">  If this event happened in the past, the timestamp
         /// can be used to designate when the identification happened. Careful with this one,
         /// if it just happened, leave it null.</param>
         ///
-        /// <param name="context"> A dictionary with additional information thats related to the visit.
-        /// Examples are userAgent, and IP address of the visitor.
-        /// Feel free to pass in null if you don't have this information.</param>
-        ///
-        ///
-        public void Track(string userId, string eventName, Properties properties,
-            DateTime? timestamp, Context context)
+		public void Track(string userId, string eventName, Properties properties,
+			Options options, DateTime? timestamp)
         {
             if (String.IsNullOrEmpty(userId))
                 throw new InvalidOperationException("Please supply a valid userId to Track.");
 
-            if (String.IsNullOrEmpty(eventName))
-                throw new InvalidOperationException("Please supply a valid eventName to Track.");
+			if (String.IsNullOrEmpty(eventName))
+                throw new InvalidOperationException("Please supply a valid event to Track.");
 
-			Track track = new Track(userId, eventName, properties, timestamp, context);
-
-            Enqueue(track);
+			Enqueue(new Track(userId, eventName, properties, options, timestamp));
         }
 
 		#endregion
@@ -315,81 +306,73 @@ namespace Segment
 		/// Aliases an anonymous user into an identified user.
 		/// </summary>
 		/// 
-		/// <param name="from">The anonymous user's id before they are logged in.</param>
+		/// <param name="previousId">The anonymous user's id before they are logged in.</param>
 		/// 
-		/// <param name="to">the identified user's id after they're logged in.</param>
+		/// <param name="userId">the identified user's id after they're logged in.</param>
+		/// 
+		public void Alias(string previousId, string userId)
+		{
+			Alias(previousId, userId, null, null);
+		}
+
+		
+		/// <summary>
+		/// Aliases an anonymous user into an identified user.
+		/// </summary>
+		/// 
+		/// <param name="previousId">The anonymous user's id before they are logged in.</param>
+		/// 
+		/// <param name="userId">the identified user's id after they're logged in.</param>
 		
 		/// <param name="timestamp">  If this event happened in the past, the timestamp
 		/// can be used to designate when the identification happened. Careful with this one,
 		/// if it just happened, leave it null.</param>
 		/// 
-		public void Alias(string from, string to)
+		public void Alias(string previousId, string userId, DateTime? timestamp)
 		{
-			Alias(from, to, null, null);
-		}
-
-		
-		/// <summary>
-		/// Aliases an anonymous user into an identified user.
-		/// </summary>
-		/// 
-		/// <param name="from">The anonymous user's id before they are logged in.</param>
-		/// 
-		/// <param name="to">the identified user's id after they're logged in.</param>
-		
-		/// <param name="timestamp">  If this event happened in the past, the timestamp
-		/// can be used to designate when the identification happened. Careful with this one,
-		/// if it just happened, leave it null.</param>
-		/// 
-		public void Alias(string from, string to, DateTime? timestamp)
-		{
-			Alias(from, to, timestamp, null);
+			Alias(previousId, userId, null, timestamp);
 		}
 
 		/// <summary>
 		/// Aliases an anonymous user into an identified user.
 		/// </summary>
 		/// 
-		/// <param name="from">The anonymous user's id before they are logged in.</param>
+		/// <param name="previousId">The anonymous user's id before they are logged in.</param>
 		/// 
-		/// <param name="to">the identified user's id after they're logged in.</param>
-		
-		/// <param name="context"> A dictionary with additional information thats related to the visit.
-		/// Examples are userAgent, and IP address of the visitor.
-		/// Feel free to pass in null if you don't have this information.</param>
+		/// <param name="userId">the identified user's id after they're logged in.</param>
+		///
+		/// <param name="options"> Allows you to set an anonymousid, which integrations this message goes to,
+		/// or the context.</param>
 		/// 
-		public void Alias(string from, string to, Context context)
+		public void Alias(string previousId, string userId, Options options)
 		{
-			Alias(from, to, null, context);
+			Alias(previousId, userId, options, null);
 		}
 
 		/// <summary>
 		/// Aliases an anonymous user into an identified user.
 		/// </summary>
 		/// 
-		/// <param name="from">The anonymous user's id before they are logged in.</param>
+		/// <param name="previousId">The anonymous user's id before they are logged in.</param>
 		/// 
-		/// <param name="to">the identified user's id after they're logged in.</param>
-		
+		/// <param name="userId">the identified user's id after they're logged in.</param>
+		/// 
+		/// <param name="options"> Allows you to set an anonymousid, which integrations this message goes to,
+		/// or the context.</param>
+		/// 
 		/// <param name="timestamp">  If this event happened in the past, the timestamp
 		/// can be used to designate when the identification happened. Careful with this one,
 		/// if it just happened, leave it null.</param>
 		///
-		/// <param name="context"> A dictionary with additional information thats related to the visit.
-		/// Examples are userAgent, and IP address of the visitor.
-		/// Feel free to pass in null if you don't have this information.</param>
-		/// 
-		public void Alias(string from, string to, DateTime? timestamp, Context context)
+		public void Alias(string previousId, string userId, Options options, DateTime? timestamp)
 		{
-			if (String.IsNullOrEmpty(from))
-				throw new InvalidOperationException("Please supply a valid 'from' to Alias.");
+			if (String.IsNullOrEmpty(previousId))
+				throw new InvalidOperationException("Please supply a valid 'previousId' to Alias.");
 			
-			if (String.IsNullOrEmpty(to))
+			if (String.IsNullOrEmpty(userId))
 				throw new InvalidOperationException("Please supply a valid 'to' to Alias.");
-			
-			Alias alias = new Alias(from, to, timestamp, context);
 
-            Enqueue(alias);
+			Enqueue(new Alias(previousId, userId, options, timestamp));
 		}
 
 		#endregion

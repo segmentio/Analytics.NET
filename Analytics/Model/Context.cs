@@ -5,16 +5,13 @@ using Newtonsoft.Json;
 
 namespace Segment.Model
 {
-    public class Context : Props
+    public class Context : Dict
     {
         [JsonProperty(PropertyName = "language")]
         internal string language;
 
         [JsonProperty(PropertyName = "ip")]
         internal string ip;
-
-		[JsonProperty(PropertyName = "providers")]
-		internal Providers providers;
 
         /// <summary>
         /// Provides additional information about a 
@@ -44,16 +41,5 @@ namespace Segment.Model
             this.ip = ip;
             return this;
         }
-
-		/// <summary>
-		/// Sets the enabled providers for this call.
-		/// </summary>
-		/// <param name="providers">The container object for provider info</param>
-		/// <returns>Context for chaining</returns>
-		public Context SetProviders(Providers providers)
-		{
-			this.providers = providers;
-			return this;
-		}
     }
 }

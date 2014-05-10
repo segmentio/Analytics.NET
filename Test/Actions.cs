@@ -27,27 +27,27 @@ namespace Segment.Test
 				{ "Friends", 30 },
 				{ "Joined", DateTime.Now },
 				{ "Cool", true },
-				{ "Company", new Props () { { "name", "Initech, Inc " } } },
+				{ "Company", new Dict () { { "name", "Initech, Inc " } } },
 				{ "Revenue", 40.32 },
 				{ "Don't Submit This, Kids", new UnauthorizedAccessException () }
 			};
 		}
 
-		public static Context Context ()
+		public static Options Options ()
 		{
-			return new Context ()
-				.SetIp ("12.212.12.49")
-				.SetLanguage ("en-us")
-				.SetProviders (new Providers () {
-				{ "all", false },
-				{ "Mixpanel", true },
-				{ "Salesforce", true }
-			});
+			return new Options () 
+				.Integration ("all", false)
+				.Integration ("Mixpanel", true)
+				.Integration ("Salesforce", true)
+				.SetContext (new Context ()
+					.SetIp ("12.212.12.49")
+					.SetLanguage ("en-us")
+			);
 		}
 			
 		public static void Identify(Client client)
 		{
-			client.Identify("user", Traits(), new DateTime(), Context());
+			client.Identify("user", Traits(), Options(), new DateTime());
 			Analytics.Client.Flush();
 		}
 
@@ -58,7 +58,7 @@ namespace Segment.Test
 
 		public static void Alias(Client client)
 		{
-			client.Alias("from", "to");
+			client.Alias("previousId", "to");
 		}
 
 		public static void Random(Client client)

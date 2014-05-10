@@ -60,7 +60,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stats\Statistics.cs" />
     <Compile Include="Model\Providers.cs" />
-    <Compile Include="Model\Props.cs" />
     <Compile Include="Model\Alias.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Flush\IFlushHandler.cs" />
@@ -71,6 +70,8 @@
     <Compile Include="Flush\IBatchFactory.cs" />
     <Compile Include="Flush\SimpleBatchFactory.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Model\Options.cs" />
+    <Compile Include="Model\Dict.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Track.cs" />

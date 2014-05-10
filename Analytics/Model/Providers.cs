@@ -5,7 +5,7 @@ namespace Segment.Model
 	/// <summary>
 	/// Providers is a context object that helps specify which providers this action should go to.
 	/// </summary>
-	public class Providers : Props
+	public class Providers : Dict
 	{
 		public Providers ()
 		{

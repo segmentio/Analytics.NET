@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Segment.Model
 {
-    public class Traits : Props
+    public class Traits : Dict
     {
     }
 }

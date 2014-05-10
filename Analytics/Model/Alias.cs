@@ -9,8 +9,8 @@ namespace Segment.Model
 	public class Alias : BaseAction
 	{
 		
-		[JsonProperty(PropertyName = "action")]
-		private string Action = "alias";
+		[JsonProperty(PropertyName = "type")]
+		private string Type = "alias";
 
 		[JsonProperty(PropertyName = "previousId")]
 		private string PreviousId { get; set; }
@@ -26,9 +26,9 @@ namespace Segment.Model
 			this.UserId = userId;
 		}
 		
-		public override string GetAction()
+		public override string GetType()
 		{
-			return Action;
+			return Type;
 		}
 	}
 }

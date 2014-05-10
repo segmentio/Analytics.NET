@@ -9,8 +9,8 @@ namespace Segment.Model
     public class Identify : BaseAction
     {
 
-        [JsonProperty(PropertyName = "action")]
-        private string Action = "identify";
+		[JsonProperty(PropertyName = "type")]
+		private string Type = "identify";
 		
 		[JsonProperty(PropertyName = "userId")]
 		public string UserId { get; private set; }
@@ -29,9 +29,9 @@ namespace Segment.Model
             this.Traits = traits ?? new Traits();
         }
 
-        public override string GetAction()
+		public override string GetType()
         {
-            return Action;
+			return Type;
         }
     }
 }

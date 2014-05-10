@@ -8,7 +8,6 @@ namespace Segment.Model
 {
     public abstract class BaseAction
     {
-
 		public Options Options;
 
 		[JsonProperty(PropertyName="timestamp")]
@@ -29,6 +28,6 @@ namespace Segment.Model
         /// A track returns "track", etc..
         /// </summary>
         /// <returns></returns>
-        public abstract string GetAction();
+		public abstract string GetType();
     }
 }

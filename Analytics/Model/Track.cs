@@ -8,8 +8,8 @@ namespace Segment.Model
 {
     public class Track : BaseAction
     {
-        [JsonProperty(PropertyName = "action")]
-        private string Action = "track";
+		[JsonProperty(PropertyName = "type")]
+		private string Type = "track";
 		
 		[JsonProperty(PropertyName = "userId")]
 		public string UserId { get; private set; }
@@ -33,9 +33,9 @@ namespace Segment.Model
             this.Properties = properties ?? new Properties();
         }
 
-        public override string GetAction()
+		public override string GetType()
         {
-            return Action;
+			return Type;
         }
     }
 }

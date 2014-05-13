@@ -8,9 +8,6 @@ namespace Segment.Model
 {
     public class Track : BaseAction
     {
-		[JsonProperty(PropertyName = "type")]
-		private string Type = "track";
-		
 		[JsonProperty(PropertyName = "userId")]
 		public string UserId { get; private set; }
 
@@ -23,19 +20,13 @@ namespace Segment.Model
         internal Track(string userId, 
 		               string eventName,
             		   Properties properties, 
-					   Options options,
-		               DateTime? timestamp)
+					   Options options)
 
-			: base(timestamp, options)
+			: base("track", options)
         {
 			this.UserId = userId;
             this.EventName = eventName;
             this.Properties = properties ?? new Properties();
-        }
-
-		public override string GetType()
-        {
-			return Type;
         }
     }
 }

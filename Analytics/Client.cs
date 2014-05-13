@@ -107,31 +107,7 @@ namespace Segment
         ///
         public void Identify(string userId, Traits traits)
         {
-            Identify(userId, traits, null, null);
-        }
-
-
-        /// <summary>
-        /// Identifying a visitor ties all of their actions to an ID you
-        /// recognize and records visitor traits you can segment by.
-        /// </summary>
-        ///
-        /// <param name="userId">The visitor's identifier after they log in, or you know
-        /// who they are. By
-        /// explicitly identifying a user, you tie all of their actions to their identity.</param>
-        ///
-        /// <param name="traits">A dictionary with keys like "email", "name", “subscriptionPlan” or
-        /// "friendCount”. You can segment your users by any trait you record.
-        /// Pass in values in key-value format. String key, then its value
-        /// { String, Integer, Boolean, Double, or Date are acceptable types for a value. } </param>
-        ///
-        /// <param name="timestamp">  If this event happened in the past, the timestamp
-        /// can be used to designate when the identification happened. Careful with this one,
-        /// if it just happened, leave it null.</param>
-        ///
-        public void Identify(string userId, Traits traits, DateTime? timestamp)
-        {
-			Identify(userId, traits, null, timestamp);
+            Identify(userId, traits, null);
         }
 
         /// <summary>
@@ -148,43 +124,15 @@ namespace Segment
         /// Pass in values in key-value format. String key, then its value
         /// { String, Integer, Boolean, Double, or Date are acceptable types for a value. } </param>
         ///
-		/// <param name="options"> Allows you to set an anonymousid, which integrations this message goes to,
-		/// or the context.</param>
+		/// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
+		/// and the context of th emessage.</param>
         ///
 		public void Identify(string userId, Traits traits, Options options)
         {
-			Identify(userId, traits, options, null);
-        }
+			if (String.IsNullOrEmpty(userId))
+				throw new InvalidOperationException("Please supply a valid userId to Identify.");
 
-        /// <summary>
-        /// Identifying a visitor ties all of their actions to an ID you
-        /// recognize and records visitor traits you can segment by.
-        /// </summary>
-        ///
-        /// <param name="userId">The visitor's identifier after they log in, or you know
-        /// who they are. By
-        /// explicitly identifying a user, you tie all of their actions to their identity.</param>
-        ///
-        /// <param name="traits">A dictionary with keys like "email", "name", “subscriptionPlan” or
-        /// "friendCount”. You can segment your users by any trait you record.
-        /// Pass in values in key-value format. String key, then its value
-        /// { String, Integer, Boolean, Double, or Date are acceptable types for a value. } </param>
-        ///
-		/// <param name="options"> Allows you to set an anonymousid, which integrations this message goes to,
-		/// or the context.</param>
-		/// 
-        /// <param name="timestamp">  If this event happened in the past, the timestamp
-        /// can be used to designate when the identification happened. Careful with this one,
-        /// if it just happened, leave it null.</param>
-		/// 
-        ///
-        ///
-		public void Identify(string userId, Traits traits, Options options, DateTime? timestamp)
-        {
-            if (String.IsNullOrEmpty(userId))
-                throw new InvalidOperationException("Please supply a valid userId to Identify.");
-
-			Enqueue(new Identify(userId, traits, options, timestamp));
+			Enqueue(new Identify(userId, traits, options));
         }
 
 		#endregion
@@ -204,7 +152,7 @@ namespace Segment
         ///
 		public void Track(string userId, string eventName)
         {
-			Track(userId, eventName, null, null, null);
+			Track(userId, eventName, null, null);
         }
 
         /// <summary>
@@ -224,9 +172,8 @@ namespace Segment
         ///
 		public void Track(string userId, string eventName, Properties properties)
         {
-			Track(userId, eventName, properties, null, null);
+			Track(userId, eventName, properties, null);
         }
-
 
 		/// <summary>
 		/// Whenever a user triggers an event on your site, you’ll want to track it
@@ -242,47 +189,14 @@ namespace Segment
 		/// that it is in human readable form. For example, "Bought T-Shirt"
 		/// or "Started an exercise"</param>
 		///
-		/// <param name="timestamp">  If this event happened in the past, the timestamp
-		/// can be used to designate when the identification happened. Careful with this one,
-		/// if it just happened, leave it null.</param>
+		/// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
+		/// and the context of th emessage.</param>
+		/// 
 		///
-		public void Track(string userId, string eventName, DateTime? timestamp)
+		public void Track(string userId, string eventName, Options options)
 		{
-			Track(userId, eventName, null, null, timestamp);
+			Track(userId, eventName, null, options);
 		}
-			
-        /// <summary>
-        /// Whenever a user triggers an event on your site, you’ll want to track it
-        /// so that you can analyze and segment by those events later.
-        /// </summary>
-        ///
-        /// <param name="userId">The visitor's identifier after they log in, or you know
-        /// who they are. By
-        /// explicitly identifying a user, you tie all of their actions to their identity.
-        /// This makes it possible for you to run things like segment-based email campaigns.</param>
-        ///
-		/// <param name="eventName">The event name you are tracking. It is recommended
-        /// that it is in human readable form. For example, "Bought T-Shirt"
-        /// or "Started an exercise"</param>
-        ///
-        /// <param name="properties"> A dictionary with items that describe the event
-        /// in more detail. This argument is optional, but highly recommended —
-        /// you’ll find these properties extremely useful later.</param>
-        ///
-        /// <param name="context"> A dictionary with additional information thats related to the visit.
-        /// Examples are userAgent, and IP address of the visitor.
-        /// Feel free to pass in null if you don't have this information.</param>
-        ///
-        /// <param name="timestamp">  If this event happened in the past, the timestamp
-        /// can be used to designate when the identification happened. Careful with this one,
-        /// if it just happened, leave it null.</param>
-        ///
-		public void Track(string userId, string eventName, Properties properties,
-           DateTime? timestamp)
-        {
-			Track(userId, eventName, properties, null, timestamp);
-        }
-
 
 		/// <summary>
 		/// Whenever a user triggers an event on your site, you’ll want to track it
@@ -302,57 +216,25 @@ namespace Segment
 		/// in more detail. This argument is optional, but highly recommended —
 		/// you’ll find these properties extremely useful later.</param>
 		///
-		/// <param name="options"> Allows you to set an anonymousid, which integrations this message goes to,
-		/// or the context.</param>
+		/// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
+		/// and the context of th emessage.</param>
 		/// 
 		///
 		public void Track(string userId, string eventName, Properties properties, Options options)
 		{
-			Track (userId, eventName, properties, options, null);
-		}
-
-        /// <summary>
-        /// Whenever a user triggers an event on your site, you’ll want to track it
-        /// so that you can analyze and segment by those events later.
-        /// </summary>
-        ///
-        /// <param name="userId">The visitor's identifier after they log in, or you know
-        /// who they are. By
-        /// explicitly identifying a user, you tie all of their actions to their identity.
-        /// This makes it possible for you to run things like segment-based email campaigns.</param>
-        ///
-		/// <param name="eventName">The event name you are tracking. It is recommended
-        /// that it is in human readable form. For example, "Bought T-Shirt"
-        /// or "Started an exercise"</param>
-        ///
-        /// <param name="properties"> A dictionary with items that describe the event
-        /// in more detail. This argument is optional, but highly recommended —
-        /// you’ll find these properties extremely useful later.</param>
-		///
-		/// <param name="options"> Allows you to set an anonymousid, which integrations this message goes to,
-		/// or the context.</param>
-		/// 
-        /// <param name="timestamp">  If this event happened in the past, the timestamp
-        /// can be used to designate when the identification happened. Careful with this one,
-        /// if it just happened, leave it null.</param>
-        ///
-		public void Track(string userId, string eventName, Properties properties,
-			Options options, DateTime? timestamp)
-        {
-            if (String.IsNullOrEmpty(userId))
-                throw new InvalidOperationException("Please supply a valid userId to Track.");
+			if (String.IsNullOrEmpty(userId))
+				throw new InvalidOperationException("Please supply a valid userId to Track.");
 
 			if (String.IsNullOrEmpty(eventName))
-                throw new InvalidOperationException("Please supply a valid event to Track.");
+				throw new InvalidOperationException("Please supply a valid event to Track.");
 
-			Enqueue(new Track(userId, eventName, properties, options, timestamp));
-        }
+			Enqueue(new Track(userId, eventName, properties, options));
+		}
 
 		#endregion
 
 		#region Alias
 
-		
 		/// <summary>
 		/// Aliases an anonymous user into an identified user.
 		/// </summary>
@@ -363,25 +245,7 @@ namespace Segment
 		/// 
 		public void Alias(string previousId, string userId)
 		{
-			Alias(previousId, userId, null, null);
-		}
-
-		
-		/// <summary>
-		/// Aliases an anonymous user into an identified user.
-		/// </summary>
-		/// 
-		/// <param name="previousId">The anonymous user's id before they are logged in.</param>
-		/// 
-		/// <param name="userId">the identified user's id after they're logged in.</param>
-		
-		/// <param name="timestamp">  If this event happened in the past, the timestamp
-		/// can be used to designate when the identification happened. Careful with this one,
-		/// if it just happened, leave it null.</param>
-		/// 
-		public void Alias(string previousId, string userId, DateTime? timestamp)
-		{
-			Alias(previousId, userId, null, timestamp);
+			Alias(previousId, userId, null);
 		}
 
 		/// <summary>
@@ -392,38 +256,18 @@ namespace Segment
 		/// 
 		/// <param name="userId">the identified user's id after they're logged in.</param>
 		///
-		/// <param name="options"> Allows you to set an anonymousid, which integrations this message goes to,
-		/// or the context.</param>
+		/// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
+		/// and the context of th emessage.</param>
 		/// 
 		public void Alias(string previousId, string userId, Options options)
 		{
-			Alias(previousId, userId, options, null);
-		}
-
-		/// <summary>
-		/// Aliases an anonymous user into an identified user.
-		/// </summary>
-		/// 
-		/// <param name="previousId">The anonymous user's id before they are logged in.</param>
-		/// 
-		/// <param name="userId">the identified user's id after they're logged in.</param>
-		/// 
-		/// <param name="options"> Allows you to set an anonymousid, which integrations this message goes to,
-		/// or the context.</param>
-		/// 
-		/// <param name="timestamp">  If this event happened in the past, the timestamp
-		/// can be used to designate when the identification happened. Careful with this one,
-		/// if it just happened, leave it null.</param>
-		///
-		public void Alias(string previousId, string userId, Options options, DateTime? timestamp)
-		{
 			if (String.IsNullOrEmpty(previousId))
 				throw new InvalidOperationException("Please supply a valid 'previousId' to Alias.");
-			
+
 			if (String.IsNullOrEmpty(userId))
 				throw new InvalidOperationException("Please supply a valid 'to' to Alias.");
 
-			Enqueue(new Alias(previousId, userId, options, timestamp));
+			Enqueue(new Alias(previousId, userId, options));
 		}
 
 		#endregion

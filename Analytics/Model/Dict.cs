@@ -17,7 +17,7 @@ namespace Segment.Model
 		/// <param name="key">Key</param>
 		/// <param name="val">Value</param>
 		/// <returns>An instance of the Props for chaining</returns>
-		public Dict Put(string key, object val) 
+		public new Dict Add(string key, object val) 
 		{
 			this.Add (key, val);
 			return this;

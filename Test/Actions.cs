@@ -36,24 +36,25 @@ namespace Segment.Test
 		public static Options Options ()
 		{
 			return new Options () 
-				.Integration ("all", false)
-				.Integration ("Mixpanel", true)
-				.Integration ("Salesforce", true)
+				.SetTimestamp(DateTime.Now)
+				.SetIntegration ("all", false)
+				.SetIntegration ("Mixpanel", true)
+				.SetIntegration ("Salesforce", true)
 				.SetContext (new Context ()
-					.SetIp ("12.212.12.49")
-					.SetLanguage ("en-us")
+					.Add ("ip", "12.212.12.49")
+					.Add ("language", "en-us")
 			);
 		}
 			
 		public static void Identify(Client client)
 		{
-			client.Identify("user", Traits(), Options(), new DateTime());
+			client.Identify("user", Traits(), Options());
 			Analytics.Client.Flush();
 		}
 
 		public static void Track(Client client)
 		{
-			client.Track("user", "Ran .NET test", Properties(), DateTime.Now);
+			client.Track("user", "Ran .NET test", Properties(), Options());
 		}
 
 		public static void Alias(Client client)

@@ -8,26 +8,31 @@ namespace Segment.Model
 {
     public abstract class BaseAction
     {
-		public Options Options;
-
-		[JsonProperty(PropertyName="timestamp")]
-		public string Timestamp { get; private set; }
+		[JsonProperty(PropertyName = "type")]
+		public string Type { get; set; }
 
 		[JsonProperty(PropertyName="messageId")]
 		public string MessageId { get; private set; }
+	
+		[JsonProperty(PropertyName="timestamp")]
+		public string Timestamp { get; private set; }
 
-		public BaseAction(DateTime? timestamp, Options options)
+		[JsonProperty(PropertyName="context")]
+		public Context Context { get; set; }
+
+		[JsonProperty(PropertyName="integrations")]
+		public Dict Integrations { get; set; }
+
+		internal BaseAction(string type, Options options)
 		{
-			if (timestamp.HasValue) this.Timestamp = timestamp.Value.ToString("o");
-			this.Options = options == null ? new Options() : options;
-			this.MessageId = Guid.NewGuid ().ToString();
-        }
+			options = options ?? new Options ();
 
-        /// <summary>
-        /// Returns the string name representing this action based on the Segment.io REST API.
-        /// A track returns "track", etc..
-        /// </summary>
-        /// <returns></returns>
-		public abstract string GetType();
+			this.Type = type;
+			this.MessageId = Guid.NewGuid ().ToString();
+			if (options.Timestamp.HasValue)
+				this.Timestamp = options.Timestamp.ToString ();
+			this.Context = options.Context;
+			this.Integrations = options.Integrations;
+        }
     }
 }

@@ -17,25 +17,30 @@ namespace Segment
 
 				analytics.Track ("user123", "Ran away");
 
-				analytics.Track ("user123", "Came back", DateTime.Now);
-
 				analytics.Track ("user123", "Engaged a bear", new Properties () {
 					{ "bearWeight", 865 }
 				});
 
+				analytics.Track ("user123", "Engaged a bear", new Options ()
+					.SetContext (new Context () {
+						{ "app", new Dict() {
+							{ "name", "test" } 
+						}}
+				}));
+
 				analytics.Track ("user123", "Is Not Alive", new Properties () {
 					{ "why", "bear attack" }
 				}, new Options()
-					.Integration("Salesforce", true)
+					.SetIntegration("Salesforce", true)
 				);
 
 				analytics.Track ("user123", "Is Not Alive", new Properties () {
 					{ "why", "bear attack" }
 				}, new Options()
-					.Integration("Salesforce", true)
+					.SetIntegration("Salesforce", true)
 					.SetAnonymousId("cookie-id")
 					.SetContext(new Context()
-						.SetIp("192.144.23.2"))
+						.Add("ip", "192.144.23.2"))
 				);
 
 				analytics.Flush ();

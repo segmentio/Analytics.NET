@@ -4,19 +4,27 @@ using Segment.Model;
 
 namespace Segment.Model
 {
-	public class Options : Dict
+	public class Options
 	{
-		internal string AnonymousId { get; private set; }
-		internal Dict Integrations { get; private set; }
-		internal Context Context { get; private set; }
+		public string AnonymousId { get; private set; }
+		public Dict Integrations { get; private set; }
+		public DateTime? Timestamp { get; private set; }
+		public Context Context { get; private set; }
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Segment.Options"/> class.
+		/// Options object that allows the specification of a timestamp, 
+		/// an anonymousId, a context, or target integrations.
 		/// </summary>
 		public Options ()
 		{
 			this.Integrations = new Dict ();
 			this.Context = new Context ();
+
+			// default the context library
+			this.Context.Add ("library", new Dict() {
+				{ "name", "Analytics.NET" },
+				{ "version", Analytics.VERSION }
+			});
 		}
 
 		/// <summary>
@@ -28,6 +36,19 @@ namespace Segment.Model
 		public Options SetAnonymousId (string anonymousId)
 		{
 			this.AnonymousId = anonymousId;
+			return this;
+		}
+			
+		/// <summary>
+		/// Sets the timestamp of when an analytics call occured. The timestamp is primarily used for 
+		/// historical imports or if this event happened in the past. The timestamp is not required, 
+		/// and if its not provided, our servers will timestamp the call as if it just happened.
+		/// </summary>
+		/// <returns>This Options object for chaining.</returns>
+		/// <param name="anonymousId">The call's timestamp.</param>
+		public Options SetTimestamp (DateTime? timestamp)
+		{
+			this.Timestamp = timestamp;
 			return this;
 		}
 
@@ -52,7 +73,7 @@ namespace Segment.Model
 		/// </summary>
 		/// <param name="integration">The integration name.</param>
 		/// <param name="enabled">If set to <c>true</c>, then the integration is enabled.</param>
-		public Options Integration (string integration, bool enabled)
+		public Options SetIntegration (string integration, bool enabled)
 		{
 			this.Integrations.Add (integration, enabled);
 			return this;

@@ -8,27 +8,17 @@ namespace Segment.Model
 {
 	public class Alias : BaseAction
 	{
-		
-		[JsonProperty(PropertyName = "type")]
-		private string Type = "alias";
-
 		[JsonProperty(PropertyName = "previousId")]
 		private string PreviousId { get; set; }
 
 		[JsonProperty(PropertyName = "userId")]
 		private string UserId { get; set; }
 		
-		internal Alias(string previousId, string userId, 
-			Options options, DateTime? timestamp)
-			: base(timestamp, options)
+		internal Alias(string previousId, string userId, Options options)
+			: base("alias", options)
 		{
 			this.PreviousId = previousId;
 			this.UserId = userId;
-		}
-		
-		public override string GetType()
-		{
-			return Type;
 		}
 	}
 }

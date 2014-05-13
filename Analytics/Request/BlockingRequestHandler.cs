@@ -20,7 +20,7 @@ namespace Segment.Request
 		/// JSON serialization settings
 		/// </summary>
 		private JsonSerializerSettings settings = new JsonSerializerSettings() {
-			Converters = new List<JsonConverter> { new ContextSerializer() }
+			// Converters = new List<JsonConverter> { new ContextSerializer() }
 		};
 
 		/// <summary>

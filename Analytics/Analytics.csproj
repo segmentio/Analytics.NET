@@ -71,6 +71,7 @@
     <Compile Include="Model\Options.cs" />
     <Compile Include="Model\Dict.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="Model\Group.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Track.cs" />

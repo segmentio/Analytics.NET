@@ -137,6 +137,84 @@ namespace Segment
 
 		#endregion
 
+		#region Group
+
+		/// <summary>
+		/// The `group` method lets you associate a user with a group. Be it a company, 
+		/// organization, account, project, team or whatever other crazy name you came up 
+		/// with for the same concept! It also lets you record custom traits about the 
+		/// group, like industry or number of employees.
+		/// </summary>
+		///
+		/// <param name="userId">The visitor's database identifier after they log in, or you know
+		/// who they are. By explicitly grouping a user, you tie all of their actions to their group.</param>
+		///
+		/// <param name="groupId">The group's database identifier after they log in, or you know
+		/// who they are.</param>
+		///
+		/// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
+		/// and the context of th emessage.</param>
+		///
+		public void Group(string userId, string groupId, Options options)
+		{
+			Group (userId, groupId, null, options);
+		}
+
+		/// <summary>
+		/// The `group` method lets you associate a user with a group. Be it a company, 
+		/// organization, account, project, team or whatever other crazy name you came up 
+		/// with for the same concept! It also lets you record custom traits about the 
+		/// group, like industry or number of employees.
+		/// </summary>
+		///
+		/// <param name="userId">The visitor's database identifier after they log in, or you know
+		/// who they are. By explicitly grouping a user, you tie all of their actions to their group.</param>
+		///
+		/// <param name="groupId">The group's database identifier after they log in, or you know
+		/// who they are.</param>
+		///
+		/// <param name="traits">A dictionary with group keys like "name", “subscriptionPlan”. 
+		/// You can segment your users by any trait you record. Pass in values in key-value format. 
+		/// String key, then its value { String, Integer, Boolean, Double, or Date are acceptable types for a value. } </param>
+		///
+		public void Group(string userId, string groupId, Traits traits)
+		{
+			Group (userId, groupId, traits, null);
+		}
+
+		/// <summary>
+		/// The `group` method lets you associate a user with a group. Be it a company, 
+		/// organization, account, project, team or whatever other crazy name you came up 
+		/// with for the same concept! It also lets you record custom traits about the 
+		/// group, like industry or number of employees.
+		/// </summary>
+		///
+		/// <param name="userId">The visitor's database identifier after they log in, or you know
+		/// who they are. By explicitly grouping a user, you tie all of their actions to their group.</param>
+		///
+		/// <param name="groupId">The group's database identifier after they log in, or you know
+		/// who they are.</param>
+		///
+		/// <param name="traits">A dictionary with group keys like "name", “subscriptionPlan”. 
+		/// You can segment your users by any trait you record. Pass in values in key-value format. 
+		/// String key, then its value { String, Integer, Boolean, Double, or Date are acceptable types for a value. } </param>
+		///
+		/// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
+		/// and the context of th emessage.</param>
+		///
+		public void Group(string userId, string groupId, Traits traits, Options options)
+		{
+			if (String.IsNullOrEmpty(userId))
+				throw new InvalidOperationException("Please supply a valid userId to call #Group.");
+
+			if (String.IsNullOrEmpty(groupId))
+				throw new InvalidOperationException("Please supply a valid groupId to call #Group.");
+
+			Enqueue(new Group(userId, groupId, traits, options));
+		}
+
+		#endregion
+
 		#region Track
 
         /// <summary>

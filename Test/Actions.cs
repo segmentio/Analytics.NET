@@ -52,6 +52,12 @@ namespace Segment.Test
 			Analytics.Client.Flush();
 		}
 
+		public static void Group(Client client)
+		{
+			client.Group("user", "group", Traits(), Options());
+			Analytics.Client.Flush();
+		}
+
 		public static void Track(Client client)
 		{
 			client.Track("user", "Ran .NET test", Properties(), Options());

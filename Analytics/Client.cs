@@ -350,6 +350,273 @@ namespace Segment
 
 		#endregion
 
+		#region Page
+
+		/// <summary>
+		/// The `page` method let your record whenever a user sees a webpage on 
+		/// your website, and attach a `name`, `category` or `properties` to the webpage load. 
+		/// </summary>
+		///
+		/// <param name="userId">The visitor's identifier after they log in, or you know
+		/// who they are. By explicitly identifying a user, you tie all of their actions to their identity.
+		/// This makes it possible for you to run things like segment-based email campaigns.</param>
+		///
+		/// <param name="name">The name of the webpage, like "Signup", "Login"</param>
+		///
+		public void Page(string userId, string name)
+		{
+			Page (userId, name, null, null, null);
+		}
+
+		/// <summary>
+		/// The `page` method let your record whenever a user sees a webpage on 
+		/// your website, and attach a `name`, `category` or `properties` to the webpage load. 
+		/// </summary>
+		///
+		/// <param name="userId">The visitor's identifier after they log in, or you know
+		/// who they are. By explicitly identifying a user, you tie all of their actions to their identity.
+		/// This makes it possible for you to run things like segment-based email campaigns.</param>
+		///
+		/// <param name="name">The name of the webpage, like "Signup", "Login"</param>
+		///
+		/// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
+		/// and the context of th emessage.</param>
+		///
+		public void Page(string userId, string name, Options options)
+		{
+			Page (userId, name, null, null, options);
+		}
+
+		/// <summary>
+		/// The `page` method let your record whenever a user sees a webpage on 
+		/// your website, and attach a `name`, `category` or `properties` to the webpage load. 
+		/// </summary>
+		///
+		/// <param name="userId">The visitor's identifier after they log in, or you know
+		/// who they are. By explicitly identifying a user, you tie all of their actions to their identity.
+		/// This makes it possible for you to run things like segment-based email campaigns.</param>
+		///
+		/// <param name="name">The name of the webpage, like "Signup", "Login"</param>
+		/// 
+		/// <param name="category">The (optional) category of the webpage, like "Authentication", "Sports"</param>
+		///
+		public void Page(string userId, string name, string category)
+		{
+			Page (userId, name, category, null, null);
+		}
+
+		/// <summary>
+		/// The `page` method let your record whenever a user sees a webpage on 
+		/// your website, and attach a `name`, `category` or `properties` to the webpage load. 
+		/// </summary>
+		///
+		/// <param name="userId">The visitor's identifier after they log in, or you know
+		/// who they are. By explicitly identifying a user, you tie all of their actions to their identity.
+		/// This makes it possible for you to run things like segment-based email campaigns.</param>
+		///
+		/// <param name="name">The name of the webpage, like "Signup", "Login"</param>
+		///
+		/// <param name="properties"> A dictionary with items that describe the page
+		/// in more detail. This argument is optional, but highly recommended —
+		/// you’ll find these properties extremely useful later.</param>
+		///
+		public void Page(string userId, string name, Properties properties)
+		{
+			Page (userId, name, null, properties, null);
+		}
+
+		/// <summary>
+		/// The `page` method let your record whenever a user sees a webpage on 
+		/// your website, and attach a `name`, `category` or `properties` to the webpage load. 
+		/// </summary>
+		///
+		/// <param name="userId">The visitor's identifier after they log in, or you know
+		/// who they are. By explicitly identifying a user, you tie all of their actions to their identity.
+		/// This makes it possible for you to run things like segment-based email campaigns.</param>
+		///
+		/// <param name="name">The name of the webpage, like "Signup", "Login"</param>
+		///
+		/// <param name="properties"> A dictionary with items that describe the page
+		/// in more detail. This argument is optional, but highly recommended —
+		/// you’ll find these properties extremely useful later.</param>
+		///
+		/// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
+		/// and the context of th emessage.</param>
+		///
+		public void Page(string userId, string name, Properties properties, Options options)
+		{
+			Page (userId, name, null, properties, options);
+		}
+
+		/// <summary>
+		/// The `page` method let your record whenever a user sees a webpage on 
+		/// your website, and attach a `name`, `category` or `properties` to the webpage load. 
+		/// </summary>
+		///
+		/// <param name="userId">The visitor's identifier after they log in, or you know
+		/// who they are. By explicitly identifying a user, you tie all of their actions to their identity.
+		/// This makes it possible for you to run things like segment-based email campaigns.</param>
+		///
+		/// <param name="name">The name of the webpage, like "Signup", "Login"</param>
+		/// 
+		/// <param name="category">The (optional) category of the mobile screen, like "Authentication", "Sports"</param>
+		///
+		/// <param name="properties"> A dictionary with items that describe the page
+		/// in more detail. This argument is optional, but highly recommended —
+		/// you’ll find these properties extremely useful later.</param>
+		///
+		/// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
+		/// and the context of th emessage.</param>
+		///
+		public void Page(string userId, string name, string category, Properties properties, Options options)
+		{
+			if (String.IsNullOrEmpty(userId))
+				throw new InvalidOperationException("Please supply a valid userId to #Page.");
+
+			if (String.IsNullOrEmpty(name))
+				throw new InvalidOperationException("Please supply a valid name to #Page.");
+
+			Enqueue(new Page(userId, name, category, properties, options));
+		}
+
+		#endregion
+
+		#region Screen
+
+		/// <summary>
+		/// The `screen` method let your record whenever a user sees a mobile screen on 
+		/// your mobile app, and attach a `name`, `category` or `properties` to the screen. 
+		/// </summary>
+		///
+		/// <param name="userId">The visitor's identifier after they log in, or you know
+		/// who they are. By
+		/// explicitly identifying a user, you tie all of their actions to their identity.
+		/// This makes it possible for you to run things like segment-based email campaigns.</param>
+		///
+		/// <param name="name">The name of the mobile screen, like "Signup", "Login"</param>
+		///
+		public void Screen(string userId, string name)
+		{
+			Screen (userId, name, null, null, null);
+		}
+
+		/// <summary>
+		/// The `screen` method let your record whenever a user sees a mobile screen on 
+		/// your mobile app, and attach a `name`, `category` or `properties` to the screen. 
+		/// </summary>
+		///
+		/// <param name="userId">The visitor's identifier after they log in, or you know
+		/// who they are. By
+		/// explicitly identifying a user, you tie all of their actions to their identity.
+		/// This makes it possible for you to run things like segment-based email campaigns.</param>
+		///
+		/// <param name="name">The name of the mobile screen, like "Signup", "Login"</param>
+		///
+		/// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
+		/// and the context of th emessage.</param>
+		///
+		public void Screen(string userId, string name, Options options)
+		{
+			Screen (userId, name, null, null, options);
+		}
+
+		/// <summary>
+		/// The `screen` method let your record whenever a user sees a mobile screen on 
+		/// your mobile app, and attach a `name`, `category` or `properties` to the screen. 
+		/// </summary>
+		///
+		/// <param name="userId">The visitor's identifier after they log in, or you know
+		/// who they are. By
+		/// explicitly identifying a user, you tie all of their actions to their identity.
+		/// This makes it possible for you to run things like segment-based email campaigns.</param>
+		///
+		/// <param name="name">The name of the mobile screen, like "Signup", "Login"</param>
+		/// 
+		/// <param name="category">The (optional) category of the mobile screen, like "Authentication", "Sports"</param>
+		///
+		public void Screen(string userId, string name, string category)
+		{
+			Screen (userId, name, category, null, null);
+		}
+
+		/// <summary>
+		/// The `screen` method let your record whenever a user sees a mobile screen on 
+		/// your mobile app, and attach a `name`, `category` or `properties` to the screen. 
+		/// </summary>
+		///
+		/// <param name="userId">The visitor's identifier after they log in, or you know
+		/// who they are. By
+		/// explicitly identifying a user, you tie all of their actions to their identity.
+		/// This makes it possible for you to run things like segment-based email campaigns.</param>
+		///
+		/// <param name="name">The name of the mobile screen, like "Signup", "Login"</param>
+		///
+		/// <param name="properties"> A dictionary with items that describe the screen
+		/// in more detail. This argument is optional, but highly recommended —
+		/// you’ll find these properties extremely useful later.</param>
+		///
+		public void Screen(string userId, string name, Properties properties)
+		{
+			Screen (userId, name, null, properties, null);
+		}
+
+		/// <summary>
+		/// The `screen` method let your record whenever a user sees a mobile screen on 
+		/// your mobile app, and attach a `name`, `category` or `properties` to the screen. 
+		/// </summary>
+		///
+		/// <param name="userId">The visitor's identifier after they log in, or you know
+		/// who they are. By
+		/// explicitly identifying a user, you tie all of their actions to their identity.
+		/// This makes it possible for you to run things like segment-based email campaigns.</param>
+		///
+		/// <param name="name">The name of the mobile screen, like "Signup", "Login"</param>
+		///
+		/// <param name="properties"> A dictionary with items that describe the screen
+		/// in more detail. This argument is optional, but highly recommended —
+		/// you’ll find these properties extremely useful later.</param>
+		///
+		/// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
+		/// and the context of th emessage.</param>
+		///
+		public void Screen(string userId, string name, Properties properties, Options options)
+		{
+			Screen (userId, name, null, properties, options);
+		}
+
+		/// <summary>
+		/// The `screen` method let your record whenever a user sees a mobile screen on 
+		/// your mobile app, and attach a `name`, `category` or `properties` to the screen. 
+		/// </summary>
+		///
+		/// <param name="userId">The visitor's identifier after they log in, or you know
+		/// who they are. By
+		/// explicitly identifying a user, you tie all of their actions to their identity.
+		/// This makes it possible for you to run things like segment-based email campaigns.</param>
+		///
+		/// <param name="name">The name of the mobile screen, like "Signup", "Login"</param>
+		/// 
+		/// <param name="category">The (optional) category of the mobile screen, like "Authentication", "Sports"</param>
+		///
+		/// <param name="properties"> A dictionary with items that describe the screen
+		/// in more detail. This argument is optional, but highly recommended —
+		/// you’ll find these properties extremely useful later.</param>
+		///
+		/// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
+		/// and the context of th emessage.</param>
+		///
+		public void Screen(string userId, string name, string category, Properties properties, Options options)
+		{
+			if (String.IsNullOrEmpty(userId))
+				throw new InvalidOperationException("Please supply a valid userId to #Screen.");
+
+			if (String.IsNullOrEmpty(name))
+				throw new InvalidOperationException("Please supply a valid name to #Screen.");
+
+			Enqueue(new Screen(userId, name, category, properties, options));
+		}
+
+		#endregion
 
         #region Other
 

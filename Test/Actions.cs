@@ -68,9 +68,19 @@ namespace Segment.Test
 			client.Alias("previousId", "to");
 		}
 
+		public static void Page(Client client)
+		{
+			client.Page("user", "name", "category", Properties(), Options());
+		}
+
+		public static void Screen(Client client)
+		{
+			client.Screen("user", "name", "category", Properties(), Options());
+		}
+
 		public static void Random(Client client)
 		{
-			switch (random.Next(0, 3))
+			switch (random.Next(0, 6))
 			{
 			case 0:
 				Identify(client);
@@ -81,8 +91,16 @@ namespace Segment.Test
 			case 2:
 				Alias(client);
 				return;
+			case 3:
+				Group(client);
+				return;
+			case 4:
+				Page(client);
+				return;
+			case 5:
+				Screen(client);
+				return;
 			}
-
 		}
 
 	}

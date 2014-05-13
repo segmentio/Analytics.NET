@@ -86,16 +86,15 @@ namespace Segment.Test
 
 		void Client_Failed(BaseAction action, System.Exception e)
 		{
-			Console.WriteLine(String.Format("Action {0} failed : {1}", action.GetType(), e.Message));
+			Console.WriteLine(String.Format("Action [{0}] {1} failed : {2}", 
+				action.MessageId, action.Type, e.Message));
 		}
 
 		void Client_Succeeded(BaseAction action)
 		{
-			Console.WriteLine(String.Format("Action {0} succeeded.", action.GetType()));
+			Console.WriteLine(String.Format("Action [{0}] {1} succeeded.", 
+				action.MessageId, action.Type));
 		}
-
 	}
-
-
 }
 

@@ -38,7 +38,28 @@ namespace Segment.Test
 			Actions.Alias (Analytics.Client);
 			FlushAndCheck (1);
 		}
-			
+
+		[Test ()]
+		public void GroupTest ()
+		{
+			Actions.Group (Analytics.Client);
+			FlushAndCheck (1);
+		}
+
+		[Test ()]
+		public void PageTest ()
+		{
+			Actions.Page (Analytics.Client);
+			FlushAndCheck (1);
+		}
+
+		[Test ()]
+		public void ScreenTest ()
+		{
+			Actions.Screen (Analytics.Client);
+			FlushAndCheck (1);
+		}
+
 		private void FlushAndCheck (int messages) {
 			Analytics.Client.Flush();
 			Assert.AreEqual(messages, Analytics.Client.Statistics.Submitted);
@@ -48,12 +69,14 @@ namespace Segment.Test
 
 		void Client_Failed(BaseAction action, System.Exception e)
 		{
-			Console.WriteLine(String.Format("Action {0} failed : {1}", action.GetType(), e.Message));
+			Console.WriteLine(String.Format("Action [{0}] {1} failed : {2}", 
+				action.MessageId, action.Type, e.Message));
 		}
 
 		void Client_Succeeded(BaseAction action)
 		{
-			Console.WriteLine(String.Format("Action {0} succeeded.", action.GetType()));
+			Console.WriteLine(String.Format("Action [{0}] {1} succeeded.", 
+				action.MessageId, action.Type));
 		}
 
 	}

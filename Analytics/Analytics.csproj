@@ -72,6 +72,8 @@
     <Compile Include="Model\Dict.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Model\Group.cs" />
+    <Compile Include="Model\Page.cs" />
+    <Compile Include="Model\Screen.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Track.cs" />

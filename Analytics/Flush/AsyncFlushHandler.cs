@@ -77,8 +77,7 @@ namespace Segment.Flush
 
             if (size > MaxQueueSize)
             {
-                // drop the message
-                // TODO: log it
+				// TODO: log the dropping of the message
             }
             else
             {

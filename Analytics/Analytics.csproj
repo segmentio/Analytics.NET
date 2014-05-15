@@ -5,12 +5,14 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{E79E6240-4954-41D0-BCE4-573B800EF006}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Segment</RootNamespace>
     <AssemblyName>Analytics.NET</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <StartupObject>Segment.MainClass</StartupObject>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <ProductVersion>12.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
@@ -67,7 +69,6 @@
     <Compile Include="Flush\BlockingFlushHandler.cs" />
     <Compile Include="Flush\IBatchFactory.cs" />
     <Compile Include="Flush\SimpleBatchFactory.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Model\Options.cs" />
     <Compile Include="Model\Dict.cs" />
     <Compile Include="Config.cs" />

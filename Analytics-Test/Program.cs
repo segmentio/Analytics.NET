@@ -3,7 +3,7 @@ using Segment;
 using Segment.Model;
 using System.Diagnostics;
 
-namespace Segment
+namespace AnalyticsTest
 {
 	class MainClass
 	{
@@ -11,7 +11,7 @@ namespace Segment
 		public static void Main (string[] args)
 		{
 			Console.WriteLine ("Started!");
-			Debugger.Break ();
+
 			using (Client analytics = new Client("r7bxis28wy")) 
 			{
 				analytics.Identify ("user123", new Traits () {
@@ -25,8 +25,8 @@ namespace Segment
 				});
 
 				analytics.Track ("user123", "Engaged a bear", new Options ()
-					.SetContext (new Context () {
-						{ "app", new Dict() {
+				                 .SetContext (new Context () {
+					{ "app", new Dict() {
 							{ "name", "test" } 
 						}}
 				}));
@@ -34,17 +34,20 @@ namespace Segment
 				analytics.Track ("user123", "Is Not Alive", new Properties () {
 					{ "why", "bear attack" }
 				}, new Options()
-					.SetIntegration("Salesforce", true)
+				.SetIntegration("Salesforce", true)
 				);
 
 				analytics.Track ("user123", "Is Not Alive", new Properties () {
 					{ "why", "bear attack" }
 				}, new Options()
-					.SetIntegration("Salesforce", true)
-					.SetAnonymousId("cookie-id")
-					.SetContext(new Context()
-						.Add("ip", "192.144.23.2"))
+				.SetIntegration("Salesforce", true)
+				.SetAnonymousId("cookie-id")
+				.SetContext(new Context()
+				            .Add("ip", "192.144.23.2"))
 				);
+
+				Analytics.Client.Screen ("user", "Some Screen");
+				Analytics.Client.Page ("user", "Some Page");
 
 				analytics.Flush ();
 			}

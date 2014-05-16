@@ -12,7 +12,7 @@ using Segment.Stats;
 namespace Segment
 {
     /// <summary>
-    /// A Segment.io REST client
+    /// A Segment.io .NET client
     /// </summary>
     public class Client : IDisposable
     {

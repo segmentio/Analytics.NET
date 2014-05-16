@@ -51,7 +51,7 @@ namespace Segment
         /// <summary>
         /// Disposes of the current client and allows the creation of a new one
         /// </summary>
-        public static void Reset()
+        public static void Dispose()
         {
             lock (padlock)
             {

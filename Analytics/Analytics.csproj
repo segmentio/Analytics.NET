@@ -30,6 +30,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -49,6 +53,7 @@
     <Compile Include="Defaults.cs" />
     <Compile Include="Exception\BadParameter.cs" />
     <Compile Include="Exception\NotInitializedException.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Model\BaseAction.cs" />
     <Compile Include="Model\Batch.cs" />
     <Compile Include="Model\Context.cs" />
@@ -92,7 +97,5 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup>
-    <Folder Include="Flush\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

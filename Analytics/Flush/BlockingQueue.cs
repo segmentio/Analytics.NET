@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 
+using Segment.Model;
+
 namespace Segment.Flush
 {
 	/// <summary>
@@ -17,7 +19,7 @@ namespace Segment.Flush
 		/// <summary>
 		/// Breaks the waiting state to check whether the queue is disposed on this interval
 		/// </summary>
-		public TimeSpan PulseInterval = TimeSpan.FromMilliseconds(250);
+		public TimeSpan PulseInterval = TimeSpan.FromMilliseconds(100);
 
 		public void Enqueue(T data)
 		{
@@ -29,6 +31,8 @@ namespace Segment.Flush
 				_queue.Enqueue(data);
 				Monitor.Pulse(_queue);
 			}
+
+            Logger.Debug("Enqueued action in queue.", new Dict { { "queue size", _queue.Count } });
 		}
 
 		public T Dequeue()

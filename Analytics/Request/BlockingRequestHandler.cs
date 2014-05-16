@@ -5,6 +5,7 @@ using System.Net;
 using System.Runtime.Serialization.Json;
 using System.IO;
 using System.Threading;
+using System.Diagnostics;
 using System.Web;
 
 using Newtonsoft.Json;
@@ -41,7 +42,9 @@ namespace Segment.Request
 		}
 
 		public void MakeRequest(Batch batch)
-		{
+        {
+            Stopwatch watch = new Stopwatch();
+
 			try
 			{
 				Uri uri = new Uri(_client.Config.Host + "/v1/import");
@@ -66,6 +69,15 @@ namespace Segment.Request
 				// buffer the data before sending, ok since we send all in one shot
 				request.AllowWriteStreamBuffering = true;
 
+                Logger.Info("Sending analytics request to Segment.io ..", new Dict
+                {
+                    { "batch id", batch.MessageId },
+                    { "json size", json.Length },
+                    { "batch size", batch.batch.Count }
+                });
+
+                watch.Start();
+
 				using (var requestStream = request.GetRequestStream())
 				{
 					using (StreamWriter writer = new StreamWriter(requestStream))
@@ -76,48 +88,62 @@ namespace Segment.Request
 
 				using (var response = (HttpWebResponse)request.GetResponse())
 				{
-					
+                    watch.Stop();
+
 					if (response.StatusCode == HttpStatusCode.OK)
 					{
-						Succeed(batch);
+                        Succeed(batch, watch.ElapsedMilliseconds);
 					}
 					else
 					{
 						string responseStr = String.Format("Status Code {0}. ", response.StatusCode);
-						
 						responseStr += ReadResponse(response);
-						
-						Fail(batch, new APIException("Unexpected Status Code", responseStr));
+                        Fail(batch, new APIException("Unexpected Status Code", responseStr), watch.ElapsedMilliseconds);
 					}
 				}
 			}
 			catch (WebException e) 
 			{
-				Fail(batch, ParseException(e));
+                watch.Stop();
+                Fail(batch, ParseException(e), watch.ElapsedMilliseconds);
 			}
 			catch (System.Exception e)
 			{
-				Fail(batch, e);
+                watch.Stop();
+                Fail(batch, e, watch.ElapsedMilliseconds);
 			}
 		}
 
-		private void Fail(Batch batch, System.Exception e) 
+		private void Fail(Batch batch, System.Exception e, long duration) 
 		{
 			foreach (BaseAction action in batch.batch)
 			{
 				_client.Statistics.Failed += 1;
 				_client.RaiseFailure(action, e);
-			}
+            }
+
+            Logger.Info("Segment.io request failed.", new Dict
+            {
+                { "batch id", batch.MessageId },
+                { "reason", e.Message },
+                { "duration (ms)", duration }
+            });
 		}
 
-		
-		private void Succeed(Batch batch) 
+
+        private void Succeed(Batch batch, long duration) 
 		{
 			foreach (BaseAction action in batch.batch)
 			{
 				_client.Statistics.Succeeded += 1;
 				_client.RaiseSuccess(action);
-			}
+            }
+
+            Logger.Info("Segment.io request successful.", new Dict
+            {
+                { "batch id", batch.MessageId },
+                { "duration (ms)", duration }
+            });
 		}
 		
 		private System.Exception ParseException(WebException e) {

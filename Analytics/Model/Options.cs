@@ -19,12 +19,6 @@ namespace Segment.Model
 		{
 			this.Integrations = new Dict ();
 			this.Context = new Context ();
-
-			// default the context library
-			this.Context.Add ("library", new Dict() {
-				{ "name", "Analytics.NET" },
-				{ "version", Analytics.VERSION }
-			});
 		}
 
 		/// <summary>

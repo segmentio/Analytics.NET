@@ -2,6 +2,8 @@
 [Bb]in/
 [Oo]bj/
 
+*.userprefs
+
 # mstest test results
 TestResults
 
@@ -106,3 +108,5 @@ Backup*/
 UpgradeLog*
 
 **sublime**
+
+.DS_STORE

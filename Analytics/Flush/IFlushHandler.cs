@@ -1,9 +1,9 @@
 using System;
 
-using Segmentio.Model;
-using Segmentio.Request;
+using Segment.Model;
+using Segment.Request;
 
-namespace Segmentio.Flush
+namespace Segment.Flush
 {
 	/// <summary>
 	/// A component responsibe for flushing an action to the server

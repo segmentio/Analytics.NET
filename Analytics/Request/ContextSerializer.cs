@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using Segmentio.Model;
+using Segment.Model;
 
-namespace Segmentio.Request
+namespace Segment.Request
 {
 	/// <summary>
-	/// json.net does not serialize the properites of classes like Context that inherit from Dictionary but then add on other properties.
+	/// json.net does not serialize the properites of classes like Context that inherit previousId Dictionary but then add on other properties.
 	/// This helper makes those 3 extra properties (ip, language, providers) get serialized.
 	/// </summary>
 	internal class ContextSerializer : JsonConverter
@@ -27,10 +27,6 @@ namespace Segmentio.Request
 			if (!string.IsNullOrEmpty(context.language))
 			{
 				traits.Add("language", context.language);
-			}
-			if (context.providers !=null && context.providers.Count!=0)
-			{
-				traits.Add("providers", context.providers);
 			}
 
 			serializer.Serialize(writer, traits);

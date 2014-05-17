@@ -1,22 +1,22 @@
 using System;
 using System.Collections.Generic;
 
-using Segmentio.Model;
+using Segment.Model;
 
-namespace Segmentio.Flush
+namespace Segment.Flush
 {
 	internal class SimpleBatchFactory : IBatchFactory
 	{
-		private string _secret;
+		private string _writeKey;
 
-		internal SimpleBatchFactory (string secret)
+		internal SimpleBatchFactory (string writeKey)
 		{
-			this._secret = secret;
+			this._writeKey = writeKey;
 		}
 
 		public Batch Create(List<BaseAction> actions) 
 		{
-			return new Batch(_secret, actions);
+			return new Batch(_writeKey, actions);
 		}
 	}
 }

@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Segmentio
+namespace Segment
 {
     public class Analytics
     {
+		// REMINDER: don't forget to set Properties.AssemblyInfo.AssemblyVersion as well
+		public static string VERSION = "1.2.2";
+
         /// <summary>
         /// Lock for thread-safety
         /// </summary>
@@ -14,10 +17,10 @@ namespace Segmentio
         public static Client Client { get; private set; }
 
         /// <summary>
-        /// Initialized the default Segment.io client with your API secret.
+        /// Initialized the default Segment.io client with your API writeKey.
         /// </summary>
-        /// <param name="secret"></param>
-        public static void Initialize(string secret)
+        /// <param name="writeKey"></param>
+        public static void Initialize(string writeKey)
         {
             // avoiding double locking as recommended:
             // http://www.yoda.arachsys.com/csharp/singleton.html
@@ -25,22 +28,22 @@ namespace Segmentio
             {
                 if (Client == null)
                 {
-                    Client = new Client(secret);
+                    Client = new Client(writeKey);
                 }
             }
         }
 
         /// <summary>
-        /// Initialized the default Segment.io client with your API secret.
+        /// Initialized the default Segment.io client with your API writeKey.
         /// </summary>
-        /// <param name="secret"></param>
-        public static void Initialize(string secret, Options options)
+        /// <param name="writeKey"></param>
+		public static void Initialize(string writeKey, Config config)
         {
             lock (padlock)
             {
                 if (Client == null)
                 {
-                    Client = new Client(secret, options);
+                    Client = new Client(writeKey, config);
                 }
             }
         }
@@ -48,7 +51,7 @@ namespace Segmentio
         /// <summary>
         /// Disposes of the current client and allows the creation of a new one
         /// </summary>
-        public static void Reset()
+        public static void Dispose()
         {
             lock (padlock)
             {

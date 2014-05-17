@@ -7,11 +7,11 @@
     <ProjectGuid>{E79E6240-4954-41D0-BCE4-573B800EF006}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Analytics</RootNamespace>
+    <RootNamespace>Segment</RootNamespace>
     <AssemblyName>Analytics.NET</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ProductVersion>10.0.0</ProductVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <ProductVersion>12.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -24,12 +24,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
     <Optimize>True</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -50,20 +53,18 @@
     <Compile Include="Defaults.cs" />
     <Compile Include="Exception\BadParameter.cs" />
     <Compile Include="Exception\NotInitializedException.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Model\BaseAction.cs" />
     <Compile Include="Model\Batch.cs" />
     <Compile Include="Model\Context.cs" />
     <Compile Include="Model\Identify.cs" />
     <Compile Include="Model\Properties.cs" />
     <Compile Include="Model\Traits.cs" />
-    <Compile Include="Options.cs" />
-    <Compile Include="Request\ContextSerializer.cs" />
     <Compile Include="Request\IRequestHandler.cs" />
     <Compile Include="Analytics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stats\Statistics.cs" />
     <Compile Include="Model\Providers.cs" />
-    <Compile Include="Model\Props.cs" />
     <Compile Include="Model\Alias.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Flush\IFlushHandler.cs" />
@@ -73,11 +74,18 @@
     <Compile Include="Flush\BlockingFlushHandler.cs" />
     <Compile Include="Flush\IBatchFactory.cs" />
     <Compile Include="Flush\SimpleBatchFactory.cs" />
+    <Compile Include="Model\Options.cs" />
+    <Compile Include="Model\Dict.cs" />
+    <Compile Include="Config.cs" />
+    <Compile Include="Model\Group.cs" />
+    <Compile Include="Model\Page.cs" />
+    <Compile Include="Model\Screen.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Track.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="History.md" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -90,7 +98,5 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup>
-    <Folder Include="Flush\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

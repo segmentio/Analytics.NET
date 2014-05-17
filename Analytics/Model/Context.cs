@@ -1,59 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
 
-using Newtonsoft.Json;
-
-namespace Segmentio.Model
+namespace Segment.Model
 {
-    public class Context : Props
+    public class Context : Dict
     {
-        [JsonProperty(PropertyName = "language")]
-        internal string language;
-
-        [JsonProperty(PropertyName = "ip")]
-        internal string ip;
-
-		[JsonProperty(PropertyName = "providers")]
-		internal Providers providers;
-
         /// <summary>
-        /// Provides additional information about a 
-        /// user during identify.
+		/// Provides additional information about the context of an analytics call, 
+		/// such as the visitor's ip or language.
         /// </summary>
-        public Context() { }
-
-        /// <summary>
-        /// IETF Language Tag, such as "en-us"
-        /// http://en.wikipedia.org/wiki/IETF_language_tag
-        /// </summary>
-        /// <param name="language">Examples: "en-us" for America English or "pt-BR" for Brazilian Portuguese</param>
-        /// <returns></returns>
-        public Context SetLanguage(string language)
-        {
-            this.language = language;
-            return this;
+        public Context() {
+            // default the context library
+            this.Add("library", new Dict() {
+			    { "name", "Analytics.NET" },
+			    { "version", Analytics.VERSION }
+		    });
         }
 
-        /// <summary>
-        /// IP-v4 Address such as "12.212.12.49"
-        /// </summary>
-        /// <param name="ip"></param>
-        /// <returns></returns>
-        public Context SetIp(string ip)
-        {
-            this.ip = ip;
-            return this;
-        }
-
-		/// <summary>
-		/// Sets the enabled providers for this call.
-		/// </summary>
-		/// <param name="providers">The container object for provider info</param>
-		/// <returns>Context for chaining</returns>
-		public Context SetProviders(Providers providers)
-		{
-			this.providers = providers;
+		public new Context Add(string key, object val) {
+			base.Add (key, val);
 			return this;
 		}
-    }
+	}
 }

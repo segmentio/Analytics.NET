@@ -6,26 +6,31 @@ using Newtonsoft.Json;
 
 namespace Segment.Model
 {
-    public class Track : BaseAction
+	public class Page : BaseAction
     {
 		[JsonProperty(PropertyName = "userId")]
 		public string UserId { get; private set; }
 
-        [JsonProperty(PropertyName = "event")]
-        private string EventName { get; set; }
+		[JsonProperty(PropertyName = "name")]
+        private string Name { get; set; }
+
+		[JsonProperty(PropertyName = "category")]
+		private string Category { get; set; }
 
         [JsonProperty(PropertyName = "properties")]
         private Properties Properties { get; set; }
 
-        internal Track(string userId, 
-		               string eventName,
-            		   Properties properties, 
-					   Options options)
+		internal Page(string userId, 
+					  string name,
+					  string category,
+            		  Properties properties, 
+					  Options options)
 
-			: base("track", options)
-        {
+			: base("page", options)
+		{
 			this.UserId = userId;
-            this.EventName = eventName;
+			this.Name = name;
+			this.Category = category;
             this.Properties = properties ?? new Properties();
         }
     }

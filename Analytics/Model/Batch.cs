@@ -4,28 +4,29 @@ using System.Text;
 
 using Newtonsoft.Json;
 
-namespace Segmentio.Model
+namespace Segment.Model
 {
     internal class Batch
     {
+        internal string WriteKey { get; set; }
 
-        [JsonProperty(PropertyName = "secret")]
-        internal string Secret { get; set; }
+		[JsonProperty(PropertyName="messageId")]
+		internal string MessageId { get; private set; }
+
+		[JsonProperty(PropertyName="sentAt")]
+		internal string SentAt { get; set; }
 
         [JsonProperty(PropertyName = "batch")]
-        internal List<BaseAction> batch { get; set; }
+		internal List<BaseAction> batch { get; set; }
 
-	[JsonProperty(PropertyName = "context")]
-	internal Context context { get; set; }
+      	internal Batch() 
+		{ 
+			this.MessageId = Guid.NewGuid ().ToString ();
+		}
 
-        internal Batch() {
-		this.context = new Context ();
-		this.context.Add ("library", "Analytics.NET");
-	}
-
-        internal Batch(string secret, List<BaseAction> batch) : this()
+        internal Batch(string writeKey, List<BaseAction> batch) : this()
         {
-            this.Secret = secret;
+            this.WriteKey = writeKey;
             this.batch = batch;
         }
     }

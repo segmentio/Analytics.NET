@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace Segmentio.Flush
+using Segment.Model;
+
+namespace Segment.Flush
 {
 	/// <summary>
 	/// Implementation of a blocking queue
@@ -17,7 +19,7 @@ namespace Segmentio.Flush
 		/// <summary>
 		/// Breaks the waiting state to check whether the queue is disposed on this interval
 		/// </summary>
-		public TimeSpan PulseInterval = TimeSpan.FromMilliseconds(250);
+		public TimeSpan PulseInterval = TimeSpan.FromMilliseconds(100);
 
 		public void Enqueue(T data)
 		{
@@ -29,6 +31,8 @@ namespace Segmentio.Flush
 				_queue.Enqueue(data);
 				Monitor.Pulse(_queue);
 			}
+
+            Logger.Debug("Enqueued action in queue.", new Dict { { "queue size", _queue.Count } });
 		}
 
 		public T Dequeue()

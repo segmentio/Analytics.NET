@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Segmentio
+namespace Segment
 {
     /// <summary>
-    /// Options required to initialize the client
+    /// Config required to initialize the client
     /// </summary>
-    public class Options
+	public class Config
     {
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace Segmentio
 
 		internal TimeSpan Timeout { get; set; }
 
-        public Options()
+		public Config()
         {
             this.Host = Defaults.Host;
 			this.Timeout = Defaults.Timeout;
@@ -30,34 +30,12 @@ namespace Segmentio
 			this.Async = Defaults.Async;
         }
 
-        /// <summary>
-        /// Sets the amount of items that can be added to the queue before it flushes
-        /// </summary>
-        /// <param name="flushAt"></param>
-        /// <returns></returns>
-		[Obsolete("SetFlushAt is no longer needed, async flush will now happen continuously in the background.")]
-        public Options SetFlushAt(int flushAt)
-        {
-            return this;
-        }
-
-        /// <summary>
-        /// Sets the amount of milliseconds that can pass before the next flush
-        /// </summary>
-        /// <param name="flushAfter"></param>
-        /// <returns></returns>
-		[Obsolete("SetFlushAfter is no longer needed, async flush will now happen continuously in the background.")]
-        public Options SetFlushAfter(TimeSpan flushAfter)
-        {
-            return this;
-        }
-
 		/// <summary>
 		/// Sets the maximum amount of timeout on the HTTP request flushes to the server.
 		/// </summary>
 		/// <param name="timeout"></param>
 		/// <returns></returns>
-		public Options SetTimeout(TimeSpan timeout)
+		public Config SetTimeout(TimeSpan timeout)
 		{
 			this.Timeout = timeout;
 			return this;
@@ -68,7 +46,7 @@ namespace Segmentio
 		/// </summary>
 		/// <param name="maxQueueSize"></param>
 		/// <returns></returns>
-		public Options SetMaxQueueSize(int maxQueueSize)
+		public Config SetMaxQueueSize(int maxQueueSize)
 		{
 			this.MaxQueueSize = maxQueueSize;
 			return this;
@@ -86,7 +64,7 @@ namespace Segmentio
         /// </summary>
 		/// <param name="async">True for async flushing, false for blocking flushing</param>
         /// <returns></returns>
-        public Options SetAsync(bool async)
+		public Config SetAsync(bool async)
         {
 			this.Async = async;
             return this;

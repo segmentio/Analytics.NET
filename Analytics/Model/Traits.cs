@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Segmentio.Model
+namespace Segment.Model
 {
-    public class Traits : Props
+    public class Traits : Dict
     {
     }
 }

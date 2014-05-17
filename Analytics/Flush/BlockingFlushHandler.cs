@@ -5,12 +5,12 @@ using System.Runtime.Serialization.Json;
 using System.IO;
 using System.Threading;
 
-using Segmentio;
-using Segmentio.Request;
-using Segmentio.Model;
-using Segmentio.Exception;
+using Segment;
+using Segment.Request;
+using Segment.Model;
+using Segment.Exception;
 
-namespace Segmentio.Flush
+namespace Segment.Flush
 {
 	internal class BlockingFlushHandler : IFlushHandler
 	{

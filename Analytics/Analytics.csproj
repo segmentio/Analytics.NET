@@ -85,6 +85,7 @@
     <Compile Include="Model\Track.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="History.md" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

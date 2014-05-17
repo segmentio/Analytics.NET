@@ -31,6 +31,8 @@ namespace Segment.Model
 			this.MessageId = Guid.NewGuid ().ToString();
 			if (options.Timestamp.HasValue)
 				this.Timestamp = options.Timestamp.ToString ();
+            else
+                this.Timestamp = DateTime.Now.ToString("o");
 			this.Context = options.Context;
 			this.Integrations = options.Integrations;
         }

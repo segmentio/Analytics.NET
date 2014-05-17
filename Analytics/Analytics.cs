@@ -7,7 +7,7 @@ namespace Segment
     public class Analytics
     {
 		// REMINDER: don't forget to set Properties.AssemblyInfo.AssemblyVersion as well
-		public static string VERSION = "1.2.2";
+		public static string VERSION = "2.0.0";
 
         /// <summary>
         /// Lock for thread-safety

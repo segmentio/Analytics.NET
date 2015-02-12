@@ -8,9 +8,6 @@ namespace Segment.Model
 {
 	public class Page : BaseAction
     {
-		[JsonProperty(PropertyName = "userId")]
-		public string UserId { get; private set; }
-
 		[JsonProperty(PropertyName = "name")]
         private string Name { get; set; }
 
@@ -26,9 +23,8 @@ namespace Segment.Model
             		  Properties properties, 
 					  Options options)
 
-			: base("page", options)
+			: base("page", userId, options)
 		{
-			this.UserId = userId;
 			this.Name = name;
 			this.Category = category;
             this.Properties = properties ?? new Properties();

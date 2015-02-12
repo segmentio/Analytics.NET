@@ -26,7 +26,10 @@ namespace Segment.Model
 		[JsonProperty(PropertyName="anonymousId")]
 		public string AnonymousId { get; set; }
 
-		internal BaseAction(string type, Options options)
+		[JsonProperty(PropertyName = "userId")]
+		public string UserId { get; private set; }
+
+		internal BaseAction(string type, string UserId, Options options)
 		{
 			options = options ?? new Options ();
 
@@ -39,6 +42,7 @@ namespace Segment.Model
 			this.Context = options.Context;
 			this.Integrations = options.Integrations;
 			this.AnonymousId = options.AnonymousId;
+			this.UserId = UserId;
         }
     }
 }

@@ -23,6 +23,9 @@ namespace Segment.Model
 		[JsonProperty(PropertyName="integrations")]
 		public Dict Integrations { get; set; }
 
+		[JsonProperty(PropertyName="anonymousId")]
+		public string AnonymousId { get; set; }
+
 		internal BaseAction(string type, Options options)
 		{
 			options = options ?? new Options ();
@@ -35,6 +38,7 @@ namespace Segment.Model
                 this.Timestamp = DateTime.Now.ToString("o");
 			this.Context = options.Context;
 			this.Integrations = options.Integrations;
+			this.AnonymousId = options.AnonymousId;
         }
     }
 }

@@ -204,8 +204,8 @@ namespace Segment
 		///
 		public void Group(string userId, string groupId, Traits traits, Options options)
 		{
-			if (String.IsNullOrEmpty(userId))
-				throw new InvalidOperationException("Please supply a valid userId to call #Group.");
+			if (String.IsNullOrEmpty(userId) && String.IsNullOrEmpty(options.AnonymousId))
+				throw new InvalidOperationException("Please supply a valid userId or anonymousID to call #Group.");
 
 			if (String.IsNullOrEmpty(groupId))
 				throw new InvalidOperationException("Please supply a valid groupId to call #Group.");
@@ -300,8 +300,8 @@ namespace Segment
 		///
 		public void Track(string userId, string eventName, Properties properties, Options options)
 		{
-			if (String.IsNullOrEmpty(userId))
-				throw new InvalidOperationException("Please supply a valid userId to Track.");
+			if (String.IsNullOrEmpty(userId) && String.IsNullOrEmpty(options.AnonymousId))
+				throw new InvalidOperationException("Please supply a valid userId or anonymousId to Track.");
 
 			if (String.IsNullOrEmpty(eventName))
 				throw new InvalidOperationException("Please supply a valid event to Track.");
@@ -470,8 +470,8 @@ namespace Segment
 		///
 		public void Page(string userId, string name, string category, Properties properties, Options options)
 		{
-			if (String.IsNullOrEmpty(userId))
-				throw new InvalidOperationException("Please supply a valid userId to #Page.");
+			if (String.IsNullOrEmpty(userId) && String.IsNullOrEmpty(options.AnonymousId))
+				throw new InvalidOperationException("Please supply a valid userId or anonymousId to #Page.");
 
 			if (String.IsNullOrEmpty(name))
 				throw new InvalidOperationException("Please supply a valid name to #Page.");
@@ -607,8 +607,8 @@ namespace Segment
 		///
 		public void Screen(string userId, string name, string category, Properties properties, Options options)
 		{
-			if (String.IsNullOrEmpty(userId))
-				throw new InvalidOperationException("Please supply a valid userId to #Screen.");
+			if (String.IsNullOrEmpty(userId) && String.IsNullOrEmpty(options.AnonymousId))
+				throw new InvalidOperationException("Please supply a valid userId or anonymousId to #Screen.");
 
 			if (String.IsNullOrEmpty(name))
 				throw new InvalidOperationException("Please supply a valid name to #Screen.");

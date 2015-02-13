@@ -8,9 +8,6 @@ namespace Segment.Model
 {
 	public class Group : BaseAction
     {
-		[JsonProperty(PropertyName = "userId")]
-		public string UserId { get; private set; }
-
 		[JsonProperty(PropertyName = "groupId")]
 		private string GroupId { get; set; }
 
@@ -21,9 +18,8 @@ namespace Segment.Model
 					   string groupId,
 					   Traits traits, 
 					   Options options)
-			: base("group", options)
+			: base("group", userId, options)
         {
-			this.UserId = userId;
 			this.GroupId = groupId;
 			this.Traits = traits ?? new Traits();
         }

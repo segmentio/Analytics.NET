@@ -8,9 +8,6 @@ namespace Segment.Model
 {
     public class Track : BaseAction
     {
-		[JsonProperty(PropertyName = "userId")]
-		public string UserId { get; private set; }
-
         [JsonProperty(PropertyName = "event")]
         private string EventName { get; set; }
 
@@ -22,9 +19,8 @@ namespace Segment.Model
             		   Properties properties, 
 					   Options options)
 
-			: base("track", options)
+			: base("track", userId, options)
         {
-			this.UserId = userId;
             this.EventName = eventName;
             this.Properties = properties ?? new Properties();
         }

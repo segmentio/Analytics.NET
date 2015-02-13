@@ -8,9 +8,6 @@ namespace Segment.Model
 {
     public class Identify : BaseAction
     {
-		[JsonProperty(PropertyName = "userId")]
-		public string UserId { get; private set; }
-
         [JsonProperty(PropertyName = "traits")]
 		public Traits Traits { get; set; }
 
@@ -18,9 +15,8 @@ namespace Segment.Model
 		                  Traits traits, 
 						  Options options)
 	
-			: base("identify", options)
+			: base("identify", userId, options)
         {
-			this.UserId = userId;
             this.Traits = traits ?? new Traits();
         }
     }

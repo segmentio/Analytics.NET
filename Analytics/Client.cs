@@ -204,7 +204,7 @@ namespace Segment
 		///
 		public void Group(string userId, string groupId, Traits traits, Options options)
 		{
-			if (String.IsNullOrEmpty(userId) && String.IsNullOrEmpty(options.AnonymousId))
+			if (String.IsNullOrEmpty(userId) && HasAnonymousId(options))
 				throw new InvalidOperationException("Please supply a valid userId or anonymousID to call #Group.");
 
 			if (String.IsNullOrEmpty(groupId))
@@ -300,7 +300,7 @@ namespace Segment
 		///
 		public void Track(string userId, string eventName, Properties properties, Options options)
 		{
-			if (String.IsNullOrEmpty(userId) && String.IsNullOrEmpty(options.AnonymousId))
+			if (String.IsNullOrEmpty(userId) && HasAnonymousId(options))
 				throw new InvalidOperationException("Please supply a valid userId or anonymousId to Track.");
 
 			if (String.IsNullOrEmpty(eventName))
@@ -470,7 +470,7 @@ namespace Segment
 		///
 		public void Page(string userId, string name, string category, Properties properties, Options options)
 		{
-			if (String.IsNullOrEmpty(userId) && String.IsNullOrEmpty(options.AnonymousId))
+			if (String.IsNullOrEmpty(userId) && HasAnonymousId(options))
 				throw new InvalidOperationException("Please supply a valid userId or anonymousId to #Page.");
 
 			if (String.IsNullOrEmpty(name))
@@ -607,7 +607,7 @@ namespace Segment
 		///
 		public void Screen(string userId, string name, string category, Properties properties, Options options)
 		{
-			if (String.IsNullOrEmpty(userId) && String.IsNullOrEmpty(options.AnonymousId))
+			if (String.IsNullOrEmpty(userId) && HasAnonymousId(options))
 				throw new InvalidOperationException("Please supply a valid userId or anonymousId to #Screen.");
 
 			if (String.IsNullOrEmpty(name))
@@ -666,6 +666,16 @@ namespace Segment
         {
             if (Failed != null) Failed(action, e);
         }
+
+		/// <summary>
+		/// Determines whether this instance has define a anonymous identifier in the specified options.
+		/// </summary>
+		/// <returns><c>true</c> if this instance has anonymous identifier the specified options; otherwise, <c>false</c>.</returns>
+		/// <param name="options">Options.</param>
+		internal bool HasAnonymousId(Options options)
+		{
+			return options == null || String.IsNullOrEmpty(options.AnonymousId);
+		}
 
         #endregion
     }

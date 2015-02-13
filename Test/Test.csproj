@@ -7,8 +7,6 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Segment.Test</RootNamespace>
     <AssemblyName>Test</AssemblyName>
-    <ProductVersion>12.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -32,9 +30,6 @@
     <ConsolePause>false</ConsolePause>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
@@ -46,6 +41,7 @@
     <Compile Include="FlushTests.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="ActionTests.cs" />
+    <Compile Include="ClientTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

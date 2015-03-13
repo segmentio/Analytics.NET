@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>Analytics</id>
+        <version>2.0.0</version>
+        <title>Analytics</title>
+        <authors>Ilya</authors>
+        <owners>Ilya Volodarsky &lt;friends@segment.io&gt;</owners>
+        <licenseUrl>https://raw.githubusercontent.com/segmentio/Analytics.NET/master/README.md</licenseUrl>
+        <projectUrl>https://segment.io</projectUrl>
+        <iconUrl>https://segment.io/favicon.ico</iconUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>The cleanest .NET API for analytics, by Segment. Install and immediately send data to 100+ analytics and business intelligence tools with the flip of a switch.</description>
+        <summary>The Segment .NET client library, the cleanest and best way to integrate analytics into your .NET application. Check out docs at: https://segment.io/docs/libraries/net/ and code at https:</summary>
+        <releaseNotes>Check out the changelog at: https://raw.githubusercontent.com/segmentio/Analytics.NET/master/History.md</releaseNotes>
+        <language>en-US</language>
+        <tags>analytics, segment.io</tags>
+        <dependencies>
+                <dependency id="Newtonsoft.Json" version="4.5.11" />
+        </dependencies>
+    </metadata>
+	<files>
+		<file src="Analytics\bin\release\Analytics.NET.dll" target="lib\net40\Analytics.NET.dll" />
+	</files>
+</package>

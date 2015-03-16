@@ -21,5 +21,6 @@
     </metadata>
 	<files>
 		<file src="Analytics\bin\release\Analytics.NET.dll" target="lib\net40\Analytics.NET.dll" />
+		<file src="Analytics\bin\release\Analytics.NET.pdb" target="lib\net40\Analytics.NET.pdb" />
 	</files>
 </package>

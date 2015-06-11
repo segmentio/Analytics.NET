@@ -1,11 +1,11 @@
 ﻿Analytics.NET
 =============
 
-Analytics.NET is a .NET / C# client for [Segment.io](https://segment.io)
+Analytics.NET is a .NET / C# client for [Segment](https://segment.com).
 
 ## Documentation
 
-Documentation is available at [https://segment.io/libraries/.net](https://segment.io/libraries/.net).
+Documentation is available at [https://segment.com/libraries/.net](https://segment.com/libraries/.net).
 
 ## License
 
@@ -21,6 +21,4 @@ WWWWWW||WWWWWW
         _||_|| _||_||
        (__|__|(__|__|
 ```
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/segmentio/analytics.net/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 

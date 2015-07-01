@@ -36,7 +36,8 @@ namespace Segment.Test
 		public static Options Options ()
 		{
 			return new Options () 
-				.SetTimestamp(DateTime.Now)
+				.SetTimestamp (DateTime.Now)
+				.SetAnonymousId (Guid.NewGuid ().ToString())
 				.SetIntegration ("all", false)
 				.SetIntegration ("Mixpanel", true)
 				.SetIntegration ("Salesforce", true)

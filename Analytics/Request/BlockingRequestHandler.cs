@@ -53,7 +53,7 @@ namespace Segment.Request
 				batch.SentAt = DateTime.Now.ToString("o");
 
 				string json = JsonConvert.SerializeObject(batch, settings);
-				
+
 				HttpWebRequest request = (HttpWebRequest) WebRequest.Create(uri);
 
 				// Basic Authentication

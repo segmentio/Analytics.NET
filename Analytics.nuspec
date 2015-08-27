@@ -11,8 +11,8 @@
         <iconUrl>https://segment.com/favicon.ico</iconUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>The .NET API for analytics, by Segment. Install and immediately send data to 150+ analytics and business intelligence tools with the flip of a switch.</description>
-        <summary>The Segment .NET client library is the simplest and best way to integrate analytics into your .NET application. Check out docs at: https://segment.com/docs/libraries/net/ and code at https:</summary>
-        <releaseNotes>Check out the changelog at: https://raw.githubusercontent.com/segmentio/Analytics.NET/master/History.md</releaseNotes>
+        <summary>The Segment .NET client library is the simplest and best way to integrate analytics into your .NET application. Check out docs at: https://segment.com/docs/libraries/net/ and code at https://github.com/segmentio/Analytics.NET</summary>
+        <releaseNotes>Check out the changelog at: https://raw.githubusercontent.com/segmentio/Analytics.NET/master/Analytics/History.md</releaseNotes>
         <language>en-US</language>
         <tags>analytics, Segment</tags>
         <dependencies>

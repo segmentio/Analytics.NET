@@ -343,7 +343,7 @@ namespace Segment
 				throw new InvalidOperationException("Please supply a valid 'previousId' to Alias.");
 
 			if (String.IsNullOrEmpty(userId))
-				throw new InvalidOperationException("Please supply a valid 'to' to Alias.");
+				throw new InvalidOperationException("Please supply a valid 'userId' to Alias.");
 
 			Enqueue(new Alias(previousId, userId, options));
 		}

@@ -29,7 +29,7 @@ namespace Segment.Flush
         private Thread _flushingThread;
 
         /// <summary>
-        /// True to continue processign the flushing, false to dispose
+        /// True to continue processing the flushing, false to dispose
         /// </summary>
         private volatile bool _continue;
 
@@ -139,7 +139,8 @@ namespace Segment.Flush
                         // add this action to the current batch
                         current.Add(action);
 
-                        Logger.Debug("Dequeued action in async loop.", new Dict{
+                        Logger.Debug("Dequeued action in async loop.", new Dict
+                        {
                             { "message id", action.MessageId },
                             { "queue size", _queue.Count }
                          });

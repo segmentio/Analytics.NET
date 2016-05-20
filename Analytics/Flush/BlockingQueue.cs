@@ -1,55 +1,76 @@
-
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using Segment.Model;
+//-----------------------------------------------------------------------
+// <copyright file="BlockingQueue.cs" company="Segment">
+//     Copyright (c) Segment. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
 
 namespace Segment.Flush
 {
-	/// <summary>
-	/// Implementation of a blocking queue
-	/// </summary>
-	public class BlockingQueue<T> : IDisposable
-	{
-		private Queue<T> _queue = new Queue<T>();
+    using System;
+    using System.Collections.Generic;
+    using System.Threading;
+    using Segment.Model;
 
-		private bool _continue = true;
+    /// <summary>
+    /// Implementation of a blocking queue.
+    /// </summary>
+    public class BlockingQueue<T> : IDisposable
+    {
+        /// <summary>
+        /// Breaks the waiting state to check whether the queue is disposed on this interval.
+        /// </summary>
+        public static readonly TimeSpan PulseInterval = TimeSpan.FromMilliseconds(100);
 
-		/// <summary>
-		/// Breaks the waiting state to check whether the queue is disposed on this interval
-		/// </summary>
-		public TimeSpan PulseInterval = TimeSpan.FromMilliseconds(100);
+        private Queue<T> queue = new Queue<T>();
+        private bool isDisposed = false;
 
-		public void Enqueue(T data)
-		{
-			if (data == null) throw new ArgumentNullException("No queue nulls allowed.");
-			if (!_continue) return;
+        public int Count
+        {
+            get { return this.queue.Count; }
+        }
 
-			lock (_queue)
-			{
-				_queue.Enqueue(data);
-				Monitor.Pulse(_queue);
-			}
+        public void Enqueue(T data)
+        {
+            if (data == null)
+            {
+                throw new ArgumentNullException("No queue nulls allowed.");
+            }
 
-            Logger.Debug("Enqueued action in queue.", new Dict { { "queue size", _queue.Count } });
-		}
+            if (this.isDisposed)
+            {
+                return;
+            }
 
-		public T Dequeue()
-		{
-			lock (_queue)
-			{
-				while (_queue.Count == 0 && _continue) Monitor.Wait(_queue, PulseInterval);
-				if (!_continue) return default(T);
-				return _queue.Dequeue();
-			}
-		}
+            lock (this.queue)
+            {
+                this.queue.Enqueue(data);
+                Monitor.Pulse(this.queue);
+            }
 
-		public int Count { get { return _queue.Count; } }
+            Logger.Debug("Enqueued action in queue.", new Dict { { "queue size", this.queue.Count } });
+        }
 
-		public void Dispose() 
-		{
-			_continue = false;
-		}
-	}
+        public T Dequeue()
+        {
+            lock (this.queue)
+            {
+                while (this.queue.Count == 0 && this.isDisposed == false)
+                {
+                    Monitor.Wait(this.queue, PulseInterval);
+                }
+
+                if (this.isDisposed)
+                {
+                    return default(T);
+                }
+
+                return this.queue.Dequeue();
+            }
+        }
+
+        public void Dispose() 
+        {
+            this.isDisposed = true;
+        }
+    }
 }
-

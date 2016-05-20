@@ -1,3 +1,8 @@
+//-----------------------------------------------------------------------
+// <copyright file="Providers.cs" company="Segment">
+//     Copyright (c) Segment. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
 
 namespace Segment.Model
 {
@@ -28,7 +33,7 @@ namespace Segment.Model
         /// </summary>
         /// <param name="providerName">The provider name. Check out the docs 
         /// for context.providers for a full list of provider 
-        /// names: https://segment.io/docs/methods/identify#choosing-providers</param>
+        /// names: https://segment.io/docs/methods/identify.</param>
         /// <param name="enabled">True for enabled, false for disabled.</param>
         /// <returns>The Providers object for chaining.</returns>
         public Providers SetEnabled(string providerName, bool enabled)

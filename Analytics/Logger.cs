@@ -1,15 +1,34 @@
-﻿
-using Segment.Model;
+﻿//-----------------------------------------------------------------------
+// <copyright file="Logger.cs" company="Lost Signal LLC">
+//     Copyright (c) Lost Signal LLC. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
 
 namespace Segment
 {
+    using Segment.Model;
+
     /// <summary>
-    /// Analytics Logging
+    /// Analytics Logging.
     /// </summary>
     public class Logger
     {
+        #region Events
+
         /// <summary>
-        /// The logging level of the message
+        /// A logging event handler.   
+        /// </summary>
+        /// <param name="level">The <see cref="Segment.Logger.Level"/> of the log event (debug, info, warn, error).</param>
+        /// <param name="message">The log message.</param>
+        /// <param name="args">Optional arguments for the message.</param>
+        public delegate void LogHandler(Level level, string message, Dict args);
+
+        public static event LogHandler Handlers;
+
+        #endregion
+        
+        /// <summary>
+        /// The logging level of the message.
         /// </summary>
         public enum Level
         {
@@ -19,60 +38,52 @@ namespace Segment
             ERROR
         }
 
-        #region Events
-
-        /// <summary>
-        /// A logging event handler.   
-        /// </summary>
-        /// <param name="level">The <see cref="Segment.Logger.Level"/> of the log event (debug, info, warn, error)</param>
-        /// <param name="message">The log message</param>
-        /// <param name="args">Optional arguments for the message</param>
-        public delegate void LogHandler(Level level, string message, Dict args);
-        public static event LogHandler Handlers;
-
-        #endregion
-
-        private static void _Log(Level level, string message, Dict args)
-        {
-            if (Handlers != null) Handlers(level, message, args);
-        }
-
         internal static void Debug(string message)
         {
-            _Log(Level.DEBUG, message, null);
+            Log(Level.DEBUG, message, null);
         }
 
         internal static void Debug(string message, Dict args)
         {
-            _Log(Level.DEBUG, message, args);
+            Log(Level.DEBUG, message, args);
         }
 
         internal static void Info(string message)
         {
-            _Log(Level.INFO, message, null);
+            Log(Level.INFO, message, null);
         }
 
         internal static void Info(string message, Dict args)
         {
-            _Log(Level.INFO, message, args);
+            Log(Level.INFO, message, args);
         }
+
         internal static void Warn(string message)
         {
-            _Log(Level.WARN, message, null);
+            Log(Level.WARN, message, null);
         }
 
         internal static void Warn(string message, Dict args)
         {
-            _Log(Level.WARN, message, args);
+            Log(Level.WARN, message, args);
         }
+
         internal static void Error(string message)
         {
-            _Log(Level.ERROR, message, null);
+            Log(Level.ERROR, message, null);
         }
 
         internal static void Error(string message, Dict args)
         {
-            _Log(Level.ERROR, message, args);
+            Log(Level.ERROR, message, args);
+        }
+
+        private static void Log(Level level, string message, Dict args)
+        {
+            if (Handlers != null)
+            {
+                Handlers(level, message, args);
+            }
         }
     }
 }

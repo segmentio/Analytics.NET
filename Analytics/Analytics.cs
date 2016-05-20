@@ -1,27 +1,32 @@
-﻿
+﻿//-----------------------------------------------------------------------
+// <copyright file="Analytics.cs" company="Segment">
+//     Copyright (c) Segment. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
+
 namespace Segment
 {
     public class Analytics
     {
-		// REMINDER: don't forget to set Properties.AssemblyInfo.AssemblyVersion as well
-		public static string VERSION = "2.0.2";
+        // REMINDER: don't forget to set Properties.AssemblyInfo.AssemblyVersion as well
+        public static readonly string VERSION = "2.0.2";
 
         /// <summary>
-        /// Lock for thread-safety
+        /// Lock for thread-safety.
         /// </summary>
-        static readonly object padlock = new object();
+        private static readonly object Padlock = new object();
 
         public static Client Client { get; private set; }
 
         /// <summary>
         /// Initialized the default Segment.io client with your API writeKey.
         /// </summary>
-        /// <param name="writeKey"></param>
+        /// <param name="writeKey">The write key.</param>
         public static void Initialize(string writeKey)
         {
             // avoiding double locking as recommended:
             // http://www.yoda.arachsys.com/csharp/singleton.html
-            lock (padlock)
+            lock (Padlock)
             {
                 if (Client == null)
                 {
@@ -33,10 +38,11 @@ namespace Segment
         /// <summary>
         /// Initialized the default Segment.io client with your API writeKey.
         /// </summary>
-        /// <param name="writeKey"></param>
-		public static void Initialize(string writeKey, Config config)
+        /// <param name="writeKey">The write key.</param>
+        /// <param name="config">The client config.</param>
+        public static void Initialize(string writeKey, Config config)
         {
-            lock (padlock)
+            lock (Padlock)
             {
                 if (Client == null)
                 {
@@ -46,11 +52,11 @@ namespace Segment
         }
 
         /// <summary>
-        /// Disposes of the current client and allows the creation of a new one
+        /// Disposes of the current client and allows the creation of a new one.
         /// </summary>
         public static void Dispose()
         {
-            lock (padlock)
+            lock (Padlock)
             {
                 if (Client != null)
                 {

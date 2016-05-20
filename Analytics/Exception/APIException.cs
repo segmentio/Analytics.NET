@@ -1,15 +1,18 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="NotInitializedException.cs" company="Segment">
+// <copyright file="APIException.cs" company="Segment">
 //     Copyright (c) Segment. All rights reserved.
 // </copyright>
 //-----------------------------------------------------------------------
 
 namespace Segment.Exception
 {
-    public class NotInitializedException : System.Exception
+    public class APIException : System.Exception
     {
-        public NotInitializedException() : base("Please initialize Segment.io first before using.")
+        public APIException(string code, string message) : base(message)
         {
+            this.Code = code;
         }
+
+        public string Code { get; set; }
     }
 }

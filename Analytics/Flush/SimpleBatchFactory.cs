@@ -1,21 +1,26 @@
-
-using System.Collections.Generic;
-using Segment.Model;
+//-----------------------------------------------------------------------
+// <copyright file="SimpleBatchFactory.cs" company="Segment">
+//     Copyright (c) Segment. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
 
 namespace Segment.Flush
 {
-	internal class SimpleBatchFactory : IBatchFactory
-	{
-		private string _writeKey;
+    using System.Collections.Generic;
+    using Segment.Model;
 
-		internal SimpleBatchFactory (string writeKey)
-		{
-			this._writeKey = writeKey;
-		}
+    internal class SimpleBatchFactory : IBatchFactory
+    {
+        private string writeKey;
 
-		public Batch Create(List<BaseAction> actions) 
-		{
-			return new Batch(_writeKey, actions);
-		}
-	}
+        internal SimpleBatchFactory(string writeKey)
+        {
+            this.writeKey = writeKey;
+        }
+
+        public Batch Create(List<BaseAction> actions) 
+        {
+            return new Batch(this.writeKey, actions);
+        }
+    }
 }

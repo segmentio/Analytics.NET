@@ -31,6 +31,9 @@ namespace Segment.Model
         [JsonProperty(PropertyName = "sentAt")]
         internal string SentAt { get; set; }
 
+        [JsonProperty(PropertyName = "context")]
+        internal Context Context { get; set; }
+
         [JsonProperty(PropertyName = "batch")]
         internal List<BaseAction> Actions { get; set; }
     }

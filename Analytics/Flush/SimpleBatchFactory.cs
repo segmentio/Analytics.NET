@@ -1,6 +1,5 @@
-using System;
-using System.Collections.Generic;
 
+using System.Collections.Generic;
 using Segment.Model;
 
 namespace Segment.Flush
@@ -20,4 +19,3 @@ namespace Segment.Flush
 		}
 	}
 }
-

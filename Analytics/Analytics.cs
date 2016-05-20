@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace Segment
 {
     public class Analytics
@@ -62,6 +59,5 @@ namespace Segment
                 }
             }
         }
-
     }
 }

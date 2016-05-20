@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
-
+﻿
+using System;
 using Segment.Flush;
 using Segment.Request;
-using Segment.Exception;
 using Segment.Model;
 using Segment.Stats;
 
@@ -57,11 +53,22 @@ namespace Segment
 
 			IRequestHandler requestHandler = new BlockingRequestHandler(this, config.Timeout);
 			IBatchFactory batchFactory = new SimpleBatchFactory(this._writeKey);
+            
+            #if UNITY_5_3_OR_NEWER
+            
+            var gameObject = new UnityEngine.GameObject("Segment");
+            var monoBehaviourFlushHandler = gameObject.AddComponent<MonoBehaviourFlushHandler>();
+            monoBehaviourFlushHandler.Initialize(batchFactory, requestHandler, config.MaxQueueSize, config.Async);
+            _flushHandler = monoBehaviourFlushHandler;
 
-			if (config.Async)
-				_flushHandler = new AsyncFlushHandler(batchFactory, requestHandler, config.MaxQueueSize);
-			else
-				_flushHandler = new BlockingFlushHandler(batchFactory, requestHandler);
+            #else
+
+            if (config.Async)
+                _flushHandler = new AsyncFlushHandler(batchFactory, requestHandler, config.MaxQueueSize);
+            else
+                _flushHandler = new BlockingFlushHandler(batchFactory, requestHandler);
+
+            #endif
         }
 
         #endregion
@@ -70,26 +77,19 @@ namespace Segment
 
         public string WriteKey
         {
-            get
-            {
-                return _writeKey;
-            }
+            get { return _writeKey; }
         }
-
 
 		public Config Config
         {
-            get
-            {
-				return _config;
-            }
+            get { return _config; }
         }
 
         #endregion
 
         #region Public Methods
 
-		#region Identify
+        #region Identify
 
         /// <summary>
         /// Identifying a visitor ties all of their actions to an ID you
@@ -135,9 +135,9 @@ namespace Segment
 			Enqueue(new Identify(userId, traits, options));
         }
 
-		#endregion
+        #endregion
 
-		#region Group
+        #region Group
 
 		/// <summary>
 		/// The `group` method lets you associate a user with a group. Be it a company, 
@@ -213,9 +213,9 @@ namespace Segment
 			Enqueue(new Group(userId, groupId, traits, options));
 		}
 
-		#endregion
+        #endregion
 
-		#region Track
+        #region Track
 
         /// <summary>
         /// Whenever a user triggers an event on your site, you’ll want to track it.
@@ -309,9 +309,9 @@ namespace Segment
 			Enqueue(new Track(userId, eventName, properties, options));
 		}
 
-		#endregion
+        #endregion
 
-		#region Alias
+        #region Alias
 
 		/// <summary>
 		/// Aliases an anonymous user into an identified user.
@@ -348,9 +348,9 @@ namespace Segment
 			Enqueue(new Alias(previousId, userId, options));
 		}
 
-		#endregion
+        #endregion
 
-		#region Page
+        #region Page
 
 		/// <summary>
 		/// The `page` method let your record whenever a user sees a webpage on 
@@ -479,9 +479,9 @@ namespace Segment
 			Enqueue(new Page(userId, name, category, properties, options));
 		}
 
-		#endregion
+        #endregion
 
-		#region Screen
+        #region Screen
 
 		/// <summary>
 		/// The `screen` method let your record whenever a user sees a mobile screen on 
@@ -616,7 +616,7 @@ namespace Segment
 			Enqueue(new Screen(userId, name, category, properties, options));
 		}
 
-		#endregion
+        #endregion
 
         #region Other
 

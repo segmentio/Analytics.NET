@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 using Newtonsoft.Json;
 
 namespace Segment.Model
@@ -14,12 +11,7 @@ namespace Segment.Model
         [JsonProperty(PropertyName = "properties")]
         private Properties Properties { get; set; }
 
-        internal Track(string userId, 
-		               string eventName,
-            		   Properties properties, 
-					   Options options)
-
-			: base("track", userId, options)
+        internal Track(string userId, string eventName, Properties properties,  Options options) : base("track", userId, options)
         {
             this.EventName = eventName;
             this.Properties = properties ?? new Properties();

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 using Newtonsoft.Json;
 
 namespace Segment.Model
@@ -17,13 +14,7 @@ namespace Segment.Model
         [JsonProperty(PropertyName = "properties")]
         private Properties Properties { get; set; }
 
-		internal Screen(string userId, 
-						string name,
-					    string category,
-            		    Properties properties, 
-					    Options options)
-
-			: base("screen", userId, options)
+		internal Screen(string userId, string name, string category, Properties properties, Options options) : base("screen", userId, options)
 		{
 			this.Name = name;
 			this.Category = category;

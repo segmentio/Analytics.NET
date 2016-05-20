@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿
 using Segment.Model;
 
 namespace Segment
@@ -10,7 +8,6 @@ namespace Segment
     /// </summary>
     public class Logger
     {
-
         /// <summary>
         /// The logging level of the message
         /// </summary>
@@ -77,6 +74,5 @@ namespace Segment
         {
             _Log(Level.ERROR, message, args);
         }
-     
     }
 }

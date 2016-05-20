@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿
 using System.Collections.Generic;
-using System.Text;
-using System.Runtime.Serialization;
 
 namespace Segment.Model
 {
@@ -19,7 +16,7 @@ namespace Segment.Model
 		/// <returns>An instance of the Props for chaining</returns>
 		public new Dict Add(string key, object val) 
 		{
-			base.Add (key, val);
+			base.Add(key, val);
 			return this;
 		}
     }

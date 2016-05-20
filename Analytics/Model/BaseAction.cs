@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
+using System;
 using Newtonsoft.Json;
 
 namespace Segment.Model
@@ -35,10 +33,12 @@ namespace Segment.Model
 
 			this.Type = type;
 			this.MessageId = Guid.NewGuid ().ToString();
-			if (options.Timestamp.HasValue)
+
+            if (options.Timestamp.HasValue)
 				this.Timestamp = options.Timestamp.Value.ToString("o");
-            		else
-                		this.Timestamp = DateTime.Now.ToString("o");
+            else
+                this.Timestamp = DateTime.Now.ToString("o");
+
 			this.Context = options.Context;
 			this.Integrations = options.Integrations;
 			this.AnonymousId = options.AnonymousId;

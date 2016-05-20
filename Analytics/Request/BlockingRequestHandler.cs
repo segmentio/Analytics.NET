@@ -1,45 +1,49 @@
-
-using System;
-using System.Text;
-using System.Net;
-using System.IO;
-using System.Diagnostics;
-using Newtonsoft.Json;
-using Segment.Model;
-using Segment.Exception;
+//-----------------------------------------------------------------------
+// <copyright file="BlockingRequestHandler.cs" company="Segment">
+//     Copyright (c) Segment. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
 
 namespace Segment.Request
 {
+    using System;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Net;
+    using System.Text;
+    using Exception;
+    using Newtonsoft.Json;
+    using Segment.Model;
+
     internal class BlockingRequestHandler : IRequestHandler
     {
         #if !UNITY_5_3_OR_NEWER
 
         /// <summary>
-        /// JSON serialization settings
+        /// JSON serialization settings.
         /// </summary>
         private JsonSerializerSettings settings = new JsonSerializerSettings()
         {
-			// Converters = new List<JsonConverter> { new ContextSerializer() }
-		};
+            // Converters = new List<JsonConverter> { new ContextSerializer() }
+        };
         
         #endif
 
         /// <summary>
-        /// Segment.io client to mark statistics
+        /// Segment.io client to mark statistics.
         /// </summary>
-        private Client _client;
-
-        /// <summary>
-        /// The maximum amount of time to wait before calling
-        /// the HTTP flush a timeout failure.
-        /// </summary>
-        public TimeSpan Timeout { get; set; }
+        private Client client;
 
         internal BlockingRequestHandler(Client client, TimeSpan timeout)
         {
-            this._client = client;
+            this.client = client;
             this.Timeout = timeout;
         }
+
+        /// <summary>
+        /// Gets or sets the maximum amount of time to wait before calling the HTTP flush a timeout failure.
+        /// </summary>
+        public TimeSpan Timeout { get; set; }
 
         public void MakeRequest(Batch batch)
         {
@@ -47,7 +51,7 @@ namespace Segment.Request
 
             #if UNITY_5_3_OR_NEWER
 
-            string url = _client.Config.Host + "/v1/import";
+            string url = this.client.Config.Host + "/v1/import";
 
             // set the current request time
             batch.SentAt = DateTime.Now.ToString("o");
@@ -63,36 +67,42 @@ namespace Segment.Request
 
             // waiting for it to finish
             while (www.isDone == false);
+            
+            watch.Stop();
 
             if (string.IsNullOrEmpty(www.error) == false)
             {
-                watch.Stop();
-                Fail(batch, new System.Exception(www.error), watch.ElapsedMilliseconds);
+                this.Fail(batch, new System.Exception(www.error), watch.ElapsedMilliseconds);
+            }
+            else
+            {
+                this.Succeed(batch, watch.ElapsedMilliseconds);
             }
 
             #else
             
             try
-			{
-                Uri uri = new Uri(_client.Config.Host + "/v1/import");
+            {
+                Uri uri = new Uri(this.client.Config.Host + "/v1/import");
 
                 // set the current request time
                 batch.SentAt = DateTime.Now.ToString("o");
 
-                string json = JsonConvert.SerializeObject(batch, settings);
+                string json = JsonConvert.SerializeObject(batch, this.settings);
 
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
 
                 // Basic Authentication
                 // https://segment.io/docs/tracking-api/reference/#authentication
-                request.Headers["Authorization"] = BasicAuthHeader(batch.WriteKey, "");
+                request.Headers["Authorization"] = this.BasicAuthHeader(batch.WriteKey, string.Empty);
 
-                request.Timeout = (int)Timeout.TotalMilliseconds;
+                request.Timeout = (int)this.Timeout.TotalMilliseconds;
                 request.ContentType = "application/json";
                 request.Method = "POST";
 
                 // do not use the expect 100-continue behavior
                 request.ServicePoint.Expect100Continue = false;
+                
                 // buffer the data before sending, ok since we send all in one shot
                 request.AllowWriteStreamBuffering = true;
 
@@ -100,7 +110,7 @@ namespace Segment.Request
                 {
                     { "batch id", batch.MessageId },
                     { "json size", json.Length },
-                    { "batch size", batch.batch.Count }
+                    { "batch size", batch.Actions.Count }
                 });
 
                 watch.Start();
@@ -119,36 +129,36 @@ namespace Segment.Request
 
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        Succeed(batch, watch.ElapsedMilliseconds);
+                        this.Succeed(batch, watch.ElapsedMilliseconds);
                     }
                     else
                     {
-                        string responseStr = String.Format("Status Code {0}. ", response.StatusCode);
-                        responseStr += ReadResponse(response);
-                        Fail(batch, new APIException("Unexpected Status Code", responseStr), watch.ElapsedMilliseconds);
+                        string responseStr = string.Format("Status Code {0}. ", response.StatusCode);
+                        responseStr += this.ReadResponse(response);
+                        this.Fail(batch, new APIException("Unexpected Status Code", responseStr), watch.ElapsedMilliseconds);
                     }
                 }
             }
-			catch (WebException e) 
-			{
+            catch (WebException e) 
+            {
                 watch.Stop();
-                Fail(batch, ParseException(e), watch.ElapsedMilliseconds);
-			}
-			catch (System.Exception e)
-			{
+                this.Fail(batch, this.ParseException(e), watch.ElapsedMilliseconds);
+            }
+            catch (System.Exception e)
+            {
                 watch.Stop();
-                Fail(batch, e, watch.ElapsedMilliseconds);
-			}
+                this.Fail(batch, e, watch.ElapsedMilliseconds);
+            }
 
             #endif
         }
 
         private void Fail(Batch batch, System.Exception e, long duration)
         {
-            foreach (BaseAction action in batch.batch)
+            foreach (BaseAction action in batch.Actions)
             {
-                _client.Statistics.Failed += 1;
-                _client.RaiseFailure(action, e);
+                this.client.Statistics.Failed += 1;
+                this.client.RaiseFailure(action, e);
             }
 
             Logger.Info("Segment.io request failed.", new Dict
@@ -161,10 +171,10 @@ namespace Segment.Request
 
         private void Succeed(Batch batch, long duration)
         {
-            foreach (BaseAction action in batch.batch)
+            foreach (BaseAction action in batch.Actions)
             {
-                _client.Statistics.Succeeded += 1;
-                _client.RaiseSuccess(action);
+                this.client.Statistics.Succeeded += 1;
+                this.client.RaiseSuccess(action);
             }
 
             Logger.Info("Segment.io request successful.", new Dict
@@ -176,10 +186,9 @@ namespace Segment.Request
 
         private System.Exception ParseException(WebException e)
         {
-
             if (e.Response != null && ((HttpWebResponse)e.Response).StatusCode == HttpStatusCode.BadRequest)
             {
-                return new APIException("Bad Request", ReadResponse(e.Response));
+                return new APIException("Bad Request", this.ReadResponse(e.Response));
             }
             else
             {

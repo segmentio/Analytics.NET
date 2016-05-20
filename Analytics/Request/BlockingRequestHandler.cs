@@ -61,12 +61,14 @@ namespace Segment.Request
 
             var headers = new System.Collections.Generic.Dictionary<string, string>();
             headers.Add("Content-Type", "application/json");
-            headers.Add("Authorization", BasicAuthHeader(batch.WriteKey, ""));
+            headers.Add("Authorization", this.BasicAuthHeader(batch.WriteKey, string.Empty));
 
             var www = new UnityEngine.WWW(url, jsonBytes, headers);
 
             // waiting for it to finish
-            while (www.isDone == false);
+            while (www.isDone == false)
+            {
+            }
             
             watch.Stop();
 
@@ -161,12 +163,8 @@ namespace Segment.Request
                 this.client.RaiseFailure(action, e);
             }
 
-            Logger.Info("Segment.io request failed.", new Dict
-            {
-                { "batch id", batch.MessageId },
-                { "reason", e.Message },
-                { "duration (ms)", duration }
-            });
+            var args = new Dict { { "batch id", batch.MessageId }, { "reason", e.Message }, { "duration (ms)", duration } };
+            Logger.Info("Segment.io request failed.", args);
         }
 
         private void Succeed(Batch batch, long duration)
@@ -177,11 +175,7 @@ namespace Segment.Request
                 this.client.RaiseSuccess(action);
             }
 
-            Logger.Info("Segment.io request successful.", new Dict
-            {
-                { "batch id", batch.MessageId },
-                { "duration (ms)", duration }
-            });
+            Logger.Info("Segment.io request successful.", new Dict { { "batch id", batch.MessageId }, { "duration (ms)", duration } });
         }
 
         private System.Exception ParseException(WebException e)

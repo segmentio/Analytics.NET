@@ -45,7 +45,11 @@ namespace Segment.Request
         /// </summary>
         public TimeSpan Timeout { get; set; }
 
+        #if UNITY_5_3_OR_NEWER
+        public System.Collections.IEnumerator MakeRequest(Batch batch)
+        #else
         public void MakeRequest(Batch batch)
+        #endif
         {
             Stopwatch watch = new Stopwatch();
 
@@ -65,10 +69,7 @@ namespace Segment.Request
 
             var www = new UnityEngine.WWW(url, jsonBytes, headers);
 
-            // waiting for it to finish
-            while (www.isDone == false)
-            {
-            }
+            yield return www;
             
             watch.Stop();
 
@@ -152,7 +153,7 @@ namespace Segment.Request
                 this.Fail(batch, e, watch.ElapsedMilliseconds);
             }
 
-            #endif
+#endif
         }
 
         private void Fail(Batch batch, System.Exception e, long duration)

@@ -49,10 +49,11 @@ namespace Segment
         public Client(string writeKey, Config config)
         {
             if (String.IsNullOrEmpty(writeKey))
+            {
                 throw new InvalidOperationException("Please supply a valid writeKey to initialize.");
+            }   
 
             this.Statistics = new Statistics();
-
             this.writeKey = writeKey;
             this.config = config;
 
@@ -61,12 +62,15 @@ namespace Segment
 
             #if UNITY_5_3_OR_NEWER
             
-            var gameObject = new UnityEngine.GameObject("Segment");
-            var monoBehaviourFlushHandler = gameObject.AddComponent<MonoBehaviourFlushHandler>();
+            var gameObject = new UnityEngine.GameObject("Segment", typeof(MonoBehaviourFlushHandler));
+
+            var monoBehaviourFlushHandler = gameObject.GetComponent<MonoBehaviourFlushHandler>();
             monoBehaviourFlushHandler.Initialize(batchFactory, requestHandler, config.MaxQueueSize, config.Async);
-            this.flushHandler = monoBehaviourFlushHandler;			
-			
-			#else
+
+            this.flushHandler = monoBehaviourFlushHandler;
+            this.Succeeded += monoBehaviourFlushHandler.ClientSuccess;
+
+            #else
 			
             if (this.config.Async)
             {
@@ -77,7 +81,7 @@ namespace Segment
                 this.flushHandler = new BlockingFlushHandler(batchFactory, requestHandler);
             }
 			
-			#endif
+            #endif
         }
 
         #endregion

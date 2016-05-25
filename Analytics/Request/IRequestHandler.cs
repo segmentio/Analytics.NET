@@ -10,6 +10,10 @@ namespace Segment.Request
 
     internal interface IRequestHandler
     {
+        #if UNITY_5_3_OR_NEWER
+        System.Collections.IEnumerator MakeRequest(Batch batch); 
+        #else
         void MakeRequest(Batch batch); 
+        #endif
     }
 }

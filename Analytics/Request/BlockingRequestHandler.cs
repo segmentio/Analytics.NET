@@ -68,11 +68,11 @@ namespace Segment.Request
             headers.Add("Authorization", this.BasicAuthHeader(batch.WriteKey, string.Empty));
 
             var www = new UnityEngine.WWW(url, jsonBytes, headers);
-
+            
             yield return www;
             
             watch.Stop();
-
+            
             if (string.IsNullOrEmpty(www.error) == false)
             {
                 this.Fail(batch, new System.Exception(www.error), watch.ElapsedMilliseconds);
@@ -153,7 +153,7 @@ namespace Segment.Request
                 this.Fail(batch, e, watch.ElapsedMilliseconds);
             }
 
-#endif
+            #endif
         }
 
         private void Fail(Batch batch, System.Exception e, long duration)

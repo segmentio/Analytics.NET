@@ -9,8 +9,6 @@
 namespace Segment.Flush
 {
     using System.Collections.Generic;
-    using System.IO;
-    using Newtonsoft.Json;
     using Segment.Model;
     using Segment.Request;
     using UnityEngine;
@@ -18,12 +16,12 @@ namespace Segment.Flush
 
     internal class MonoBehaviourFlushHandler : MonoBehaviour, IFlushHandler
     {
-        private const int FlushAmount = 100;
+        private const int FlushAmount = 50;
 
         /// <summary>
         /// Internal message queue.
         /// </summary>
-        private LocalStore<BaseAction> dataStore;
+        private LocalStore dataStore;
 
         /// <summary>
         /// Creates a series of actions into a batch that we can send to the server.
@@ -41,6 +39,7 @@ namespace Segment.Flush
         private Context context;
         
         private DateTime lastFlushTime = DateTime.Now;
+
         private int actionsSinceLastFlush;
 
         /// <summary>
@@ -94,16 +93,11 @@ namespace Segment.Flush
 
             if (this.dataStore.Count == 0)
             {
-                // DO NOT CHECKIN
-                Debug.Log("Nothing to Flush!");
                 return;
             }
 
             List<BaseAction> current = this.dataStore.PeakTop(FlushAmount);
-
-            // DO NOT CHECKIN
-            Debug.LogFormat("Flushing {0} events", current.Count);
-
+            
             // we have a batch that we're trying to send
             Batch batch = this.batchFactory.Create(current);
             batch.Context = this.context;
@@ -154,7 +148,7 @@ namespace Segment.Flush
 
         internal void Initialize(IBatchFactory batchFactory, IRequestHandler requestHandler, int maxQueueSize, bool async)
         {
-            this.dataStore = new LocalStore<BaseAction>("analytics");
+            this.dataStore = new LocalStore();
             this.batchFactory = batchFactory;
             this.requestHandler = requestHandler;
             this.MaxQueueSize = maxQueueSize;

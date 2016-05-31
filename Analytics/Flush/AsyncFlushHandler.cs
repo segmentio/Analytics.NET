@@ -12,6 +12,7 @@ using Segment.Exception;
 
 namespace Segment.Flush
 {
+    using Dict = System.Collections.Generic.Dictionary<string, object>;
     internal class AsyncFlushHandler : IFlushHandler
     {
         /// <summary>

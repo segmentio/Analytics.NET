@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 
 namespace Segment.Model
 {
+    using Traits = System.Collections.Generic.IDictionary<string, object>;
     public class Identify : BaseAction
     {
         [JsonProperty(PropertyName = "traits")]
@@ -17,7 +18,7 @@ namespace Segment.Model
 	
 			: base("identify", userId, options)
         {
-            this.Traits = traits ?? new Traits();
+            this.Traits = traits ?? new Dictionary<string, object>();
         }
     }
 }

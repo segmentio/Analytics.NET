@@ -6,7 +6,8 @@ using Newtonsoft.Json;
 
 namespace Segment.Model
 {
-	public class Page : BaseAction
+    using Properties = System.Collections.Generic.IDictionary<string, object>;
+    public class Page : BaseAction
     {
 		[JsonProperty(PropertyName = "name")]
         private string Name { get; set; }
@@ -27,7 +28,7 @@ namespace Segment.Model
 		{
 			this.Name = name;
 			this.Category = category;
-            this.Properties = properties ?? new Properties();
+            this.Properties = properties ?? new Dictionary<string, object>();
         }
     }
 }

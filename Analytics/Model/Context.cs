@@ -2,6 +2,7 @@
 
 namespace Segment.Model
 {
+    using Dict = System.Collections.Generic.Dictionary<string, object>;
     public class Context : Dict
     {
         /// <summary>
@@ -10,8 +11,8 @@ namespace Segment.Model
         /// </summary>
         public Context() {
             // default the context library
-            this.Add("library", new Dict() {
-			    { "name", "Analytics.NET" },
+            this.Add("library", new Dict {
+                { "name", "Analytics.NET" },
 			    { "version", Analytics.VERSION }
 		    });
         }

@@ -1,10 +1,11 @@
 ﻿using System;
-
+using System.Collections.Generic;
 using Segment.Model;
 
 namespace Segment.Model
 {
-	public class Options
+    using Dict = System.Collections.Generic.IDictionary<string, object>;
+    public class Options
 	{
 		public string AnonymousId { get; private set; }
 		public Dict Integrations { get; private set; }
@@ -17,7 +18,7 @@ namespace Segment.Model
 		/// </summary>
 		public Options ()
 		{
-			this.Integrations = new Dict ();
+			this.Integrations = new Dictionary<string, object>();
 			this.Context = new Context ();
 		}
 

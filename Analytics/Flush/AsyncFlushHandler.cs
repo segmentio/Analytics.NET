@@ -165,9 +165,10 @@ namespace Segment.Flush
                         var args = new Dict { { "message id", action.MessageId }, { "queue size", this.queue.Count } };
                         Logger.Debug("Dequeued action in async loop.", args);
                     }
+                    
+                    // if we can easily see that there's still stuff in the queue we'd prefer to add more 
+                    // to the current batch to send more at once. But only if we're not disposed yet.
                 }
-                // if we can easily see that there's still stuff in the queue we'd prefer to add more 
-                // to the current batch to send more at once. But only if we're not disposed yet.
                 while (this.isDisposed == false && this.queue.Count > 0 && current.Count <= Constants.BatchIncrement);
 
                 if (current.Count > 0) 

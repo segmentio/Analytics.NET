@@ -14,6 +14,7 @@ namespace Segment.Flush
     /// <summary>
     /// Implementation of a blocking queue.
     /// </summary>
+    /// <typeparam name="T">The generic type this queue holds.</typeparam>
     public class BlockingQueue<T> : IDisposable
     {
         /// <summary>

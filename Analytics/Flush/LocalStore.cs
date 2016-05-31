@@ -30,7 +30,7 @@ namespace Segment.Flush
 
         public int Count
         {
-            get { return dataList.Count; }
+            get { return this.dataList.Count; }
         }
 
         public string FileName
@@ -108,9 +108,14 @@ namespace Segment.Flush
         
         public class BaseActionConverter : JsonConverter
         {
+            public override bool CanWrite
+            {
+                get { return false; }
+            }
+
             public override bool CanConvert(Type objectType)
             {
-                return (objectType == typeof(BaseAction));
+                return objectType == typeof(BaseAction);
             }
 
             public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
@@ -184,11 +189,6 @@ namespace Segment.Flush
                     default:
                         return null;
                 }
-            }
-
-            public override bool CanWrite
-            {
-                get { return false; }
             }
 
             public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

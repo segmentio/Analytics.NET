@@ -8,12 +8,12 @@
 
 namespace Segment.Flush
 {
+    using System;
     using System.Collections.Generic;
     using Segment.Model;
     using Segment.Request;
     using UnityEngine;
-    using System;
-
+    
     internal class MonoBehaviourFlushHandler : MonoBehaviour, IFlushHandler
     {
         private const int FlushAmount = 50;
@@ -85,6 +85,26 @@ namespace Segment.Flush
         {
             this.Flush(this.Async);
         }
+        
+        public void Dispose()
+        {
+            this.OnDestroy();
+        }
+
+        public void ClientSuccess(BaseAction action)
+        {
+            this.dataStore.Remove(action);
+        }
+
+        internal void Initialize(IBatchFactory batchFactory, IRequestHandler requestHandler, int maxQueueSize, bool async)
+        {
+            this.dataStore = new LocalStore();
+            this.batchFactory = batchFactory;
+            this.requestHandler = requestHandler;
+            this.MaxQueueSize = maxQueueSize;
+            this.Async = async;
+            this.context = this.GetContext();
+        }
 
         private void Flush(bool asyc)
         {
@@ -119,16 +139,6 @@ namespace Segment.Flush
             }
         }
 
-        public void Dispose()
-        {
-            this.OnDestroy();
-        }
-
-        public void ClientSuccess(BaseAction action)
-        {
-            this.dataStore.Remove(action);
-        }
-
         private void Update()
         {
             // if we have a lot to flush, then check every 20 seconds, else wait a minute and a half
@@ -144,16 +154,6 @@ namespace Segment.Flush
 
                 this.lastFlushTime = DateTime.Now;
             }
-        }
-
-        internal void Initialize(IBatchFactory batchFactory, IRequestHandler requestHandler, int maxQueueSize, bool async)
-        {
-            this.dataStore = new LocalStore();
-            this.batchFactory = batchFactory;
-            this.requestHandler = requestHandler;
-            this.MaxQueueSize = maxQueueSize;
-            this.Async = async;
-            this.context = this.GetContext();
         }
         
         private void OnApplicationFocus(bool focus)

@@ -21,34 +21,26 @@ namespace Segment
         private string writeKey;
         private Config config;
 
-        public Statistics Statistics { get; set; }
-
-        #region Events
-
-        public delegate void FailedHandler(BaseAction action, System.Exception e);
-        public delegate void SucceededHandler(BaseAction action);
-
-        public event FailedHandler Failed;
-        public event SucceededHandler Succeeded;
-
-        #endregion
-
         #region Initialization
 
         /// <summary>
-        /// Creates a new REST client with a specified API writeKey and default config
+        /// Initializes a new instance of the <see cref="Client" /> class.
+        /// Creates a new REST client with a specified API writeKey and default config.
         /// </summary>
-        /// <param name="writeKey"></param>
-        public Client(string writeKey) : this(writeKey, new Config()) {}
+        /// <param name="writeKey">The API write key.</param>
+        public Client(string writeKey) : this(writeKey, new Config())
+        {
+        }
 
         /// <summary>
-        /// Creates a new REST client with a specified API writeKey and default config
+        /// Initializes a new instance of the <see cref="Client" /> class.
+        /// Creates a new REST client with a specified API writeKey and default config.
         /// </summary>
-        /// <param name="writeKey"></param>
-        /// <param name="config"></param>
+        /// <param name="writeKey">The API write key.</param>
+        /// <param name="config">The config file to initialize the client with.</param>
         public Client(string writeKey, Config config)
         {
-            if (String.IsNullOrEmpty(writeKey))
+            if (string.IsNullOrEmpty(writeKey))
             {
                 throw new InvalidOperationException("Please supply a valid writeKey to initialize.");
             }   
@@ -86,23 +78,30 @@ namespace Segment
 
         #endregion
 
+        #region Events
+
+        public delegate void FailedHandler(BaseAction action, System.Exception e);
+
+        public delegate void SucceededHandler(BaseAction action);
+
+        public event FailedHandler Failed;
+
+        public event SucceededHandler Succeeded;
+
+        #endregion
+
         #region Properties
+        
+        public Statistics Statistics { get; set; }
 
         public string WriteKey
         {
-            get
-            {
-                return writeKey;
-            }
+            get { return this.writeKey; }
         }
-
-
+        
         public Config Config
         {
-            get
-            {
-                return config;
-            }
+            get { return this.config; }
         }
 
         #endregion
@@ -115,44 +114,42 @@ namespace Segment
         /// Identifying a visitor ties all of their actions to an ID you
         /// recognize and records visitor traits you can segment by.
         /// </summary>
-        ///
-        /// <param name="userId">The visitor's identifier after they log in, or you know
-        /// who they are. By
-        /// explicitly identifying a user, you tie all of their actions to their identity.</param>
-        ///
+        /// <para/>
+        /// <param name="userId">The visitor's identifier after they log in, or you know who they are. 
+        /// By explicitly identifying a user, you tie all of their actions to their identity.</param>
+        /// <para/>
         /// <param name="traits">A dictionary with keys like "email", "name", “subscriptionPlan” or
         /// "friendCount”. You can segment your users by any trait you record.
         /// Pass in values in key-value format. String key, then its value
-        /// { String, Integer, Boolean, Double, or Date are acceptable types for a value. } </param>
-        ///
+        /// { String, Integer, Boolean, Double, or Date are acceptable types for a value. }.</param>
         public void Identify(string userId, Traits traits)
         {
-            Identify(userId, traits, null);
+            this.Identify(userId, traits, null);
         }
 
         /// <summary>
         /// Identifying a visitor ties all of their actions to an ID you
         /// recognize and records visitor traits you can segment by.
         /// </summary>
-        ///
-        /// <param name="userId">The visitor's identifier after they log in, or you know
-        /// who they are. By
-        /// explicitly identifying a user, you tie all of their actions to their identity.</param>
-        ///
+        /// <para/>
+        /// <param name="userId">The visitor's identifier after they log in, or you know who they are. 
+        /// By explicitly identifying a user, you tie all of their actions to their identity.</param>
+        /// <para/>
         /// <param name="traits">A dictionary with keys like "email", "name", “subscriptionPlan” or
         /// "friendCount”. You can segment your users by any trait you record.
         /// Pass in values in key-value format. String key, then its value
-        /// { String, Integer, Boolean, Double, or Date are acceptable types for a value. } </param>
-        ///
+        /// { String, Integer, Boolean, Double, or Date are acceptable types for a value. }.</param>
+        /// <para/>
         /// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
-        /// and the context of th emessage.</param>
-        ///
+        /// and the context of the message.</param>
         public void Identify(string userId, Traits traits, Options options)
         {
-            if (String.IsNullOrEmpty(userId) && !HasAnonymousId(options))
+            if (string.IsNullOrEmpty(userId) && !HasAnonymousId(options))
+            {
                 throw new InvalidOperationException("Please supply a valid userId to Identify.");
+            }
 
-            Enqueue(new Identify(userId, traits, options));
+            this.Enqueue(new Identify(userId, traits, options));
         }
 
         #endregion
@@ -165,19 +162,18 @@ namespace Segment
         /// with for the same concept! It also lets you record custom traits about the 
         /// group, like industry or number of employees.
         /// </summary>
-        ///
+        /// <para/>
         /// <param name="userId">The visitor's database identifier after they log in, or you know
         /// who they are. By explicitly grouping a user, you tie all of their actions to their group.</param>
-        ///
+        /// <para/>
         /// <param name="groupId">The group's database identifier after they log in, or you know
         /// who they are.</param>
-        ///
+        /// <para/>
         /// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
-        /// and the context of th emessage.</param>
-        ///
+        /// and the context of the message.</param>
         public void Group(string userId, string groupId, Options options)
         {
-            Group (userId, groupId, null, options);
+            this.Group(userId, groupId, null, options);
         }
 
         /// <summary>
@@ -186,20 +182,19 @@ namespace Segment
         /// with for the same concept! It also lets you record custom traits about the 
         /// group, like industry or number of employees.
         /// </summary>
-        ///
+        /// <para/>
         /// <param name="userId">The visitor's database identifier after they log in, or you know
         /// who they are. By explicitly grouping a user, you tie all of their actions to their group.</param>
-        ///
+        /// <para/>
         /// <param name="groupId">The group's database identifier after they log in, or you know
         /// who they are.</param>
-        ///
+        /// <para/>
         /// <param name="traits">A dictionary with group keys like "name", “subscriptionPlan”. 
         /// You can segment your users by any trait you record. Pass in values in key-value format. 
-        /// String key, then its value { String, Integer, Boolean, Double, or Date are acceptable types for a value. } </param>
-        ///
+        /// String key, then its value { String, Integer, Boolean, Double, or Date are acceptable types for a value. }.</param>
         public void Group(string userId, string groupId, Traits traits)
         {
-            Group (userId, groupId, traits, null);
+            this.Group(userId, groupId, traits, null);
         }
 
         /// <summary>
@@ -208,29 +203,32 @@ namespace Segment
         /// with for the same concept! It also lets you record custom traits about the 
         /// group, like industry or number of employees.
         /// </summary>
-        ///
+        /// <para/>
         /// <param name="userId">The visitor's database identifier after they log in, or you know
         /// who they are. By explicitly grouping a user, you tie all of their actions to their group.</param>
-        ///
+        /// <para/>
         /// <param name="groupId">The group's database identifier after they log in, or you know
         /// who they are.</param>
-        ///
+        /// <para/>
         /// <param name="traits">A dictionary with group keys like "name", “subscriptionPlan”. 
         /// You can segment your users by any trait you record. Pass in values in key-value format. 
-        /// String key, then its value { String, Integer, Boolean, Double, or Date are acceptable types for a value. } </param>
-        ///
+        /// String key, then its value { String, Integer, Boolean, Double, or Date are acceptable types for a value. }.</param>
+        /// <para/>
         /// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
-        /// and the context of th emessage.</param>
-        ///
+        /// and the context of the message.</param>
         public void Group(string userId, string groupId, Traits traits, Options options)
         {
-            if (String.IsNullOrEmpty(userId) && !HasAnonymousId(options))
+            if (string.IsNullOrEmpty(userId) && !HasAnonymousId(options))
+            {
                 throw new InvalidOperationException("Please supply a valid userId or anonymousID to call #Group.");
+            }
 
-            if (String.IsNullOrEmpty(groupId))
+            if (string.IsNullOrEmpty(groupId))
+            {
                 throw new InvalidOperationException("Please supply a valid groupId to call #Group.");
-
-            Enqueue(new Group(userId, groupId, traits, options));
+            }
+            
+            this.Enqueue(new Group(userId, groupId, traits, options));
         }
 
         #endregion
@@ -250,18 +248,17 @@ namespace Segment
         /// <summary>
         /// Whenever a user triggers an event on your site, you’ll want to track it.
         /// </summary>
-        ///
+        /// <para/>
         /// <param name="userId">The visitor's identifier after they log in, or you know
-        /// who they are. </param>
-        ///
+        /// who they are.</param>
+        /// <para/>
         /// <param name="eventName">The event name you are tracking. It is recommended
         /// that it is in human readable form. For example, "Bought T-Shirt"
-        /// or "Started an exercise"</param>
-        ///
-        /// <param name="properties"> A dictionary with items that describe the event
+        /// or "Started an exercise".</param>
+        /// <para/>
+        /// <param name="properties">A dictionary with items that describe the event
         /// in more detail. This argument is optional, but highly recommended —
         /// you’ll find these properties extremely useful later.</param>
-        ///
         public void Track(string userId, string eventName, Properties properties)
         {
             this.Track(userId, eventName, properties, null);
@@ -271,20 +268,18 @@ namespace Segment
         /// Whenever a user triggers an event on your site, you’ll want to track it
         /// so that you can analyze and segment by those events later.
         /// </summary>
-        ///
+        /// <para/>
         /// <param name="userId">The visitor's identifier after they log in, or you know
         /// who they are. By
         /// explicitly identifying a user, you tie all of their actions to their identity.
         /// This makes it possible for you to run things like segment-based email campaigns.</param>
-        ///
+        /// <para/>
         /// <param name="eventName">The event name you are tracking. It is recommended
         /// that it is in human readable form. For example, "Bought T-Shirt"
-        /// or "Started an exercise"</param>
-        ///
+        /// or "Started an exercise".</param>
+        /// <para/>
         /// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
-        /// and the context of th emessage.</param>
-        /// 
-        ///
+        /// and the context of the message.</param>
         public void Track(string userId, string eventName, Options options)
         {
             this.Track(userId, eventName, null, options);
@@ -294,32 +289,30 @@ namespace Segment
         /// Whenever a user triggers an event on your site, you’ll want to track it
         /// so that you can analyze and segment by those events later.
         /// </summary>
-        ///
+        /// <para/>
         /// <param name="userId">The visitor's identifier after they log in, or you know
         /// who they are. By
         /// explicitly identifying a user, you tie all of their actions to their identity.
         /// This makes it possible for you to run things like segment-based email campaigns.</param>
-        ///
+        /// <para/>
         /// <param name="eventName">The event name you are tracking. It is recommended
         /// that it is in human readable form. For example, "Bought T-Shirt"
-        /// or "Started an exercise"</param>
-        ///
+        /// or "Started an exercise".</param>
+        /// <para/>
         /// <param name="properties"> A dictionary with items that describe the event
         /// in more detail. This argument is optional, but highly recommended —
         /// you’ll find these properties extremely useful later.</param>
-        ///
+        /// <para/>
         /// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
-        /// and the context of th emessage.</param>
-        /// 
-        ///
+        /// and the context of the message.</param>
         public void Track(string userId, string eventName, Properties properties, Options options)
         {
-            if (String.IsNullOrEmpty(userId) && !HasAnonymousId(options))
+            if (string.IsNullOrEmpty(userId) && !HasAnonymousId(options))
             {
                 throw new InvalidOperationException("Please supply a valid userId or anonymousId to Track.");
             }
 
-            if (String.IsNullOrEmpty(eventName))
+            if (string.IsNullOrEmpty(eventName))
             {
                 throw new InvalidOperationException("Please supply a valid event to Track.");
             } 
@@ -334,36 +327,36 @@ namespace Segment
         /// <summary>
         /// Aliases an anonymous user into an identified user.
         /// </summary>
-        /// 
         /// <param name="previousId">The anonymous user's id before they are logged in.</param>
-        /// 
-        /// <param name="userId">the identified user's id after they're logged in.</param>
-        /// 
+        /// <param name="userId">The identified user's id after they're logged in.</param>
         public void Alias(string previousId, string userId)
         {
-            Alias(previousId, userId, null);
+            this.Alias(previousId, userId, null);
         }
 
         /// <summary>
         /// Aliases an anonymous user into an identified user.
         /// </summary>
-        /// 
+        /// <para/>
         /// <param name="previousId">The anonymous user's id before they are logged in.</param>
-        /// 
-        /// <param name="userId">the identified user's id after they're logged in.</param>
-        ///
+        /// <para/>
+        /// <param name="userId">The identified user's id after they're logged in.</param>
+        /// <para/>
         /// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
-        /// and the context of th emessage.</param>
-        /// 
+        /// and the context of the message.</param>
         public void Alias(string previousId, string userId, Options options)
         {
-            if (String.IsNullOrEmpty(previousId))
+            if (string.IsNullOrEmpty(previousId))
+            {
                 throw new InvalidOperationException("Please supply a valid 'previousId' to Alias.");
+            }   
 
-            if (String.IsNullOrEmpty(userId))
+            if (string.IsNullOrEmpty(userId))
+            {
                 throw new InvalidOperationException("Please supply a valid 'userId' to Alias.");
+            }
 
-            Enqueue(new Alias(previousId, userId, options));
+            this.Enqueue(new Alias(previousId, userId, options));
         }
 
         #endregion
@@ -374,127 +367,125 @@ namespace Segment
         /// The `page` method let your record whenever a user sees a webpage on 
         /// your website, and attach a `name`, `category` or `properties` to the webpage load. 
         /// </summary>
-        ///
+        /// <para/>
         /// <param name="userId">The visitor's identifier after they log in, or you know
         /// who they are. By explicitly identifying a user, you tie all of their actions to their identity.
         /// This makes it possible for you to run things like segment-based email campaigns.</param>
-        ///
-        /// <param name="name">The name of the webpage, like "Signup", "Login"</param>
-        ///
+        /// <para/>
+        /// <param name="name">The name of the webpage, like "Signup", "Login".</param>
         public void Page(string userId, string name)
         {
-            Page (userId, name, null, null, null);
+            this.Page(userId, name, null, null, null);
         }
 
         /// <summary>
         /// The `page` method let your record whenever a user sees a webpage on 
         /// your website, and attach a `name`, `category` or `properties` to the webpage load. 
         /// </summary>
-        ///
+        /// <para/>
         /// <param name="userId">The visitor's identifier after they log in, or you know
         /// who they are. By explicitly identifying a user, you tie all of their actions to their identity.
         /// This makes it possible for you to run things like segment-based email campaigns.</param>
-        ///
-        /// <param name="name">The name of the webpage, like "Signup", "Login"</param>
-        ///
+        /// <para/>
+        /// <param name="name">The name of the webpage, like "Signup", "Login".</param>
+        /// <para/>
         /// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
-        /// and the context of th emessage.</param>
-        ///
+        /// and the context of the message.</param>
         public void Page(string userId, string name, Options options)
         {
-            Page (userId, name, null, null, options);
+            this.Page(userId, name, null, null, options);
         }
 
         /// <summary>
         /// The `page` method let your record whenever a user sees a webpage on 
         /// your website, and attach a `name`, `category` or `properties` to the webpage load. 
         /// </summary>
-        ///
+        /// <para/>
         /// <param name="userId">The visitor's identifier after they log in, or you know
         /// who they are. By explicitly identifying a user, you tie all of their actions to their identity.
         /// This makes it possible for you to run things like segment-based email campaigns.</param>
-        ///
-        /// <param name="name">The name of the webpage, like "Signup", "Login"</param>
-        /// 
-        /// <param name="category">The (optional) category of the webpage, like "Authentication", "Sports"</param>
-        ///
+        /// <para/>
+        /// <param name="name">The name of the webpage, like "Signup", "Login".</param>
+        /// <para/>
+        /// <param name="category">The (optional) category of the webpage, like "Authentication", "Sports".</param>
         public void Page(string userId, string name, string category)
         {
-            Page (userId, name, category, null, null);
+            this.Page(userId, name, category, null, null);
         }
 
         /// <summary>
         /// The `page` method let your record whenever a user sees a webpage on 
         /// your website, and attach a `name`, `category` or `properties` to the webpage load. 
         /// </summary>
-        ///
+        /// <para/>
         /// <param name="userId">The visitor's identifier after they log in, or you know
         /// who they are. By explicitly identifying a user, you tie all of their actions to their identity.
         /// This makes it possible for you to run things like segment-based email campaigns.</param>
-        ///
-        /// <param name="name">The name of the webpage, like "Signup", "Login"</param>
-        ///
+        /// <para/>
+        /// <param name="name">The name of the webpage, like "Signup", "Login".</param>
+        /// <para/>
         /// <param name="properties"> A dictionary with items that describe the page
         /// in more detail. This argument is optional, but highly recommended —
         /// you’ll find these properties extremely useful later.</param>
-        ///
         public void Page(string userId, string name, Properties properties)
         {
-            Page (userId, name, null, properties, null);
+            this.Page(userId, name, null, properties, null);
         }
 
         /// <summary>
         /// The `page` method let your record whenever a user sees a webpage on 
         /// your website, and attach a `name`, `category` or `properties` to the webpage load. 
         /// </summary>
-        ///
+        /// <para/>
         /// <param name="userId">The visitor's identifier after they log in, or you know
         /// who they are. By explicitly identifying a user, you tie all of their actions to their identity.
         /// This makes it possible for you to run things like segment-based email campaigns.</param>
-        ///
-        /// <param name="name">The name of the webpage, like "Signup", "Login"</param>
-        ///
+        /// <para/>
+        /// <param name="name">The name of the webpage, like "Signup", "Login".</param>
+        /// <para/>
         /// <param name="properties"> A dictionary with items that describe the page
         /// in more detail. This argument is optional, but highly recommended —
         /// you’ll find these properties extremely useful later.</param>
-        ///
+        /// <para/>
         /// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
-        /// and the context of th emessage.</param>
-        ///
+        /// and the context of the message.</param>
         public void Page(string userId, string name, Properties properties, Options options)
         {
-            Page (userId, name, null, properties, options);
+            this.Page(userId, name, null, properties, options);
         }
 
         /// <summary>
         /// The `page` method let your record whenever a user sees a webpage on 
         /// your website, and attach a `name`, `category` or `properties` to the webpage load. 
         /// </summary>
-        ///
+        /// <para/>
         /// <param name="userId">The visitor's identifier after they log in, or you know
         /// who they are. By explicitly identifying a user, you tie all of their actions to their identity.
         /// This makes it possible for you to run things like segment-based email campaigns.</param>
-        ///
-        /// <param name="name">The name of the webpage, like "Signup", "Login"</param>
-        /// 
-        /// <param name="category">The (optional) category of the mobile screen, like "Authentication", "Sports"</param>
-        ///
+        /// <para/>
+        /// <param name="name">The name of the webpage, like "Signup", "Login".</param>
+        /// <para/>
+        /// <param name="category">The (optional) category of the mobile screen, like "Authentication", "Sports".</param>
+        /// <para/>
         /// <param name="properties"> A dictionary with items that describe the page
         /// in more detail. This argument is optional, but highly recommended —
         /// you’ll find these properties extremely useful later.</param>
-        ///
+        /// <para/>
         /// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
-        /// and the context of th emessage.</param>
-        ///
+        /// and the context of the message.</param>
         public void Page(string userId, string name, string category, Properties properties, Options options)
         {
-            if (String.IsNullOrEmpty(userId) && !HasAnonymousId(options))
+            if (string.IsNullOrEmpty(userId) && !HasAnonymousId(options))
+            {
                 throw new InvalidOperationException("Please supply a valid userId or anonymousId to #Page.");
+            }
 
-            if (String.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(name))
+            {
                 throw new InvalidOperationException("Please supply a valid name to #Page.");
+            }
 
-            Enqueue(new Page(userId, name, category, properties, options));
+            this.Enqueue(new Page(userId, name, category, properties, options));
         }
 
         #endregion
@@ -505,133 +496,130 @@ namespace Segment
         /// The `screen` method let your record whenever a user sees a mobile screen on 
         /// your mobile app, and attach a `name`, `category` or `properties` to the screen. 
         /// </summary>
-        ///
-        /// <param name="userId">The visitor's identifier after they log in, or you know
-        /// who they are. By
-        /// explicitly identifying a user, you tie all of their actions to their identity.
+        /// <para/>
+        /// <param name="userId">The visitor's identifier after they log in, or you know who they 
+        /// are. By explicitly identifying a user, you tie all of their actions to their identity.
         /// This makes it possible for you to run things like segment-based email campaigns.</param>
-        ///
-        /// <param name="name">The name of the mobile screen, like "Signup", "Login"</param>
-        ///
+        /// <para/>
+        /// <param name="name">The name of the mobile screen, like "Signup", "Login".</param>
         public void Screen(string userId, string name)
         {
-            Screen (userId, name, null, null, null);
+            this.Screen(userId, name, null, null, null);
         }
 
         /// <summary>
         /// The `screen` method let your record whenever a user sees a mobile screen on 
         /// your mobile app, and attach a `name`, `category` or `properties` to the screen. 
         /// </summary>
-        ///
+        /// <para/>
         /// <param name="userId">The visitor's identifier after they log in, or you know
         /// who they are. By
         /// explicitly identifying a user, you tie all of their actions to their identity.
         /// This makes it possible for you to run things like segment-based email campaigns.</param>
-        ///
-        /// <param name="name">The name of the mobile screen, like "Signup", "Login"</param>
-        ///
+        /// <para/>
+        /// <param name="name">The name of the mobile screen, like "Signup", "Login".</param>
+        /// <para/>
         /// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
-        /// and the context of th emessage.</param>
-        ///
+        /// and the context of the message.</param>
         public void Screen(string userId, string name, Options options)
         {
-            Screen (userId, name, null, null, options);
+            this.Screen(userId, name, null, null, options);
         }
 
         /// <summary>
         /// The `screen` method let your record whenever a user sees a mobile screen on 
         /// your mobile app, and attach a `name`, `category` or `properties` to the screen. 
         /// </summary>
-        ///
+        /// <para/>
         /// <param name="userId">The visitor's identifier after they log in, or you know
         /// who they are. By
         /// explicitly identifying a user, you tie all of their actions to their identity.
         /// This makes it possible for you to run things like segment-based email campaigns.</param>
-        ///
-        /// <param name="name">The name of the mobile screen, like "Signup", "Login"</param>
-        /// 
-        /// <param name="category">The (optional) category of the mobile screen, like "Authentication", "Sports"</param>
-        ///
+        /// <para/>
+        /// <param name="name">The name of the mobile screen, like "Signup", "Login".</param>
+        /// <para/>
+        /// <param name="category">The (optional) category of the mobile screen, like "Authentication", "Sports".</param>
         public void Screen(string userId, string name, string category)
         {
-            Screen (userId, name, category, null, null);
+            this.Screen(userId, name, category, null, null);
         }
 
         /// <summary>
         /// The `screen` method let your record whenever a user sees a mobile screen on 
         /// your mobile app, and attach a `name`, `category` or `properties` to the screen. 
         /// </summary>
-        ///
+        /// <para/>
         /// <param name="userId">The visitor's identifier after they log in, or you know
-        /// who they are. By
-        /// explicitly identifying a user, you tie all of their actions to their identity.
-        /// This makes it possible for you to run things like segment-based email campaigns.</param>
-        ///
-        /// <param name="name">The name of the mobile screen, like "Signup", "Login"</param>
-        ///
+        /// who they are. By explicitly identifying a user, you tie all of their actions 
+        /// to their identity.  This makes it possible for you to run things like segment-
+        /// based email campaigns.</param>
+        /// <para/>
+        /// <param name="name">The name of the mobile screen, like "Signup", "Login".</param>
+        /// <para/>
         /// <param name="properties"> A dictionary with items that describe the screen
         /// in more detail. This argument is optional, but highly recommended —
         /// you’ll find these properties extremely useful later.</param>
-        ///
         public void Screen(string userId, string name, Properties properties)
         {
-            Screen (userId, name, null, properties, null);
+            this.Screen(userId, name, null, properties, null);
         }
 
         /// <summary>
         /// The `screen` method let your record whenever a user sees a mobile screen on 
         /// your mobile app, and attach a `name`, `category` or `properties` to the screen. 
         /// </summary>
-        ///
+        /// <para/>
         /// <param name="userId">The visitor's identifier after they log in, or you know
         /// who they are. By
         /// explicitly identifying a user, you tie all of their actions to their identity.
         /// This makes it possible for you to run things like segment-based email campaigns.</param>
-        ///
-        /// <param name="name">The name of the mobile screen, like "Signup", "Login"</param>
-        ///
+        /// <para/>
+        /// <param name="name">The name of the mobile screen, like "Signup", "Login".</param>
+        /// <para/>
         /// <param name="properties"> A dictionary with items that describe the screen
         /// in more detail. This argument is optional, but highly recommended —
         /// you’ll find these properties extremely useful later.</param>
-        ///
+        /// <para/>
         /// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
-        /// and the context of th emessage.</param>
-        ///
+        /// and the context of the message.</param>
         public void Screen(string userId, string name, Properties properties, Options options)
         {
-            Screen (userId, name, null, properties, options);
+            this.Screen(userId, name, null, properties, options);
         }
 
         /// <summary>
         /// The `screen` method let your record whenever a user sees a mobile screen on 
         /// your mobile app, and attach a `name`, `category` or `properties` to the screen. 
         /// </summary>
-        ///
+        /// <para/>
         /// <param name="userId">The visitor's identifier after they log in, or you know
         /// who they are. By
         /// explicitly identifying a user, you tie all of their actions to their identity.
         /// This makes it possible for you to run things like segment-based email campaigns.</param>
-        ///
-        /// <param name="name">The name of the mobile screen, like "Signup", "Login"</param>
-        /// 
-        /// <param name="category">The (optional) category of the mobile screen, like "Authentication", "Sports"</param>
-        ///
+        /// <para/>
+        /// <param name="name">The name of the mobile screen, like "Signup", "Login".</param>
+        /// <para/>
+        /// <param name="category">The (optional) category of the mobile screen, like "Authentication", "Sports".</param>
+        /// <para/>
         /// <param name="properties"> A dictionary with items that describe the screen
         /// in more detail. This argument is optional, but highly recommended —
         /// you’ll find these properties extremely useful later.</param>
-        ///
+        /// <para/>
         /// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
-        /// and the context of th emessage.</param>
-        ///
+        /// and the context of the message.</param>
         public void Screen(string userId, string name, string category, Properties properties, Options options)
         {
-            if (String.IsNullOrEmpty(userId) && !HasAnonymousId(options))
+            if (string.IsNullOrEmpty(userId) && !HasAnonymousId(options))
+            {
                 throw new InvalidOperationException("Please supply a valid userId or anonymousId to #Screen.");
+            }   
 
-            if (String.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(name))
+            {
                 throw new InvalidOperationException("Please supply a valid name to #Screen.");
+            }
 
-            Enqueue(new Screen(userId, name, category, properties, options));
+            this.Enqueue(new Screen(userId, name, category, properties, options));
         }
 
         #endregion
@@ -639,7 +627,7 @@ namespace Segment
         #region Other
 
         /// <summary>
-        /// Blocks until all messages are flushed
+        /// Blocks until all messages are flushed.
         /// </summary>
         public void Flush()
         {
@@ -655,24 +643,24 @@ namespace Segment
         /// collector can reclaim the memory that the <see cref="Segment.Client"/> was occupying.</remarks>
         public void Dispose() 
         {
-            flushHandler.Dispose();
+            this.flushHandler.Dispose();
         }
 
         #endregion
-
-        #endregion
-
-        #region Private Methods
-
-        private void Enqueue(BaseAction action)
-        {
-            this.flushHandler.Process(action);
-            this.Statistics.Submitted += 1;
-        }
 
         #endregion
 
         #region Event API
+
+        /// <summary>
+        /// Determines whether an anonymous identifier is defined in the specified options.
+        /// </summary>
+        /// <returns><c>true</c> if the specified options have an anonymous identifier; otherwise, <c>false</c>.</returns>
+        /// <param name="options">The options associated with this client.</param>
+        internal static bool HasAnonymousId(Options options)
+        {
+            return options != null && !string.IsNullOrEmpty(options.AnonymousId);
+        }
 
         internal void RaiseSuccess(BaseAction action)
         {
@@ -690,14 +678,14 @@ namespace Segment
             }
         }
 
-        /// <summary>
-        /// Determines whether an anonymous identifier is defined in the specified options.
-        /// </summary>
-        /// <returns><c>true</c> if the specified options have an anonymous identifier; otherwise, <c>false</c>.</returns>
-        /// <param name="options">Options.</param>
-        internal static bool HasAnonymousId(Options options)
+        #endregion
+
+        #region Private Methods
+
+        private void Enqueue(BaseAction action)
         {
-            return options != null &&  !string.IsNullOrEmpty(options.AnonymousId);
+            this.flushHandler.Process(action);
+            this.Statistics.Submitted += 1;
         }
 
         #endregion

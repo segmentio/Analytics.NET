@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 
 using Segment;
@@ -97,7 +98,7 @@ namespace Segment.Test
 				action.MessageId, action.Type));
 		}
 
-        static void LoggingHandler(Logger.Level level, string message, Dict args)
+        static void LoggingHandler(Logger.Level level, string message, IDictionary<string, object> args)
         {
             if (args != null)
             {

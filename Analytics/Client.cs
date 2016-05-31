@@ -200,7 +200,7 @@ namespace Segment
 		/// String key, then its value { String, Integer, Boolean, Double, or Date are acceptable types for a value. } </param>
 		///
 		/// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
-		/// and the context of th emessage.</param>
+		/// and the context of the message.</param>
 		///
 		public void Group(string userId, string groupId, Traits traits, Options options)
 		{

@@ -63,7 +63,7 @@ namespace Segment
             this.Succeeded += monoBehaviourFlushHandler.ClientSuccess;
 
             #else
-			
+            
             if (this.config.Async)
             {
                 this.flushHandler = new AsyncFlushHandler(batchFactory, requestHandler, this.config.MaxQueueSize);
@@ -72,7 +72,7 @@ namespace Segment
             {
                 this.flushHandler = new BlockingFlushHandler(batchFactory, requestHandler);
             }
-			
+            
             #endif
         }
 

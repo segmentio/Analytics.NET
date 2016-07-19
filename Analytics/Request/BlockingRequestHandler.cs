@@ -109,12 +109,14 @@ namespace Segment.Request
                 // buffer the data before sending, ok since we send all in one shot
                 request.AllowWriteStreamBuffering = true;
 
-                Logger.Info("Sending analytics request to Segment.io ..", new Dict
-                {
-                    { "batch id", batch.MessageId },
-                    { "json size", json.Length },
-                    { "batch size", batch.Actions.Count }
-                });
+                Logger.Info(
+                    "Sending analytics request to Segment.io ..", 
+                    new Dict
+                    {
+                        { "batch id", batch.MessageId },
+                        { "json size", json.Length },
+                        { "batch size", batch.Actions.Count }
+                    });
 
                 watch.Start();
 

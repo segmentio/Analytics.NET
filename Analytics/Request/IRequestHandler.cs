@@ -1,13 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-using Segment.Model;
+﻿//-----------------------------------------------------------------------
+// <copyright file="IRequestHandler.cs" company="Segment">
+//     Copyright (c) Segment. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
 
 namespace Segment.Request
 {
+    using Segment.Model;
+
     internal interface IRequestHandler
     {
-		void MakeRequest(Batch batch); 
+        #if UNITY_5_3_OR_NEWER
+        System.Collections.IEnumerator MakeRequest(Batch batch); 
+        #else
+        void MakeRequest(Batch batch); 
+        #endif
     }
 }

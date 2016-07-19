@@ -1,23 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-using Newtonsoft.Json;
+﻿//-----------------------------------------------------------------------
+// <copyright file="Identify.cs" company="Segment">
+//     Copyright (c) Segment. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
 
 namespace Segment.Model
 {
+    using Newtonsoft.Json;
+
     public class Identify : BaseAction
     {
-        [JsonProperty(PropertyName = "traits")]
-		public Traits Traits { get; set; }
-
-        internal Identify(string userId,
-		                  Traits traits, 
-						  Options options)
-	
-			: base("identify", userId, options)
+        internal Identify(string userId, Traits traits, Options options)
+            : base("identify", userId, options)
         {
             this.Traits = traits ?? new Traits();
         }
+
+        [JsonProperty(PropertyName = "traits")]
+        public Traits Traits { get; set; }
     }
 }

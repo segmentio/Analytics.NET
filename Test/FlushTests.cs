@@ -33,6 +33,10 @@ namespace Segment.Test
 			Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
 		}
 
+        // because Unity uses coroutines to simulate async, these 
+        // test will fail when running them in the unity test runner
+        #if !UNITY_5_3_OR_NEWER
+
         [Test()]
 		public void AsynchronousFlushTest()
 		{
@@ -51,7 +55,7 @@ namespace Segment.Test
 			Assert.AreEqual(trials, Analytics.Client.Statistics.Succeeded);
 			Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
 		}
-
+        
         [Test()]
 		public void PerformanceTest()
 		{
@@ -76,8 +80,10 @@ namespace Segment.Test
 
 			Assert.IsTrue(duration.CompareTo(TimeSpan.FromSeconds(20)) < 0);
 		}
+        
+        #endif
 
-		private void RunTests(Client client, int trials)
+        private void RunTests(Client client, int trials)
 		{
 			for (int i = 0; i < trials; i += 1)
 			{
@@ -110,4 +116,3 @@ namespace Segment.Test
         }
 	}
 }
-

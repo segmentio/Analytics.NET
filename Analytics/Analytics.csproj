@@ -45,7 +45,7 @@
   <ItemGroup>
     <Compile Include="Client.cs" />
     <Compile Include="Defaults.cs" />
-    <Compile Include="Exception\BadParameter.cs" />
+    <Compile Include="Exception\APIException.cs" />
     <Compile Include="Exception\NotInitializedException.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Model\BaseAction.cs" />

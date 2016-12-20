@@ -205,7 +205,7 @@ namespace Segment
 		public void Group(string userId, string groupId, Traits traits, Options options)
 		{
 			if (String.IsNullOrEmpty(userId) && !HasAnonymousId(options))
-				throw new InvalidOperationException("Please supply a valid userId or anonymousID to call #Group.");
+				throw new InvalidOperationException("Please supply a valid userId or anonymousId to call #Group.");
 
 			if (String.IsNullOrEmpty(groupId))
 				throw new InvalidOperationException("Please supply a valid groupId to call #Group.");
@@ -301,10 +301,10 @@ namespace Segment
 		public void Track(string userId, string eventName, Properties properties, Options options)
 		{
 			if (String.IsNullOrEmpty(userId) && !HasAnonymousId(options))
-				throw new InvalidOperationException("Please supply a valid userId or anonymousId to Track.");
+				throw new InvalidOperationException("Please supply a valid userId or anonymousId to call #Track.");
 
 			if (String.IsNullOrEmpty(eventName))
-				throw new InvalidOperationException("Please supply a valid event to Track.");
+				throw new InvalidOperationException("Please supply a valid event to call #Track.");
 
 			Enqueue(new Track(userId, eventName, properties, options));
 		}
@@ -471,10 +471,10 @@ namespace Segment
 		public void Page(string userId, string name, string category, Properties properties, Options options)
 		{
 			if (String.IsNullOrEmpty(userId) && !HasAnonymousId(options))
-				throw new InvalidOperationException("Please supply a valid userId or anonymousId to #Page.");
+				throw new InvalidOperationException("Please supply a valid userId or anonymousId to call #Page.");
 
 			if (String.IsNullOrEmpty(name))
-				throw new InvalidOperationException("Please supply a valid name to #Page.");
+				throw new InvalidOperationException("Please supply a valid name to call #Page.");
 
 			Enqueue(new Page(userId, name, category, properties, options));
 		}
@@ -608,10 +608,10 @@ namespace Segment
 		public void Screen(string userId, string name, string category, Properties properties, Options options)
 		{
 			if (String.IsNullOrEmpty(userId) && !HasAnonymousId(options))
-				throw new InvalidOperationException("Please supply a valid userId or anonymousId to #Screen.");
+				throw new InvalidOperationException("Please supply a valid userId or anonymousId to call #Screen.");
 
 			if (String.IsNullOrEmpty(name))
-				throw new InvalidOperationException("Please supply a valid name to #Screen.");
+				throw new InvalidOperationException("Please supply a valid name to call #Screen.");
 
 			Enqueue(new Screen(userId, name, category, properties, options));
 		}

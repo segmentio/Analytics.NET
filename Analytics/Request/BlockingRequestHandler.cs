@@ -118,7 +118,10 @@ namespace Segment.Request
 		{
 			foreach (BaseAction action in batch.batch)
 			{
-				_client.Statistics.Failed += 1;
+				unchecked
+				{
+					_client.Statistics.Failed += 1;
+				}
 				_client.RaiseFailure(action, e);
             }
 
@@ -135,7 +138,10 @@ namespace Segment.Request
 		{
 			foreach (BaseAction action in batch.batch)
 			{
-				_client.Statistics.Succeeded += 1;
+				unchecked
+				{
+					_client.Statistics.Succeeded += 1;
+				}
 				_client.RaiseSuccess(action);
             }
 

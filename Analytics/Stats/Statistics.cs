@@ -7,8 +7,8 @@ namespace Segment.Stats
 {
     public class Statistics
     {
-        public int Submitted { get; set; }
-        public int Succeeded { get; set; }
-        public int Failed { get; set; }
+        public uint Submitted { get; set; }
+        public uint Succeeded { get; set; }
+        public uint Failed { get; set; }
     }
 }

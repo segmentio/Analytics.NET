@@ -15,12 +15,12 @@ namespace Segment.Model
 		private string Category { get; set; }
 
         [JsonProperty(PropertyName = "properties")]
-        private Properties Properties { get; set; }
+        private IDictionary<string, object> Properties { get; set; }
 
 		internal Page(string userId, 
 					  string name,
 					  string category,
-            		  Properties properties, 
+                      IDictionary<string, object> properties, 
 					  Options options)
 
 			: base("page", userId, options)

@@ -12,11 +12,11 @@ namespace Segment.Model
         private string EventName { get; set; }
 
         [JsonProperty(PropertyName = "properties")]
-        private Properties Properties { get; set; }
+        private IDictionary<string, object> Properties { get; set; }
 
         internal Track(string userId, 
 		               string eventName,
-            		   Properties properties, 
+                       IDictionary<string, object> properties, 
 					   Options options)
 
 			: base("track", userId, options)

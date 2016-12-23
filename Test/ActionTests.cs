@@ -69,7 +69,7 @@ namespace Segment.Test
 			Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
 		}
 
-        static void LoggingHandler(Logger.Level level, string message, Dict args)
+        static void LoggingHandler(Logger.Level level, string message, IDictionary<string, object> args)
         {
             if (args != null)
             {

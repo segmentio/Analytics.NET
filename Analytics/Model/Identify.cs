@@ -9,10 +9,10 @@ namespace Segment.Model
     public class Identify : BaseAction
     {
         [JsonProperty(PropertyName = "traits")]
-		public Traits Traits { get; set; }
+		public IDictionary<string, object> Traits { get; set; }
 
         internal Identify(string userId,
-		                  Traits traits, 
+		                  IDictionary<string, object> traits, 
 						  Options options)
 	
 			: base("identify", userId, options)

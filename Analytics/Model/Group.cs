@@ -12,11 +12,11 @@ namespace Segment.Model
 		private string GroupId { get; set; }
 
 		[JsonProperty(PropertyName = "traits")]
-		private Traits Traits { get; set; }
+		private IDictionary<string, object> Traits { get; set; }
 
 		internal Group(string userId, 
 					   string groupId,
-					   Traits traits, 
+                       IDictionary<string, object> traits, 
 					   Options options)
 			: base("group", userId, options)
         {

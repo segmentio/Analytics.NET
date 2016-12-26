@@ -650,10 +650,7 @@ namespace Segment
         {
             _flushHandler.Process(action);
 
-            unchecked
-            {
-                this.Statistics.Submitted += 1;
-            }
+            this.Statistics.Submitted = Statistics.Increment(this.Statistics.Submitted);
         }
 
         #endregion

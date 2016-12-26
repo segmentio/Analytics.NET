@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 
 using Segment.Model;
 using Segment.Exception;
+using Segment.Stats;
 
 namespace Segment.Request
 {
@@ -118,10 +119,7 @@ namespace Segment.Request
 		{
 			foreach (BaseAction action in batch.batch)
 			{
-				unchecked
-				{
-					_client.Statistics.Failed += 1;
-				}
+				_client.Statistics.Failed = Statistics.Increment(_client.Statistics.Failed);
 				_client.RaiseFailure(action, e);
             }
 
@@ -138,10 +136,7 @@ namespace Segment.Request
 		{
 			foreach (BaseAction action in batch.batch)
 			{
-				unchecked
-				{
-					_client.Statistics.Succeeded += 1;
-				}
+				_client.Statistics.Succeeded = Statistics.Increment(_client.Statistics.Succeeded);
 				_client.RaiseSuccess(action);
             }
 

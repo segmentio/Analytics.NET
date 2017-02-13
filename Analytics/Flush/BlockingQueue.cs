@@ -7,10 +7,11 @@ using Segment.Model;
 
 namespace Segment.Flush
 {
-	/// <summary>
-	/// Implementation of a blocking queue
-	/// </summary>
-	public class BlockingQueue<T> : IDisposable
+    using Dict = System.Collections.Generic.Dictionary<string, object>;
+    /// <summary>
+    /// Implementation of a blocking queue
+    /// </summary>
+    public class BlockingQueue<T> : IDisposable
 	{
 		private Queue<T> _queue = new Queue<T>();
 

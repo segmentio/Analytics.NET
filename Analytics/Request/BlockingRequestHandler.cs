@@ -16,7 +16,8 @@ using Segment.Stats;
 
 namespace Segment.Request
 {
-	internal class BlockingRequestHandler : IRequestHandler
+    using Dict = System.Collections.Generic.Dictionary<string, object>;
+    internal class BlockingRequestHandler : IRequestHandler
 	{
 		/// <summary>
 		/// JSON serialization settings

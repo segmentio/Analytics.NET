@@ -8,13 +8,16 @@ using Segment.Model;
 
 namespace Segment.Test
 {
-	public class Actions
+    using Dict = System.Collections.Generic.Dictionary<string, object>;
+    using Traits = System.Collections.Generic.IDictionary<string, object>;
+    using Properties = System.Collections.Generic.IDictionary<string, object>;
+    public class Actions
 	{
 		private static Random random = new Random();
 
 		public static Properties Properties () 
 		{
-			return new Properties () {
+			return new Dict {
 				{ "Success", true },
 				{ "When", DateTime.Now }
 			};
@@ -22,12 +25,12 @@ namespace Segment.Test
 
 		public static Traits Traits () 
 		{
-			return new Traits () {
+			return new Dict {
 				{ "Subscription Plan", "Free" },
 				{ "Friends", 30 },
 				{ "Joined", DateTime.Now },
 				{ "Cool", true },
-				{ "Company", new Dict () { { "name", "Initech, Inc " } } },
+				{ "Company", new Dict { { "name", "Initech, Inc " } } },
 				{ "Revenue", 40.32 },
 				{ "Don't Submit This, Kids", new UnauthorizedAccessException () }
 			};

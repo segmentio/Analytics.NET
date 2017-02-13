@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 
 namespace Segment.Model
 {
+    using Properties = System.Collections.Generic.IDictionary<string, object>;
     public class Track : BaseAction
     {
         [JsonProperty(PropertyName = "event")]
@@ -22,7 +23,7 @@ namespace Segment.Model
 			: base("track", userId, options)
         {
             this.EventName = eventName;
-            this.Properties = properties ?? new Properties();
+            this.Properties = properties ?? new Dictionary<string, object>();
         }
     }
 }

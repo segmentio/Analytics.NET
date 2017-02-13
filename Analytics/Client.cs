@@ -11,6 +11,8 @@ using Segment.Stats;
 
 namespace Segment
 {
+    using Traits = System.Collections.Generic.IDictionary<string, object>;
+    using Properties = System.Collections.Generic.IDictionary<string, object>;
     /// <summary>
     /// A Segment.io .NET client
     /// </summary>

@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 
 namespace Segment.Model
 {
+    using Dict = System.Collections.Generic.IDictionary<string, object>;
     public abstract class BaseAction
     {
 		[JsonProperty(PropertyName = "type")]

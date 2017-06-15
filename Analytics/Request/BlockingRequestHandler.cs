@@ -25,7 +25,7 @@ namespace Segment.Request
 		/// <summary>
 		/// Segment.io client to mark statistics
 		/// </summary>
-		private Client _client;
+		private readonly Client _client;
 
 		/// <summary>
 		/// The maximum amount of time to wait before calling

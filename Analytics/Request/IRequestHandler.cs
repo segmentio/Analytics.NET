@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿using System.Threading.Tasks;
 using Segment.Model;
 
 namespace Segment.Request
 {
     internal interface IRequestHandler
     {
-		void MakeRequest(Batch batch); 
+		Task MakeRequest(Batch batch);
     }
 }

@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Text;
-using System.Net;
-using System.IO;
 using System.Diagnostics;
-
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
-
-using Segment.Model;
 using Segment.Exception;
+using Segment.Model;
 using Segment.Stats;
 
 namespace Segment.Request
@@ -15,17 +15,11 @@ namespace Segment.Request
 	internal class BlockingRequestHandler : IRequestHandler
 	{
 		/// <summary>
-		/// JSON serialization settings
-		/// </summary>
-		private JsonSerializerSettings settings = new JsonSerializerSettings()
-		{
-			// Converters = new List<JsonConverter> { new ContextSerializer() }
-		};
-
-		/// <summary>
 		/// Segment.io client to mark statistics
 		/// </summary>
 		private readonly Client _client;
+
+		private readonly HttpClient _httpClient;
 
 		/// <summary>
 		/// The maximum amount of time to wait before calling
@@ -37,9 +31,12 @@ namespace Segment.Request
 		{
 			this._client = client;
 			this.Timeout = timeout;
+
+			_httpClient = new HttpClient { Timeout = Timeout };
+			_httpClient.DefaultRequestHeaders.Add("ContentType", "application/json");
 		}
 
-		public void MakeRequest(Batch batch)
+		public async Task MakeRequest(Batch batch)
 		{
 			Stopwatch watch = new Stopwatch();
 
@@ -50,22 +47,11 @@ namespace Segment.Request
 				// set the current request time
 				batch.SentAt = DateTime.Now.ToString("o");
 
-				string json = JsonConvert.SerializeObject(batch, settings);
-
-				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+				string json = JsonConvert.SerializeObject(batch);
 
 				// Basic Authentication
 				// https://segment.io/docs/tracking-api/reference/#authentication
-				request.Headers["Authorization"] = BasicAuthHeader(batch.WriteKey, "");
-
-				request.Timeout = (int)Timeout.TotalMilliseconds;
-				request.ContentType = "application/json";
-				request.Method = "POST";
-
-				// do not use the expect 100-continue behavior
-				request.ServicePoint.Expect100Continue = false;
-				// buffer the data before sending, ok since we send all in one shot
-				request.AllowWriteStreamBuffering = true;
+				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", BasicAuthHeader(batch.WriteKey, string.Empty));
 
 				Logger.Info("Sending analytics request to Segment.io ..", new Dict
 				{
@@ -76,34 +62,20 @@ namespace Segment.Request
 
 				watch.Start();
 
-				using (var requestStream = request.GetRequestStream())
-				{
-					using (StreamWriter writer = new StreamWriter(requestStream))
-					{
-						writer.Write(json);
-					}
-				}
+				var response = await _httpClient.PostAsync(uri, new StringContent(json)).ConfigureAwait(false);
 
-				using (var response = (HttpWebResponse)request.GetResponse())
-				{
-					watch.Stop();
-
-					if (response.StatusCode == HttpStatusCode.OK)
-					{
-						Succeed(batch, watch.ElapsedMilliseconds);
-					}
-					else
-					{
-						string responseStr = String.Format("Status Code {0}. ", response.StatusCode);
-						responseStr += ReadResponse(response);
-						Fail(batch, new APIException("Unexpected Status Code", responseStr), watch.ElapsedMilliseconds);
-					}
-				}
-			}
-			catch (WebException e)
-			{
 				watch.Stop();
-				Fail(batch, ParseException(e), watch.ElapsedMilliseconds);
+
+				if (response.StatusCode == HttpStatusCode.OK)
+				{
+					Succeed(batch, watch.ElapsedMilliseconds);
+				}
+				else
+				{
+					string responseStr = String.Format("Status Code {0}. ", response.StatusCode);
+					responseStr += await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+					Fail(batch, new APIException("Unexpected Status Code", responseStr), watch.ElapsedMilliseconds);
+				}
 			}
 			catch (System.Exception e)
 			{
@@ -128,7 +100,6 @@ namespace Segment.Request
 			});
 		}
 
-
 		private void Succeed(Batch batch, long duration)
 		{
 			foreach (BaseAction action in batch.batch)
@@ -144,43 +115,10 @@ namespace Segment.Request
 			});
 		}
 
-		private System.Exception ParseException(WebException e)
-		{
-
-			if (e.Response != null && ((HttpWebResponse)e.Response).StatusCode == HttpStatusCode.BadRequest)
-			{
-				return new APIException("Bad Request", ReadResponse(e.Response));
-			}
-			else
-			{
-				return e;
-			}
-		}
-
-
-		private string ReadResponse(WebResponse response)
-		{
-			if (response != null)
-			{
-				using (Stream responseStream = response.GetResponseStream())
-				{
-					using (StreamReader reader = new StreamReader(responseStream))
-					{
-						return reader.ReadToEnd();
-					}
-				}
-			}
-			else
-			{
-				return null;
-			}
-		}
-
 		private string BasicAuthHeader(string user, string pass)
 		{
 			string val = user + ":" + pass;
-			return "Basic " + Convert.ToBase64String(Encoding.GetEncoding(0).GetBytes(val));
+			return Convert.ToBase64String(Encoding.GetEncoding(0).GetBytes(val));
 		}
 	}
 }
-

@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Net;
-
-using System.Threading;
-
-using Segmentio.Model;
+﻿using System.Threading;
+using Segment.Model;
 
 namespace Segmentio.Request
 {

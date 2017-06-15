@@ -1,14 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Runtime.Serialization.Json;
-using System.IO;
 using System.Threading;
-
-using Segment;
 using Segment.Request;
 using Segment.Model;
-using Segment.Exception;
 
 namespace Segment.Flush
 {

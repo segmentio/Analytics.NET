@@ -159,7 +159,7 @@ namespace Segment.Flush
                     });
 
 					// make the request here
-					_requestHandler.MakeRequest(batch);
+					_requestHandler.MakeRequest(batch).GetAwaiter().GetResult();
 
 					// mark the current batch as null
 					current = new List<BaseAction>();

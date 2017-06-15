@@ -1,7 +1,6 @@
-using System;
-
+﻿using System;
+using System.Threading.Tasks;
 using Segment.Model;
-using Segment.Request;
 
 namespace Segment.Flush
 {
@@ -14,7 +13,7 @@ namespace Segment.Flush
 		/// Validates an action and begins the process of flushing it to the server
 		/// </summary>
 		/// <param name="action">Action.</param>
-		void Process(BaseAction action);
+		Task Process(BaseAction action);
 
 		/// <summary>
 		/// Blocks until all processing messages are flushed to the server
@@ -22,4 +21,3 @@ namespace Segment.Flush
 		void Flush();
 	}
 }
-

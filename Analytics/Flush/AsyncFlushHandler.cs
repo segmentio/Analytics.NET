@@ -1,7 +1,8 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
-using Segment.Request;
+using System.Threading.Tasks;
 using Segment.Model;
+using Segment.Request;
 
 namespace Segment.Flush
 {
@@ -64,7 +65,7 @@ namespace Segment.Flush
 			_flushingThread.Start();
         }
 
-        public void Process(BaseAction action)
+        public async Task Process(BaseAction action)
         {
 			int size = _queue.Count;
 

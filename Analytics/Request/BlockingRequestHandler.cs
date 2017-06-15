@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Text;
 using System.Net;
 using System.IO;
@@ -17,7 +17,8 @@ namespace Segment.Request
 		/// <summary>
 		/// JSON serialization settings
 		/// </summary>
-		private JsonSerializerSettings settings = new JsonSerializerSettings() {
+		private JsonSerializerSettings settings = new JsonSerializerSettings()
+		{
 			// Converters = new List<JsonConverter> { new ContextSerializer() }
 		};
 
@@ -32,15 +33,15 @@ namespace Segment.Request
 		/// </summary>
 		public TimeSpan Timeout { get; set; }
 
-		internal BlockingRequestHandler (Client client, TimeSpan timeout)
+		internal BlockingRequestHandler(Client client, TimeSpan timeout)
 		{
 			this._client = client;
 			this.Timeout = timeout;
 		}
 
 		public void MakeRequest(Batch batch)
-        {
-            Stopwatch watch = new Stopwatch();
+		{
+			Stopwatch watch = new Stopwatch();
 
 			try
 			{
@@ -51,7 +52,7 @@ namespace Segment.Request
 
 				string json = JsonConvert.SerializeObject(batch, settings);
 
-				HttpWebRequest request = (HttpWebRequest) WebRequest.Create(uri);
+				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
 
 				// Basic Authentication
 				// https://segment.io/docs/tracking-api/reference/#authentication
@@ -66,14 +67,14 @@ namespace Segment.Request
 				// buffer the data before sending, ok since we send all in one shot
 				request.AllowWriteStreamBuffering = true;
 
-                Logger.Info("Sending analytics request to Segment.io ..", new Dict
-                {
-                    { "batch id", batch.MessageId },
-                    { "json size", json.Length },
-                    { "batch size", batch.batch.Count }
-                });
+				Logger.Info("Sending analytics request to Segment.io ..", new Dict
+				{
+					{ "batch id", batch.MessageId },
+					{ "json size", json.Length },
+					{ "batch size", batch.batch.Count }
+				});
 
-                watch.Start();
+				watch.Start();
 
 				using (var requestStream = request.GetRequestStream())
 				{
@@ -85,66 +86,67 @@ namespace Segment.Request
 
 				using (var response = (HttpWebResponse)request.GetResponse())
 				{
-                    watch.Stop();
+					watch.Stop();
 
 					if (response.StatusCode == HttpStatusCode.OK)
 					{
-                        Succeed(batch, watch.ElapsedMilliseconds);
+						Succeed(batch, watch.ElapsedMilliseconds);
 					}
 					else
 					{
 						string responseStr = String.Format("Status Code {0}. ", response.StatusCode);
 						responseStr += ReadResponse(response);
-                        Fail(batch, new APIException("Unexpected Status Code", responseStr), watch.ElapsedMilliseconds);
+						Fail(batch, new APIException("Unexpected Status Code", responseStr), watch.ElapsedMilliseconds);
 					}
 				}
 			}
-			catch (WebException e) 
+			catch (WebException e)
 			{
-                watch.Stop();
-                Fail(batch, ParseException(e), watch.ElapsedMilliseconds);
+				watch.Stop();
+				Fail(batch, ParseException(e), watch.ElapsedMilliseconds);
 			}
 			catch (System.Exception e)
 			{
-                watch.Stop();
-                Fail(batch, e, watch.ElapsedMilliseconds);
+				watch.Stop();
+				Fail(batch, e, watch.ElapsedMilliseconds);
 			}
 		}
 
-		private void Fail(Batch batch, System.Exception e, long duration) 
+		private void Fail(Batch batch, System.Exception e, long duration)
 		{
 			foreach (BaseAction action in batch.batch)
 			{
 				_client.Statistics.Failed = Statistics.Increment(_client.Statistics.Failed);
 				_client.RaiseFailure(action, e);
-            }
+			}
 
-            Logger.Info("Segment.io request failed.", new Dict
-            {
-                { "batch id", batch.MessageId },
-                { "reason", e.Message },
-                { "duration (ms)", duration }
-            });
+			Logger.Info("Segment.io request failed.", new Dict
+			{
+				{ "batch id", batch.MessageId },
+				{ "reason", e.Message },
+				{ "duration (ms)", duration }
+			});
 		}
 
 
-        private void Succeed(Batch batch, long duration) 
+		private void Succeed(Batch batch, long duration)
 		{
 			foreach (BaseAction action in batch.batch)
 			{
 				_client.Statistics.Succeeded = Statistics.Increment(_client.Statistics.Succeeded);
 				_client.RaiseSuccess(action);
-            }
+			}
 
-            Logger.Info("Segment.io request successful.", new Dict
-            {
-                { "batch id", batch.MessageId },
-                { "duration (ms)", duration }
-            });
+			Logger.Info("Segment.io request successful.", new Dict
+			{
+				{ "batch id", batch.MessageId },
+				{ "duration (ms)", duration }
+			});
 		}
-		
-		private System.Exception ParseException(WebException e) {
-			
+
+		private System.Exception ParseException(WebException e)
+		{
+
 			if (e.Response != null && ((HttpWebResponse)e.Response).StatusCode == HttpStatusCode.BadRequest)
 			{
 				return new APIException("Bad Request", ReadResponse(e.Response));
@@ -154,8 +156,8 @@ namespace Segment.Request
 				return e;
 			}
 		}
-		
-		
+
+
 		private string ReadResponse(WebResponse response)
 		{
 			if (response != null)
@@ -174,10 +176,10 @@ namespace Segment.Request
 			}
 		}
 
-		private string BasicAuthHeader(string user, string pass) 
+		private string BasicAuthHeader(string user, string pass)
 		{
 			string val = user + ":" + pass;
-			return  "Basic " + Convert.ToBase64String(Encoding.GetEncoding(0).GetBytes(val));
+			return "Basic " + Convert.ToBase64String(Encoding.GetEncoding(0).GetBytes(val));
 		}
 	}
 }

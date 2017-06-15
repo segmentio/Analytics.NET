@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Segment;
+using System.Threading.Tasks;
 using Segment.Model;
 
 namespace Segment.Test
@@ -47,62 +43,61 @@ namespace Segment.Test
 			);
 		}
 
-		public static void Identify(Client client)
+		public static async Task Identify(Client client)
 		{
-			client.Identify("user", Traits(), Options());
+			await client.Identify("user", Traits(), Options());
 			Analytics.Client.Flush();
 		}
 
-		public static void Group(Client client)
+		public static async Task Group(Client client)
 		{
-			client.Group("user", "group", Traits(), Options());
+			await client.Group("user", "group", Traits(), Options());
 			Analytics.Client.Flush();
 		}
 
-		public static void Track(Client client)
+		public static async Task Track(Client client)
 		{
-			client.Track("user", "Ran .NET test", Properties(), Options());
+			await client.Track("user", "Ran .NET test", Properties(), Options());
 		}
 
-		public static void Alias(Client client)
+		public static async Task Alias(Client client)
 		{
-			client.Alias("previousId", "to");
+			await client.Alias("previousId", "to");
 		}
 
-		public static void Page(Client client)
+		public static async Task Page(Client client)
 		{
-			client.Page("user", "name", "category", Properties(), Options());
+			await client.Page("user", "name", "category", Properties(), Options());
 		}
 
-		public static void Screen(Client client)
+		public static async Task Screen(Client client)
 		{
-			client.Screen("user", "name", "category", Properties(), Options());
+			await client.Screen("user", "name", "category", Properties(), Options());
 		}
 
-		public static void Random(Client client)
+		public static async Task Random(Client client)
 		{
 			switch (random.Next(0, 6))
 			{
 				case 0:
-					Identify(client);
+					await Identify(client);
 					return;
 				case 1:
-					Track(client);
+					await Track(client);
 					return;
 				case 2:
-					Alias(client);
+					await Alias(client);
 					return;
 				case 3:
-					Group(client);
+					await Group(client);
 					return;
 				case 4:
-					Page(client);
+					await Page(client);
 					return;
 				case 5:
-					Screen(client);
+					await Screen(client);
 					return;
 			}
 		}
-
 	}
 }

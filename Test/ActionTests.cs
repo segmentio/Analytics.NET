@@ -1,10 +1,7 @@
-﻿using NUnit.Framework;
-
-using System;
+﻿using System;
+using NUnit.Framework;
 using System.Collections.Generic;
-
-using Segment;
-using Segment.Model;
+using System.Threading.Tasks;
 
 namespace Segment.Test
 {
@@ -20,45 +17,45 @@ namespace Segment.Test
 			Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false));
 		}
 
-		[Test()]
-		public void IdentifyTest()
+		[Test ()]
+		public async Task IdentifyTest()
 		{
-			Actions.Identify(Analytics.Client);
+			await Actions.Identify(Analytics.Client);
 			FlushAndCheck(1);
 		}
 
 		[Test()]
-		public void TrackTest()
+		public async Task TrackTest()
 		{
-			Actions.Track(Analytics.Client);
+			await Actions.Track(Analytics.Client);
 			FlushAndCheck(1);
 		}
 
 		[Test()]
-		public void AliasTest()
+		public async Task AliasTest()
 		{
-			Actions.Alias(Analytics.Client);
+			await Actions.Alias(Analytics.Client);
 			FlushAndCheck(1);
 		}
 
 		[Test()]
-		public void GroupTest()
+		public async Task GroupTest()
 		{
-			Actions.Group(Analytics.Client);
+			await Actions.Group(Analytics.Client);
 			FlushAndCheck(1);
 		}
 
 		[Test()]
-		public void PageTest()
+		public async Task PageTest()
 		{
-			Actions.Page(Analytics.Client);
+			await Actions.Page(Analytics.Client);
 			FlushAndCheck(1);
 		}
 
 		[Test()]
-		public void ScreenTest()
+		public async Task ScreenTest()
 		{
-			Actions.Screen(Analytics.Client);
+			await Actions.Screen(Analytics.Client);
 			FlushAndCheck(1);
 		}
 

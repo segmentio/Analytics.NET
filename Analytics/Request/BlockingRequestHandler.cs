@@ -177,7 +177,7 @@ namespace Segment.Request
 		private string BasicAuthHeader(string user, string pass) 
 		{
 			string val = user + ":" + pass;
-			return  "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes(val));
+			return  "Basic " + Convert.ToBase64String(Encoding.GetEncoding(0).GetBytes(val));
 		}
 	}
 }

@@ -1,4 +1,9 @@
 ﻿
+3.0.0 / June 15, 2017
+=================
+* now targeting netstandard 1.3
+* all APIs are now async
+
 2.0.1 / July 1, 2015
 =================
 * anonymous id fixes

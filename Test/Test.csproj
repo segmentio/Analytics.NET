@@ -45,15 +45,15 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\Analytics\Analytics.csproj">
-      <Project>{E79E6240-4954-41D0-BCE4-573B800EF006}</Project>
-      <Name>Analytics</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Analytics\Analytics.csproj">
+      <Project>{a386cf02-d902-4b22-90a8-e828093e3aa4}</Project>
+      <Name>Analytics</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

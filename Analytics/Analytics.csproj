@@ -1,96 +1,12 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E79E6240-4954-41D0-BCE4-573B800EF006}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Segment</RootNamespace>
-    <AssemblyName>Analytics.NET</AssemblyName>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFramework>netstandard1.6</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>True</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>False</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <Optimize>True</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net35\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel.Web" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="System.Threading.Thread" Version="4.3.0" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Client.cs" />
-    <Compile Include="Defaults.cs" />
-    <Compile Include="Exception\BadParameter.cs" />
-    <Compile Include="Exception\NotInitializedException.cs" />
-    <Compile Include="Logger.cs" />
-    <Compile Include="Model\BaseAction.cs" />
-    <Compile Include="Model\Batch.cs" />
-    <Compile Include="Model\Context.cs" />
-    <Compile Include="Model\Identify.cs" />
-    <Compile Include="Model\Properties.cs" />
-    <Compile Include="Model\Traits.cs" />
-    <Compile Include="Request\IRequestHandler.cs" />
-    <Compile Include="Analytics.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Stats\Statistics.cs" />
-    <Compile Include="Model\Providers.cs" />
-    <Compile Include="Model\Alias.cs" />
-    <Compile Include="Constants.cs" />
-    <Compile Include="Flush\IFlushHandler.cs" />
-    <Compile Include="Flush\AsyncFlushHandler.cs" />
-    <Compile Include="Flush\BlockingQueue.cs" />
-    <Compile Include="Request\BlockingRequestHandler.cs" />
-    <Compile Include="Flush\BlockingFlushHandler.cs" />
-    <Compile Include="Flush\IBatchFactory.cs" />
-    <Compile Include="Flush\SimpleBatchFactory.cs" />
-    <Compile Include="Model\Options.cs" />
-    <Compile Include="Model\Dict.cs" />
-    <Compile Include="Config.cs" />
-    <Compile Include="Model\Group.cs" />
-    <Compile Include="Model\Page.cs" />
-    <Compile Include="Model\Screen.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Model\Track.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="History.md" />
-    <None Include="Analytics.nuspec" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
-  <ItemGroup />
+
 </Project>

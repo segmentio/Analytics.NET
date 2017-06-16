@@ -33,7 +33,6 @@ namespace Segment.Request
 			this.Timeout = timeout;
 
 			_httpClient = new HttpClient { Timeout = Timeout };
-			_httpClient.DefaultRequestHeaders.Add("ContentType", "application/json");
 		}
 
 		public async Task MakeRequest(Batch batch)
@@ -62,7 +61,7 @@ namespace Segment.Request
 
 				watch.Start();
 
-				var response = await _httpClient.PostAsync(uri, new StringContent(json)).ConfigureAwait(false);
+				var response = await _httpClient.PostAsync(uri, new StringContent(json, Encoding.UTF8, "application/json")).ConfigureAwait(false);
 
 				watch.Stop();
 

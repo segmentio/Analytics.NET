@@ -18,7 +18,7 @@ namespace Segment.Test
 		}
 
 		[Test()]
-		public async Task SynchronousFlushTest()
+		public void SynchronousFlushTest()
 		{
 			Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false));
 			Analytics.Client.Succeeded += Client_Succeeded;
@@ -26,7 +26,7 @@ namespace Segment.Test
 
 			int trials = 10;
 
-			await RunTests(Analytics.Client, trials);
+			RunTests(Analytics.Client, trials);
 
 			Assert.AreEqual(trials, Analytics.Client.Statistics.Submitted);
 			Assert.AreEqual(trials, Analytics.Client.Statistics.Succeeded);
@@ -34,7 +34,7 @@ namespace Segment.Test
 		}
 
 		[Test()]
-		public async Task AsynchronousFlushTest()
+		public void AsynchronousFlushTest()
 		{
 			Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(true));
 
@@ -43,7 +43,7 @@ namespace Segment.Test
 
 			int trials = 10;
 
-			await RunTests(Analytics.Client, trials);
+			RunTests(Analytics.Client, trials);
 
 			Thread.Sleep(1000); // cant use flush to wait during asynchronous flushing
 
@@ -64,7 +64,7 @@ namespace Segment.Test
 
 			DateTime start = DateTime.Now;
 
-			await RunTests(Analytics.Client, trials);
+			RunTests(Analytics.Client, trials);
 
 			Analytics.Client.Flush();
 
@@ -77,11 +77,11 @@ namespace Segment.Test
 			Assert.IsTrue(duration.CompareTo(TimeSpan.FromSeconds(20)) < 0);
 		}
 
-		private async Task RunTests(Client client, int trials)
+		private void RunTests(Client client, int trials)
 		{
 			for (int i = 0; i < trials; i += 1)
 			{
-				await Actions.Random(client);
+				Actions.Random(client);
 			}
 		}
 

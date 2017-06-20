@@ -43,59 +43,59 @@ namespace Segment.Test
 			);
 		}
 
-		public static async Task Identify(Client client)
+		public static void Identify(Client client)
 		{
-			await client.Identify("user", Traits(), Options());
+			client.Identify("user", Traits(), Options());
 			Analytics.Client.Flush();
 		}
 
-		public static async Task Group(Client client)
+		public static void Group(Client client)
 		{
-			await client.Group("user", "group", Traits(), Options());
+			client.Group("user", "group", Traits(), Options());
 			Analytics.Client.Flush();
 		}
 
-		public static async Task Track(Client client)
+		public static void Track(Client client)
 		{
-			await client.Track("user", "Ran .NET test", Properties(), Options());
+			client.Track("user", "Ran .NET test", Properties(), Options());
 		}
 
-		public static async Task Alias(Client client)
+		public static void Alias(Client client)
 		{
-			await client.Alias("previousId", "to");
+			client.Alias("previousId", "to");
 		}
 
-		public static async Task Page(Client client)
+		public static void Page(Client client)
 		{
-			await client.Page("user", "name", "category", Properties(), Options());
+			client.Page("user", "name", "category", Properties(), Options());
 		}
 
-		public static async Task Screen(Client client)
+		public static void Screen(Client client)
 		{
-			await client.Screen("user", "name", "category", Properties(), Options());
+			client.Screen("user", "name", "category", Properties(), Options());
 		}
 
-		public static async Task Random(Client client)
+		public static void Random(Client client)
 		{
 			switch (random.Next(0, 6))
 			{
 				case 0:
-					await Identify(client);
+					Identify(client);
 					return;
 				case 1:
-					await Track(client);
+					Track(client);
 					return;
 				case 2:
-					await Alias(client);
+					Alias(client);
 					return;
 				case 3:
-					await Group(client);
+					Group(client);
 					return;
 				case 4:
-					await Page(client);
+					Page(client);
 					return;
 				case 5:
-					await Screen(client);
+					Screen(client);
 					return;
 			}
 		}

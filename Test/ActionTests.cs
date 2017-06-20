@@ -18,44 +18,44 @@ namespace Segment.Test
 		}
 
 		[Test ()]
-		public async Task IdentifyTest()
+		public void IdentifyTest()
 		{
-			await Actions.Identify(Analytics.Client);
+			Actions.Identify(Analytics.Client);
 			FlushAndCheck(1);
 		}
 
 		[Test()]
-		public async Task TrackTest()
+		public void TrackTest()
 		{
-			await Actions.Track(Analytics.Client);
+			Actions.Track(Analytics.Client);
 			FlushAndCheck(1);
 		}
 
 		[Test()]
-		public async Task AliasTest()
+		public void AliasTest()
 		{
-			await Actions.Alias(Analytics.Client);
+			Actions.Alias(Analytics.Client);
 			FlushAndCheck(1);
 		}
 
 		[Test()]
-		public async Task GroupTest()
+		public void GroupTest()
 		{
-			await Actions.Group(Analytics.Client);
+			Actions.Group(Analytics.Client);
 			FlushAndCheck(1);
 		}
 
 		[Test()]
-		public async Task PageTest()
+		public void PageTest()
 		{
-			await Actions.Page(Analytics.Client);
+			Actions.Page(Analytics.Client);
 			FlushAndCheck(1);
 		}
 
 		[Test()]
-		public async Task ScreenTest()
+		public void ScreenTest()
 		{
-			await Actions.Screen(Analytics.Client);
+			Actions.Screen(Analytics.Client);
 			FlushAndCheck(1);
 		}
 

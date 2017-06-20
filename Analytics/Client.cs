@@ -102,9 +102,9 @@ namespace Segment
         /// Pass in values in key-value format. String key, then its value
         /// { String, Integer, Boolean, Double, or Date are acceptable types for a value. } </param>
         ///
-        public async Task Identify(string userId, IDictionary<string, object> traits)
+        public void Identify(string userId, IDictionary<string, object> traits)
         {
-            await Identify(userId, traits, null).ConfigureAwait(false);
+            Identify(userId, traits, null);
         }
 
         /// <summary>
@@ -124,12 +124,12 @@ namespace Segment
 		/// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
 		/// and the context of th emessage.</param>
         ///
-		public async Task Identify(string userId, IDictionary<string, object> traits, Options options)
+		public void Identify(string userId, IDictionary<string, object> traits, Options options)
         {
 			if (String.IsNullOrEmpty(userId) && !HasAnonymousId(options))
 				throw new InvalidOperationException("Please supply a valid userId to Identify.");
 
-			await Enqueue(new Identify(userId, traits, options)).ConfigureAwait(false);
+			Enqueue(new Identify(userId, traits, options));
         }
 
 		#endregion
@@ -152,9 +152,9 @@ namespace Segment
 		/// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
 		/// and the context of th emessage.</param>
 		///
-		public async Task Group(string userId, string groupId, Options options)
+		public void Group(string userId, string groupId, Options options)
 		{
-			await Group (userId, groupId, null, options).ConfigureAwait(false);
+			Group (userId, groupId, null, options);
 		}
 
 		/// <summary>
@@ -174,9 +174,9 @@ namespace Segment
 		/// You can segment your users by any trait you record. Pass in values in key-value format. 
 		/// String key, then its value { String, Integer, Boolean, Double, or Date are acceptable types for a value. } </param>
 		///
-		public async Task Group(string userId, string groupId, IDictionary<string, object> traits)
+		public void Group(string userId, string groupId, IDictionary<string, object> traits)
 		{
-			await Group (userId, groupId, traits, null).ConfigureAwait(false);
+			Group (userId, groupId, traits, null);
 		}
 
 		/// <summary>
@@ -199,7 +199,7 @@ namespace Segment
 		/// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
 		/// and the context of the message.</param>
 		///
-		public async Task Group(string userId, string groupId, IDictionary<string, object> traits, Options options)
+		public void Group(string userId, string groupId, IDictionary<string, object> traits, Options options)
 		{
 			if (String.IsNullOrEmpty(userId) && !HasAnonymousId(options))
 				throw new InvalidOperationException("Please supply a valid userId or anonymousId to call #Group.");
@@ -207,7 +207,7 @@ namespace Segment
 			if (String.IsNullOrEmpty(groupId))
 				throw new InvalidOperationException("Please supply a valid groupId to call #Group.");
 
-			await Enqueue(new Group(userId, groupId, traits, options)).ConfigureAwait(false);
+			Enqueue(new Group(userId, groupId, traits, options));
 		}
 
 		#endregion
@@ -225,9 +225,9 @@ namespace Segment
         /// that it is in human readable form. For example, "Bought T-Shirt"
         /// or "Started an exercise"</param>
         ///
-		public async Task Track(string userId, string eventName)
+		public void Track(string userId, string eventName)
         {
-			await Track(userId, eventName, null, null).ConfigureAwait(false);
+			Track(userId, eventName, null, null);
         }
 
         /// <summary>
@@ -245,9 +245,9 @@ namespace Segment
         /// in more detail. This argument is optional, but highly recommended —
         /// you’ll find these properties extremely useful later.</param>
         ///
-		public async Task Track(string userId, string eventName, IDictionary<string, object> properties)
+		public void Track(string userId, string eventName, IDictionary<string, object> properties)
         {
-			await Track(userId, eventName, properties, null).ConfigureAwait(false);
+			Track(userId, eventName, properties, null);
         }
 
 		/// <summary>
@@ -268,9 +268,9 @@ namespace Segment
 		/// and the context of th emessage.</param>
 		/// 
 		///
-		public async Task Track(string userId, string eventName, Options options)
+		public void Track(string userId, string eventName, Options options)
 		{
-			await Track(userId, eventName, null, options).ConfigureAwait(false);
+			Track(userId, eventName, null, options);
 		}
 
 		/// <summary>
@@ -295,7 +295,7 @@ namespace Segment
 		/// and the context of th emessage.</param>
 		/// 
 		///
-		public async Task Track(string userId, string eventName, IDictionary<string, object> properties, Options options)
+		public void Track(string userId, string eventName, IDictionary<string, object> properties, Options options)
 		{
 			if (String.IsNullOrEmpty(userId) && !HasAnonymousId(options))
 				throw new InvalidOperationException("Please supply a valid userId or anonymousId to call #Track.");
@@ -303,7 +303,7 @@ namespace Segment
 			if (String.IsNullOrEmpty(eventName))
 				throw new InvalidOperationException("Please supply a valid event to call #Track.");
 
-			await Enqueue(new Track(userId, eventName, properties, options)).ConfigureAwait(false);
+			Enqueue(new Track(userId, eventName, properties, options));
 		}
 
 		#endregion
@@ -318,9 +318,9 @@ namespace Segment
 		/// 
 		/// <param name="userId">the identified user's id after they're logged in.</param>
 		/// 
-		public async Task Alias(string previousId, string userId)
+		public void Alias(string previousId, string userId)
 		{
-			await Alias(previousId, userId, null).ConfigureAwait(false);
+			Alias(previousId, userId, null);
 		}
 
 		/// <summary>
@@ -334,7 +334,7 @@ namespace Segment
 		/// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
 		/// and the context of th emessage.</param>
 		/// 
-		public async Task Alias(string previousId, string userId, Options options)
+		public void Alias(string previousId, string userId, Options options)
 		{
 			if (String.IsNullOrEmpty(previousId))
 				throw new InvalidOperationException("Please supply a valid 'previousId' to Alias.");
@@ -342,7 +342,7 @@ namespace Segment
 			if (String.IsNullOrEmpty(userId))
 				throw new InvalidOperationException("Please supply a valid 'userId' to Alias.");
 
-			await Enqueue(new Alias(previousId, userId, options)).ConfigureAwait(false);
+			Enqueue(new Alias(previousId, userId, options));
 		}
 
 		#endregion
@@ -360,9 +360,9 @@ namespace Segment
 		///
 		/// <param name="name">The name of the webpage, like "Signup", "Login"</param>
 		///
-		public async Task Page(string userId, string name)
+		public void Page(string userId, string name)
 		{
-			await Page (userId, name, null, null, null).ConfigureAwait(false);
+			Page (userId, name, null, null, null);
 		}
 
 		/// <summary>
@@ -379,9 +379,9 @@ namespace Segment
 		/// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
 		/// and the context of th emessage.</param>
 		///
-		public async Task Page(string userId, string name, Options options)
+		public void Page(string userId, string name, Options options)
 		{
-			await Page (userId, name, null, null, options).ConfigureAwait(false);
+			Page (userId, name, null, null, options);
 		}
 
 		/// <summary>
@@ -397,9 +397,9 @@ namespace Segment
 		/// 
 		/// <param name="category">The (optional) category of the webpage, like "Authentication", "Sports"</param>
 		///
-		public async Task Page(string userId, string name, string category)
+		public void Page(string userId, string name, string category)
 		{
-			await Page (userId, name, category, null, null).ConfigureAwait(false);
+			Page (userId, name, category, null, null);
 		}
 
 		/// <summary>
@@ -417,9 +417,9 @@ namespace Segment
 		/// in more detail. This argument is optional, but highly recommended —
 		/// you’ll find these properties extremely useful later.</param>
 		///
-		public async Task Page(string userId, string name, IDictionary<string, object> properties)
+		public void Page(string userId, string name, IDictionary<string, object> properties)
 		{
-			await Page (userId, name, null, properties, null).ConfigureAwait(false);
+			Page (userId, name, null, properties, null);
 		}
 
 		/// <summary>
@@ -440,9 +440,9 @@ namespace Segment
 		/// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
 		/// and the context of th emessage.</param>
 		///
-		public async Task Page(string userId, string name, IDictionary<string, object> properties, Options options)
+		public void Page(string userId, string name, IDictionary<string, object> properties, Options options)
 		{
-			await Page (userId, name, null, properties, options).ConfigureAwait(false);
+			Page (userId, name, null, properties, options);
 		}
 
 		/// <summary>
@@ -465,7 +465,7 @@ namespace Segment
 		/// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
 		/// and the context of th emessage.</param>
 		///
-		public async Task Page(string userId, string name, string category, IDictionary<string, object> properties, Options options)
+		public void Page(string userId, string name, string category, IDictionary<string, object> properties, Options options)
 		{
 			if (String.IsNullOrEmpty(userId) && !HasAnonymousId(options))
 				throw new InvalidOperationException("Please supply a valid userId or anonymousId to call #Page.");
@@ -473,7 +473,7 @@ namespace Segment
 			if (String.IsNullOrEmpty(name))
 				throw new InvalidOperationException("Please supply a valid name to call #Page.");
 
-			await Enqueue(new Page(userId, name, category, properties, options)).ConfigureAwait(false);
+			Enqueue(new Page(userId, name, category, properties, options));
 		}
 
 		#endregion
@@ -492,9 +492,9 @@ namespace Segment
 		///
 		/// <param name="name">The name of the mobile screen, like "Signup", "Login"</param>
 		///
-		public async Task Screen(string userId, string name)
+		public void Screen(string userId, string name)
 		{
-			await Screen (userId, name, null, null, null).ConfigureAwait(false);
+			Screen (userId, name, null, null, null);
 		}
 
 		/// <summary>
@@ -512,9 +512,9 @@ namespace Segment
 		/// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
 		/// and the context of th emessage.</param>
 		///
-		public async Task Screen(string userId, string name, Options options)
+		public void Screen(string userId, string name, Options options)
 		{
-			await Screen (userId, name, null, null, options).ConfigureAwait(false);
+			Screen (userId, name, null, null, options);
 		}
 
 		/// <summary>
@@ -531,9 +531,9 @@ namespace Segment
 		/// 
 		/// <param name="category">The (optional) category of the mobile screen, like "Authentication", "Sports"</param>
 		///
-		public async Task Screen(string userId, string name, string category)
+		public void Screen(string userId, string name, string category)
 		{
-			await Screen (userId, name, category, null, null).ConfigureAwait(false);
+			Screen (userId, name, category, null, null);
 		}
 
 		/// <summary>
@@ -552,9 +552,9 @@ namespace Segment
 		/// in more detail. This argument is optional, but highly recommended —
 		/// you’ll find these properties extremely useful later.</param>
 		///
-		public async Task Screen(string userId, string name, IDictionary<string, object> properties)
+		public void Screen(string userId, string name, IDictionary<string, object> properties)
 		{
-			await Screen (userId, name, null, properties, null).ConfigureAwait(false);
+			Screen (userId, name, null, properties, null);
 		}
 
 		/// <summary>
@@ -576,9 +576,9 @@ namespace Segment
 		/// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
 		/// and the context of th emessage.</param>
 		///
-		public async Task Screen(string userId, string name, IDictionary<string, object> properties, Options options)
+		public void Screen(string userId, string name, IDictionary<string, object> properties, Options options)
 		{
-			await Screen (userId, name, null, properties, options).ConfigureAwait(false);
+			Screen (userId, name, null, properties, options);
 		}
 
 		/// <summary>
@@ -602,7 +602,7 @@ namespace Segment
 		/// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
 		/// and the context of th emessage.</param>
 		///
-		public async Task Screen(string userId, string name, string category, IDictionary<string, object> properties, Options options)
+		public void Screen(string userId, string name, string category, IDictionary<string, object> properties, Options options)
 		{
 			if (String.IsNullOrEmpty(userId) && !HasAnonymousId(options))
 				throw new InvalidOperationException("Please supply a valid userId or anonymousId to call #Screen.");
@@ -610,7 +610,7 @@ namespace Segment
 			if (String.IsNullOrEmpty(name))
 				throw new InvalidOperationException("Please supply a valid name to call #Screen.");
 
-			await Enqueue(new Screen(userId, name, category, properties, options)).ConfigureAwait(false);
+			Enqueue(new Screen(userId, name, category, properties, options));
 		}
 
 		#endregion
@@ -643,9 +643,9 @@ namespace Segment
 
         #region Private Methods
 
-        private async Task Enqueue(BaseAction action)
+        private void Enqueue(BaseAction action)
         {
-            await _flushHandler.Process(action).ConfigureAwait(false);
+            _flushHandler.Process(action).GetAwaiter().GetResult();
 
             this.Statistics.Submitted = Statistics.Increment(this.Statistics.Submitted);
         }

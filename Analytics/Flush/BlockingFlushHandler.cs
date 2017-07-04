@@ -1,14 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Runtime.Serialization.Json;
-using System.IO;
-using System.Threading;
-
-using Segment;
-using Segment.Request;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Segment.Model;
-using Segment.Exception;
+using Segment.Request;
 
 namespace Segment.Flush
 {
@@ -32,10 +25,10 @@ namespace Segment.Flush
 			this._requestHandler = requestHandler;
 		}
 		
-		public void Process(BaseAction action)
+		public async Task Process(BaseAction action)
 		{
 			Batch batch = _batchFactory.Create(new List<BaseAction>() { action });
-			_requestHandler.MakeRequest(batch);
+			await _requestHandler.MakeRequest(batch).ConfigureAwait(false);
 		}
 		
 		/// <summary>

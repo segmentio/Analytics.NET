@@ -1,14 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Runtime.Serialization.Json;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Threading;
-
-using Segment;
-using Segment.Request;
+using System.Threading.Tasks;
 using Segment.Model;
-using Segment.Exception;
+using Segment.Request;
 
 namespace Segment.Flush
 {
@@ -71,7 +65,7 @@ namespace Segment.Flush
 			_flushingThread.Start();
         }
 
-        public void Process(BaseAction action)
+        public async Task Process(BaseAction action)
         {
 			int size = _queue.Count;
 
@@ -166,7 +160,7 @@ namespace Segment.Flush
                     });
 
 					// make the request here
-					_requestHandler.MakeRequest(batch);
+					_requestHandler.MakeRequest(batch).GetAwaiter().GetResult();
 
 					// mark the current batch as null
 					current = new List<BaseAction>();

@@ -1,4 +1,8 @@
 ﻿
+X.X.X / June 20, 2017
+=================
+* now targeting netstandard 1.3
+
 2.0.1 / July 1, 2015
 =================
 * anonymous id fixes

@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
-
+using System.Threading.Tasks;
 using Segment.Flush;
-using Segment.Request;
-using Segment.Exception;
 using Segment.Model;
+using Segment.Request;
 using Segment.Stats;
 
 namespace Segment
@@ -648,7 +645,7 @@ namespace Segment
 
         private void Enqueue(BaseAction action)
         {
-            _flushHandler.Process(action);
+            _flushHandler.Process(action).GetAwaiter().GetResult();
 
             this.Statistics.Submitted = Statistics.Increment(this.Statistics.Submitted);
         }

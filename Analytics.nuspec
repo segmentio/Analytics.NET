@@ -16,12 +16,12 @@
         <language>en-US</language>
         <tags>analytics, Segment</tags>
         <dependencies>
-            <group targetFramework=".NETFramework3.5">
-                <dependency id="Newtonsoft.Json" version="4.5.11" />
-            </group>
+        <group targetFramework=".NETStandard1.3">
+            <dependency id="Newtonsoft.Json" version="9.0.1" />
+        </group>
         </dependencies>
     </metadata>
     <files>
-      <file src="Analytics/bin/Debug/Analytics.NET.dll" target="lib" />
+      <file src="Analytics/bin/Release/netstandard1.3/Analytics.dll" target="lib/netstandard1.3" />
     </files>
 </package>

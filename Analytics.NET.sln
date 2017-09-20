@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.15
+VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Analytics", "Analytics\Analytics.csproj", "{A386CF02-D902-4B22-90A8-E828093E3AA4}"
 EndProject
@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalyticsTest_NetStandard", "AnalyticsTest_NetStandard\AnalyticsTest_NetStandard.csproj", "{6E35516B-8AB6-4B67-9790-6A4C711A2298}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Net35", "Test.Net35\Test.Net35.csproj", "{14046A5D-168B-4320-B031-C72BEE19F206}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{6AE99FF7-EECF-4639-B6B1-3E7CF1CC3048}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AE99FF7-EECF-4639-B6B1-3E7CF1CC3048}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6AE99FF7-EECF-4639-B6B1-3E7CF1CC3048}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6E35516B-8AB6-4B67-9790-6A4C711A2298}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6E35516B-8AB6-4B67-9790-6A4C711A2298}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6E35516B-8AB6-4B67-9790-6A4C711A2298}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6E35516B-8AB6-4B67-9790-6A4C711A2298}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14046A5D-168B-4320-B031-C72BEE19F206}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14046A5D-168B-4320-B031-C72BEE19F206}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14046A5D-168B-4320-B031-C72BEE19F206}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14046A5D-168B-4320-B031-C72BEE19F206}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

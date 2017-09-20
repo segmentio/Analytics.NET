@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
-        <id>Analytics</id>
-        <version>3.0.0</version>
+        <id>Analytics.MultiPlatformTest</id>
+        <version>0.1.0</version>
         <title>Analytics</title>
-        <authors>Segment Team</authors>
+        <authors>Kevin Gilliard</authors>
         <owners>Segment Team &lt;friends@segment.com&gt;</owners>
         <licenseUrl>https://raw.githubusercontent.com/segmentio/Analytics.NET/master/README.md</licenseUrl>
         <projectUrl>https://segment.com</projectUrl>
@@ -15,13 +15,8 @@
         <releaseNotes>Check out the changelog at: https://raw.githubusercontent.com/segmentio/Analytics.NET/master/Analytics/History.md</releaseNotes>
         <language>en-US</language>
         <tags>analytics, Segment</tags>
-        <dependencies>
-            <group targetFramework=".NETFramework3.5">
-                <dependency id="Newtonsoft.Json" version="4.5.11" />
-            </group>
-        </dependencies>
     </metadata>
     <files>
-      <file src="Analytics/bin/Debug/Analytics.NET.dll" target="lib" />
+      <file src="Analytics/bin/Release/**/*.dll" target="lib" />
     </files>
 </package>

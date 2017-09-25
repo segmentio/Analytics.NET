@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Net;
+#if NET35
+#else
 using System.Net.Http;
 using System.Net.Http.Headers;
+#endif
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -12,6 +15,21 @@ using Segment.Stats;
 
 namespace Segment.Request
 {
+#if NET35
+    internal class HttpClient : WebClient
+    {
+        public TimeSpan Timeout { get; set; }
+
+        protected override WebRequest GetWebRequest(Uri address)
+        {
+            WebRequest w = base.GetWebRequest(address);
+            if (Timeout.Milliseconds != 0)
+                w.Timeout = Timeout.Milliseconds;
+            return w;
+        }
+    }
+#endif
+
 	internal class BlockingRequestHandler : IRequestHandler
 	{
 		/// <summary>
@@ -48,9 +66,13 @@ namespace Segment.Request
 
 				string json = JsonConvert.SerializeObject(batch);
 
-				// Basic Authentication
-				// https://segment.io/docs/tracking-api/reference/#authentication
-				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", BasicAuthHeader(batch.WriteKey, string.Empty));
+                // Basic Authentication
+                // https://segment.io/docs/tracking-api/reference/#authentication
+#if NET35
+                _httpClient.Headers.Add("Authenticate", "Basic " + batch.WriteKey);
+#else
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", BasicAuthHeader(batch.WriteKey, string.Empty));
+#endif
 
 				Logger.Info("Sending analytics request to Segment.io ..", new Dict
 				{
@@ -59,6 +81,24 @@ namespace Segment.Request
 					{ "batch size", batch.batch.Count }
 				});
 
+#if NET35
+                watch.Start();
+
+                try
+                {
+                    var response = Encoding.UTF8.GetString(_httpClient.UploadData(uri, Encoding.UTF8.GetBytes(json)));
+                    watch.Stop();
+
+                    Succeed(batch, watch.ElapsedMilliseconds);
+                }
+                catch (WebException ex)
+                {
+                    watch.Stop();
+
+                    string responseStr = ex.Message;
+                    Fail(batch, new APIException("Unexpected Response", responseStr), watch.ElapsedMilliseconds);
+                }
+#else
 				watch.Start();
 
 				var response = await _httpClient.PostAsync(uri, new StringContent(json, Encoding.UTF8, "application/json")).ConfigureAwait(false);
@@ -75,6 +115,7 @@ namespace Segment.Request
 					responseStr += await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 					Fail(batch, new APIException("Unexpected Status Code", responseStr), watch.ElapsedMilliseconds);
 				}
+#endif
 			}
 			catch (System.Exception e)
 			{

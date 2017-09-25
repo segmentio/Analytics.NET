@@ -4,14 +4,13 @@
     <TargetFrameworks>netstandard1.3;net35</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Analytics.MultiPlatformTest</PackageId>
-    <Version>0.1.3</Version>
+    <Version>0.1.4</Version>
     <Authors>Kevin Gilliard</Authors>
     <Company />
     <Product>Analytics Test Package</Product>
-    <Description>This package is based on Analytics.
+    <Description>This package is based on Analytics.  (Release Version)
 It's targetting to .Net Standard 1.3 and .Net Framework 3.5.
-(Debug purpose only)
-HttpClient error in previous version was fixed.</Description>
+</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)'=='net35'">

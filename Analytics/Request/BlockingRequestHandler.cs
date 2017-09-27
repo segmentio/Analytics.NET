@@ -66,12 +66,13 @@ namespace Segment.Request
 
 				string json = JsonConvert.SerializeObject(batch);
 
-                // Basic Authentication
-                // https://segment.io/docs/tracking-api/reference/#authentication
+				// Basic Authentication
+				// https://segment.io/docs/tracking-api/reference/#authentication
 #if NET35
-                _httpClient.Headers.Add("Authenticate", "Basic " + batch.WriteKey);
+                _httpClient.Headers.Add("Authorization", "Basic " + BasicAuthHeader(batch.WriteKey, string.Empty));
+                _httpClient.Headers.Add("Content-Type", "application/json; charset=utf-8");
 #else
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", BasicAuthHeader(batch.WriteKey, string.Empty));
+				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", BasicAuthHeader(batch.WriteKey, string.Empty));
 #endif
 
 				Logger.Info("Sending analytics request to Segment.io ..", new Dict
@@ -86,8 +87,14 @@ namespace Segment.Request
 
                 try
                 {
-                    var response = Encoding.UTF8.GetString(_httpClient.UploadData(uri, Encoding.UTF8.GetBytes(json)));
+                    var response = Encoding.UTF8.GetString(_httpClient.UploadData(uri, "POST", Encoding.UTF8.GetBytes(json)));
                     watch.Stop();
+
+                    Logger.Info("Request: " + uri.AbsoluteUri);
+                    Logger.Info(json);
+                    Logger.Info("Response:");
+                    Logger.Info(response);
+                    Logger.Info("\n");
 
                     Succeed(batch, watch.ElapsedMilliseconds);
                 }
@@ -106,7 +113,13 @@ namespace Segment.Request
 				watch.Stop();
 
 				if (response.StatusCode == HttpStatusCode.OK)
-				{
+				{               
+                    Logger.Info("Request: " + uri.AbsoluteUri);
+                    Logger.Info(json);
+                    Logger.Info("Response:");
+                    Logger.Info(response.Content.ToString());
+                    Logger.Info("\n");
+
 					Succeed(batch, watch.ElapsedMilliseconds);
 				}
 				else

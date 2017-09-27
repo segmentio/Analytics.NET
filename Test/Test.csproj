@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
+    <StartupObject>Segment.Test.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>

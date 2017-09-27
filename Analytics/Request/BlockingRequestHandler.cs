@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Net;
 #if NET35
@@ -90,12 +90,6 @@ namespace Segment.Request
                     var response = Encoding.UTF8.GetString(_httpClient.UploadData(uri, "POST", Encoding.UTF8.GetBytes(json)));
                     watch.Stop();
 
-                    Logger.Info("Request: " + uri.AbsoluteUri);
-                    Logger.Info(json);
-                    Logger.Info("Response:");
-                    Logger.Info(response);
-                    Logger.Info("\n");
-
                     Succeed(batch, watch.ElapsedMilliseconds);
                 }
                 catch (WebException ex)
@@ -114,12 +108,6 @@ namespace Segment.Request
 
 				if (response.StatusCode == HttpStatusCode.OK)
 				{               
-                    Logger.Info("Request: " + uri.AbsoluteUri);
-                    Logger.Info(json);
-                    Logger.Info("Response:");
-                    Logger.Info(response.Content.ToString());
-                    Logger.Info("\n");
-
 					Succeed(batch, watch.ElapsedMilliseconds);
 				}
 				else

@@ -2,16 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
+    <StartupObject>Segment.Test.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Analytics.MultiPlatformTest" Version="0.1.5" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
     <PackageReference Include="NUnit" Version="3.7.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.8.0-alpha1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Analytics\Analytics.csproj" />
   </ItemGroup>
 
   <ItemGroup>

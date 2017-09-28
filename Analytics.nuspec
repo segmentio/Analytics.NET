@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
         <id>Analytics</id>
-        <version>3.0.0</version>
+        <version>3.1.0-alpha</version>
         <title>Analytics</title>
         <authors>Segment Team</authors>
         <owners>Segment Team &lt;friends@segment.com&gt;</owners>
@@ -15,13 +15,8 @@
         <releaseNotes>Check out the changelog at: https://raw.githubusercontent.com/segmentio/Analytics.NET/master/Analytics/History.md</releaseNotes>
         <language>en-US</language>
         <tags>analytics, Segment</tags>
-        <dependencies>
-            <group targetFramework=".NETFramework3.5">
-                <dependency id="Newtonsoft.Json" version="4.5.11" />
-            </group>
-        </dependencies>
     </metadata>
     <files>
-      <file src="Analytics/bin/Debug/Analytics.NET.dll" target="lib" />
+      <file src="Analytics/bin/Release/**/*.dll" target="lib" />
     </files>
 </package>

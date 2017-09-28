@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
-        <id>Analytics.MultiPlatformTest</id>
-        <version>0.1.0</version>
+        <id>Analytics</id>
+        <version>3.1.0-alpha</version>
         <title>Analytics</title>
-        <authors>Kevin Gilliard</authors>
+        <authors>Segment Team</authors>
         <owners>Segment Team &lt;friends@segment.com&gt;</owners>
         <licenseUrl>https://raw.githubusercontent.com/segmentio/Analytics.NET/master/README.md</licenseUrl>
         <projectUrl>https://segment.com</projectUrl>

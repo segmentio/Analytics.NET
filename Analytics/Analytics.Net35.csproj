@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net35</TargetFrameworks>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Analytics</PackageId>
+    <Version>3.1.0-alpha</Version>
+    <Authors>Segment Team</Authors>
+    <Company />
+    <Product>Analytics.NET</Product>
+    <Description>The .NET API for analytics, by Segment.</Description>
+    <DefineConstants>NET35</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DefineConstants>DEBUG;NET35</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType></DebugType>
+    <DefineConstants>RELEASE;NET35</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="AsyncBridge.Net35" Version="0.2.0">
+    </PackageReference>
+    <Reference Include="System.Net" />
+  </ItemGroup>
+
+</Project>

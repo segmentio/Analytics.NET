@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.3</TargetFrameworks>
+    <TargetFrameworks>net35</TargetFrameworks>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageId>Analytics</PackageId>
     <Version>3.1.0-alpha</Version>
@@ -9,18 +9,26 @@
     <Company />
     <Product>Analytics.NET</Product>
     <Description>The .NET API for analytics, by Segment.</Description>
+    <DefineConstants>NET35</DefineConstants>
+    <RootNamespace>Analytics</RootNamespace>
+    <AssemblyName>Analytics</AssemblyName>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.3|AnyCPU'">
-    <WarningLevel>2</WarningLevel>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DefineConstants>DEBUG;NET35</DefineConstants>
   </PropertyGroup>
-
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType></DebugType>
+    <DefineConstants>RELEASE;NET35</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="System.Net" />
+    <Compile Include="..\Analytics\**\*.cs" Exclude="..\Analytics\obj\**\*.cs">
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AsyncBridge.Net35" Version="0.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="System.Threading.Thread" Version="4.3.0" />
   </ItemGroup>
 
 </Project>

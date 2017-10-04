@@ -15,8 +15,23 @@
         <releaseNotes>Check out the changelog at: https://raw.githubusercontent.com/segmentio/Analytics.NET/master/Analytics/History.md</releaseNotes>
         <language>en-US</language>
         <tags>analytics, Segment</tags>
+        <dependencies>
+            <group targetFramework="net35">
+                <dependency id="AsyncBridge.Net35" version="0.2.0" exclude="Build,Analyzers" />
+                <dependency id="Newtonsoft.Json" version="10.0.3" exclude="Build,Analyzers" />
+            </group>
+            <group targetFramework=".NETStandard1.3">
+                <dependency id="System.Threading.Thread" version="4.3.0" exclude="Build,Analyzers" />
+                <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
+                <dependency id="Newtonsoft.Json" version="10.0.3" exclude="Build,Analyzers" />
+            </group>
+        </dependencies>
+        <frameworkAssemblies>
+            <frameworkAssembly assemblyName="System.Net" targetFramework="net35" />
+        </frameworkAssemblies>
     </metadata>
     <files>
-      <file src="Analytics/bin/Release/**/*.dll" target="lib" />
+        <file src="Analytics.Net35/bin/Release/net35/Analytics.dll" target="lib/net35/" />
+        <file src="Analytics/bin/Release/netstandard1.3/Analytics.dll" target="lib/netstandard1.3/" />
     </files>
 </package>

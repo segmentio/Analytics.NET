@@ -5,7 +5,9 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{14046A5D-168B-4320-B031-C72BEE19F206}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
+    <StartupObject />
+    <OutputPath>bin\Release\</OutputPath>
     <RootNamespace>Test.Net35</RootNamespace>
     <AssemblyName>Test.Net35</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>

@@ -43,5 +43,5 @@ workflows:
   build_and_test:
     jobs:
       # - build
-      # - test
-      - test_35
+      - test
+      # - test_35

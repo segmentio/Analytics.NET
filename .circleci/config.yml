@@ -24,8 +24,8 @@ jobs:
     steps:
       - checkout
       - run: cd Test
-      - run: dotnet restore
-      - run: dotnet test
+      - run: dotnet restore Test.csproj
+      - run: dotnet test Test.csproj
       - run: cd.. 
   test_35:
     working_directory: /test35
@@ -44,6 +44,6 @@ workflows:
   version: 2
   build_and_test:
     jobs:
-      - build
-      - test
+      # - build
+      # - test
       - test_35

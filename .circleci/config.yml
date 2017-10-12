@@ -23,10 +23,10 @@ jobs:
       DOTNET_CLI_TELEMETRY_OUTPUT: 1
     steps:
       - checkout
-      - run: cd Test
+      - run: cd ./Test
       - run: dotnet restore Test.csproj
       - run: dotnet test Test.csproj
-      - run: cd.. 
+      - run: cd .. 
   test_35:
     working_directory: /test35
     docker:  
@@ -36,11 +36,12 @@ jobs:
       DOTNET_CLI_TELEMETRY_OUTPUT: 1
     steps:
       - checkout
-      - run: cd Test.Net35
+      - run: cd ./Test.Net35
       - run: ls # Just testing, to see file list in directory
       - run: msbuild Test.Net35.csproj /t:restore
       - run: msbuild Test.Net35.csproj /p:Configuration=Release
       - run: nunit-console bin/Release/Test.Net35.dll
+      - run: cd ..
 workflows:
   version: 2
   build_and_test:

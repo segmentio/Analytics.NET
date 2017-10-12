@@ -31,7 +31,7 @@
         </frameworkAssemblies>
     </metadata>
     <files>
-        <file src="Analytics.Net35\bin\Release\net35\Analytics.dll" target="lib\net35\" />
-        <file src="Analytics\bin\Release\netstandard1.3\Analytics.dll" target="lib\netstandard1.3\" />
+        <file src="Analytics.Net35/bin/Release/net35/Analytics.dll" target="lib/net35/" />
+        <file src="Analytics/bin/Release/netstandard1.3/Analytics.dll" target="lib/netstandard1.3/" />
     </files>
 </package>

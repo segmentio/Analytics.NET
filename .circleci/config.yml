@@ -2,8 +2,8 @@ version: 2
 jobs:
   build:
     working_directory: /temp
-    docker:
-      - image: microsoft/dotnet:sdk
+    docker:  
+      - image: xamarin/mono
     environment:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       DOTNET_CLI_TELEMETRY_OUTPUT: 1

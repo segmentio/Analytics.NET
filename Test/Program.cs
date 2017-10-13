@@ -9,7 +9,7 @@ namespace Segment.Test
 {
 	class Program
 	{
-		static void Main(string[] args)
+		static void Main_Exe(string[] args)
 		{
 			Logger.Handlers += Logger_Handlers;
 

@@ -10,22 +10,38 @@ namespace Segment
     /// </summary>
 	public class Config
     {
+		/// <summary>
+		/// The REST API endpoint
+		/// </summary>
+		internal string Host { get; set; }
 
 		internal string Proxy { get; set; }
 
-        internal int MaxQueueSize { get; set; }
+		internal int MaxQueueSize { get; set; }
 
 		internal bool Async { get; set; }
 
 		internal TimeSpan Timeout { get; set; }
 
 		public Config()
-        {
+		{
+			this.Host = Defaults.Host;
 			this.Proxy = "";
 			this.Timeout = Defaults.Timeout;
-            this.MaxQueueSize = Defaults.MaxQueueCapacity;
+			this.MaxQueueSize = Defaults.MaxQueueCapacity;
 			this.Async = Defaults.Async;
-        }
+		}
+
+		/// <summary>
+		/// Set the API host server address, instead of default server "https://api.segment.io"
+		/// </summary>
+		/// <param name="host">Host server url</param>
+		/// <returns></returns>
+		public Config SetHost(string host)
+		{
+			this.Host = host;
+			return this;
+		}
 
 		/// <summary>
 		/// Set the proxy server Uri

@@ -108,7 +108,7 @@ namespace Segment.Request
 
 			try
 			{
-				Uri uri = new Uri(Defaults.Host + "/v1/import");
+				Uri uri = new Uri(_client.Config.Host + "/v1/import");
 
 				// set the current request time
 				batch.SentAt = DateTime.Now.ToString("o");

@@ -23,14 +23,24 @@ namespace Segment
 		internal TimeSpan Timeout { get; set; }
 
 		public Config()
-        {
-            this.Host = Defaults.Host;
+		{
+			this.Host = Defaults.Host;
 			this.Timeout = Defaults.Timeout;
-            this.MaxQueueSize = Defaults.MaxQueueCapacity;
+			this.MaxQueueSize = Defaults.MaxQueueCapacity;
 			this.Async = Defaults.Async;
-        }
+		}
 
 		/// <summary>
+		/// Set the API host server address, instead of default server "https://api.segment.io"
+		/// </summary>
+		/// <param name="host">Host server url</param>
+		/// <returns></returns>
+		public Config SetHost(string host)
+		{
+			this.Host = host;
+			return this;
+		}
+
 		/// Sets the maximum amount of timeout on the HTTP request flushes to the server.
 		/// </summary>
 		/// <param name="timeout"></param>

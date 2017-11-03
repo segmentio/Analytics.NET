@@ -12,11 +12,11 @@ jobs:
 # Code Formatting
       - run: apt-get -qq update; apt-get -y install git; apt-get install unzip
       - run: git clone https://github.com/kevingilliard/codeformatter.git # clone source code in /codeformatter directory
-      - run: ./codeformatter/init-tools.sh    # download and install msbuild
+      - run: codeformatter/init-tools.sh    # download and install msbuild
       - run: nuget update -self
-      - run: nuget restore ./codeformatter/src/
-      - run: msbuild /p:Configuration=Release
-      - run: mv ./codeformatter/bin/CodeFormatter/Release ./codeformatter/tools   # Now, we can get CodeFormatter.exe in /codeformatter/tools directory
+      - run: nuget restore codeformatter/src/
+      - run: msbuild codeformatter/src/CodeFormatter.sln /p:Configuration=Release
+      - run: mv codeformatter/bin/CodeFormatter/Release codeformatter/tools   # Now, we can get CodeFormatter.exe in /codeformatter/tools directory
       - run: mono codeformatter/tools/CodeFormatter.exe Analytics/Analytics.csproj
 # Build project
       - run: msbuild Analytics/Analytics.csproj /t:restore

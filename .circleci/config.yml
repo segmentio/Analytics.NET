@@ -10,6 +10,7 @@ jobs:
     steps:
       - checkout
 # Code Formatting
+      - run: apt-get -qq update; apt-get -y install git
       - run: git clone https://github.com/kevingilliard/codeformatter.git # clone source code in /codeformatter directory
       - run: cd codeformatter
       - run: ./init-tools.sh    # download and install msbuild

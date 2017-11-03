@@ -10,15 +10,18 @@ jobs:
     steps:
       - checkout
 # Code Formatting
-      - run: apt-get -qq update; apt-get -y install git
+      - run: apt-get -qq update; apt-get -y install git; apt-get install unzip
       - run: git clone https://github.com/kevingilliard/codeformatter.git # clone source code in /codeformatter directory
       - run: cd codeformatter
+      - run: ls
       - run: ./init-tools.sh    # download and install msbuild
       - run: cd src
+      - run: nuget update -self
       - run: nuget restore
       - run: msbuild /p:Configuration=Release
       - run: mv ../bin/CodeFormatter/Release ../tools   # Now, we can get CodeFormatter.exe in /codeformatter/tools directory
-      - run: mono codeformatter/tools/CodeFormatter.exe Analytics.NET.sln
+      - run: cd ../../
+      - run: mono codeformatter/tools/CodeFormatter.exe Analytics/Analytics.csproj
 # Build project
       - run: msbuild Analytics/Analytics.csproj /t:restore
       - run: msbuild Analytics/Analytics.csproj /p:Configuration=Release

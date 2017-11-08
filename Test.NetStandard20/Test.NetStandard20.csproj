@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <StartupObject></StartupObject>
     <ApplicationIcon />
     <OutputType>Library</OutputType>
@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../Analytics/Analytics.csproj" />
+    <ProjectReference Include="../Analytics.NetStandard20/Analytics.NetStandard20.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,13 +10,14 @@ namespace Segment
     /// </summary>
 	public class Config
     {
+		/// <summary>
+		/// The REST API endpoint
+		/// </summary>
+		internal string Host { get; set; }
 
-        /// <summary>
-        /// The REST API endpoint
-        /// </summary>
-        internal string Host { get; set; }
+		internal string Proxy { get; set; }
 
-        internal int MaxQueueSize { get; set; }
+		internal int MaxQueueSize { get; set; }
 
 		internal bool Async { get; set; }
 
@@ -25,6 +26,7 @@ namespace Segment
 		public Config()
 		{
 			this.Host = Defaults.Host;
+			this.Proxy = "";
 			this.Timeout = Defaults.Timeout;
 			this.MaxQueueSize = Defaults.MaxQueueCapacity;
 			this.Async = Defaults.Async;
@@ -41,6 +43,18 @@ namespace Segment
 			return this;
 		}
 
+		/// <summary>
+		/// Set the proxy server Uri
+		/// </summary>
+		/// <param name="proxy">Proxy server Uri</param>
+		/// <returns></returns>
+		public Config SetProxy(string proxy)
+		{
+			this.Proxy = proxy;
+			return this;
+		}
+
+		/// <summary>
 		/// Sets the maximum amount of timeout on the HTTP request flushes to the server.
 		/// </summary>
 		/// <param name="timeout"></param>

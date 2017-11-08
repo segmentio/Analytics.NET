@@ -28,6 +28,38 @@ namespace Segment.Request
             return w;
         }
     }
+#else
+	class WebProxy : System.Net.IWebProxy
+	{
+		private string _proxy;
+
+		public WebProxy(string proxy)
+		{
+			_proxy = proxy;
+			GetProxy(new Uri(proxy)); // ** What does this do?
+		}
+    
+		public System.Net.ICredentials Credentials
+		{
+			get; set;
+		}
+
+		public Uri GetProxy(Uri destination)
+		{
+			if (!String.IsNullOrWhiteSpace(destination.ToString()))
+				return destination;
+			else
+				return new Uri("");
+		}
+
+		public bool IsBypassed(Uri host)
+		{
+			if (!String.IsNullOrWhiteSpace(host.ToString()))
+				return true;
+			else
+				return false;
+		}
+	}
 #endif
 
 	internal class BlockingRequestHandler : IRequestHandler
@@ -50,7 +82,24 @@ namespace Segment.Request
 			this._client = client;
 			this.Timeout = timeout;
 
+#if NET35
 			_httpClient = new HttpClient { Timeout = Timeout };
+			// set proxy
+			if (!string.IsNullOrEmpty(_client.Config.Proxy))
+				_httpClient.Proxy = new WebProxy(_client.Config.Proxy);
+#else
+			if (!string.IsNullOrEmpty(_client.Config.Proxy))
+			{
+				var handler = new HttpClientHandler
+				{
+					Proxy = new WebProxy(_client.Config.Proxy),
+					UseProxy = true
+				};
+				_httpClient = new HttpClient(handler) { Timeout = Timeout };
+			}
+			else
+				_httpClient = new HttpClient() { Timeout = Timeout };
+#endif
 		}
 
 		public async Task MakeRequest(Batch batch)
@@ -69,7 +118,7 @@ namespace Segment.Request
 				// Basic Authentication
 				// https://segment.io/docs/tracking-api/reference/#authentication
 #if NET35
-                _httpClient.Headers.Add("Authorization", "Basic " + BasicAuthHeader(batch.WriteKey, string.Empty));
+				_httpClient.Headers.Add("Authorization", "Basic " + BasicAuthHeader(batch.WriteKey, string.Empty));
                 _httpClient.Headers.Add("Content-Type", "application/json; charset=utf-8");
 #else
 				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", BasicAuthHeader(batch.WriteKey, string.Empty));

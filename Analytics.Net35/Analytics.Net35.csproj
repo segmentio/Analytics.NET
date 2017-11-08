@@ -16,6 +16,8 @@
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DefineConstants>DEBUG;NET35;</DefineConstants>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType></DebugType>
@@ -23,7 +25,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.Net" />
-    <Compile Include="..\Analytics\**\*.cs" Exclude="..\Analytics\obj\**\*.cs">
+    <Compile Include="../Analytics/**/*.cs" Exclude="../Analytics/obj/**/*.cs">
     </Compile>
   </ItemGroup>
   <ItemGroup>

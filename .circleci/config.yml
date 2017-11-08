@@ -11,6 +11,8 @@ jobs:
       - checkout
       - run: msbuild Analytics/Analytics.csproj /t:restore
       - run: msbuild Analytics/Analytics.csproj /p:Configuration=Release
+      - run: msbuild Analytics.NetStandard20/Analytics.NetStandard20.csproj /t:restore
+      - run: msbuild Analytics.NetStandard20/Analytics.NetStandard20.csproj /p:Configuration=Release
       - run: msbuild Analytics.Net35/Analytics.Net35.csproj /t:restore
       - run: msbuild Analytics.Net35/Analytics.Net35.csproj /p:Configuration=Release
       - run: nuget pack Analytics.nuspec

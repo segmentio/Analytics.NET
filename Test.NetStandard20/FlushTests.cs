@@ -18,7 +18,7 @@ namespace Segment.Test
 		}
 
 		[Test()]
-		public void SynchronousFlushTest()
+		public void SynchronousFlushTestNetStanard20()
 		{
 			Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false));
 			Analytics.Client.Succeeded += Client_Succeeded;
@@ -34,7 +34,7 @@ namespace Segment.Test
 		}
 
 		[Test()]
-		public void AsynchronousFlushTest()
+		public void AsynchronousFlushTestNetStanard20()
 		{
 			Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(true));
 
@@ -53,7 +53,7 @@ namespace Segment.Test
 		}
 
 		[Test()]
-		public async Task PerformanceTest()
+		public async Task PerformanceTestNetStanard20()
 		{
 			Analytics.Initialize(Constants.WRITE_KEY);
 

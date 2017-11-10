@@ -1,9 +1,15 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)/$(MSBuildToolsVersion)/Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)/$(MSBuildToolsVersion)/Microsoft.Common.props')" />
   <PropertyGroup>
-    <TargetFrameworks>net35</TargetFrameworks>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <PackageId>Analytics</PackageId>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3A457076-63AD-4A74-B6FC-D5E4AB2FA695}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <StartupObject />
+    <OutputPath>bin/$(Configuration)/net35</OutputPath>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
     <Version>3.1.0-alpha</Version>
     <Authors>Segment Team</Authors>
     <Company />
@@ -15,20 +21,86 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DefineConstants>DEBUG;NET35;</DefineConstants>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin/Debug/net35/</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NET35;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType></DebugType>
-    <DefineConstants>RELEASE;NET35;</DefineConstants>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin/Release/net35/</OutputPath>
+    <DefineConstants>TRACE;NET35;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System.Net" />
-    <Compile Include="..\Analytics\**\*.cs" Exclude="..\Analytics\obj\**\*.cs">
-    </Compile>
+    <Reference Include="AsyncBridge.Net35">
+      <HintPath>../packages/AsyncBridge.Net35.0.2.0/lib/net35-Client/AsyncBridge.Net35.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>../packages/Newtonsoft.Json.10.0.3/lib/net35/Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Threading">
+      <HintPath>../packages/TaskParallelLibrary.1.0.2856.0/lib/Net35/System.Threading.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AsyncBridge.Net35" Version="0.2.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <Compile Include="../Analytics/Analytics.cs" />
+    <Compile Include="../Analytics/Client.cs" />
+    <Compile Include="../Analytics/Config.cs" />
+    <Compile Include="../Analytics/Constants.cs" />
+    <Compile Include="../Analytics/Defaults.cs" />
+    <Compile Include="../Analytics/Exception/BadParameter.cs" />
+    <Compile Include="../Analytics/Exception/NotInitializedException.cs" />
+    <Compile Include="../Analytics/Flush/AsyncFlushHandler.cs" />
+    <Compile Include="../Analytics/Flush/BlockingFlushHandler.cs" />
+    <Compile Include="../Analytics/Flush/BlockingQueue.cs" />
+    <Compile Include="../Analytics/Flush/IBatchFactory.cs" />
+    <Compile Include="../Analytics/Flush/IFlushHandler.cs" />
+    <Compile Include="../Analytics/Flush/SimpleBatchFactory.cs" />
+    <Compile Include="../Analytics/Logger.cs" />
+    <Compile Include="../Analytics/Model/Alias.cs" />
+    <Compile Include="../Analytics/Model/BaseAction.cs" />
+    <Compile Include="../Analytics/Model/Batch.cs" />
+    <Compile Include="../Analytics/Model/Context.cs" />
+    <Compile Include="../Analytics/Model/Dict.cs" />
+    <Compile Include="../Analytics/Model/Group.cs" />
+    <Compile Include="../Analytics/Model/Identify.cs" />
+    <Compile Include="../Analytics/Model/Options.cs" />
+    <Compile Include="../Analytics/Model/Page.cs" />
+    <Compile Include="../Analytics/Model/Properties.cs" />
+    <Compile Include="../Analytics/Model/Providers.cs" />
+    <Compile Include="../Analytics/Model/Screen.cs" />
+    <Compile Include="../Analytics/Model/Track.cs" />
+    <Compile Include="../Analytics/Model/Traits.cs" />
+    <Compile Include="../Analytics/Request/BlockingRequestHandler.cs" />
+    <Compile Include="../Analytics/Request/IRequestHandler.cs" />
+    <Compile Include="../Analytics/Stats/Statistics.cs" />
   </ItemGroup>
-
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)/Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>

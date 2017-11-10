@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Analytics", "Analytics/Analytics.csproj", "{A386CF02-D902-4B22-90A8-E828093E3AA4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test/Test.csproj", "{6AE99FF7-EECF-4639-B6B1-3E7CF1CC3048}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A386CF02-D902-4B22-90A8-E828093E3AA4} = {A386CF02-D902-4B22-90A8-E828093E3AA4}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C316F1BB-6C70-4DEB-BC04-5664C39313F3}"
 	ProjectSection(SolutionItems) = preProject

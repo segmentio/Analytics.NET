@@ -1,58 +1,55 @@
-﻿using System;
-using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace Segment.Test
 {
-	[TestFixture()]
 	public class ActionTests
 	{
-
-		[SetUp]
-		public void Init()
+		public ActionTests()
 		{
 			Analytics.Dispose();
 			Logger.Handlers += LoggingHandler;
 			Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false));
 		}
 
-		[Test ()]
+		[Fact()]
 		public void IdentifyTest()
 		{
 			Actions.Identify(Analytics.Client);
 			FlushAndCheck(1);
 		}
 
-		[Test()]
+		[Fact()]
 		public void TrackTest()
 		{
 			Actions.Track(Analytics.Client);
 			FlushAndCheck(1);
 		}
 
-		[Test()]
+		[Fact()]
 		public void AliasTest()
 		{
 			Actions.Alias(Analytics.Client);
 			FlushAndCheck(1);
 		}
 
-		[Test()]
+		[Fact()]
 		public void GroupTest()
 		{
 			Actions.Group(Analytics.Client);
 			FlushAndCheck(1);
 		}
 
-		[Test()]
+		[Fact()]
 		public void PageTest()
 		{
 			Actions.Page(Analytics.Client);
 			FlushAndCheck(1);
 		}
 
-		[Test()]
+		[Fact()]
 		public void ScreenTest()
 		{
 			Actions.Screen(Analytics.Client);
@@ -62,9 +59,9 @@ namespace Segment.Test
 		private void FlushAndCheck(int messages)
 		{
 			Analytics.Client.Flush();
-			Assert.AreEqual(messages, Analytics.Client.Statistics.Submitted);
-			Assert.AreEqual(messages, Analytics.Client.Statistics.Succeeded);
-			Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
+			Assert.Equal(messages, Analytics.Client.Statistics.Submitted);
+			Assert.Equal(messages, Analytics.Client.Statistics.Succeeded);
+			Assert.Equal(0, Analytics.Client.Statistics.Failed);
 		}
 
 		static void LoggingHandler(Logger.Level level, string message, IDictionary<string, object> args)
@@ -79,7 +76,4 @@ namespace Segment.Test
 			Console.WriteLine(String.Format("[ActionTests] [{0}] {1}", level, message));
 		}
 	}
-
-
 }
-

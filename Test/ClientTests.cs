@@ -1,25 +1,21 @@
-﻿using NUnit.Framework;
-
 using System;
 using System.Collections.Generic;
-
 using Segment;
 using Segment.Model;
+using Xunit;
 
 namespace Segment.Test
 {
-	[TestFixture ()]
 	public class ClientTests
 	{
 		Client client;
 
-		[SetUp]
-		public void Init()
+		public ClientTests()
 		{
 			client = new Client("foo");
 		}
 
-		[Test ()]
+		[Fact()]
 		public void TrackTest ()
 		{
 			// verify it doesn't fail for a null options
@@ -27,4 +23,3 @@ namespace Segment.Test
 		}
 	}
 }
-

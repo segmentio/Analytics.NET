@@ -1,23 +1,21 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using NUnit.Framework;
 using Segment.Model;
+using Xunit;
 
 namespace Segment.Test
 {
-	[TestFixture()]
 	public class FlushTests
 	{
-		[SetUp]
-		public void Init()
+		public FlushTests()
 		{
 			Analytics.Dispose();
 			Logger.Handlers += LoggingHandler;
 		}
 
-		[Test()]
+		[Fact()]
 		public void SynchronousFlushTest()
 		{
 			Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false));
@@ -28,12 +26,12 @@ namespace Segment.Test
 
 			RunTests(Analytics.Client, trials);
 
-			Assert.AreEqual(trials, Analytics.Client.Statistics.Submitted);
-			Assert.AreEqual(trials, Analytics.Client.Statistics.Succeeded);
-			Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
+			Assert.Equal(trials, Analytics.Client.Statistics.Submitted);
+			Assert.Equal(trials, Analytics.Client.Statistics.Succeeded);
+			Assert.Equal(0, Analytics.Client.Statistics.Failed);
 		}
 
-		[Test()]
+		[Fact()]
 		public void AsynchronousFlushTest()
 		{
 			Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(true));
@@ -47,12 +45,12 @@ namespace Segment.Test
 
 			Thread.Sleep(1000); // cant use flush to wait during asynchronous flushing
 
-			Assert.AreEqual(trials, Analytics.Client.Statistics.Submitted);
-			Assert.AreEqual(trials, Analytics.Client.Statistics.Succeeded);
-			Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
+			Assert.Equal(trials, Analytics.Client.Statistics.Submitted);
+			Assert.Equal(trials, Analytics.Client.Statistics.Succeeded);
+			Assert.Equal(0, Analytics.Client.Statistics.Failed);
 		}
 
-		[Test()]
+		[Fact()]
 		public async Task PerformanceTest()
 		{
 			Analytics.Initialize(Constants.WRITE_KEY);
@@ -70,11 +68,11 @@ namespace Segment.Test
 
 			TimeSpan duration = DateTime.Now.Subtract(start);
 
-			Assert.AreEqual(trials, Analytics.Client.Statistics.Submitted);
-			Assert.AreEqual(trials, Analytics.Client.Statistics.Succeeded);
-			Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
+			Assert.Equal(trials, Analytics.Client.Statistics.Submitted);
+			Assert.Equal(trials, Analytics.Client.Statistics.Succeeded);
+			Assert.Equal(0, Analytics.Client.Statistics.Failed);
 
-			Assert.IsTrue(duration.CompareTo(TimeSpan.FromSeconds(20)) < 0);
+			Assert.True(duration.CompareTo(TimeSpan.FromSeconds(20)) < 0);
 		}
 
 		private void RunTests(Client client, int trials)
@@ -110,4 +108,3 @@ namespace Segment.Test
 		}
 	}
 }
-

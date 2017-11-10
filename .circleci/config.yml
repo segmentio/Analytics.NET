@@ -9,9 +9,8 @@ jobs:
       DOTNET_CLI_TELEMETRY_OUTPUT: 1
     steps:
       - checkout
-      - run: msbuild Analytics/Analytics.csproj /t:restore
+      - run: nuget restore
       - run: msbuild Analytics/Analytics.csproj /p:Configuration=Release
-      - run: msbuild Analytics.Net35/Analytics.Net35.csproj /t:restore
       - run: msbuild Analytics.Net35/Analytics.Net35.csproj /p:Configuration=Release
       - run: nuget pack Analytics.nuspec
   test:
@@ -32,7 +31,6 @@ jobs:
     steps:
       - checkout
       - run: nuget restore
-      - run: msbuild Test.Net35/Test.Net35.csproj /t:restore
       - run: msbuild Test.Net35/Test.Net35.csproj /p:Configuration=Debug
       - run: mono --debug --profile=monocov ./packages/NUnit.ConsoleRunner.3.7.0/tools/nunit3-console.exe Test.Net35/bin/Debug/Test.Net35.dll
       - run: curl -s https://codecov.io/bash > codecov

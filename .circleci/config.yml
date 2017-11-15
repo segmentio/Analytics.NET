@@ -25,7 +25,17 @@ jobs:
     steps:
       - checkout
       - run: dotnet restore Test/Test.csproj
-      - run: dotnet test Test/Test.csproj
+      - run: dotnet build Test/Test.csproj
+      - run: nuget install Newtonsoft.Json -Version 10.0.3
+      - run: nuget install xunit.assert -Version 2.3.0-beta1-build3642
+      - run: nuget install xunit.runner.console -Version 2.3.0-beta1-build3642
+      - run: nuget install xunit.extensibility.execution -Version 2.3.0-beta1-build3642
+      - run: mv Newtonsoft.Json/lib/netstandard1.0/*.* Test/bin/Debug/netcoreapp1.1/
+      - run: mv xunit.assert.2.3.0-beta1-build3642/lib/netstandard1.1/*.* Test/bin/Debug/netcoreapp1.1/
+      - run: mv xunit.runner.console.2.3.0-beta1-build3642/tools/*.* Test/bin/Debug/netcoreapp1.1/
+      - run: mv xunit.extensibility.core.2.3.0-beta1-build3642/lib/netstandard1.1/*.* Test/bin/Debug/netcoreapp1.1/ -f
+      - run: mv xunit.extensibility.execution.2.3.0-beta1-build3642/lib/netstandard1.1/*.* Test/bin/Debug/netcoreapp1.1/ -f
+      - run: cd Test/bin/Debug/netcoreapp1.1/ && xunit.console.exe Test.dll -noshadow -nologo -xml Test_Coverage.xml
   test_code_coverage:
     working_directory: /test_code_coverage
     docker:

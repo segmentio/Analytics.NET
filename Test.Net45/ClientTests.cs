@@ -11,19 +11,58 @@ namespace Segment.Test
 	[TestFixture ()]
 	public class ClientTests
 	{
-		Client client;
-
-		[SetUp]
-		public void Init()
+		class TestClient : Client
 		{
-			client = new Client("foo");
+			public TestClient() : base("catpants")
+			{
+			}
+
+			public bool EnsureId(String userId, Options options)
+			{
+				try
+				{
+					base.ensureId(userId, options);
+				}
+				catch
+				{
+					return false;
+				}
+
+				return true;
+			}
 		}
 
-		[Test ()]
-		public void TrackTestNet45 ()
+		[Test]
+		public void HasUserId_NoOptions()
 		{
-			// verify it doesn't fail for a null options
-			client.Screen("bar", "qaz", null, null);
+			var test = new TestClient();
+			Assert.IsTrue(test.EnsureId("user id", null));
+		}
+
+		[Test]
+		public void NoUserId_HasAnonId()
+		{
+			var test = new TestClient();
+
+			var options = new Options();
+			options.SetAnonymousId("anon id");
+			Assert.IsTrue(test.EnsureId("", options));
+		}
+
+		[Test]
+		public void NoUserId_NoAnon()
+		{
+			var test = new TestClient();
+
+			Assert.IsFalse(test.EnsureId("", new Options()));
+		}
+
+		[Test]
+		public void NoUserId_NoOptions()
+		{
+			var test = new TestClient();
+
+			Assert.IsFalse(test.EnsureId("", null));
 		}
 	}
 }

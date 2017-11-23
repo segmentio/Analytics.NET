@@ -62,3 +62,4 @@ workflows:
       - build
       - test
       - test_35
+      - test_45

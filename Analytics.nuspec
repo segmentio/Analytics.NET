@@ -20,6 +20,10 @@
                 <dependency id="AsyncBridge.Net35" version="0.2.0" exclude="Build,Analyzers" />
                 <dependency id="Newtonsoft.Json" version="10.0.3" exclude="Build,Analyzers" />
             </group>
+            <group targetFramework="net45">
+                <dependency id="System.Net.Http" version="4.3.3" exclude="Build,Analyzers" />
+                <dependency id="Newtonsoft.Json" version="10.0.3" exclude="Build,Analyzers" />
+            </group>
             <group targetFramework=".NETStandard1.3, .NETStandard2.0">
                 <dependency id="System.Threading.Thread" version="4.3.0" exclude="Build,Analyzers" />
                 <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
@@ -32,6 +36,7 @@
     </metadata>
     <files>
         <file src="Analytics.Net35/bin/Release/net35/Analytics.dll" target="lib/net35/" />
+        <file src="Analytics.Net45/bin/Release/net45/Analytics.dll" target="lib/net45/" />
         <file src="Analytics.NetStandard20/bin/Release/netstandard2.0/Analytics.dll" target="lib/netstandard2.0/" />
         <file src="Analytics/bin/Release/netstandard1.3/Analytics.dll" target="lib/netstandard1.3/" />
     </files>

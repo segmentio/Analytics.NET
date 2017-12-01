@@ -9,6 +9,16 @@ jobs:
       DOTNET_CLI_TELEMETRY_OUTPUT: 1
     steps:
       - checkout
+# Code Formatting
+      - run: apt-get -qq update; apt-get -y install git; apt-get install unzip
+      - run: git clone https://github.com/kevingilliard/codeformatter.git # clone source code in /codeformatter directory
+      - run: cd codeformatter && ./init-tools.sh    # download and install msbuild
+      - run: nuget update -self
+      - run: cd codeformatter/src && nuget restore
+      - run: cd codeformatter/src && msbuild CodeFormatter.sln /p:Configuration=Release
+      - run: mv codeformatter/bin/CodeFormatter/Release codeformatter/tools   # Now, we can get CodeFormatter.exe in /codeformatter/tools directory
+      - run: mono codeformatter/tools/CodeFormatter.exe Analytics.NET.sln
+# Build project
       - run: msbuild Analytics/Analytics.csproj /t:restore
       - run: msbuild Analytics/Analytics.csproj /p:Configuration=Release
       - run: msbuild Analytics.NetStandard20/Analytics.NetStandard20.csproj /t:restore

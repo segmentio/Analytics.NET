@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Segment.Model;
@@ -22,6 +22,12 @@ namespace Segment.Flush
 		/// </summary>
 		private IRequestHandler _requestHandler;
 
+#if NET_NOTHREAD
+		/// <summary>
+		/// Cancellation token for the flushing task. 
+		/// </summary>
+		private CancellationTokenSource _continue;
+#else
 		/// <summary>
 		/// The thread that is responsible for flushing the queue to the server
 		/// </summary>
@@ -30,6 +36,7 @@ namespace Segment.Flush
 		/// True to continue processign the flushing, false to dispose
 		/// </summary>
 		private volatile bool _continue;
+#endif
 
 		/// <summary>
 		/// Marks that the current queue is empty and no flush is happening.
@@ -55,6 +62,15 @@ namespace Segment.Flush
             
 			this.MaxQueueSize = maxQueueSize;
 
+#if NET_NOTHREAD
+			// set that the queue is currently empty
+			_idle = new ManualResetEvent(true);
+
+			_continue = new CancellationTokenSource();
+
+			// start the long running flushing task
+			Task.Factory.StartNew(() => Loop(), _continue.Token);
+#else
 			_continue = true;
 			
 			// set that the queue is currently empty
@@ -63,7 +79,8 @@ namespace Segment.Flush
 			// start the flushing thread
 			_flushingThread = new Thread(new ThreadStart(Loop));
 			_flushingThread.Start();
-        }
+#endif
+		}
 
         public async Task Process(BaseAction action)
         {
@@ -110,9 +127,15 @@ namespace Segment.Flush
 			List<BaseAction> current = new List<BaseAction>();
 
 			// keep looping while flushing thread is active
-			while (_continue) {
+#if NET_NOTHREAD
+			while (!_continue.Token.IsCancellationRequested)
+#else
+			while (_continue)
+#endif
+			{
 
-				do {
+				do
+				{
 
 					// the only time we're actually not flushing
 					// is if the condition that the queue is empty here
@@ -144,11 +167,15 @@ namespace Segment.Flush
                             { "queue size", _queue.Count }
                          });
 					}
-				} 
+				}
 				// if we can easily see that there's still stuff in the queue
 				// we'd prefer to add more to the current batch to send more
 				// at once. But only if we're not disposed yet (_continue is true).
+#if NET_NOTHREAD
+				while (!_continue.Token.IsCancellationRequested && _queue.Count > 0 && current.Count <= Constants.BatchIncrement);
+#else
 				while (_continue && _queue.Count > 0 && current.Count <= Constants.BatchIncrement);
+#endif
 
 				if (current.Count > 0) 
 				{
@@ -166,8 +193,10 @@ namespace Segment.Flush
 					current = new List<BaseAction>();
 				}
 
+#if !NET_NOTHREAD
 				// thread context switch to avoid resource contention
 				Thread.Sleep (0);
+#endif
 			}
 		}
 
@@ -182,7 +211,11 @@ namespace Segment.Flush
 		public void Dispose() 
 		{
 			// tell the flushing thread to stop 
+#if NET_NOTHREAD
+			_continue.Cancel();
+#else
 			_continue = false;
+#endif
 
 			// tell the queue to stop blocking if it is currently doing so
 			_queue.Dispose();

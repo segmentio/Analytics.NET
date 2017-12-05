@@ -17,6 +17,8 @@ jobs:
       - run: msbuild Analytics.Net35/Analytics.Net35.csproj /p:Configuration=Release
       - run: msbuild Analytics.Net45/Analytics.Net45.csproj /t:restore
       - run: msbuild Analytics.Net45/Analytics.Net45.csproj /p:Configuration=Release
+      - run: msbuild Analytics.Portable/Analytics.Portable.csproj /t:restore
+      - run: msbuild Analytics.Portable/Analytics.Portable.csproj /p:Configuration=Release
       - run: nuget pack Analytics.nuspec
   test:
     working_directory: /test

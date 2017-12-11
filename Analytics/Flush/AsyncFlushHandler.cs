@@ -154,7 +154,7 @@ namespace Segment.Flush
 				// if we can easily see that there's still stuff in the queue
 				// we'd prefer to add more to the current batch to send more
 				// at once. But only if we're not disposed yet (_continue is true).
-				while (_continue && _queue.Count > 0 && current.Count <= Constants.BatchIncrement);
+				while (_continue && _queue.Count > 0 && current.Count <= Defaults.BatchIncrement);
 
 				if (current.Count > 0) 
 				{

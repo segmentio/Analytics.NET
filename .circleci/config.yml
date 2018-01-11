@@ -57,6 +57,18 @@ jobs:
       - run: msbuild Test.Net45/Test.Net45.csproj /t:restore
       - run: msbuild Test.Net45/Test.Net45.csproj /p:Configuration=Release
       - run: mono --debug ./packages/NUnit.ConsoleRunner.3.7.0/tools/nunit3-console.exe Test.Net45/bin/Release/Test.Net45.dll
+  test_e2e:
+    working_directory: /test_e2e
+    docker:  
+      - image: microsoft/dotnet:1.1.1-sdk
+    environment:
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_CLI_TELEMETRY_OUTPUT: 1
+    steps:
+      - checkout
+      - run: dotnet restore Test.E2E/Test.E2E.csproj
+      - run: dotnet build Test.E2E/Test.E2E.csproj
+      - run: cd Test.E2E/ && dotnet xunit
 workflows:
   version: 2
   build_and_test:
@@ -65,3 +77,4 @@ workflows:
       - test
       - test_35
       - test_45
+      - test_e2e

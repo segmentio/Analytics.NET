@@ -132,8 +132,9 @@ namespace Segment.Request
 					{ "batch size", batch.batch.Count }
 				});
 
-				const int MAXIMUM_BACKOFF_DURATION = 10000;
-				int backoff = 100;
+				// Retries with exponential backoff
+				const int MAXIMUM_BACKOFF_DURATION = 10000;	// Set maximum waiting limit to 10s
+				int backoff = 100;	// Set initial waiting time to 100ms
 
 				int statusCode = (int)HttpStatusCode.OK;
 				string responseStr = "";

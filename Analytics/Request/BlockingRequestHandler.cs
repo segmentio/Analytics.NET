@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 #endif
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Segment.Exception;
@@ -131,11 +132,13 @@ namespace Segment.Request
 					{ "batch size", batch.batch.Count }
 				});
 
-				const int MAX_RETRY_COUNT = 3;
-				int retry = 0, statusCode = (int)HttpStatusCode.OK;
+				const int MAXIMUM_BACKOFF_DURATION = 10000;
+				int backoff = 100;
+
+				int statusCode = (int)HttpStatusCode.OK;
 				string responseStr = "";
 
-				for (retry = 0; retry < MAX_RETRY_COUNT; retry++)
+				while (backoff < MAXIMUM_BACKOFF_DURATION)
 				{
 #if NET35
 					watch.Start();
@@ -161,6 +164,8 @@ namespace Segment.Request
 								// If status code is greater than 500, it indicates server error
 								// Error code 429 indicates rate limited.
 								// Retry uploading in these cases.
+								Thread.Sleep(backoff);
+								backoff	*= 2;
 								continue;
 							}
 							else if (statusCode >= 400)
@@ -191,6 +196,8 @@ namespace Segment.Request
 							// If status code is greater than 500, it indicates server error
 							// Error code 429 indicates rate limited.
 							// Retry uploading in these cases.
+							Task.Delay(backoff).Wait();
+							backoff *= 2;
 							continue;
 						}
 						else if (statusCode >= 400)
@@ -203,7 +210,7 @@ namespace Segment.Request
 #endif
 				}
 
-				if (retry == MAX_RETRY_COUNT && statusCode != (int)HttpStatusCode.OK)
+				if (backoff == MAXIMUM_BACKOFF_DURATION && statusCode != (int)HttpStatusCode.OK)
 				{
 					Fail(batch, new APIException("Unexpected Status Code", responseStr), watch.ElapsedMilliseconds);
 				}

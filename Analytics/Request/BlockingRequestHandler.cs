@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Net;
 #if NET35
@@ -131,41 +131,59 @@ namespace Segment.Request
 					{ "batch size", batch.batch.Count }
 				});
 
-#if NET35
-                watch.Start();
-
-                try
-                {
-                    var response = Encoding.UTF8.GetString(_httpClient.UploadData(uri, "POST", Encoding.UTF8.GetBytes(json)));
-                    watch.Stop();
-
-                    Succeed(batch, watch.ElapsedMilliseconds);
-                }
-                catch (WebException ex)
-                {
-                    watch.Stop();
-
-                    string responseStr = ex.Message;
-                    Fail(batch, new APIException("Unexpected Response", responseStr), watch.ElapsedMilliseconds);
-                }
-#else
-				watch.Start();
-
-				var response = await _httpClient.PostAsync(uri, new StringContent(json, Encoding.UTF8, "application/json")).ConfigureAwait(false);
-
-				watch.Stop();
-
-				if (response.StatusCode == HttpStatusCode.OK)
-				{               
-					Succeed(batch, watch.ElapsedMilliseconds);
-				}
-				else
+				const int MAX_RETRY_COUNT = 3;
+				for (int retry = 0; retry < MAX_RETRY_COUNT; retry++)
 				{
-					string responseStr = String.Format("Status Code {0}. ", response.StatusCode);
-					responseStr += await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-					Fail(batch, new APIException("Unexpected Status Code", responseStr), watch.ElapsedMilliseconds);
-				}
+#if NET35
+					watch.Start();
+
+					try
+					{
+						var response = Encoding.UTF8.GetString(_httpClient.UploadData(uri, "POST", Encoding.UTF8.GetBytes(json)));
+						watch.Stop();
+
+						Succeed(batch, watch.ElapsedMilliseconds);
+					}
+					catch (WebException ex)
+					{
+						watch.Stop();
+
+						string responseStr = ex.Message;
+						Fail(batch, new APIException("Unexpected Response", responseStr), watch.ElapsedMilliseconds);
+					}
+#else
+					watch.Start();
+
+					var response = await _httpClient.PostAsync(uri, new StringContent(json, Encoding.UTF8, "application/json")).ConfigureAwait(false);
+
+					watch.Stop();
+
+					if (response.StatusCode == HttpStatusCode.OK)
+					{
+						Succeed(batch, watch.ElapsedMilliseconds);
+						break;
+					}
+					else
+					{
+						int statusCode = (int)response.StatusCode;
+						if (statusCode >= 500 || statusCode == 429)
+						{
+							// If status code is greater than 500, it indicates server error
+							// Error code 429 indicates rate limited.
+							// Retry uploading in these cases.
+							continue;
+						}
+						else if (statusCode >= 400)
+						{
+							string responseStr = String.Format("Status Code {0}. ", response.StatusCode);
+							responseStr += await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+							Fail(batch, new APIException("Unexpected Status Code", responseStr), watch.ElapsedMilliseconds);
+
+							break;
+						}
+					}
 #endif
+				}
 			}
 			catch (System.Exception e)
 			{

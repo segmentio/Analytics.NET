@@ -132,7 +132,10 @@ namespace Segment.Request
 				});
 
 				const int MAX_RETRY_COUNT = 3;
-				for (int retry = 0; retry < MAX_RETRY_COUNT; retry++)
+				int retry = 0, statusCode = (int)HttpStatusCode.OK;
+				string responseStr = "";
+
+				for (retry = 0; retry < MAX_RETRY_COUNT; retry++)
 				{
 #if NET35
 					watch.Start();
@@ -143,13 +146,30 @@ namespace Segment.Request
 						watch.Stop();
 
 						Succeed(batch, watch.ElapsedMilliseconds);
+						break;
 					}
 					catch (WebException ex)
 					{
 						watch.Stop();
 
-						string responseStr = ex.Message;
-						Fail(batch, new APIException("Unexpected Response", responseStr), watch.ElapsedMilliseconds);
+						var response = (HttpWebResponse)ex.Response;
+						if (response != null)
+						{
+							statusCode = (int)response.StatusCode;
+							if (statusCode >= 500 || statusCode == 429)
+							{
+								// If status code is greater than 500, it indicates server error
+								// Error code 429 indicates rate limited.
+								// Retry uploading in these cases.
+								continue;
+							}
+							else if (statusCode >= 400)
+							{
+								string responseStr = String.Format("Status Code {0}. ", statusCode);
+								responseStr += ex.Message;
+								break;
+							}
+						}
 					}
 #else
 					watch.Start();
@@ -165,7 +185,7 @@ namespace Segment.Request
 					}
 					else
 					{
-						int statusCode = (int)response.StatusCode;
+						statusCode = (int)response.StatusCode;
 						if (statusCode >= 500 || statusCode == 429)
 						{
 							// If status code is greater than 500, it indicates server error
@@ -175,14 +195,17 @@ namespace Segment.Request
 						}
 						else if (statusCode >= 400)
 						{
-							string responseStr = String.Format("Status Code {0}. ", response.StatusCode);
+							responseStr = String.Format("Status Code {0}. ", response.StatusCode);
 							responseStr += await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-							Fail(batch, new APIException("Unexpected Status Code", responseStr), watch.ElapsedMilliseconds);
-
 							break;
 						}
 					}
 #endif
+				}
+
+				if (retry == MAX_RETRY_COUNT && statusCode != (int)HttpStatusCode.OK)
+				{
+					Fail(batch, new APIException("Unexpected Status Code", responseStr), watch.ElapsedMilliseconds);
 				}
 			}
 			catch (System.Exception e)

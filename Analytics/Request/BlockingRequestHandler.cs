@@ -160,9 +160,9 @@ namespace Segment.Request
 						if (response != null)
 						{
 							statusCode = (int)response.StatusCode;
-							if (statusCode >= 500 || statusCode == 429)
+							if ((statusCode >= 500 && statusCode <= 600) || statusCode == 429)
 							{
-								// If status code is greater than 500, it indicates server error
+								// If status code is greater than 500 and less than 600, it indicates server error
 								// Error code 429 indicates rate limited.
 								// Retry uploading in these cases.
 								Thread.Sleep(backoff);
@@ -192,9 +192,9 @@ namespace Segment.Request
 					else
 					{
 						statusCode = (int)response.StatusCode;
-						if (statusCode >= 500 || statusCode == 429)
+						if ((statusCode >= 500 && statusCode <= 600) || statusCode == 429)
 						{
-							// If status code is greater than 500, it indicates server error
+							// If status code is greater than 500 and less than 600, it indicates server error
 							// Error code 429 indicates rate limited.
 							// Retry uploading in these cases.
 							Task.Delay(backoff).Wait();

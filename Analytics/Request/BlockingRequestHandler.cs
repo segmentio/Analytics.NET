@@ -170,7 +170,7 @@ namespace Segment.Request
 							}
 							else if (statusCode >= 400)
 							{
-								string responseStr = String.Format("Status Code {0}. ", statusCode);
+								responseStr = String.Format("Status Code {0}. ", statusCode);
 								responseStr += ex.Message;
 								break;
 							}

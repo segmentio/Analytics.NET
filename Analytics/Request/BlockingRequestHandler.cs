@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Net;
 #if NET35
@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 #endif
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Segment.Exception;
@@ -131,41 +132,88 @@ namespace Segment.Request
 					{ "batch size", batch.batch.Count }
 				});
 
-#if NET35
-                watch.Start();
+				const int MAXIMUM_BACKOFF_DURATION = 10000;
+				int backoff = 100;
 
-                try
-                {
-                    var response = Encoding.UTF8.GetString(_httpClient.UploadData(uri, "POST", Encoding.UTF8.GetBytes(json)));
-                    watch.Stop();
+				int statusCode = (int)HttpStatusCode.OK;
+				string responseStr = "";
 
-                    Succeed(batch, watch.ElapsedMilliseconds);
-                }
-                catch (WebException ex)
-                {
-                    watch.Stop();
-
-                    string responseStr = ex.Message;
-                    Fail(batch, new APIException("Unexpected Response", responseStr), watch.ElapsedMilliseconds);
-                }
-#else
-				watch.Start();
-
-				var response = await _httpClient.PostAsync(uri, new StringContent(json, Encoding.UTF8, "application/json")).ConfigureAwait(false);
-
-				watch.Stop();
-
-				if (response.StatusCode == HttpStatusCode.OK)
-				{               
-					Succeed(batch, watch.ElapsedMilliseconds);
-				}
-				else
+				while (backoff < MAXIMUM_BACKOFF_DURATION)
 				{
-					string responseStr = String.Format("Status Code {0}. ", response.StatusCode);
-					responseStr += await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+#if NET35
+					watch.Start();
+
+					try
+					{
+						var response = Encoding.UTF8.GetString(_httpClient.UploadData(uri, "POST", Encoding.UTF8.GetBytes(json)));
+						watch.Stop();
+
+						Succeed(batch, watch.ElapsedMilliseconds);
+						break;
+					}
+					catch (WebException ex)
+					{
+						watch.Stop();
+
+						var response = (HttpWebResponse)ex.Response;
+						if (response != null)
+						{
+							statusCode = (int)response.StatusCode;
+							if (statusCode >= 500 || statusCode == 429)
+							{
+								// If status code is greater than 500, it indicates server error
+								// Error code 429 indicates rate limited.
+								// Retry uploading in these cases.
+								Thread.Sleep(backoff);
+								backoff	*= 2;
+								continue;
+							}
+							else if (statusCode >= 400)
+							{
+								string responseStr = String.Format("Status Code {0}. ", statusCode);
+								responseStr += ex.Message;
+								break;
+							}
+						}
+					}
+#else
+					watch.Start();
+
+					var response = await _httpClient.PostAsync(uri, new StringContent(json, Encoding.UTF8, "application/json")).ConfigureAwait(false);
+
+					watch.Stop();
+
+					if (response.StatusCode == HttpStatusCode.OK)
+					{
+						Succeed(batch, watch.ElapsedMilliseconds);
+						break;
+					}
+					else
+					{
+						statusCode = (int)response.StatusCode;
+						if (statusCode >= 500 || statusCode == 429)
+						{
+							// If status code is greater than 500, it indicates server error
+							// Error code 429 indicates rate limited.
+							// Retry uploading in these cases.
+							Task.Delay(backoff).Wait();
+							backoff *= 2;
+							continue;
+						}
+						else if (statusCode >= 400)
+						{
+							responseStr = String.Format("Status Code {0}. ", response.StatusCode);
+							responseStr += await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+							break;
+						}
+					}
+#endif
+				}
+
+				if (backoff == MAXIMUM_BACKOFF_DURATION && statusCode != (int)HttpStatusCode.OK)
+				{
 					Fail(batch, new APIException("Unexpected Status Code", responseStr), watch.ElapsedMilliseconds);
 				}
-#endif
 			}
 			catch (System.Exception e)
 			{

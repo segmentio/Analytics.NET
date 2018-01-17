@@ -126,7 +126,8 @@ namespace Segment.Request
 
 				// Send user agent in the form of {library_name}/{library_version} as per RFC 7231.
 				var context = new Context();
-				string szUserAgent = string.Format("{0}/{1}", context["name"], context["version"]);
+				var library = context["library"] as Dict;
+				string szUserAgent = string.Format("{0}/{1}", library["name"], library["version"]);
 #if NET35
 				_httpClient.Headers.Add("User-Agent", szUserAgent);
 #else

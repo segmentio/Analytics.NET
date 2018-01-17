@@ -125,6 +125,16 @@ namespace Segment.Request
 				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", BasicAuthHeader(batch.WriteKey, string.Empty));
 #endif
 
+				// Send user agent in the form of {library_name}/{library_version} as per RFC 7231.
+				var context = new Context();
+				var library = context["library"] as Dict;
+				string szUserAgent = string.Format("{0}/{1}", library["name"], library["version"]);
+#if NET35
+				_httpClient.Headers.Add("User-Agent", szUserAgent);
+#else
+				_httpClient.DefaultRequestHeaders.Add("User-Agent", szUserAgent);
+#endif
+
 				Logger.Info("Sending analytics request to Segment.io ..", new Dict
 				{
 					{ "batch id", batch.MessageId },

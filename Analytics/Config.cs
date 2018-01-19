@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +20,8 @@ namespace Segment
 		internal int MaxQueueSize { get; set; }
 
 		internal bool Async { get; set; }
+
+		internal bool UseGZip { get; set; }
 
 		internal TimeSpan Timeout { get; set; }
 
@@ -93,5 +95,16 @@ namespace Segment
 			this.Async = async;
             return this;
         }
+
+		/// <summary>
+		/// Sets the API request header uses GZip option.
+		/// </summary>
+		/// <param name="useGZip"></param>
+		/// <returns></returns>
+		public Config SetGZip(bool useGZip)
+		{
+			this.UseGZip = useGZip;
+			return this;
+		}
     }
 }

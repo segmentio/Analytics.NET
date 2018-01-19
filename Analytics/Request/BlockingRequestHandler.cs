@@ -83,23 +83,28 @@ namespace Segment.Request
 			this._client = client;
 			this.Timeout = timeout;
 
+			// Create HttpClient instance in .Net 3.5
 #if NET35
 			_httpClient = new HttpClient { Timeout = Timeout };
-			// set proxy
-			if (!string.IsNullOrEmpty(_client.Config.Proxy))
-				_httpClient.Proxy = new WebProxy(_client.Config.Proxy);
 #else
+			var handler = new HttpClientHandler();
+#endif
+
+			// Set proxy information
 			if (!string.IsNullOrEmpty(_client.Config.Proxy))
 			{
-				var handler = new HttpClientHandler
-				{
-					Proxy = new WebProxy(_client.Config.Proxy),
-					UseProxy = true
-				};
-				_httpClient = new HttpClient(handler) { Timeout = Timeout };
+#if NET35
+				_httpClient.Proxy = new WebProxy(_client.Config.Proxy);
+#else
+				handler.Proxy = new WebProxy(_client.Config.Proxy);
+				handler.UseProxy = true;
+#endif
 			}
-			else
-				_httpClient = new HttpClient() { Timeout = Timeout };
+
+			// Initialize HttpClient instance with given configuration
+#if NET35
+#else
+			_httpClient = new HttpClient(handler) { Timeout = Timeout };
 #endif
 		}
 
@@ -134,6 +139,25 @@ namespace Segment.Request
 #else
 				_httpClient.DefaultRequestHeaders.Add("User-Agent", szUserAgent);
 #endif
+
+				// Set GZip Deflate
+				if (_client.Config.UseGZip)
+				{
+#if NET35
+					_httpClient.Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip, deflate");
+#else
+					_httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
+#endif
+				}
+				else
+				{
+#if NET35
+					_httpClient.Headers.Remove(HttpRequestHeader.AcceptEncoding);
+#else
+					_httpClient.DefaultRequestHeaders.Remove("Accept-Encoding");
+#endif
+				}
+
 
 				Logger.Info("Sending analytics request to Segment.io ..", new Dict
 				{

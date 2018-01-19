@@ -13,6 +13,8 @@ using Newtonsoft.Json;
 using Segment.Exception;
 using Segment.Model;
 using Segment.Stats;
+using System.IO;
+using System.IO.Compression;
 
 namespace Segment.Request
 {
@@ -140,24 +142,28 @@ namespace Segment.Request
 				_httpClient.DefaultRequestHeaders.Add("User-Agent", szUserAgent);
 #endif
 
+				// Prepare request data;
+				var requestData = Encoding.UTF8.GetBytes(json);
+
 				// Set GZip Deflate
 				if (_client.Config.UseGZip)
 				{
 #if NET35
-					_httpClient.Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip, deflate");
+					_httpClient.Headers.Add(HttpRequestHeader.ContentEncoding, "gzip");
 #else
-					_httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
+					//_httpClient.DefaultRequestHeaders.Add("Content-Encoding", "gzip");
 #endif
-				}
-				else
-				{
-#if NET35
-					_httpClient.Headers.Remove(HttpRequestHeader.AcceptEncoding);
-#else
-					_httpClient.DefaultRequestHeaders.Remove("Accept-Encoding");
-#endif
-				}
 
+					// Compress request data with GZip
+					using (MemoryStream memory = new MemoryStream())
+					{
+						using (GZipStream gzip = new GZipStream(memory, CompressionMode.Compress, true))
+						{
+							gzip.Write(requestData, 0, requestData.Length);
+						}
+						requestData = memory.ToArray();
+					}
+				}
 
 				Logger.Info("Sending analytics request to Segment.io ..", new Dict
 				{
@@ -180,7 +186,7 @@ namespace Segment.Request
 
 					try
 					{
-						var response = Encoding.UTF8.GetString(_httpClient.UploadData(uri, "POST", Encoding.UTF8.GetBytes(json)));
+						var response = Encoding.UTF8.GetString(_httpClient.UploadData(uri, "POST", requestData));
 						watch.Stop();
 
 						Succeed(batch, watch.ElapsedMilliseconds);
@@ -211,10 +217,16 @@ namespace Segment.Request
 							}
 						}
 					}
+
 #else
 					watch.Start();
 
-					var response = await _httpClient.PostAsync(uri, new StringContent(json, Encoding.UTF8, "application/json")).ConfigureAwait(false);
+					ByteArrayContent content = new ByteArrayContent(requestData);
+					content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+					if (_client.Config.UseGZip)
+						content.Headers.ContentEncoding.Add("gzip");
+
+					var response = await _httpClient.PostAsync(uri, content).ConfigureAwait(false);
 
 					watch.Stop();
 

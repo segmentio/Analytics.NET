@@ -32,7 +32,7 @@ namespace Segment.Test
 		public void GZipTest()
 		{
 			// Set GZip/Deflate on request header
-			Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false).SetGZip(true));
+			Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false).SetRequestCompression(true));
 
 			Actions.Identify(Analytics.Client);
 

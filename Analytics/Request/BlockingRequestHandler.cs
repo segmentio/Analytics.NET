@@ -13,6 +13,8 @@ using Newtonsoft.Json;
 using Segment.Exception;
 using Segment.Model;
 using Segment.Stats;
+using System.IO;
+using System.IO.Compression;
 
 namespace Segment.Request
 {
@@ -83,23 +85,28 @@ namespace Segment.Request
 			this._client = client;
 			this.Timeout = timeout;
 
+			// Create HttpClient instance in .Net 3.5
 #if NET35
 			_httpClient = new HttpClient { Timeout = Timeout };
-			// set proxy
-			if (!string.IsNullOrEmpty(_client.Config.Proxy))
-				_httpClient.Proxy = new WebProxy(_client.Config.Proxy);
 #else
+			var handler = new HttpClientHandler();
+#endif
+
+			// Set proxy information
 			if (!string.IsNullOrEmpty(_client.Config.Proxy))
 			{
-				var handler = new HttpClientHandler
-				{
-					Proxy = new WebProxy(_client.Config.Proxy),
-					UseProxy = true
-				};
-				_httpClient = new HttpClient(handler) { Timeout = Timeout };
+#if NET35
+				_httpClient.Proxy = new WebProxy(_client.Config.Proxy);
+#else
+				handler.Proxy = new WebProxy(_client.Config.Proxy);
+				handler.UseProxy = true;
+#endif
 			}
-			else
-				_httpClient = new HttpClient() { Timeout = Timeout };
+
+			// Initialize HttpClient instance with given configuration
+#if NET35
+#else
+			_httpClient = new HttpClient(handler) { Timeout = Timeout };
 #endif
 		}
 
@@ -135,6 +142,29 @@ namespace Segment.Request
 				_httpClient.DefaultRequestHeaders.Add("User-Agent", szUserAgent);
 #endif
 
+				// Prepare request data;
+				var requestData = Encoding.UTF8.GetBytes(json);
+
+				// Compress request data if compression is set
+				if (_client.Config.CompressRequest)
+				{
+#if NET35
+					_httpClient.Headers.Add(HttpRequestHeader.ContentEncoding, "gzip");
+#else
+					//_httpClient.DefaultRequestHeaders.Add("Content-Encoding", "gzip");
+#endif
+
+					// Compress request data with GZip
+					using (MemoryStream memory = new MemoryStream())
+					{
+						using (GZipStream gzip = new GZipStream(memory, CompressionMode.Compress, true))
+						{
+							gzip.Write(requestData, 0, requestData.Length);
+						}
+						requestData = memory.ToArray();
+					}
+				}
+
 				Logger.Info("Sending analytics request to Segment.io ..", new Dict
 				{
 					{ "batch id", batch.MessageId },
@@ -156,7 +186,7 @@ namespace Segment.Request
 
 					try
 					{
-						var response = Encoding.UTF8.GetString(_httpClient.UploadData(uri, "POST", Encoding.UTF8.GetBytes(json)));
+						var response = Encoding.UTF8.GetString(_httpClient.UploadData(uri, "POST", requestData));
 						watch.Stop();
 
 						Succeed(batch, watch.ElapsedMilliseconds);
@@ -187,10 +217,16 @@ namespace Segment.Request
 							}
 						}
 					}
+
 #else
 					watch.Start();
 
-					var response = await _httpClient.PostAsync(uri, new StringContent(json, Encoding.UTF8, "application/json")).ConfigureAwait(false);
+					ByteArrayContent content = new ByteArrayContent(requestData);
+					content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+					if (_client.Config.CompressRequest)
+						content.Headers.ContentEncoding.Add("gzip");
+
+					var response = await _httpClient.PostAsync(uri, content).ConfigureAwait(false);
 
 					watch.Stop();
 

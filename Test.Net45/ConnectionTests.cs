@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
@@ -20,6 +20,19 @@ namespace Segment.Test
 		{
 			// Set proxy address, like as "http://localhost:8888"
 			Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false).SetProxy(""));
+
+			Actions.Identify(Analytics.Client);
+
+			Assert.AreEqual(1, Analytics.Client.Statistics.Submitted);
+			Assert.AreEqual(1, Analytics.Client.Statistics.Succeeded);
+			Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
+		}
+
+		[Test()]
+		public void GZipTestNet45()
+		{
+			// Set GZip/Deflate on request header
+			Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false).SetRequestCompression(true));
 
 			Actions.Identify(Analytics.Client);
 

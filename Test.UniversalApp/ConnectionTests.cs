@@ -29,6 +29,19 @@ namespace Segment.Test
 			Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
 		}
 
+		[TestMethod]
+		public void GZipTestNetPortable()
+		{
+			// Set proxy address, like as "http://localhost:8888"
+			Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false).SetGZip(true));
+
+			Actions.Identify(Analytics.Client);
+
+			Assert.AreEqual(1, Analytics.Client.Statistics.Submitted);
+			Assert.AreEqual(1, Analytics.Client.Statistics.Succeeded);
+			Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
+		}
+
 		static void LoggingHandler(Logger.Level level, string message, IDictionary<string, object> args)
 		{
 			if (args != null)

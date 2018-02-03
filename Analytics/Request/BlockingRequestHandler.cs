@@ -165,6 +165,12 @@ namespace Segment.Request
 					}
 				}
 
+				// Check message size is below than 32KB or not
+				if (requestData.Length > 32 * 1024)
+				{
+					throw new InvalidOperationException("Please supply a message size to be below than 32KB.");
+				}
+
 				Logger.Info("Sending analytics request to Segment.io ..", new Dict
 				{
 					{ "batch id", batch.MessageId },

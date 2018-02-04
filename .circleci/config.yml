@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: /temp
     docker:
-      - image: mono:5.8.0.108-slim
+      - image: mono:5.8.0.108
     environment:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       DOTNET_CLI_TELEMETRY_OUTPUT: 1

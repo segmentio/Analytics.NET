@@ -2,8 +2,8 @@ version: 2
 jobs:
   build:
     working_directory: /temp
-    docker:  
-      - image: mono:latest
+    docker:
+      - image: mono:5.8.0.108-slim
     environment:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       DOTNET_CLI_TELEMETRY_OUTPUT: 1
@@ -22,7 +22,7 @@ jobs:
       - run: nuget pack Analytics.nuspec
   test:
     working_directory: /test
-    docker:  
+    docker:
       - image: microsoft/dotnet:1.1.1-sdk
     environment:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
@@ -33,7 +33,7 @@ jobs:
       - run: dotnet test Test/Test.csproj
   test_35:
     working_directory: /test35
-    docker:  
+    docker:
       - image: mono:latest
     environment:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
@@ -46,7 +46,7 @@ jobs:
       - run: mono --debug ./packages/NUnit.ConsoleRunner.3.7.0/tools/nunit3-console.exe Test.Net35/bin/Release/Test.Net35.dll
   test_45:
     working_directory: /test45
-    docker:  
+    docker:
       - image: mono:latest
     environment:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
@@ -59,7 +59,7 @@ jobs:
       - run: mono --debug ./packages/NUnit.ConsoleRunner.3.7.0/tools/nunit3-console.exe Test.Net45/bin/Release/Test.Net45.dll
   test_e2e:
     working_directory: /test_e2e
-    docker:  
+    docker:
       - image: microsoft/dotnet:1.1.1-sdk
     environment:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1

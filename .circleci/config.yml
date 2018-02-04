@@ -7,13 +7,14 @@ jobs:
     environment:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       DOTNET_CLI_TELEMETRY_OUTPUT: 1
+    dependencies:
+      pre:
+        # Update mono to latest version (5.8)
+        - echo "deb http://download.mono-project.com/repo/ubuntu trusty main" | tee /etc/apt/sources.list.d/mono-official.list
+        - apt-get update
+        - apt-get install -y mono-devel
+        - mono -V   # Check mono version
     steps:
-      # Update mono to latest version (5.8)
-      - echo "deb http://download.mono-project.com/repo/ubuntu trusty main" | tee /etc/apt/sources.list.d/mono-official.list
-      - apt-get update
-      - apt-get install -y mono-devel
-      - mono -V   # Check mono version
-      # Download project and try to build
       - checkout
       - run: msbuild Analytics/Analytics.csproj /t:restore
       - run: msbuild Analytics/Analytics.csproj /p:Configuration=Release

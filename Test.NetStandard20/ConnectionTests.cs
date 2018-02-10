@@ -7,7 +7,7 @@ namespace Segment.Test
 {
 	[TestFixture()]
 	public class ConnectionTests
-    {
+	{
 		[SetUp]
 		public void Init()
 		{
@@ -32,7 +32,7 @@ namespace Segment.Test
 		public void GZipTestNetStanard20()
 		{
 			// Set proxy address, like as "http://localhost:8888"
-			Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false).SetGZip(true));
+			Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false).SetRequestCompression(true));
 
 			Actions.Identify(Analytics.Client);
 

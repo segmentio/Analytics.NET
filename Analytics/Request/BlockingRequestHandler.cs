@@ -63,38 +63,6 @@ namespace Segment.Request
 				return false;
 		}
 	}
-#else
-	class WebProxy : System.Net.IWebProxy
-	{
-		private string _proxy;
-
-		public WebProxy(string proxy)
-		{
-			_proxy = proxy;
-			GetProxy(new Uri(proxy)); // ** What does this do?
-		}
-    
-		public System.Net.ICredentials Credentials
-		{
-			get; set;
-		}
-
-		public Uri GetProxy(Uri destination)
-		{
-			if (!String.IsNullOrWhiteSpace(destination.ToString()))
-				return destination;
-			else
-				return new Uri("");
-		}
-
-		public bool IsBypassed(Uri host)
-		{
-			if (!String.IsNullOrWhiteSpace(host.ToString()))
-				return true;
-			else
-				return false;
-		}
-	}
 #endif
 
 	internal class BlockingRequestHandler : IRequestHandler

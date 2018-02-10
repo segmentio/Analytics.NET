@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 using System;
-=======
-﻿using System;
->>>>>>> remotes/origin/master
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
@@ -32,8 +28,6 @@ namespace Segment.Test
 			Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
 		}
 
-<<<<<<< HEAD
-=======
 		[Test()]
 		public void GZipTestNet35()
 		{
@@ -47,7 +41,6 @@ namespace Segment.Test
 			Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
 		}
 
->>>>>>> remotes/origin/master
 		static void LoggingHandler(Logger.Level level, string message, IDictionary<string, object> args)
 		{
 			if (args != null)

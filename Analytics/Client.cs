@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Segment.Flush;
@@ -650,11 +650,17 @@ namespace Segment
             this.Statistics.Submitted = Statistics.Increment(this.Statistics.Submitted);
         }
 
-        #endregion
+		protected void ensureId(String userId, Options options)
+		{
+			if (String.IsNullOrEmpty(userId) && String.IsNullOrEmpty(options.AnonymousId))
+				throw new InvalidOperationException("Please supply a valid id (either userId or anonymousId.");
+		}
 
-        #region Event API
+		#endregion
 
-        internal void RaiseSuccess(BaseAction action)
+		#region Event API
+
+		internal void RaiseSuccess(BaseAction action)
         {
             if (Succeeded != null) Succeeded(action);
         }

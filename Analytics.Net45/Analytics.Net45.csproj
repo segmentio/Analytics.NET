@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net45</TargetFrameworks>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageId>Analytics</PackageId>
+    <Version>3.1.0-alpha</Version>
+    <Authors>Segment Team</Authors>
+    <Company />
+    <Product>Analytics.NET</Product>
+    <Description>The .NET API for analytics, by Segment.</Description>
+    <DefineConstants>NET45</DefineConstants>
+    <RootNamespace>Analytics</RootNamespace>
+    <AssemblyName>Analytics</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DefineConstants>DEBUG;</DefineConstants>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType></DebugType>
+    <DefineConstants>RELEASE;</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Net" />
+    <Compile Include="../Analytics/**/*.cs" Exclude="../Analytics/obj/**/*.cs">
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="System.Net.Http" Version="4.3.3" />
+  </ItemGroup>
+
+</Project>

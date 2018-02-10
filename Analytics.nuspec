@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
         <id>Analytics</id>
-        <version>3.1.0-alpha</version>
+        <version>3.2.0-alpha</version>
         <title>Analytics</title>
         <authors>Segment Team</authors>
         <owners>Segment Team &lt;friends@segment.com&gt;</owners>
@@ -20,11 +20,34 @@
                 <dependency id="AsyncBridge.Net35" version="0.2.0" exclude="Build,Analyzers" />
                 <dependency id="Newtonsoft.Json" version="10.0.3" exclude="Build,Analyzers" />
             </group>
-            <group targetFramework=".NETStandard1.3, .NETStandard2.0">
+            <group targetFramework="net45">
+                <dependency id="System.Net.Http" version="4.3.3" exclude="Build,Analyzers" />
+                <dependency id="Newtonsoft.Json" version="10.0.3" exclude="Build,Analyzers" />
+            </group>
+            <group targetFramework="netstandard1.3">
                 <dependency id="System.Threading.Thread" version="4.3.0" exclude="Build,Analyzers" />
                 <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
                 <dependency id="Newtonsoft.Json" version="10.0.3" exclude="Build,Analyzers" />
             </group>
+            <group targetFramework="netstandard2.0">
+                <dependency id="System.Threading.Thread" version="4.3.0" exclude="Build,Analyzers" />
+                <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
+                <dependency id="Newtonsoft.Json" version="10.0.3" exclude="Build,Analyzers" />
+            </group>
+
+            <!--Xamarin.Android-->
+            <group targetFramework="MonoAndroid10">
+                <dependency id="Newtonsoft.Json" version="10.0.3" exclude="Build,Analyzers" />
+            </group>
+            <!--Xamarin.iOS Unified-->
+            <group targetFramework="Xamarin.iOS10">
+                <dependency id="Newtonsoft.Json" version="10.0.3" exclude="Build,Analyzers" />
+            </group>
+            <!--Win Universal-->
+            <group targetFramework="uap10.0">
+                <dependency id="Newtonsoft.Json" version="10.0.3" exclude="Build,Analyzers" />
+            </group>
+
         </dependencies>
         <frameworkAssemblies>
             <frameworkAssembly assemblyName="System.Net" targetFramework="net35" />
@@ -32,7 +55,17 @@
     </metadata>
     <files>
         <file src="Analytics.Net35/bin/Release/net35/Analytics.dll" target="lib/net35/" />
+        <file src="Analytics.Net45/bin/Release/net45/Analytics.dll" target="lib/net45/" />
         <file src="Analytics.NetStandard20/bin/Release/netstandard2.0/Analytics.dll" target="lib/netstandard2.0/" />
         <file src="Analytics/bin/Release/netstandard1.3/Analytics.dll" target="lib/netstandard1.3/" />
+
+        <!--Core-->
+        <file src="Analytics.Portable/bin/Release/Analytics.dll" target="lib/portable+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10/Analytics.Xamarin.Pcl.dll" />
+        <!--Xamarin.Android-->
+        <file src="Analytics.Portable/bin/Release/Analytics.dll" target="lib/MonoAndroid10/Analytics.dll" />
+        <!--Xamarin.iOS Unified-->
+        <file src="Analytics.Portable/bin/Release/Analytics.dll" target="lib/Xamarin.iOS10/Analytics.dll" />
+        <!--Windows Universal-->
+        <file src="Analytics.Portable/bin/Release/Analytics.dll" target="lib/uap10.0/Analytics.dll" />
     </files>
 </package>

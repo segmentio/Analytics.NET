@@ -21,6 +21,8 @@ namespace Segment
 
 		internal bool Async { get; set; }
 
+		internal bool CompressRequest { get; set; }
+
 		internal TimeSpan Timeout { get; set; }
 
 		public Config()
@@ -93,5 +95,18 @@ namespace Segment
 			this.Async = async;
             return this;
         }
+
+		/// <summary>
+		/// Sets the API request header uses GZip option.
+		/// Enable this when the network is the bottleneck for your application (typically in client side applications).
+		/// If useGZip is set, it compresses request content with GZip algorithm
+		/// </summary>
+		/// <param name="bCompress">True to compress request header, false for no compression</param>
+		/// <returns></returns>
+		public Config SetRequestCompression(bool bCompress)
+		{
+			this.CompressRequest = bCompress;
+			return this;
+		}
     }
 }

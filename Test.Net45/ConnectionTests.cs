@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-using System;
-=======
 ﻿using System;
->>>>>>> remotes/origin/master
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
@@ -20,7 +16,7 @@ namespace Segment.Test
 		}
 
 		[Test()]
-		public void ProxyTestNet35()
+		public void ProxyTestNet45()
 		{
 			// Set proxy address, like as "http://localhost:8888"
 			Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false).SetProxy(""));
@@ -32,10 +28,8 @@ namespace Segment.Test
 			Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
 		}
 
-<<<<<<< HEAD
-=======
 		[Test()]
-		public void GZipTestNet35()
+		public void GZipTestNet45()
 		{
 			// Set GZip/Deflate on request header
 			Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false).SetRequestCompression(true));
@@ -47,7 +41,6 @@ namespace Segment.Test
 			Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
 		}
 
->>>>>>> remotes/origin/master
 		static void LoggingHandler(Logger.Level level, string message, IDictionary<string, object> args)
 		{
 			if (args != null)

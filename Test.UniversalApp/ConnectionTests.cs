@@ -1,26 +1,23 @@
-<<<<<<< HEAD
 using System;
-=======
-﻿using System;
->>>>>>> remotes/origin/master
 using System.Collections.Generic;
 using System.Text;
-using NUnit.Framework;
+using System.Diagnostics;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Segment.Test
 {
-	[TestFixture()]
+	[TestClass]
 	public class ConnectionTests
     {
-		[SetUp]
+		[TestInitialize]
 		public void Init()
 		{
 			Analytics.Dispose();
 			Logger.Handlers += LoggingHandler;
 		}
 
-		[Test()]
-		public void ProxyTestNet35()
+		[TestMethod]
+		public void ProxyTestNetPortable()
 		{
 			// Set proxy address, like as "http://localhost:8888"
 			Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false).SetProxy(""));
@@ -32,13 +29,11 @@ namespace Segment.Test
 			Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
 		}
 
-<<<<<<< HEAD
-=======
-		[Test()]
-		public void GZipTestNet35()
+		[TestMethod]
+		public void GZipTestNetPortable()
 		{
-			// Set GZip/Deflate on request header
-			Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false).SetRequestCompression(true));
+			// Set proxy address, like as "http://localhost:8888"
+			Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false).SetGZip(true));
 
 			Actions.Identify(Analytics.Client);
 
@@ -47,7 +42,6 @@ namespace Segment.Test
 			Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
 		}
 
->>>>>>> remotes/origin/master
 		static void LoggingHandler(Logger.Level level, string message, IDictionary<string, object> args)
 		{
 			if (args != null)
@@ -57,7 +51,7 @@ namespace Segment.Test
 					message += String.Format(" {0}: {1},", "" + key, "" + args[key]);
 				}
 			}
-			Console.WriteLine(String.Format("[ConnectionTests] [{0}] {1}", level, message));
+			Debug.WriteLine(String.Format("[ConnectionTests] [{0}] {1}", level, message));
 		}
 	}
 }

@@ -15,13 +15,13 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DefineConstants>DEBUG;</DefineConstants>
+    <DefineConstants>DEBUG;NET35;</DefineConstants>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType></DebugType>
-    <DefineConstants>RELEASE;</DefineConstants>
+    <DefineConstants>RELEASE;NET35;</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.Net" />

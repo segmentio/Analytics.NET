@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -21,6 +21,27 @@ namespace Segment.Test
 		public void IdentifyTestNet35()
 		{
 			Actions.Identify(Analytics.Client);
+			FlushAndCheck(1);
+		}
+
+		[Test()]
+		public void IdentifyWithCustomOptionsTestNet35()
+		{
+			var traits = new Model.Traits() {
+				{ "email", "friends@segment.com" }
+			};
+			var options = new Model.Options()
+				.SetIntegration("Vero", new Model.Dict() {
+					{
+						"tags", new Model.Dict() {
+							{ "id", "235FAG" },
+							{ "action", "add" },
+							{ "values", new string[] {"warriors", "giants", "niners"} }
+						}
+					}
+				});
+
+			Actions.Identify(Analytics.Client, traits, options);
 			FlushAndCheck(1);
 		}
 

@@ -25,6 +25,27 @@ namespace Segment.Test
 		}
 
 		[Test()]
+		public void IdentifyWithCustomOptionsTest()
+		{
+			var traits = new Model.Traits() {
+				{ "email", "friends@segment.com" }
+			};
+			var options = new Model.Options()
+				.SetIntegration("Vero", new Model.Dict() {
+					{
+						"tags", new Model.Dict() {
+							{ "id", "235FAG" },
+							{ "action", "add" },
+							{ "values", new string[] {"warriors", "giants", "niners"} }
+						}
+					}
+				});
+
+			Actions.Identify(Analytics.Client, traits, options);
+			FlushAndCheck(1);
+		}
+
+		[Test()]
 		public void TrackTest()
 		{
 			Actions.Track(Analytics.Client);

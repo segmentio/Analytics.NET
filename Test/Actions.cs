@@ -49,6 +49,12 @@ namespace Segment.Test
 			Analytics.Client.Flush();
 		}
 
+		public static void Identify(Client client, Traits traits, Options options)
+		{
+			client.Identify("user", traits, options);
+			Analytics.Client.Flush();
+		}
+
 		public static void Group(Client client)
 		{
 			client.Group("user", "group", Traits(), Options());

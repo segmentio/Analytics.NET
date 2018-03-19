@@ -73,5 +73,25 @@ namespace Segment.Model
 			return this;
 		}
 
+		/// <summary>
+		/// Enable destination specific options for integration.
+		/// For example, to send tags in https://segment.com/docs/destinations/vero/#tags, use following
+		///   new Options()
+		///     .Integration("Vero", new Model.Dict() {
+		///			"tags", new Model.Dict() {
+		///             { "id", "235FAG" },
+		///             { "action", "add" },
+		///             { "values", new string[] {"warriors", "giants", "niners"} }
+		///         }
+		///     });
+		/// </summary>
+		/// <param name="integration">The integration name.</param>
+		/// <param name="value">Dict value</param>
+		public Options SetIntegration (string integration, Dict value)
+		{
+			this.Integrations.Add (integration, value);
+			return this;
+		}
+
 	}
 }

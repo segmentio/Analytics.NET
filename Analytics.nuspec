@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
         <id>Analytics</id>
-        <version>3.2.0-alpha</version>
+        <version>3.3.0-alpha</version>
         <title>Analytics</title>
         <authors>Segment Team</authors>
         <owners>Segment Team &lt;friends@segment.com&gt;</owners>

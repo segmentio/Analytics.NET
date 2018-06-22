@@ -164,19 +164,12 @@ namespace Segment.Request
 					}
 				}
 
-				var requestInfo = new Dict
+				Logger.Info("Sending analytics request to Segment.io ..", new Dict
 				{
 					{ "batch id", batch.MessageId },
 					{ "json size", json.Length },
 					{ "batch size", batch.batch.Count }
-				};
-
-				if (_client.Config.CompressRequest)
-				{
-					requestInfo.Add("gzipped json size", requestData.Length);
-				}
-
-				Logger.Info("Sending analytics request to Segment.io ..", requestInfo);
+				});
 
 				// Retries with exponential backoff
 				const int MAXIMUM_BACKOFF_DURATION = 10000;	// Set maximum waiting limit to 10s

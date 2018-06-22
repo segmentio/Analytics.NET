@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Net;
 #if NET35
@@ -108,6 +108,15 @@ namespace Segment.Request
 #else
 			_httpClient = new HttpClient(handler) { Timeout = Timeout };
 #endif
+			// Send user agent in the form of {library_name}/{library_version} as per RFC 7231.
+			var context = new Context();
+			var library = context["library"] as Dict;
+			string szUserAgent = string.Format("{0}/{1}", library["name"], library["version"]);
+#if NET35
+			_httpClient.Headers.Add("User-Agent", szUserAgent);
+#else
+			_httpClient.DefaultRequestHeaders.Add("User-Agent", szUserAgent);
+#endif
 		}
 
 		public async Task MakeRequest(Batch batch)
@@ -130,16 +139,6 @@ namespace Segment.Request
                 _httpClient.Headers.Add("Content-Type", "application/json; charset=utf-8");
 #else
 				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", BasicAuthHeader(batch.WriteKey, string.Empty));
-#endif
-
-				// Send user agent in the form of {library_name}/{library_version} as per RFC 7231.
-				var context = new Context();
-				var library = context["library"] as Dict;
-				string szUserAgent = string.Format("{0}/{1}", library["name"], library["version"]);
-#if NET35
-				_httpClient.Headers.Add("User-Agent", szUserAgent);
-#else
-				_httpClient.DefaultRequestHeaders.Add("User-Agent", szUserAgent);
 #endif
 
 				// Prepare request data;
@@ -165,12 +164,19 @@ namespace Segment.Request
 					}
 				}
 
-				Logger.Info("Sending analytics request to Segment.io ..", new Dict
+				var requestInfo = new Dict
 				{
 					{ "batch id", batch.MessageId },
 					{ "json size", json.Length },
 					{ "batch size", batch.batch.Count }
-				});
+				};
+
+				if (_client.Config.CompressRequest)
+				{
+					requestInfo.Add("gzipped json size", requestData.Length);
+				}
+
+				Logger.Info("Sending analytics request to Segment.io ..", requestInfo);
 
 				// Retries with exponential backoff
 				const int MAXIMUM_BACKOFF_DURATION = 10000;	// Set maximum waiting limit to 10s
@@ -243,7 +249,7 @@ namespace Segment.Request
 							// If status code is greater than 500 and less than 600, it indicates server error
 							// Error code 429 indicates rate limited.
 							// Retry uploading in these cases.
-							Task.Delay(backoff).Wait();
+							await Task.Delay(backoff).ConfigureAwait(false);
 							backoff *= 2;
 							continue;
 						}
@@ -257,7 +263,7 @@ namespace Segment.Request
 #endif
 				}
 
-				if (backoff == MAXIMUM_BACKOFF_DURATION && statusCode != (int)HttpStatusCode.OK)
+				if (backoff >= MAXIMUM_BACKOFF_DURATION || statusCode != (int)HttpStatusCode.OK)
 				{
 					Fail(batch, new APIException("Unexpected Status Code", responseStr), watch.ElapsedMilliseconds);
 				}

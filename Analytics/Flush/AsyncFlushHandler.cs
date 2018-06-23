@@ -51,9 +51,15 @@ namespace Segment.Flush
         /// </summary>
 		internal int MaxQueueSize { get; set; }
 
-        internal AsyncFlushHandler(IBatchFactory batchFactory, 
+		/// <summary>
+		/// The maximum amount of messages to send per batch
+		/// </summary>
+		internal int MaxBatchSize { get; set; }
+
+		internal AsyncFlushHandler(IBatchFactory batchFactory, 
 		                         IRequestHandler requestHandler, 
-		                         int maxQueueSize)
+		                         int maxQueueSize,
+		                         int maxBatchSize)
         {
 			_queue = new BlockingQueue<BaseAction>();
 
@@ -61,6 +67,7 @@ namespace Segment.Flush
 			this._requestHandler = requestHandler;
             
 			this.MaxQueueSize = maxQueueSize;
+			this.MaxBatchSize = maxBatchSize;
 
 #if NET_NOTHREAD
 			// set that the queue is currently empty
@@ -172,9 +179,9 @@ namespace Segment.Flush
 				// we'd prefer to add more to the current batch to send more
 				// at once. But only if we're not disposed yet (_continue is true).
 #if NET_NOTHREAD
-				while (!_continue.Token.IsCancellationRequested && _queue.Count > 0 && current.Count <= Constants.BatchIncrement);
+				while (!_continue.Token.IsCancellationRequested && _queue.Count > 0 && current.Count <= MaxBatchSize);
 #else
-				while (_continue && _queue.Count > 0 && current.Count <= Constants.BatchIncrement);
+				while (_continue && _queue.Count > 0 && current.Count <= MaxBatchSize);
 #endif
 
 				if (current.Count > 0) 

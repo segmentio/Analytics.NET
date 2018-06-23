@@ -256,7 +256,7 @@ namespace Segment.Request
 #endif
 				}
 
-				if (backoff == MAXIMUM_BACKOFF_DURATION && statusCode != (int)HttpStatusCode.OK)
+				if (backoff >= MAXIMUM_BACKOFF_DURATION || statusCode != (int)HttpStatusCode.OK)
 				{
 					Fail(batch, new APIException("Unexpected Status Code", responseStr), watch.ElapsedMilliseconds);
 				}

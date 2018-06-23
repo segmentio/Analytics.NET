@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Net;
 #if NET35
@@ -257,7 +257,7 @@ namespace Segment.Request
 #endif
 				}
 
-				if (backoff == MAXIMUM_BACKOFF_DURATION && statusCode != (int)HttpStatusCode.OK)
+				if (backoff >= MAXIMUM_BACKOFF_DURATION || statusCode != (int)HttpStatusCode.OK)
 				{
 					Fail(batch, new APIException("Unexpected Status Code", responseStr), watch.ElapsedMilliseconds);
 				}

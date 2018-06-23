@@ -84,7 +84,7 @@ namespace Segment
 		/// <summary>
 		/// Sets the maximum amount of messages to send per batch
 		/// </summary>
-		/// <param name="maxQueueSize"></param>
+		/// <param name="maxBatchSize"></param>
 		/// <returns></returns>
 		public Config SetMaxBatchSize(int maxBatchSize)
 		{

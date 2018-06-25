@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Net;
 #if NET35
@@ -108,6 +108,15 @@ namespace Segment.Request
 #else
 			_httpClient = new HttpClient(handler) { Timeout = Timeout };
 #endif
+			// Send user agent in the form of {library_name}/{library_version} as per RFC 7231.
+			var context = new Context();
+			var library = context["library"] as Dict;
+			string szUserAgent = string.Format("{0}/{1}", library["name"], library["version"]);
+#if NET35
+			_httpClient.Headers.Add("User-Agent", szUserAgent);
+#else
+			_httpClient.DefaultRequestHeaders.Add("User-Agent", szUserAgent);
+#endif
 		}
 
 		public async Task MakeRequest(Batch batch)
@@ -130,16 +139,6 @@ namespace Segment.Request
                 _httpClient.Headers.Add("Content-Type", "application/json; charset=utf-8");
 #else
 				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", BasicAuthHeader(batch.WriteKey, string.Empty));
-#endif
-
-				// Send user agent in the form of {library_name}/{library_version} as per RFC 7231.
-				var context = new Context();
-				var library = context["library"] as Dict;
-				string szUserAgent = string.Format("{0}/{1}", library["name"], library["version"]);
-#if NET35
-				_httpClient.Headers.Add("User-Agent", szUserAgent);
-#else
-				_httpClient.DefaultRequestHeaders.Add("User-Agent", szUserAgent);
 #endif
 
 				// Prepare request data;

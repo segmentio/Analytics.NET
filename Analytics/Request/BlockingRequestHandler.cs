@@ -242,7 +242,7 @@ namespace Segment.Request
 							// If status code is greater than 500 and less than 600, it indicates server error
 							// Error code 429 indicates rate limited.
 							// Retry uploading in these cases.
-							Task.Delay(backoff).Wait();
+							await Task.Delay(backoff);
 							backoff *= 2;
 							continue;
 						}

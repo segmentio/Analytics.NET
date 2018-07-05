@@ -19,6 +19,8 @@ namespace Segment
 
 		internal int MaxQueueSize { get; set; }
 
+		internal int MaxBatchSize { get; set; }
+
 		internal bool Async { get; set; }
 
 		internal bool CompressRequest { get; set; }
@@ -31,6 +33,7 @@ namespace Segment
 			this.Proxy = "";
 			this.Timeout = Defaults.Timeout;
 			this.MaxQueueSize = Defaults.MaxQueueCapacity;
+			this.MaxBatchSize = Defaults.MaxBatchSize;
 			this.Async = Defaults.Async;
 		}
 
@@ -78,8 +81,19 @@ namespace Segment
 			return this;
 		}
 
-        /// <summary>
-        /// Sets whether the flushing to the server is synchronous or asynchronous.
+		/// <summary>
+		/// Sets the maximum amount of messages to send per batch
+		/// </summary>
+		/// <param name="maxBatchSize"></param>
+		/// <returns></returns>
+		public Config SetMaxBatchSize(int maxBatchSize)
+		{
+			this.MaxBatchSize = maxBatchSize;
+			return this;
+		}
+
+		/// <summary>
+		/// Sets whether the flushing to the server is synchronous or asynchronous.
 		/// 
 		/// True is the default and will allow your calls to Analytics.Client.Identify(...), Track(...), etc
 		/// to return immediately and to be queued to be flushed on a different thread.
@@ -87,9 +101,9 @@ namespace Segment
 		/// False is convenient for testing but should not be used in production. False will cause the 
 		/// HTTP requests to happen immediately.
 		/// 
-        /// </summary>
+		/// </summary>
 		/// <param name="async">True for async flushing, false for blocking flushing</param>
-        /// <returns></returns>
+		/// <returns></returns>
 		public Config SetAsync(bool async)
         {
 			this.Async = async;

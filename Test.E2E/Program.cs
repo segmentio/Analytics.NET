@@ -12,9 +12,9 @@ namespace Segment.E2ETest
 		{
 			Logger.Handlers += Logger_Handlers;
 
-            Tests test = new Tests();
-            test.Test();
-        }
+			Tests test = new Tests();
+			test.Test();
+		}
 
 		private static void Logger_Handlers(Logger.Level level, string message, IDictionary<string, object> args)
 		{

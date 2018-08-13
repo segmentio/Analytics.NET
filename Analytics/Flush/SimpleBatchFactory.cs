@@ -5,19 +5,19 @@ using Segment.Model;
 
 namespace Segment.Flush
 {
-	internal class SimpleBatchFactory : IBatchFactory
-	{
-		private string _writeKey;
+    internal class SimpleBatchFactory : IBatchFactory
+    {
+        private string _writeKey;
 
-		internal SimpleBatchFactory (string writeKey)
-		{
-			this._writeKey = writeKey;
-		}
+        internal SimpleBatchFactory (string writeKey)
+        {
+            this._writeKey = writeKey;
+        }
 
-		public Batch Create(List<BaseAction> actions) 
-		{
-			return new Batch(_writeKey, actions);
-		}
-	}
+        public Batch Create(List<BaseAction> actions) 
+        {
+            return new Batch(_writeKey, actions);
+        }
+    }
 }
 

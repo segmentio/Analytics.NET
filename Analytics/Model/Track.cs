@@ -15,11 +15,11 @@ namespace Segment.Model
         private IDictionary<string, object> Properties { get; set; }
 
         internal Track(string userId, 
-		               string eventName,
+                       string eventName,
                        IDictionary<string, object> properties, 
-					   Options options)
+                       Options options)
 
-			: base("track", userId, options)
+            : base("track", userId, options)
         {
             this.EventName = eventName;
             this.Properties = properties ?? new Properties();

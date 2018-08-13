@@ -5,6 +5,6 @@ namespace Segment.Request
 {
     internal interface IRequestHandler
     {
-		Task MakeRequest(Batch batch);
+        Task MakeRequest(Batch batch);
     }
 }

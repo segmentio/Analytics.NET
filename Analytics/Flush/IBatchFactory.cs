@@ -5,9 +5,9 @@ using Segment.Model;
 
 namespace Segment.Flush
 {
-	internal interface IBatchFactory
-	{
-		Batch Create(List<BaseAction> actions);
-	}
+    internal interface IBatchFactory
+    {
+        Batch Create(List<BaseAction> actions);
+    }
 }
 

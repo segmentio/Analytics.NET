@@ -6,16 +6,15 @@ using Newtonsoft.Json;
 
 namespace Segment.Model
 {
-	public class Alias : BaseAction
-	{
-		[JsonProperty(PropertyName = "previousId")]
-		private string PreviousId { get; set; }
-		
-		internal Alias(string previousId, string userId, Options options)
-			: base("alias", userId, options)
-		{
-			this.PreviousId = previousId;
-		}
-	}
+    public class Alias : BaseAction
+    {
+        [JsonProperty(PropertyName = "previousId")]
+        private string PreviousId { get; set; }
+        
+        internal Alias(string previousId, string userId, Options options)
+            : base("alias", userId, options)
+        {
+            this.PreviousId = previousId;
+        }
+    }
 }
-

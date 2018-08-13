@@ -8,23 +8,23 @@ using Segment.Model;
 
 namespace Segment.Test
 {
-	[TestFixture ()]
-	public class ClientTests
-	{
-		Client client;
+    [TestFixture ()]
+    public class ClientTests
+    {
+        Client client;
 
-		[SetUp]
-		public void Init()
-		{
-			client = new Client("foo");
-		}
+        [SetUp]
+        public void Init()
+        {
+            client = new Client("foo");
+        }
 
-		[Test ()]
-		public void TrackTestNetStanard20()
-		{
-			// verify it doesn't fail for a null options
-			client.Screen("bar", "qaz", null, null);
-		}
-	}
+        [Test ()]
+        public void TrackTestNetStanard20()
+        {
+            // verify it doesn't fail for a null options
+            client.Screen("bar", "qaz", null, null);
+        }
+    }
 }
 

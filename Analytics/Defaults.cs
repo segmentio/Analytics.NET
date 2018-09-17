@@ -17,6 +17,6 @@ namespace Segment
 
         public static int UploadInterval = 0;
 
-        public static bool Async = false;
+        public static bool Async = true;
     }
 }

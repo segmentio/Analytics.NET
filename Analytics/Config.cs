@@ -21,6 +21,8 @@ namespace Segment
 
         internal int MaxBatchSize { get; set; }
 
+        internal int UploadInterval { get; set; }
+
         internal bool Async { get; set; }
 
         internal bool CompressRequest { get; set; }
@@ -34,6 +36,7 @@ namespace Segment
             this.Timeout = Defaults.Timeout;
             this.MaxQueueSize = Defaults.MaxQueueCapacity;
             this.MaxBatchSize = Defaults.MaxBatchSize;
+            this.UploadInterval = Defaults.UploadInterval;
             this.Async = Defaults.Async;
         }
 
@@ -89,6 +92,17 @@ namespace Segment
         public Config SetMaxBatchSize(int maxBatchSize)
         {
             this.MaxBatchSize = maxBatchSize;
+            return this;
+        }
+
+        /// <summary>
+        /// In asynchronous mode, flushes on user defined time
+        /// </summary>
+        /// <param name="uploadInterval"></param>
+        /// <returns></returns>
+        public Config SetUploadInterval(int uploadInterval)
+        {
+            this.UploadInterval = uploadInterval;
             return this;
         }
 

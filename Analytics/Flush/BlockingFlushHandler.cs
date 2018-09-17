@@ -16,7 +16,7 @@ namespace Segment.Flush
         /// </summary>
         private IRequestHandler _requestHandler;
 
-        internal BlockingFlushHandler(IBatchFactory batchFactory, 
+        internal BlockingFlushHandler(IBatchFactory batchFactory,
                                  IRequestHandler requestHandler)
         {
 
@@ -45,6 +45,5 @@ namespace Segment.Flush
         {
             // do nothing
         }
-        
     }
 }

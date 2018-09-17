@@ -56,7 +56,7 @@ namespace Segment
             IBatchFactory batchFactory = new SimpleBatchFactory(this._writeKey);
 
             if (config.Async)
-                _flushHandler = new AsyncFlushHandler(batchFactory, requestHandler, config.MaxQueueSize, config.MaxBatchSize);
+                _flushHandler = new AsyncFlushHandler(batchFactory, requestHandler, config.MaxQueueSize, config.MaxBatchSize, config.UploadInterval);
             else
                 _flushHandler = new BlockingFlushHandler(batchFactory, requestHandler);
         }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -56,18 +57,26 @@ namespace Segment.Flush
         /// </summary>
         internal int MaxBatchSize { get; set; }
 
+        /// <summary>
+        /// Flush on user defined time
+        /// </summary>
+        internal int UploadInterval { get; set; }
+
         internal AsyncFlushHandler(IBatchFactory batchFactory, 
                                  IRequestHandler requestHandler, 
                                  int maxQueueSize,
-                                 int maxBatchSize)
+                                 int maxBatchSize,
+                                 int uploadInterval)
         {
             _queue = new BlockingQueue<BaseAction>();
 
             this._batchFactory = batchFactory;
             this._requestHandler = requestHandler;
-            
+
             this.MaxQueueSize = maxQueueSize;
             this.MaxBatchSize = maxBatchSize;
+
+            this.UploadInterval = uploadInterval;
 
 #if NET_NOTHREAD
             // set that the queue is currently empty
@@ -79,7 +88,7 @@ namespace Segment.Flush
             Task.Factory.StartNew(() => Loop(), _continue.Token);
 #else
             _continue = true;
-            
+
             // set that the queue is currently empty
             _idle = new ManualResetEvent(true);
 
@@ -111,7 +120,7 @@ namespace Segment.Flush
         /// <summary>
         /// Blocks until all the messages are flushed
         /// </summary>
-        public void Flush() 
+        public void Flush()
         {
             // if the queue has items and the flushing thread is still on WAIT for the blocking
             // queue, then the idle event could still be triggered. in that case, we want to reset it
@@ -132,6 +141,9 @@ namespace Segment.Flush
             Logger.Debug("Starting async flush thread ..");
 
             List<BaseAction> current = new List<BaseAction>();
+
+            long lastUploadTime = DateTime.Now.Ticks;
+            long uploadInterval = UploadInterval * 10000;
 
             // keep looping while flushing thread is active
 #if NET_NOTHREAD
@@ -176,12 +188,14 @@ namespace Segment.Flush
                 // we'd prefer to add more to the current batch to send more
                 // at once. But only if we're not disposed yet (_continue is true).
 #if NET_NOTHREAD
-                while (!_continue.Token.IsCancellationRequested && _queue.Count > 0 && current.Count <= MaxBatchSize);
+                while (!_continue.Token.IsCancellationRequested && _queue.Count > 0 && current.Count <= MaxBatchSize &&
+                    (uploadInterval <= 0 || ((DateTime.Now.Ticks - lastUploadTime) < uploadInterval)));
 #else
-                while (_continue && _queue.Count > 0 && current.Count <= MaxBatchSize);
+                while (_continue && _queue.Count > 0 && current.Count <= MaxBatchSize &&
+                    (uploadInterval <= 0 || ((DateTime.Now.Ticks - lastUploadTime) < uploadInterval)));
 #endif
 
-                if (current.Count > 0) 
+                if (current.Count > 0)
                 {
                     // we have a batch that we're trying to send
                     Batch batch = _batchFactory.Create(current);
@@ -195,6 +209,8 @@ namespace Segment.Flush
 
                     // mark the current batch as null
                     current = new List<BaseAction>();
+
+                    lastUploadTime = DateTime.Now.Ticks;
                 }
 
 #if !NET_NOTHREAD
@@ -212,7 +228,7 @@ namespace Segment.Flush
         /// After calling <see cref="Dispose"/>, you must release all references to the
         /// <see cref="Segment.Flush.AsyncFlushHandler"/> so the garbage collector can reclaim the memory that the
         /// <see cref="Segment.Flush.AsyncFlushHandler"/> was occupying.</remarks>
-        public void Dispose() 
+        public void Dispose()
         {
             // tell the flushing thread to stop 
 #if NET_NOTHREAD

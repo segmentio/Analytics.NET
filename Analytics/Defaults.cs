@@ -15,6 +15,8 @@ namespace Segment
 
         public static int MaxBatchSize = 20;
 
-        public static bool Async = true;
+        public static int UploadInterval = 0;
+
+        public static bool Async = false;
     }
 }

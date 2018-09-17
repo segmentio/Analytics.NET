@@ -21,7 +21,7 @@ namespace Segment.Model
 
         internal Batch()
         {
-            this.MessageId = Guid.NewGuid ().ToString ();
+            this.MessageId = Guid.NewGuid().ToString();
         }
 
         internal Batch(string writeKey, List<BaseAction> batch) : this()

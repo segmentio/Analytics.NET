@@ -17,7 +17,7 @@ namespace Segment.Model
         }
 
         public new Context Add(string key, object val) {
-            base.Add (key, val);
+            base.Add(key, val);
             return this;
         }
     }

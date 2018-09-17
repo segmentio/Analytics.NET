@@ -23,9 +23,9 @@ namespace Segment.Test
                 { "Friends", 30 },
                 { "Joined", DateTime.Now },
                 { "Cool", true },
-                { "Company", new Dict () { { "name", "Initech, Inc " } } },
+                { "Company", new Dict() { { "name", "Initech, Inc " } } },
                 { "Revenue", 40.32 },
-                { "Don't Submit This, Kids", new UnauthorizedAccessException () }
+                { "Don't Submit This, Kids", new UnauthorizedAccessException() }
             };
         }
 

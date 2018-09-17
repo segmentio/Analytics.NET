@@ -8,7 +8,7 @@ using Segment.Model;
 
 namespace Segment.Test
 {
-    [TestFixture ()]
+    [TestFixture()]
     public class ClientTests
     {
         class TestClient : Client
@@ -66,4 +66,3 @@ namespace Segment.Test
         }
     }
 }
-

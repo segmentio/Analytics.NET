@@ -10,4 +10,3 @@ namespace Segment.Flush
         Batch Create(List<BaseAction> actions);
     }
 }
-

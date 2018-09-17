@@ -9,7 +9,7 @@ namespace Segment.Flush
     {
         private string _writeKey;
 
-        internal SimpleBatchFactory (string writeKey)
+        internal SimpleBatchFactory(string writeKey)
         {
             this._writeKey = writeKey;
         }
@@ -20,4 +20,3 @@ namespace Segment.Flush
         }
     }
 }
-

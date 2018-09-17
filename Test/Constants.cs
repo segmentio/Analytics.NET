@@ -8,4 +8,3 @@ namespace Segment.Test
         public static string WRITE_KEY = "r7bxis28wy";
     }
 }
-

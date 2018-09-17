@@ -16,7 +16,7 @@ namespace Segment.Test
             Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false));
         }
 
-        [Test ()]
+        [Test()]
         public void IdentifyTestNet35()
         {
             Actions.Identify(Analytics.Client);
@@ -100,4 +100,3 @@ namespace Segment.Test
         }
     }
 }
-

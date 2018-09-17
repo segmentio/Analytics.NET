@@ -161,7 +161,7 @@ namespace Segment.Flush
                     } else
                     {
                         // we are no longer idle since there's messages to be processed
-                        _idle.Reset ();
+                        _idle.Reset();
 
                         // add this action to the current batch
                         current.Add(action);
@@ -199,7 +199,7 @@ namespace Segment.Flush
 
 #if !NET_NOTHREAD
                 // thread context switch to avoid resource contention
-                Thread.Sleep (0);
+                Thread.Sleep(0);
 #endif
             }
         }

@@ -8,23 +8,22 @@ using Segment.Model;
 
 namespace Segment.Test
 {
-	[TestClass]
-	public class ClientTests
-	{
-		Client client;
+    [TestClass]
+    public class ClientTests
+    {
+        Client client;
 
-		[TestInitialize]
-		public void Init()
-		{
-			client = new Client("foo");
-		}
+        [TestInitialize]
+        public void Init()
+        {
+            client = new Client("foo");
+        }
 
-		[TestMethod]
-		public void TrackTestNetPortable()
-		{
-			// verify it doesn't fail for a null options
-			client.Screen("bar", "qaz", null, null);
-		}
-	}
+        [TestMethod]
+        public void TrackTestNetPortable()
+        {
+            // verify it doesn't fail for a null options
+            client.Screen("bar", "qaz", null, null);
+        }
+    }
 }
-

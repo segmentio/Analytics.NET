@@ -7,7 +7,7 @@ namespace Segment.Model
     /// </summary>
     public class Providers : Dict
     {
-        public Providers ()
+        public Providers()
         {
         }
 
@@ -19,7 +19,7 @@ namespace Segment.Model
         /// True is default.</param>
         /// <returns>The Providers object for chaining.</returns>
         public Providers SetDefault(bool enabled) {
-            this.Add ("all", enabled);
+            this.Add("all", enabled);
             return this;
         }
 
@@ -32,9 +32,8 @@ namespace Segment.Model
         /// <param name="enabled">True for enabled, false for disabled.</param>
         /// <returns>The Providers object for chaining.</returns>
         public Providers SetEnabled(string providerName, bool enabled) {
-            this.Add (providerName, enabled);
+            this.Add(providerName, enabled);
             return this;
         }
-
     }
 }

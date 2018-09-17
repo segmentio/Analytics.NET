@@ -8,7 +8,7 @@ using Segment.Model;
 
 namespace Segment.Test
 {
-    [TestFixture ()]
+    [TestFixture()]
     public class ClientTests
     {
         Client client;
@@ -19,12 +19,11 @@ namespace Segment.Test
             client = new Client("foo");
         }
 
-        [Test ()]
-        public void TrackTest ()
+        [Test()]
+        public void TrackTest()
         {
             // verify it doesn't fail for a null options
             client.Screen("bar", "qaz", null, null);
         }
     }
 }
-

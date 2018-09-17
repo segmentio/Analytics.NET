@@ -73,7 +73,6 @@ namespace Segment
             }
         }
 
-
         public Config Config
         {
             get
@@ -154,7 +153,7 @@ namespace Segment
         ///
         public void Group(string userId, string groupId, Options options)
         {
-            Group (userId, groupId, null, options);
+            Group(userId, groupId, null, options);
         }
 
         /// <summary>
@@ -176,7 +175,7 @@ namespace Segment
         ///
         public void Group(string userId, string groupId, IDictionary<string, object> traits)
         {
-            Group (userId, groupId, traits, null);
+            Group(userId, groupId, traits, null);
         }
 
         /// <summary>
@@ -362,7 +361,7 @@ namespace Segment
         ///
         public void Page(string userId, string name)
         {
-            Page (userId, name, null, null, null);
+            Page(userId, name, null, null, null);
         }
 
         /// <summary>
@@ -381,7 +380,7 @@ namespace Segment
         ///
         public void Page(string userId, string name, Options options)
         {
-            Page (userId, name, null, null, options);
+            Page(userId, name, null, null, options);
         }
 
         /// <summary>
@@ -399,7 +398,7 @@ namespace Segment
         ///
         public void Page(string userId, string name, string category)
         {
-            Page (userId, name, category, null, null);
+            Page(userId, name, category, null, null);
         }
 
         /// <summary>
@@ -419,7 +418,7 @@ namespace Segment
         ///
         public void Page(string userId, string name, IDictionary<string, object> properties)
         {
-            Page (userId, name, null, properties, null);
+            Page(userId, name, null, properties, null);
         }
 
         /// <summary>
@@ -442,7 +441,7 @@ namespace Segment
         ///
         public void Page(string userId, string name, IDictionary<string, object> properties, Options options)
         {
-            Page (userId, name, null, properties, options);
+            Page(userId, name, null, properties, options);
         }
 
         /// <summary>
@@ -494,7 +493,7 @@ namespace Segment
         ///
         public void Screen(string userId, string name)
         {
-            Screen (userId, name, null, null, null);
+            Screen(userId, name, null, null, null);
         }
 
         /// <summary>
@@ -514,7 +513,7 @@ namespace Segment
         ///
         public void Screen(string userId, string name, Options options)
         {
-            Screen (userId, name, null, null, options);
+            Screen(userId, name, null, null, options);
         }
 
         /// <summary>
@@ -533,7 +532,7 @@ namespace Segment
         ///
         public void Screen(string userId, string name, string category)
         {
-            Screen (userId, name, category, null, null);
+            Screen(userId, name, category, null, null);
         }
 
         /// <summary>
@@ -554,7 +553,7 @@ namespace Segment
         ///
         public void Screen(string userId, string name, IDictionary<string, object> properties)
         {
-            Screen (userId, name, null, properties, null);
+            Screen(userId, name, null, properties, null);
         }
 
         /// <summary>
@@ -578,7 +577,7 @@ namespace Segment
         ///
         public void Screen(string userId, string name, IDictionary<string, object> properties, Options options)
         {
-            Screen (userId, name, null, properties, options);
+            Screen(userId, name, null, properties, options);
         }
 
         /// <summary>
@@ -677,7 +676,7 @@ namespace Segment
         /// <param name="options">Options.</param>
         internal static bool HasAnonymousId(Options options)
         {
-            return options != null &&  !String.IsNullOrEmpty(options.AnonymousId);
+            return options != null && !String.IsNullOrEmpty(options.AnonymousId);
         }
 
         #endregion

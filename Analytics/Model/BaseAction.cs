@@ -31,10 +31,10 @@ namespace Segment.Model
 
         internal BaseAction(string type, string UserId, Options options)
         {
-            options = options ?? new Options ();
+            options = options ?? new Options();
 
             this.Type = type;
-            this.MessageId = Guid.NewGuid ().ToString();
+            this.MessageId = Guid.NewGuid().ToString();
             if (options.Timestamp.HasValue)
                 this.Timestamp = options.Timestamp.Value.ToString("o");
             else

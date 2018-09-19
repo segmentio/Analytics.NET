@@ -84,7 +84,7 @@ jobs:
       - checkout
       - run: dotnet restore Test.E2E/Test.E2E.csproj
       - run: dotnet build Test.E2E/Test.E2E.csproj
-      - run: chmod 777 Test.E2E/e2e.sh
+      - run: chmod +x Test.E2E/e2e.sh
       - run: cd Test.E2E/ && ./e2e.sh
 workflows:
   version: 2

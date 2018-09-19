@@ -5,8 +5,6 @@ namespace Segment.E2ETest
 {
     public sealed class Tests : IDisposable
     {
-        AxiosClient client;
-
         public Tests(string writeKey)
         {
             // Segment Write Key for https://app.segment.com/segment-libraries/sources/analytics_net_e2e_test/overview.

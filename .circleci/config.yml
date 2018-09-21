@@ -25,7 +25,7 @@ jobs:
       - run: msbuild Analytics.Portable/Analytics.Portable.csproj /t:restore
       - run: msbuild Analytics.Portable/Analytics.Portable.csproj /p:Configuration=Release
       - run: nuget pack Analytics.nuspec
-  test_20:
+  coverage:
     working_directory: /coverage
     docker:  
       - image: microsoft/dotnet:2.0-sdk

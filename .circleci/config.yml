@@ -34,11 +34,8 @@ jobs:
       DOTNET_CLI_TELEMETRY_OUTPUT: 1
     steps:
       - checkout
-      - run: dotnet restore Test.NetStandard20/Test.NetStandard20.csproj
-      - run: dotnet build Test.NetStandard20/Test.NetStandard20.csproj
-      - run: cd Test.NetStandard20 && dotnet minicover instrument --assemblies ./bin/**/Test.NetStandard20.dll
-      - run: cd Test.NetStandard20 && dotnet minicover reset
-      - run: cd Test.NetStandard20 && dotnet test && dotnet minicover xmlreport
+      - run: chmod +x Test.NetStandard20/coverage_report.sh
+      - run: ./Test.NetStandard20/coverage_report.sh
       - run: cd Test.NetStandard20 && bash <(curl -s https://codecov.io/bash)
   test:
     working_directory: /test

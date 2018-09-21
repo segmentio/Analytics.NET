@@ -36,7 +36,7 @@ jobs:
       - checkout
       - run: chmod +x Test.NetStandard20/coverage_report.sh
       - run: ./Test.NetStandard20/coverage_report.sh
-      - run: cd Test.NetStandard20 && bash <(curl -s https://codecov.io/bash)
+      - run: bash <(curl -s https://codecov.io/bash)
   test:
     working_directory: /test
     docker:

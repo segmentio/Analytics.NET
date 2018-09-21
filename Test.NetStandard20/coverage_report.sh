@@ -6,4 +6,4 @@ dotnet build
 dotnet minicover instrument --workdir ../ --assemblies Test.NetStandard20/**/bin/**/Test.NetStandard20.dll --sources /**/*.cs
 dotnet minicover reset
 dotnet test --no-build
-dotnet minicover xmlreport --workdir ../
+dotnet minicover opencoverreport --workdir ../

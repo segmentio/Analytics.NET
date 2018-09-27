@@ -9,7 +9,7 @@ else
 
   # Hide system environment variable values
   echo "./tester -path='./analytics.sh'"
-  { ./tester -path='./analytics.sh' -segment-write-key="$SEGMENT_WRITE_KEY" -webhook-auth-username="$WEBHOOK_AUTH_USERNAME" -webhook-bucket="$WEBHOOK_BUCKET"; } 2> /dev/null
+  { ./tester -path='./analytics.sh'; } 2> /dev/null
 
   # Run code coverage
   wget https://codecov.io/bash -O codecov

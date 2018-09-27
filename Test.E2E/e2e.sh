@@ -12,9 +12,7 @@ else
   { ./tester -path='./analytics.sh'; } 2> /dev/null
 
   # Run code coverage
-  wget https://codecov.io/bash -O codecov
-  chmod +x codecov
-  ./codecov
+  bash "-c" "bash <(curl -s https://codecov.io/bash)"
 
   echo "End to end tests completed!"
 fi

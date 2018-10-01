@@ -225,19 +225,32 @@ namespace Segment.Request
                     if (_client.Config.CompressRequest)
                         content.Headers.ContentEncoding.Add("gzip");
 
-                    var response = await _httpClient.PostAsync(uri, content).ConfigureAwait(false);
+                    HttpResponseMessage response = null;
+                    bool retry = false;
+                    try
+                    {
+                        response = await _httpClient.PostAsync(uri, content).ConfigureAwait(false);
+                    }
+                    catch (System.Threading.Tasks.TaskCanceledException)
+                    {
+                        retry = true;
+                    }
+                    catch (System.Exception e)
+                    {
+                        throw e;
+                    }
 
                     watch.Stop();
 
-                    if (response.StatusCode == HttpStatusCode.OK)
+                    if (response != null && response.StatusCode == HttpStatusCode.OK)
                     {
                         Succeed(batch, watch.ElapsedMilliseconds);
                         break;
                     }
                     else
                     {
-                        statusCode = (int)response.StatusCode;
-                        if ((statusCode >= 500 && statusCode <= 600) || statusCode == 429)
+                        statusCode = response != null ? (int)response.StatusCode : 0;
+                        if ((statusCode >= 500 && statusCode <= 600) || statusCode == 429 || retry)
                         {
                             // If status code is greater than 500 and less than 600, it indicates server error
                             // Error code 429 indicates rate limited.

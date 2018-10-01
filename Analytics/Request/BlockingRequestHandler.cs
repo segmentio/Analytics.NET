@@ -235,10 +235,6 @@ namespace Segment.Request
                     {
                         retry = true;
                     }
-                    catch (System.Exception e)
-                    {
-                        throw e;
-                    }
 
                     watch.Stop();
 

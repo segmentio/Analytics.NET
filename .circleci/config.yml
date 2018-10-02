@@ -1,4 +1,13 @@
 version: 2
+
+_run:
+    notify_on_fail: &notify_on_fail
+      when: on_fail
+      command: |
+        wget https://raw.githubusercontent.com/segmentio/circleci-notifications/master/slack-notify-branch.sh
+        chmod u+x slack-notify-branch.sh
+        BUILD_STATUS="Failed" NOTIFY_BRANCH="master scheduled_e2e_testing" ./slack-notify-branch.sh
+
 jobs:
   build:
     working_directory: /temp
@@ -50,7 +59,7 @@ jobs:
       - run: dotnet test Test/Test.csproj
   test_20:
     working_directory: /test20
-    docker:  
+    docker:
       - image: microsoft/dotnet:2.0-sdk
     environment:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
@@ -97,6 +106,8 @@ jobs:
       - run: dotnet restore Test.E2E/Test.E2E.csproj
       - run: dotnet build Test.E2E/Test.E2E.csproj
       - run: cd Test.E2E/ && ./e2e.sh
+      - run: *notify_on_fail
+
 workflows:
   version: 2
   build_and_test:

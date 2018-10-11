@@ -26,8 +26,8 @@ namespace Segment.Request
         protected override WebRequest GetWebRequest(Uri address)
         {
             WebRequest w = base.GetWebRequest(address);
-            if (Timeout.Milliseconds != 0)
-                w.Timeout = Timeout.Milliseconds;
+            if (Timeout.TotalMilliseconds != 0)
+                w.Timeout = (int)Timeout.TotalMilliseconds;
             return w;
         }
     }
@@ -196,24 +196,22 @@ namespace Segment.Request
                         watch.Stop();
 
                         var response = (HttpWebResponse)ex.Response;
-                        if (response != null)
+                        // response with null value means connection error
+                        statusCode = (response != null) ? (int)response.StatusCode : 0;
+                        if ((statusCode >= 500 && statusCode <= 600) || statusCode == 429 || statusCode == 0)
                         {
-                            statusCode = (int)response.StatusCode;
-                            if ((statusCode >= 500 && statusCode <= 600) || statusCode == 429)
-                            {
-                                // If status code is greater than 500 and less than 600, it indicates server error
-                                // Error code 429 indicates rate limited.
-                                // Retry uploading in these cases.
-                                Thread.Sleep(backoff);
-                                backoff *= 2;
-                                continue;
-                            }
-                            else if (statusCode >= 400)
-                            {
-                                responseStr = String.Format("Status Code {0}. ", statusCode);
-                                responseStr += ex.Message;
-                                break;
-                            }
+                            // If status code is greater than 500 and less than 600, it indicates server error
+                            // Error code 429 indicates rate limited.
+                            // Retry uploading in these cases.
+                            Thread.Sleep(backoff);
+                            backoff *= 2;
+                            continue;
+                        }
+                        else if (statusCode >= 400)
+                        {
+                            responseStr = String.Format("Status Code {0}. ", statusCode);
+                            responseStr += ex.Message;
+                            break;
                         }
                     }
 

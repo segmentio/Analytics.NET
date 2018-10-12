@@ -233,6 +233,10 @@ namespace Segment.Request
                     {
                         retry = true;
                     }
+                    catch (HttpRequestException)
+                    {
+                        retry = true;
+                    }
 
                     watch.Stop();
 

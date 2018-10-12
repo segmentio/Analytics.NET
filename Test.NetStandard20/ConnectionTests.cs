@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using NUnit.Framework;
+using Segment.Model;
 
 namespace Segment.Test
 {
@@ -26,6 +27,8 @@ namespace Segment.Test
             config.SetHost("https://api.segment.com");
             config.SetTimeout(new TimeSpan(0, 0, 1));
             Analytics.Initialize(Constants.WRITE_KEY, config);
+            Analytics.Client.Succeeded += Client_Succeeded;
+            Analytics.Client.Failed += Client_Failed;
 
             // Calculate working time for Identiy message with invalid host address
             watch.Start();
@@ -77,6 +80,18 @@ namespace Segment.Test
                 }
             }
             Console.WriteLine(String.Format("[ConnectionTests] [{0}] {1}", level, message));
+        }
+
+        void Client_Failed(BaseAction action, System.Exception e)
+        {
+            Console.WriteLine(String.Format("Action [{0}] {1} failed : {2}",
+                action.MessageId, action.Type, e.Message));
+        }
+
+        void Client_Succeeded(BaseAction action)
+        {
+            Console.WriteLine(String.Format("Action [{0}] {1} succeeded.",
+                action.MessageId, action.Type));
         }
     }
 }

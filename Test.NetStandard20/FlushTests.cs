@@ -53,7 +53,7 @@ namespace Segment.Test
         }
 
         [Test()]
-        public async Task PerformanceTestNetStanard20()
+        public void PerformanceTestNetStanard20()
         {
             Analytics.Initialize(Constants.WRITE_KEY);
 

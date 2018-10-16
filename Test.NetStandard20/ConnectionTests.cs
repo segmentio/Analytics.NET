@@ -2,11 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using Unosquare.Labs.EmbedIO;
-using Unosquare.Labs.EmbedIO.Constants;
 using Unosquare.Labs.EmbedIO.Modules;
 
 namespace Segment.Test

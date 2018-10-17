@@ -24,7 +24,7 @@ namespace Segment.Test
 
             // Set invalid host address and make timeout to 1s
             var config = new Config().SetAsync(false);
-            config.SetHost("https://api.segment.com");
+            config.SetHost("https://fake.segment-server.com");
             config.SetTimeout(new TimeSpan(0, 0, 1));
             Analytics.Initialize(Constants.WRITE_KEY, config);
 

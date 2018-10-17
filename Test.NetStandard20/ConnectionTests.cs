@@ -48,7 +48,7 @@ namespace Segment.Test
             public HttpStatusCode ResponseCode;
             public string ErrorMessage;
             public int Timeout;
-            public bool LessThan;
+            public bool ShouldRetry;
         }
 
         [Test()]
@@ -74,7 +74,7 @@ namespace Segment.Test
                     {
                         ErrorMessage = "Server Gone",
                         ResponseCode = HttpStatusCode.Gone,
-                        LessThan = true,
+                        ShouldRetry = false,
                         Timeout = 10000
                     },
                     // 429 error requires retry
@@ -82,7 +82,7 @@ namespace Segment.Test
                     {
                         ErrorMessage = "Too many requests",
                         ResponseCode = (HttpStatusCode)429,
-                        LessThan = false,
+                        ShouldRetry = true,
                         Timeout = 10000
                     },
                     // Server errors require retry
@@ -90,7 +90,7 @@ namespace Segment.Test
                     {
                         ErrorMessage = "Bad Gateway",
                         ResponseCode = HttpStatusCode.BadGateway,
-                        LessThan = false,
+                        ShouldRetry = true,
                         Timeout = 10000
                     }
                 };
@@ -116,7 +116,10 @@ namespace Segment.Test
 
                     // Handling Identify message will less than 10s because the server returns GONE message.
                     // That's because it retries submit when it's failed.
-                    Assert.AreEqual(testCase.LessThan, watch.ElapsedMilliseconds < testCase.Timeout);
+                    if (testCase.ShouldRetry)
+                        Assert.IsTrue(watch.ElapsedMilliseconds > testCase.Timeout);
+                    else
+                        Assert.IsFalse(watch.ElapsedMilliseconds > testCase.Timeout);
                 }
             }
         }

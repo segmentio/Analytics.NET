@@ -54,7 +54,6 @@
     <Compile Include="ConnectionTests.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="FlushTests.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties/AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

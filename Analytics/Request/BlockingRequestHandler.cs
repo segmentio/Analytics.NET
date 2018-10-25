@@ -198,7 +198,7 @@ namespace Segment.Request
                         var response = (HttpWebResponse)ex.Response;
                         // response with null value means connection error
                         statusCode = (response != null) ? (int)response.StatusCode : 0;
-                        if ((statusCode >= 500 && statusCode <= 600) || statusCode == 429 || statusCode == 0)
+                        if ((statusCode >= 500 && statusCode < 600) || statusCode == 429 || statusCode == 0)
                         {
                             // If status code is greater than 500 and less than 600, it indicates server error
                             // Error code 429 indicates rate limited.
@@ -248,7 +248,7 @@ namespace Segment.Request
                     else
                     {
                         statusCode = response != null ? (int)response.StatusCode : 0;
-                        if ((statusCode >= 500 && statusCode <= 600) || statusCode == 429 || retry)
+                        if ((statusCode >= 500 && statusCode < 600) || statusCode == 429 || retry)
                         {
                             // If status code is greater than 500 and less than 600, it indicates server error
                             // Error code 429 indicates rate limited.

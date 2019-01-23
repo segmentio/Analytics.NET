@@ -39,6 +39,7 @@ namespace Segment.Model
                 this.Timestamp = options.Timestamp.Value.ToString("o");
             else
                 this.Timestamp = DateTime.Now.ToString("o");
+            Console.WriteLine("----- Timestamp: " + this.Timestamp)
             this.Context = options.Context;
             this.Integrations = options.Integrations;
             this.AnonymousId = options.AnonymousId;

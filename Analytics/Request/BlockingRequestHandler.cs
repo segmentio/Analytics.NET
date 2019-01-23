@@ -129,6 +129,7 @@ namespace Segment.Request
 
                 // set the current request time
                 batch.SentAt = DateTime.Now.ToString("o");
+                Console.WriteLine("---------------------- SentAt: " + batch.SentAt)
 
                 string json = JsonConvert.SerializeObject(batch);
 

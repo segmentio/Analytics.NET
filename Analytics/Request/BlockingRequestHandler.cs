@@ -117,6 +117,15 @@ namespace Segment.Request
 #else
             _httpClient.DefaultRequestHeaders.Add("User-Agent", szUserAgent);
 #endif
+
+            // Basic Authentication
+            // https://segment.io/docs/tracking-api/reference/#authentication
+#if NET35
+            _httpClient.Headers.Add("Authorization", "Basic " + BasicAuthHeader(client.WriteKey, string.Empty));
+            _httpClient.Headers.Add("Content-Type", "application/json; charset=utf-8");
+#else
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", BasicAuthHeader(client.WriteKey, string.Empty));
+#endif
         }
 
         public async Task MakeRequest(Batch batch)
@@ -131,15 +140,6 @@ namespace Segment.Request
                 batch.SentAt = DateTime.Now.ToString("o");
 
                 string json = JsonConvert.SerializeObject(batch);
-
-                // Basic Authentication
-                // https://segment.io/docs/tracking-api/reference/#authentication
-#if NET35
-                _httpClient.Headers.Add("Authorization", "Basic " + BasicAuthHeader(batch.WriteKey, string.Empty));
-                _httpClient.Headers.Add("Content-Type", "application/json; charset=utf-8");
-#else
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", BasicAuthHeader(batch.WriteKey, string.Empty));
-#endif
 
                 // Prepare request data;
                 var requestData = Encoding.UTF8.GetBytes(json);

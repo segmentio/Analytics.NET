@@ -11,12 +11,18 @@ namespace Segment.Test
         [SetUp]
         public void Init()
         {
-            Analytics.Dispose();
             Logger.Handlers += LoggingHandler;
             Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false));
         }
 
-        [Test ()]
+        [TearDown]
+        public void Dispose()
+        {
+            Logger.Handlers -= LoggingHandler;
+            Analytics.Dispose();
+        }
+
+        [Test()]
         public void IdentifyTestNet35()
         {
             Actions.Identify(Analytics.Client);

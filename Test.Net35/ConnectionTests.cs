@@ -12,8 +12,14 @@ namespace Segment.Test
         [SetUp]
         public void Init()
         {
-            Analytics.Dispose();
             Logger.Handlers += LoggingHandler;
+        }
+
+        [TearDown]
+        public void Dispose()
+        {
+            Logger.Handlers -= LoggingHandler;
+            Analytics.Dispose();
         }
 
         [Test()]

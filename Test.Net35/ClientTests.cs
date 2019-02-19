@@ -19,8 +19,14 @@ namespace Segment.Test
             client = new Client("foo");
         }
 
+        [TearDown]
+        public void Dispose()
+        {
+            client.Dispose();
+        }
+
         [Test ()]
-        public void TrackTestNet35 ()
+        public void TrackTestNet35()
         {
             // verify it doesn't fail for a null options
             client.Screen("bar", "qaz", null, null);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using NUnit.Framework;
+using Segment.Model;
 
 namespace Segment.Test
 {
@@ -56,7 +57,10 @@ namespace Segment.Test
             int trials = 1000;
             for (int i = 1; i <= trials; i++)
             {
-                Analytics.Client.Track("User", "Batch event test");
+                Analytics.Client.Track("019mr8mf4r", "Item Purchased", new Properties()
+                {
+                    { "item", i }
+                });
                 Analytics.Client.Flush();
 
                 Assert.AreEqual(i, Analytics.Client.Statistics.Submitted);

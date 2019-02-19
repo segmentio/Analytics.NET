@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using NUnit.Framework;
 
 namespace Segment.Test
@@ -39,6 +40,23 @@ namespace Segment.Test
             Assert.AreEqual(1, Analytics.Client.Statistics.Submitted);
             Assert.AreEqual(1, Analytics.Client.Statistics.Succeeded);
             Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
+        }
+
+        [Test()]
+        public void BatchSendTestNet35()
+        {
+            Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false));
+
+            int trials = 1000;
+            for (int i = 1; i <= trials; i++)
+            {
+                Actions.Random(Analytics.Client);
+                Thread.Sleep(1000);
+
+                Assert.AreEqual(i, Analytics.Client.Statistics.Submitted);
+                Assert.AreEqual(i, Analytics.Client.Statistics.Succeeded);
+                Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
+            }
         }
 
         static void LoggingHandler(Logger.Level level, string message, IDictionary<string, object> args)

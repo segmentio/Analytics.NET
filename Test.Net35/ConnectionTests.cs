@@ -56,7 +56,7 @@ namespace Segment.Test
             int trials = 1000;
             for (int i = 1; i <= trials; i++)
             {
-                Actions.Random(Analytics.Client);
+                Analytics.Client.Track("User", "Batch event test");
                 Analytics.Client.Flush();
 
                 Assert.AreEqual(i, Analytics.Client.Statistics.Submitted);

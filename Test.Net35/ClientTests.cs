@@ -25,7 +25,7 @@ namespace Segment.Test
             client.Dispose();
         }
 
-        [Test ()]
+        [Test()]
         public void TrackTestNet35()
         {
             // verify it doesn't fail for a null options

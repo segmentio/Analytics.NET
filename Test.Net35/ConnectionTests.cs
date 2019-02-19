@@ -18,8 +18,8 @@ namespace Segment.Test
         [TearDown]
         public void Dispose()
         {
-            Logger.Handlers -= LoggingHandler;
             Analytics.Dispose();
+            Logger.Handlers -= LoggingHandler;
         }
 
         [Test()]
@@ -63,7 +63,7 @@ namespace Segment.Test
                 Assert.AreEqual(i, Analytics.Client.Statistics.Succeeded);
                 Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
 
-                Thread.Sleep(1000);
+                Thread.Sleep(500);
             }
         }
 

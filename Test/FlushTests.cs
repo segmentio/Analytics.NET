@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,8 +13,14 @@ namespace Segment.Test
         [SetUp]
         public void Init()
         {
-            Analytics.Dispose();
             Logger.Handlers += LoggingHandler;
+        }
+
+        [TearDown]
+        public void Dispose()
+        {
+            Analytics.Dispose();
+            Logger.Handlers -= LoggingHandler;
         }
 
         [Test()]

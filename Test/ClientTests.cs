@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 
 using System;
 using System.Collections.Generic;
@@ -19,7 +19,13 @@ namespace Segment.Test
             client = new Client("foo");
         }
 
-        [Test ()]
+        [TearDown]
+        public void Dispose()
+        {
+            client.Dispose();
+        }
+
+        [Test()]
         public void TrackTest ()
         {
             // verify it doesn't fail for a null options

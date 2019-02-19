@@ -8,16 +8,21 @@ namespace Segment.Test
     [TestFixture()]
     public class ActionTests
     {
-
         [SetUp]
         public void Init()
         {
-            Analytics.Dispose();
             Logger.Handlers += LoggingHandler;
             Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false));
         }
 
-        [Test ()]
+        [TearDown]
+        public void Dispose()
+        {
+            Analytics.Dispose();
+            Logger.Handlers -= LoggingHandler;
+        }
+
+        [Test()]
         public void IdentifyTest()
         {
             Actions.Identify(Analytics.Client);

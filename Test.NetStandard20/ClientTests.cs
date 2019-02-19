@@ -19,7 +19,13 @@ namespace Segment.Test
             client = new Client("foo");
         }
 
-        [Test ()]
+        [TearDown]
+        public void Dispose()
+        {
+            client.Dispose();
+        }
+
+        [Test()]
         public void TrackTestNetStanard20()
         {
             // verify it doesn't fail for a null options

@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading;
 using NUnit.Framework;
-using Segment.Model;
 
 namespace Segment.Test
 {
@@ -47,28 +45,6 @@ namespace Segment.Test
             Assert.AreEqual(1, Analytics.Client.Statistics.Submitted);
             Assert.AreEqual(1, Analytics.Client.Statistics.Succeeded);
             Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
-        }
-
-        [Test()]
-        public void BatchSendTestNet35()
-        {
-            Analytics.Initialize(Constants.WRITE_KEY);
-
-            int trials = 1000;
-            for (int i = 1; i <= trials; i++)
-            {
-                Analytics.Client.Track("019mr8mf4r", "Item Purchased", new Properties()
-                {
-                    { "item", i }
-                });
-                Analytics.Client.Flush();
-
-                Assert.AreEqual(i, Analytics.Client.Statistics.Submitted);
-                Assert.AreEqual(i, Analytics.Client.Statistics.Succeeded);
-                Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
-
-                Thread.Sleep(500);
-            }
         }
 
         static void LoggingHandler(Logger.Level level, string message, IDictionary<string, object> args)

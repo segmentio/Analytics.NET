@@ -80,6 +80,10 @@ namespace Segment.Request
         /// </summary>
         public TimeSpan Timeout { get; set; }
 
+#if NET35
+        private string UserAgent;
+#endif
+
         internal BlockingRequestHandler(Client client, TimeSpan timeout)
         {
             this._client = client;
@@ -113,7 +117,7 @@ namespace Segment.Request
             var library = context["library"] as Dict;
             string szUserAgent = string.Format("{0}/{1}", library["name"], library["version"]);
 #if NET35
-            _httpClient.Headers.Add("User-Agent", szUserAgent);
+            this.UserAgent = szUserAgent;
 #else
             _httpClient.DefaultRequestHeaders.Add("User-Agent", szUserAgent);
 #endif
@@ -122,7 +126,6 @@ namespace Segment.Request
             // https://segment.io/docs/tracking-api/reference/#authentication
 #if NET35
             _httpClient.Headers.Add("Authorization", "Basic " + BasicAuthHeader(client.WriteKey, string.Empty));
-            _httpClient.Headers.Add("Content-Type", "application/json; charset=utf-8");
 #else
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", BasicAuthHeader(client.WriteKey, string.Empty));
 #endif
@@ -143,6 +146,12 @@ namespace Segment.Request
 
                 // Prepare request data;
                 var requestData = Encoding.UTF8.GetBytes(json);
+
+#if NET35
+                // Add default header
+                _httpClient.Headers.Add("User-Agent", this.UserAgent);
+                _httpClient.Headers.Add("Content-Type", "application/json; charset=utf-8");
+#endif
 
                 // Compress request data if compression is set
                 if (_client.Config.CompressRequest)

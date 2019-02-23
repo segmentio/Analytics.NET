@@ -39,7 +39,7 @@ namespace Segment.Test
 
             Analytics.Initialize(Constants.WRITE_KEY);
 
-            int trials = 1000;
+            int trials = 100;
             for (int i = 1; i <= trials; i++)
             {
                 string uid = Uid(16);
@@ -87,12 +87,6 @@ namespace Segment.Test
 
                 string szMessageDetail = string.Format("Finding message \"{0}\" on webhook (item: {1})", "Item Purchased", i);
                 Assert.IsTrue(bMessageHandled, szMessageDetail);
-
-                if (i % 100 == 0)
-                {
-                    szMessageDetail = string.Format("{0} messages sent successfully.", i);
-                    LoggingHandler(Logger.Level.INFO, szMessageDetail, null);
-                }
 
                 Thread.Sleep(500);
             }

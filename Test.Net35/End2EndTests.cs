@@ -21,7 +21,6 @@ namespace Segment.Test
         [TearDown]
         public void Dispose()
         {
-            Analytics.Dispose();
             Logger.Handlers -= LoggingHandler;
         }
 
@@ -86,8 +85,14 @@ namespace Segment.Test
                     }
                 }
 
-                string szMessageDetail = string.Format("Finding message \"{0}\" on webhook (item: {1}", "Item Purchased", i);
+                string szMessageDetail = string.Format("Finding message \"{0}\" on webhook (item: {1})", "Item Purchased", i);
                 Assert.IsTrue(bMessageHandled, szMessageDetail);
+
+                if (i % 100 == 0)
+                {
+                    szMessageDetail = string.Format("{0} messages sent successfully.", i);
+                    LoggingHandler(Logger.Level.INFO, szMessageDetail, null);
+                }
 
                 Thread.Sleep(500);
             }

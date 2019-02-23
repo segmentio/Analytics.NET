@@ -59,7 +59,7 @@ namespace Segment.Test
 
                 // Retrieve server messages and see whether message is existing
                 bool bMessageHandled = false;
-                for (int retries = 0; retries < 5; retries++)
+                for (int retries = 0; retries < 30; retries++)
                 {
                     var messages = GetRunscopeMessages(bucket, username);
                     int count = messages.Count(m =>
@@ -90,6 +90,8 @@ namespace Segment.Test
 
                 Thread.Sleep(500);
             }
+
+            Analytics.Dispose();
         }
 
         private IList<JToken> GetRunscopeMessages(string bucket, string username)

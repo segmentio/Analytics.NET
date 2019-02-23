@@ -86,7 +86,8 @@ namespace Segment.Test
                     }
                 }
 
-                Assert.IsTrue(bMessageHandled, "Finding message on webhook");
+                string szMessageDetail = string.Format("Finding message \"{0}\" on webhook (item: {1}", "Item Purchased", i);
+                Assert.IsTrue(bMessageHandled, szMessageDetail);
 
                 Thread.Sleep(500);
             }
@@ -105,7 +106,7 @@ namespace Segment.Test
 
                 // Send request to server and retrieve response
                 // Retry 3 times for invalid response
-                string url = "https://webhook-e2e.segment.com/buckets/" + bucket + "?limit=10";
+                string url = "https://webhook-e2e.segment.com/buckets/" + bucket + "?limit=30";
 
                 for (int i = 0; i < 3; i++)
                 {

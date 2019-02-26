@@ -39,7 +39,7 @@ namespace Segment.Test
 
             Analytics.Initialize(Constants.WRITE_KEY);
 
-            int trials = 100;
+            int trials = 1000;
             for (int i = 1; i <= trials; i++)
             {
                 string uid = Uid(16);

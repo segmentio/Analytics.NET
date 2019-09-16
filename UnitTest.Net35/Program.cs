@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Segment;
+using Segment.Test;
 
 namespace UnitTest.Net35
 {
@@ -9,6 +7,9 @@ namespace UnitTest.Net35
 	{
 		static void Main(string[] args)
 		{
+			// Just init SDK with a mock Write Key:
+			Analytics.Initialize(Constants.MOCK_WRITE_KEY);
+			Analytics.Client.Flush();
 		}
 	}
 }

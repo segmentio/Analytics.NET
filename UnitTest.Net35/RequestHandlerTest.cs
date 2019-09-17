@@ -33,7 +33,6 @@ namespace Segment.Test
 			var authorizationHeader = httpClient.Headers.Get("Authorization");
 
 			// Assert: Verify that "Basic" appears only once in the Authorization header:
-			// Currently failing because multiple headers are appended (LIB-833)
 			Assert.AreEqual(1, Regex.Matches(authorizationHeader, "Basic").Count);
 		}
 

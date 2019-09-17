@@ -20,13 +20,13 @@ namespace Segment.Test
         public void Dispose()
         {
             Logger.Handlers -= LoggingHandler;
-            Analytics.Dispose();
         }
 
         [Test()]
         public void SynchronousFlushTestNet35()
         {
             Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false));
+
             Analytics.Client.Succeeded += Client_Succeeded;
             Analytics.Client.Failed += Client_Failed;
 
@@ -37,6 +37,8 @@ namespace Segment.Test
             Assert.AreEqual(trials, Analytics.Client.Statistics.Submitted);
             Assert.AreEqual(trials, Analytics.Client.Statistics.Succeeded);
             Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
+
+            Analytics.Dispose();
         }
 
         [Test()]
@@ -56,6 +58,8 @@ namespace Segment.Test
             Assert.AreEqual(trials, Analytics.Client.Statistics.Submitted);
             Assert.AreEqual(trials, Analytics.Client.Statistics.Succeeded);
             Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
+
+            Analytics.Dispose();
         }
 
         [Test()]
@@ -81,6 +85,8 @@ namespace Segment.Test
             Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
 
             Assert.IsTrue(duration.CompareTo(TimeSpan.FromSeconds(20)) < 0);
+
+            Analytics.Dispose();
         }
 
         private void RunTests(Client client, int trials)

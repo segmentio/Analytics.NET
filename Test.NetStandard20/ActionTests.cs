@@ -19,8 +19,8 @@ namespace Segment.Test
         [TearDown]
         public void Dispose()
         {
-            Logger.Handlers -= LoggingHandler;
             Analytics.Dispose();
+            Logger.Handlers -= LoggingHandler;
         }
 
         [Test()]

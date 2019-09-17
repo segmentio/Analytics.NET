@@ -17,7 +17,6 @@ namespace Segment.Test
         [TearDown]
         public void Dispose()
         {
-            Analytics.Dispose();
             Logger.Handlers -= LoggingHandler;
         }
 
@@ -32,6 +31,8 @@ namespace Segment.Test
             Assert.AreEqual(1, Analytics.Client.Statistics.Submitted);
             Assert.AreEqual(1, Analytics.Client.Statistics.Succeeded);
             Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
+
+            Analytics.Dispose();
         }
 
         [Test()]
@@ -45,6 +46,8 @@ namespace Segment.Test
             Assert.AreEqual(1, Analytics.Client.Statistics.Submitted);
             Assert.AreEqual(1, Analytics.Client.Statistics.Succeeded);
             Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
+
+            Analytics.Dispose();
         }
 
         static void LoggingHandler(Logger.Level level, string message, IDictionary<string, object> args)

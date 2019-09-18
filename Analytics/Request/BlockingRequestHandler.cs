@@ -125,7 +125,7 @@ namespace Segment.Request
             // Basic Authentication
             // https://segment.io/docs/tracking-api/reference/#authentication
 #if NET35
-            _httpClient.Headers.Add("Authorization", "Basic " + BasicAuthHeader(client.WriteKey, string.Empty));
+            _httpClient.Headers.Set("Authorization", "Basic " + BasicAuthHeader(client.WriteKey, string.Empty));
 #else
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", BasicAuthHeader(client.WriteKey, string.Empty));
 #endif
@@ -149,15 +149,15 @@ namespace Segment.Request
 
 #if NET35
                 // Add default header
-                _httpClient.Headers.Add("User-Agent", this.UserAgent);
-                _httpClient.Headers.Add("Content-Type", "application/json; charset=utf-8");
+                _httpClient.Headers.Set("User-Agent", this.UserAgent);
+                _httpClient.Headers.Set("Content-Type", "application/json; charset=utf-8");
 #endif
 
                 // Compress request data if compression is set
                 if (_client.Config.CompressRequest)
                 {
 #if NET35
-                    _httpClient.Headers.Add(HttpRequestHeader.ContentEncoding, "gzip");
+                    _httpClient.Headers.Set(HttpRequestHeader.ContentEncoding, "gzip");
 #else
                     //_httpClient.DefaultRequestHeaders.Add("Content-Encoding", "gzip");
 #endif

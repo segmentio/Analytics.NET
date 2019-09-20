@@ -31,7 +31,7 @@ namespace Segment.Test
 			var requestHandler = GetPrivateFieldByReflection(flushHandler, "_requestHandler");
 			var httpClient = GetPrivateFieldByReflection(requestHandler, "_httpClient") as WebClient;
 			var authorizationHeader = httpClient.Headers.Get("Authorization");
-
+			
 			// Assert: Verify that "Basic" appears only once in the Authorization header:
 			Assert.AreEqual(1, Regex.Matches(authorizationHeader, "Basic").Count);
 		}

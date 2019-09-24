@@ -18,7 +18,7 @@ namespace Segment.Test
 		[Test()]
 		public void HeaderTestNet35()
 		{
-			// Arrange: Initialize SDK:
+			// Arrange: Init SDK:
 			Analytics.Initialize(Constants.MOCK_WRITE_KEY, new Config().SetAsync(false));
 
 			// Act: Perform some tracking events:

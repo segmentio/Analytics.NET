@@ -1,5 +1,7 @@
 using NUnit.Framework;
 using Segment.Model;
+using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -13,6 +15,7 @@ namespace Segment.Test
 		public void Init()
 		{
 			Analytics.Dispose();
+			Logger.Handlers += LoggingHandler;
 		}
 
 		[Test()]
@@ -39,5 +42,17 @@ namespace Segment.Test
 		// Obtains a private field contained by the source object using reflection:
 		private object GetPrivateFieldByReflection(object source, string fieldName) =>
 			source.GetType().GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance).GetValue(source);
+
+		static void LoggingHandler(Logger.Level level, string message, IDictionary<string, object> args)
+		{
+			if (args != null)
+			{
+				foreach (string key in args.Keys)
+				{
+					message += String.Format(" {0}: {1},", "" + key, "" + args[key]);
+				}
+			}
+			Console.WriteLine(String.Format("[RequestHandlerTest] [{0}] {1}", level, message));
+		}
 	}
 }

@@ -135,8 +135,8 @@ namespace Segment.Request
                 // Basic Authentication
                 // https://segment.io/docs/tracking-api/reference/#authentication
 #if NET35
-                _httpClient.Headers.Add("Authorization", "Basic " + BasicAuthHeader(batch.WriteKey, string.Empty));
-                _httpClient.Headers.Add("Content-Type", "application/json; charset=utf-8");
+                _httpClient.Headers.Set("Authorization", "Basic " + BasicAuthHeader(batch.WriteKey, string.Empty));
+                _httpClient.Headers.Set("Content-Type", "application/json; charset=utf-8");
 #else
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", BasicAuthHeader(batch.WriteKey, string.Empty));
 #endif

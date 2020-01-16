@@ -1,5 +1,6 @@
 ﻿Analytics.NET
 =============
+[![CircleCI](https://circleci.com/gh/segmentio/Analytics.NET.svg?style=svg&circle-token=9d5be6bcbf6f5e8c6f74025a899d1a5e04bb54e0)](https://circleci.com/gh/segmentio/Analytics.NET)
 
 Analytics.NET is a .NET / C# client for [Segment](https://segment.com).
 

@@ -20,7 +20,7 @@ namespace Segment.Test
 		}
 
 		[Test]
-		public void InitilizationFailWhenWriteKeyIsEmpty()
+		public void InitilizationThrowsInvalidOperationExceptionWhenWriteKeyIsEmpty()
 		{
 			var ex = Assert.Throws<InvalidOperationException>(() => new Client(""));
 
@@ -28,7 +28,15 @@ namespace Segment.Test
 
 		}
 
-        [Test ()]
+		[Test]
+		public void PageThrowsInvalidOperationExceptionWhenPageNameIsEmtpy()
+		{
+			var ex = Assert.Throws<InvalidOperationException>(() => client.Page("userId", ""));
+
+			Assert.AreEqual("Please supply a valid name to call #Page.", ex.Message);
+		}
+
+		[Test ()]
         public void TrackTest ()
         {
             // verify it doesn't fail for a null options

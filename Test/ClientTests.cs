@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 
 using System;
 using System.Collections.Generic;
@@ -8,16 +8,25 @@ using Segment.Model;
 
 namespace Segment.Test
 {
-    [TestFixture ()]
-    public class ClientTests
-    {
-        Client client;
+	[TestFixture()]
+	public class ClientTests
+	{
+		Client client;
 
-        [SetUp]
-        public void Init()
-        {
-            client = new Client("foo");
-        }
+		[SetUp]
+		public void Init()
+		{
+			client = new Client("foo");
+		}
+
+		[Test]
+		public void InitilizationFailWhenWriteKeyIsEmpty()
+		{
+			var ex = Assert.Throws<InvalidOperationException>(() => new Client(""));
+
+			Assert.AreEqual("Please supply a valid writeKey to initialize.", ex.Message);
+
+		}
 
         [Test ()]
         public void TrackTest ()

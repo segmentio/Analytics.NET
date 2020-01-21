@@ -23,7 +23,6 @@ namespace Segment.Test
         public void InitilizationThrowsInvalidOperationExceptionWhenWriteKeyIsEmpty()
         {
             var ex = Assert.Throws<InvalidOperationException>(() => new Client(""));
-
             Assert.AreEqual("Please supply a valid writeKey to initialize.", ex.Message);
         }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -52,7 +52,34 @@ namespace Segment.Test
             Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
         }
 
-        [Test()]
+
+		[Test()]
+		public void AsynchronousFlushIntervalTest()
+		{
+			Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(true));
+
+			Analytics.Client.Succeeded += Client_Succeeded;
+			Analytics.Client.Failed += Client_Failed;
+
+			for (var i = 1; i < 10; i++)
+			{
+				int trials = 1;
+
+				Actions.Track(Analytics.Client);
+
+				Thread.Sleep(10); // cant use flush to wait during asynchronous flushing
+
+				Assert.AreEqual(trials * i, Analytics.Client.Statistics.Submitted);
+				Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
+			}
+
+			Analytics.Client.Flush();
+			Assert.AreEqual(10, Analytics.Client.Statistics.Succeeded);
+
+		}
+
+
+		[Test()]
         public async Task PerformanceTest()
         {
             Analytics.Initialize(Constants.WRITE_KEY);

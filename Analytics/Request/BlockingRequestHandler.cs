@@ -80,11 +80,20 @@ namespace Segment.Request
         /// </summary>
         public TimeSpan Timeout { get; set; }
 
-        internal BlockingRequestHandler(Client client, TimeSpan timeout)
+        internal BlockingRequestHandler(Client client, TimeSpan timeout) : this(client, timeout, null)
+        {
+        }
+
+        internal BlockingRequestHandler(Client client, TimeSpan timeout, HttpClient httpClient)
         {
             this._client = client;
             this.Timeout = timeout;
 
+            if (httpClient != null)
+            {
+                _httpClient = httpClient;
+                return;
+            }
             // Create HttpClient instance in .Net 3.5
 #if NET35
             _httpClient = new HttpClient { Timeout = Timeout };

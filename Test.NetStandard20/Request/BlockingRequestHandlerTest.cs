@@ -6,6 +6,7 @@ using Segment.Model;
 using Segment.Request;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -19,28 +20,24 @@ namespace Test.NetStandard20.Request
     class BlockingRequestHandlerTest
     {
         private Mock<HttpMessageHandler> _mockHttpMessageHandler;
-        private HttpResponseMessage _httpResponse;
         private Client _client;
 
-        private BlockingRequestHandler _handler { get; set; }
+		private BlockingRequestHandler _handler;
+		Func<HttpResponseMessage> _httpBehavior;
 
-
-        [SetUp]
+		[SetUp]
         public void Init()
         {
             _mockHttpMessageHandler = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            _httpResponse = new HttpResponseMessage()
-            {
-                StatusCode = HttpStatusCode.OK
-            };
+			_httpBehavior = SingleHttpResponseBehavior(HttpStatusCode.OK);
 
-            _mockHttpMessageHandler.Protected().Setup<Task<HttpResponseMessage>>(
+			_mockHttpMessageHandler.Protected().Setup<Task<HttpResponseMessage>>(
                 "SendAsync",
-                ItExpr.IsAny<HttpRequestMessage>(),
-                ItExpr.IsAny<CancellationToken>()
+				ItExpr.IsAny<HttpRequestMessage>(),
+				ItExpr.IsAny<CancellationToken>()
                 )
                 // prepare the expected response of the mocked http call
-            .ReturnsAsync(() => _httpResponse)
+            .ReturnsAsync(() => _httpBehavior())
             .Verifiable();
 
             _client = new Client("foo");
@@ -51,12 +48,8 @@ namespace Test.NetStandard20.Request
         public async Task MakeRequestWith5xxStatusCode()
         {
             //Arrange
-            _httpResponse = new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.InternalServerError
-            };
-
-            var batch = GetBatch();
+			_httpBehavior = SingleHttpResponseBehavior(HttpStatusCode.InternalServerError);
+			var batch = GetBatch();
 
             //Act
             await _handler.MakeRequest(batch);
@@ -70,13 +63,9 @@ namespace Test.NetStandard20.Request
         [Test]
         public async Task MakeRequestWith429StatusCode()
         {
-            //Arrange
-            _httpResponse = new HttpResponseMessage
-            {
-                StatusCode = (HttpStatusCode)429
-            };
-
-            var batch = GetBatch();
+			//Arrange
+			_httpBehavior = SingleHttpResponseBehavior((HttpStatusCode)429);
+			var batch = GetBatch();
 
             //Act
             await _handler.MakeRequest(batch);
@@ -91,12 +80,8 @@ namespace Test.NetStandard20.Request
         [Test]
         public async Task MakeRequestWith4xxStatusCode()
         {
-            //Arrange
-            _httpResponse = new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.MethodNotAllowed
-            };
-
+			//Arrange
+			_httpBehavior = SingleHttpResponseBehavior(HttpStatusCode.MethodNotAllowed);
             var batch = GetBatch();
 
             //Act
@@ -121,9 +106,63 @@ namespace Test.NetStandard20.Request
             Assert.AreEqual(1, _client.Statistics.Succeeded);
             Assert.AreEqual(0, _client.Statistics.Failed);
             AssertSendAsyncWasCalled();
-        }
+		}
 
-        private void AssertSendAsyncWasCalled(int times = 1)
+		[Test]
+		public async Task MakeRequestWithErrorStatusCodeRetryUntilSuccess()
+		{
+			//Arrange
+			_httpBehavior = MultipleHttpResponseBehavior(
+				HttpStatusCode.InternalServerError,
+				HttpStatusCode.NotImplemented,
+				(HttpStatusCode)429, 
+				HttpStatusCode.OK);
+
+			var batch = GetBatch();
+
+			//Act
+			await _handler.MakeRequest(batch);
+
+			//Assert
+			Assert.AreEqual(1, _client.Statistics.Succeeded);
+			Assert.AreEqual(0, _client.Statistics.Failed);
+			AssertSendAsyncWasCalled(4);
+		}
+		[Test]
+		public async Task MakeRequestWithErrorStatusCodeRetryUntil4xxErrorExcept429()
+		{
+			//Arrange
+			_httpBehavior = MultipleHttpResponseBehavior(
+				HttpStatusCode.InternalServerError,
+				HttpStatusCode.NotImplemented,
+				(HttpStatusCode)429,
+				HttpStatusCode.NotFound);
+
+			var batch = GetBatch();
+
+			//Act
+			await _handler.MakeRequest(batch);
+
+			//Assert
+			Assert.AreEqual(0, _client.Statistics.Succeeded);
+			Assert.AreEqual(1, _client.Statistics.Failed);
+			AssertSendAsyncWasCalled(4);
+		}
+
+
+		private Func<HttpResponseMessage> SingleHttpResponseBehavior(HttpStatusCode statusCode)
+		{
+			return () => new HttpResponseMessage(statusCode: statusCode);
+		}
+
+		private Func<HttpResponseMessage> MultipleHttpResponseBehavior(params HttpStatusCode[] statusCode)
+		{
+			var response = new Queue<HttpResponseMessage>(statusCode.Select(s => new HttpResponseMessage { StatusCode = s }));
+			return () => response.Count > 0 ? response.Dequeue() : null;
+		}
+
+
+		private void AssertSendAsyncWasCalled(int times = 1)
         {
             _mockHttpMessageHandler.Protected().Verify("SendAsync", Times.Exactly(times),
                 ItExpr.IsAny<HttpRequestMessage>(),

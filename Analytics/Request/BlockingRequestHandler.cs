@@ -198,6 +198,7 @@ namespace Segment.Request
                         watch.Stop();
 
                         Succeed(batch, watch.ElapsedMilliseconds);
+                        statusCode = 200;
                         break;
                     }
                     catch (WebException ex)
@@ -237,15 +238,15 @@ namespace Segment.Request
                     var response = await _httpClient.PostAsync(uri, content).ConfigureAwait(false);
 
                     watch.Stop();
+					statusCode = (int)response.StatusCode;
 
-                    if (response.StatusCode == HttpStatusCode.OK)
+					if (statusCode == (int)HttpStatusCode.OK)
                     {
                         Succeed(batch, watch.ElapsedMilliseconds);
                         break;
                     }
                     else
                     {
-                        statusCode = (int)response.StatusCode;
                         if ((statusCode >= 500 && statusCode <= 600) || statusCode == 429)
                         {
                             // If status code is greater than 500 and less than 600, it indicates server error

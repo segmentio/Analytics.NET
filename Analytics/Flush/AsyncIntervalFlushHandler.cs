@@ -7,6 +7,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Segment.Flush
@@ -21,6 +22,7 @@ namespace Segment.Flush
         private readonly IBatchFactory _batchFactory;
         private readonly IRequestHandler _requestHandler;
         private readonly int _maxQueueSize;
+        private readonly CancellationTokenSource _continue;
 
         internal AsyncIntervalFlushHandler(IBatchFactory batchFactory,
             IRequestHandler requestHandler,
@@ -32,13 +34,14 @@ namespace Segment.Flush
             _requestHandler = requestHandler;
             _maxQueueSize = maxQueueSize;
             _maxBatchSize = maxBatchSize;
+            _continue = new CancellationTokenSource();
 
             RunInterval();
         }
 
         private async Task RunInterval()
         {
-            while (true)
+            while (!_continue.Token.IsCancellationRequested)
             {
                 Logger.Debug($"Flushing at {DateTime.Now}");
                 _tasks.RemoveAll(t => t.IsCompleted);
@@ -60,13 +63,13 @@ namespace Segment.Flush
         {
             var current = new List<BaseAction>();
 
-            while (_queue.Count > 0)
+            while (!_queue.IsEmpty && !_continue.Token.IsCancellationRequested)
             {
                 do
                 {
                     _queue.TryDequeue(out var action);
                     current.Add(action);
-                } while (_queue.Count > 0 && current.Count <= _maxBatchSize);
+                } while (!_queue.IsEmpty && current.Count <= _maxBatchSize && !_continue.Token.IsCancellationRequested);
 
                 if (current.Count > 0)
                 {
@@ -101,6 +104,7 @@ namespace Segment.Flush
 
         public void Dispose()
         {
+            _continue.Cancel();
         }
 
     }

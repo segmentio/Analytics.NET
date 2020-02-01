@@ -18,11 +18,13 @@ namespace Segment.Flush
 
         private readonly ConcurrentQueue<BaseAction> _queue;
         private readonly int _maxBatchSize;
-        private readonly List<Task> _tasks = new List<Task>();
         private readonly IBatchFactory _batchFactory;
         private readonly IRequestHandler _requestHandler;
         private readonly int _maxQueueSize;
         private readonly CancellationTokenSource _continue;
+        private readonly int _flushIntervalInMillis;
+        private const int _workloads = 4;
+        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(_workloads);
 
         internal AsyncIntervalFlushHandler(IBatchFactory batchFactory,
             IRequestHandler requestHandler,
@@ -35,39 +37,69 @@ namespace Segment.Flush
             _maxQueueSize = maxQueueSize;
             _maxBatchSize = maxBatchSize;
             _continue = new CancellationTokenSource();
+            _flushIntervalInMillis = 4000;
 
-            RunInterval();
+            _ = RunInterval();
         }
 
         private async Task RunInterval()
         {
             while (!_continue.Token.IsCancellationRequested)
             {
-                Logger.Debug($"Flushing at {DateTime.Now}");
-                _tasks.RemoveAll(t => t.IsCompleted);
+                _ = Task.Run(NewMethod);
+                await Task.Delay(_flushIntervalInMillis);
+            }
+        }
 
-                _tasks.Add(Task.Run(() => FlushImpl()));
-                await Task.Delay(5000);
+        private async Task NewMethod()
+        {
+            if (_semaphore.CurrentCount <= 0) {
+                Logger.Debug("Skipping flush. Workload limit has been reached");
+                return;
+            }
+
+            try
+            {
+                await _semaphore.WaitAsync();
+                await FlushImpl();
+            }
+            finally
+            {
+                _semaphore.Release();
             }
         }
 
         public void Flush()
         {
-            if (_tasks.Count > 0) Task.WaitAll(_tasks.ToArray());
-            
-            FlushImpl().GetAwaiter().GetResult();
+            try
+            {
+                _semaphore.Wait();
+                FlushImpl().GetAwaiter().GetResult();
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
+
+            for (var i = 0; i < _workloads; i++) _semaphore.Wait();
+            for (var i = 0; i < _workloads; i++) _semaphore.Release();
 
         }
 
-        public async Task FlushImpl()
+        private async Task FlushImpl()
         {
             var current = new List<BaseAction>();
-
             while (!_queue.IsEmpty && !_continue.Token.IsCancellationRequested)
             {
                 do
-                {
-                    _queue.TryDequeue(out var action);
+                {                 
+                    if (!_queue.TryDequeue(out var action)) break;
+
+                    Logger.Debug("Dequeued action in async loop.", new Dict{
+                            { "message id", action.MessageId },
+                            { "queue size", _queue.Count }
+                         });
+
                     current.Add(action);
                 } while (!_queue.IsEmpty && current.Count <= _maxBatchSize && !_continue.Token.IsCancellationRequested);
 
@@ -91,19 +123,21 @@ namespace Segment.Flush
 
         public Task Process(BaseAction action)
         {
+            //todo: verify what to do when queue is full
             _queue.Enqueue(action);
 
-            Logger.Debug("Dequeued action in async loop.", new Dict{
+            Logger.Debug("Enqueued action in async loop.", new Dict{
                             { "message id", action.MessageId },
                             { "queue size", _queue.Count }
                          });
-
 
             return Task.FromResult(true);
         }
 
         public void Dispose()
         {
+            Logger.Debug("Disposing AsyncIntervalFlushHandler");
+            _semaphore.Dispose();
             _continue.Cancel();
         }
 

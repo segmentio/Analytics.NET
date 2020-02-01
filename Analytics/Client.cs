@@ -652,8 +652,7 @@ namespace Segment
         private void Enqueue(BaseAction action)
         {
             _flushHandler.Process(action).GetAwaiter().GetResult();
-
-            this.Statistics.Submitted = Statistics.Increment(this.Statistics.Submitted);
+            this.Statistics.IncrementSubmitted();
         }
 
         protected void ensureId(String userId, Options options)

@@ -1,26 +1,30 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace Segment.Stats
 {
     public class Statistics
     {
-        public int Submitted { get; set; }
-        public int Succeeded { get; set; }
-        public int Failed { get; set; }
+        private int _submitted;
+        private int _succeeded;
+        private int _failed;
 
-        internal static int Increment(int value)
-        {
-            // This is to make counters overflow to zero instead
-            // of going negative.
-            // Cannot use "uint" type because it's not CLS compliant
+        public int Submitted => _submitted;
+        public int Succeeded => _succeeded;
+        public int Failed => _failed;
+
+        internal void IncrementSubmitted() => Increment(ref _submitted);
+        internal void IncrementSucceeded() => Increment(ref _succeeded);
+        internal void IncrementFailed() => Increment(ref _failed);
+
+        private void Increment(ref int value) {
             if (value == int.MaxValue)
-            {
-                return 0;
-            }
-            return value + 1;
+                Interlocked.Add(ref value, -value);
+            else
+                Interlocked.Increment(ref value);
         }
     }
 }

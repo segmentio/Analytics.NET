@@ -22,6 +22,7 @@ namespace Segment.Flush
         /// Performs the actual HTTP request to our server
         /// </summary>
         private IRequestHandler _requestHandler;
+        private readonly int _flushIntervalInMillis;
 
 #if NET_NOTHREAD
         /// <summary>
@@ -38,6 +39,10 @@ namespace Segment.Flush
         /// </summary>
         private volatile bool _continue;
 #endif
+
+        /// <summary>
+        /// Used to break interval waiting time
+        /// </summary>
         private volatile bool _forcedFlush = false;
 
         /// <summary>
@@ -61,7 +66,8 @@ namespace Segment.Flush
         internal AsyncFlushHandler(IBatchFactory batchFactory, 
                                  IRequestHandler requestHandler, 
                                  int maxQueueSize,
-                                 int maxBatchSize)
+                                 int maxBatchSize,
+                                 int flushIntervalInMillis)
         {
             _queue = new BlockingQueue<BaseAction>();
 
@@ -70,6 +76,7 @@ namespace Segment.Flush
             
             this.MaxQueueSize = maxQueueSize;
             this.MaxBatchSize = maxBatchSize;
+            _flushIntervalInMillis = flushIntervalInMillis;
 
 #if NET_NOTHREAD
             // set that the queue is currently empty
@@ -134,7 +141,6 @@ namespace Segment.Flush
             Logger.Debug("Starting async flush thread ..");
 
             List<BaseAction> current = new List<BaseAction>();
-            const int TEMP_VAR = 1000;
             DateTime lastSend = DateTime.Now;
             TimeSpan enlasepTime;
 
@@ -189,9 +195,9 @@ namespace Segment.Flush
                 // we'd prefer to add more to the current batch to send more
                 // at once. But only if we're not disposed yet (_continue is true).
 #if NET_NOTHREAD
-                while (!_continue.Token.IsCancellationRequested && enlasepTime.TotalMilliseconds < TEMP_VAR && current.Count <= MaxBatchSize);
+                while (!_continue.Token.IsCancellationRequested && enlasepTime.TotalMilliseconds < _flushIntervalInMillis && current.Count <= MaxBatchSize);
 #else
-                while (_continue && enlasepTime.TotalMilliseconds < TEMP_VAR && current.Count <= MaxBatchSize) ;
+                while (_continue && enlasepTime.TotalMilliseconds < _flushIntervalInMillis && current.Count <= MaxBatchSize) ;
 #endif
 
                 if (current.Count > 0) 

@@ -28,8 +28,9 @@ namespace Segment.Flush
 
         internal AsyncIntervalFlushHandler(IBatchFactory batchFactory,
             IRequestHandler requestHandler,
-                                 int maxQueueSize,
-                                 int maxBatchSize)
+            int maxQueueSize,
+            int maxBatchSize, 
+            int flushIntervalInMillis)
         {
             _queue = new ConcurrentQueue<BaseAction>();
             _batchFactory = batchFactory;
@@ -37,7 +38,7 @@ namespace Segment.Flush
             _maxQueueSize = maxQueueSize;
             _maxBatchSize = maxBatchSize;
             _continue = new CancellationTokenSource();
-            _flushIntervalInMillis = 4000;
+            _flushIntervalInMillis = flushIntervalInMillis;
 
             _ = RunInterval();
         }

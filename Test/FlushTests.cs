@@ -52,7 +52,7 @@ namespace Segment.Test
             Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
         }
 
-		[Test()]
+	[Test()]
         public async Task PerformanceTest()
         {
             Analytics.Initialize(Constants.WRITE_KEY);

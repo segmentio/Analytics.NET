@@ -1,12 +1,8 @@
 #if !NET35
-using Segment;
-using Segment.Flush;
 using Segment.Model;
 using Segment.Request;
-using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,7 +19,7 @@ namespace Segment.Flush
         private readonly int _maxQueueSize;
         private readonly CancellationTokenSource _continue;
         private readonly int _flushIntervalInMillis;
-        private const int _workloads = 4;
+        private const int _workloads = 1;
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(_workloads);
 
         internal AsyncIntervalFlushHandler(IBatchFactory batchFactory,
@@ -45,16 +41,18 @@ namespace Segment.Flush
 
         private async Task RunInterval()
         {
+            //used instead a Timer cause it is not avaible for NetStandar 1.3
             while (!_continue.Token.IsCancellationRequested)
             {
-                _ = Task.Run(NewMethod);
+                _ = Task.Run(PerformFlush);
                 await Task.Delay(_flushIntervalInMillis);
             }
         }
 
-        private async Task NewMethod()
+        private async Task PerformFlush()
         {
-            if (_semaphore.CurrentCount <= 0) {
+            if (_semaphore.CurrentCount <= 0)
+            {
                 Logger.Debug("Skipping flush. Workload limit has been reached");
                 return;
             }
@@ -70,21 +68,16 @@ namespace Segment.Flush
             }
         }
 
+        /// <summary>
+        /// Blocks until all the messages are flushed
+        /// </summary>
         public void Flush()
         {
-            try
-            {
-                _semaphore.Wait();
-                FlushImpl().GetAwaiter().GetResult();
-            }
-            finally
-            {
-                _semaphore.Release();
-            }
+            PerformFlush().GetAwaiter().GetResult();
 
+            //waiting for all workers to be released
             for (var i = 0; i < _workloads; i++) _semaphore.Wait();
-            for (var i = 0; i < _workloads; i++) _semaphore.Release();
-
+            _semaphore.Release(_workloads);
         }
 
         private async Task FlushImpl()
@@ -93,7 +86,7 @@ namespace Segment.Flush
             while (!_queue.IsEmpty && !_continue.Token.IsCancellationRequested)
             {
                 do
-                {                 
+                {
                     if (!_queue.TryDequeue(out var action)) break;
 
                     Logger.Debug("Dequeued action in async loop.", new Dict{
@@ -124,7 +117,6 @@ namespace Segment.Flush
 
         public Task Process(BaseAction action)
         {
-            //todo: verify what to do when queue is full
             _queue.Enqueue(action);
 
             Logger.Debug("Enqueued action in async loop.", new Dict{
@@ -132,7 +124,13 @@ namespace Segment.Flush
                             { "queue size", _queue.Count }
                          });
 
-            return Task.FromResult(true);
+            if (_queue.Count >= _maxQueueSize)
+            {
+                Logger.Debug("Queue is full. Performing a flush");
+                _ = PerformFlush();
+            }
+
+            return Task.FromResult(0);
         }
 
         public void Dispose()

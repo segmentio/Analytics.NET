@@ -77,5 +77,19 @@ namespace Segment.Test.Flush
 
             _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), times: Times.Exactly(5));
         }
+
+        [Test]
+        public void ProcessActionFlushWhenQueueIsFull()
+        {
+            var queueSize = 10;
+            _handler = new AsyncIntervalFlushHandler(new SimpleBatchFactory(""), _mockRequestHandler.Object, queueSize, 20, 20000);
+            
+            for (int i = 0; i < queueSize; i++)
+            {
+                _ = _handler.Process(new Track(null, null, null, null));
+            }
+
+            _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), times: Times.Exactly(1));
+        }
     }
 }

@@ -35,6 +35,10 @@
     <Compile Include="../Analytics/**/*.cs" Exclude="../Analytics/obj/**/*.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="..\Analytics\Flush\AsyncFlushHandler.cs" />
+    <Compile Remove="..\Analytics\Flush\BlockingQueue.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
       <_Parameter1>Test.NetStandard20</_Parameter1>
     </AssemblyAttribute>

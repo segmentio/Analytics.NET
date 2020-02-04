@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,6 +17,12 @@ namespace Segment.Test
             Logger.Handlers += LoggingHandler;
         }
 
+        [TearDown]
+        public void CleanUp()
+        {
+            Logger.Handlers -= LoggingHandler;
+        }
+
         [Test()]
         public void SynchronousFlushTest()
         {
@@ -27,6 +33,8 @@ namespace Segment.Test
             int trials = 10;
 
             RunTests(Analytics.Client, trials);
+
+            Analytics.Client.Flush();
 
             Assert.AreEqual(trials, Analytics.Client.Statistics.Submitted);
             Assert.AreEqual(trials, Analytics.Client.Statistics.Succeeded);
@@ -64,7 +72,9 @@ namespace Segment.Test
 
             DateTime start = DateTime.Now;
 
+            Console.WriteLine("starting to trigger events");
             RunTests(Analytics.Client, trials);
+            Console.WriteLine("finnishing to trigger events");
 
             Analytics.Client.Flush();
 
@@ -82,6 +92,7 @@ namespace Segment.Test
             for (int i = 0; i < trials; i += 1)
             {
                 Actions.Random(client);
+                if (i % 100 == 0) Thread.Sleep(500);
             }
         }
 

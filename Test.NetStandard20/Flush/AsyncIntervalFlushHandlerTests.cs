@@ -121,7 +121,7 @@ namespace Segment.Test.Flush
             TimeSpan duration = DateTime.Now.Subtract(start);
 
             _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), times: Times.Exactly(1));
-            Assert.IsTrue(duration.CompareTo(TimeSpan.FromMilliseconds(time)) > 0);
+            Assert.IsTrue(duration.CompareTo(TimeSpan.FromMilliseconds(time)) >= 0);
 
         }
 

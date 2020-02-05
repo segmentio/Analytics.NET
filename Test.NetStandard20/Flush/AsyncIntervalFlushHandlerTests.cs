@@ -27,6 +27,7 @@ namespace Segment.Test.Flush
                 .Returns(() => _requestHandlerBehavior())
                 .Verifiable();
             _handler = new AsyncIntervalFlushHandler(new SimpleBatchFactory(""), _mockRequestHandler.Object, 100, 20, 2000);
+            Logger.Handlers += LoggingHandler;
 
         }
 
@@ -34,6 +35,7 @@ namespace Segment.Test.Flush
         public void CleanUp()
         {
             _handler.Dispose();
+            Logger.Handlers -= LoggingHandler;
         }
 
         [Test()]
@@ -121,7 +123,7 @@ namespace Segment.Test.Flush
             TimeSpan duration = DateTime.Now.Subtract(start);
 
             _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), times: Times.Exactly(1));
-            Assert.IsTrue(duration.CompareTo(TimeSpan.FromMilliseconds(time)) >= 0);
+            Assert.IsTrue(duration.CompareTo(TimeSpan.FromMilliseconds(time - 50)) >= 0);
 
         }
 
@@ -157,6 +159,17 @@ namespace Segment.Test.Flush
         {
             var response = new Queue<Task>(tasks);
             return () => response.Count > 0 ? response.Dequeue() : null;
+        }
+        static void LoggingHandler(Logger.Level level, string message, IDictionary<string, object> args)
+        {
+            if (args != null)
+            {
+                foreach (string key in args.Keys)
+                {
+                    message += String.Format(" {0}: {1},", "" + key, "" + args[key]);
+                }
+            }
+            Console.WriteLine(String.Format("[FlushTests] [{0}] {1}", level, message));
         }
     }
 }

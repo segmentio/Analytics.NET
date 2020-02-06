@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 
+[assembly: InternalsVisibleTo("Test.UniversalApp")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 namespace Segment.Stats
 {
     public class Statistics

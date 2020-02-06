@@ -6,7 +6,6 @@ using Segment.Request;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Task = System.Threading.Tasks.Task;
 
 namespace Segment.Test.Flush
@@ -32,7 +31,6 @@ namespace Segment.Test.Flush
             _mockBatchFactory = new Mock<IBatchFactory>();
             _handler = GetFlushHandler(100, 20, 2000);
             Logger.Handlers += LoggingHandler;
-
         }
 
         [TearDown]

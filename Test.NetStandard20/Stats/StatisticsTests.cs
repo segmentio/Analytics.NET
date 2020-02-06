@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Segment.NetStandard20.Stats
+namespace Segment.Test.Stats
 {
     [TestFixture]
     public class StatisticsTests

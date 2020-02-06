@@ -17,6 +17,12 @@ namespace Segment.Test
             Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false));
         }
 
+        [TearDown]
+        public void CleanUp()
+        {
+            Logger.Handlers -= LoggingHandler;
+        }
+
         [Test ()]
         public void IdentifyTestNetStanard20()
         {

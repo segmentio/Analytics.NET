@@ -31,7 +31,6 @@ namespace Segment.Test.Flush
             _mockBatchFactory = new Mock<IBatchFactory>();
             _handler = GetFlushHandler(100, 20, 2000);
             Logger.Handlers += LoggingHandler;
-
         }
 
         [TestCleanup]

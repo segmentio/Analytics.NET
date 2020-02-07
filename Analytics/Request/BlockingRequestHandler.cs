@@ -240,7 +240,7 @@ namespace Segment.Request
                     watch.Stop();
 					statusCode = (int)response.StatusCode;
 
-					if (statusCode == (int)HttpStatusCode.OK)
+                    if (statusCode == (int)HttpStatusCode.OK)
                     {
                         Succeed(batch, watch.ElapsedMilliseconds);
                         break;

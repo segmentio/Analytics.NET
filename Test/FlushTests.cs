@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -52,7 +52,7 @@ namespace Segment.Test
             Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
         }
 
-        [Test()]
+	[Test()]
         public async Task PerformanceTest()
         {
             Analytics.Initialize(Constants.WRITE_KEY);

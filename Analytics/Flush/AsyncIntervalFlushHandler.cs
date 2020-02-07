@@ -1,4 +1,3 @@
-#if !NET35
 using Segment.Model;
 using Segment.Request;
 using System.Collections.Concurrent;
@@ -21,11 +20,12 @@ namespace Segment.Flush
         private readonly int _flushIntervalInMillis;
         private const int _workloads = 1;
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(_workloads);
+        private Timer _timer;
 
         internal AsyncIntervalFlushHandler(IBatchFactory batchFactory,
             IRequestHandler requestHandler,
             int maxQueueSize,
-            int maxBatchSize, 
+            int maxBatchSize,
             int flushIntervalInMillis)
         {
             _queue = new ConcurrentQueue<BaseAction>();
@@ -36,18 +36,15 @@ namespace Segment.Flush
             _continue = new CancellationTokenSource();
             _flushIntervalInMillis = flushIntervalInMillis;
 
-            _ = RunInterval();
+            RunInterval();
         }
 
-        private async Task RunInterval()
+        private void RunInterval()
         {
-            //used instead a Timer cause it is not avaible for NetStandar 1.3
-            while (!_continue.Token.IsCancellationRequested)
-            {
-                _ = Task.Run(PerformFlush);
-                await Task.Delay(_flushIntervalInMillis);
-            }
+            var initialDelay = _queue.Count == 0 ? _flushIntervalInMillis : 0;
+            _timer = new Timer(new TimerCallback(async (b) => await PerformFlush()), new { }, 0, _flushIntervalInMillis);
         }
+      
 
         private async Task PerformFlush()
         {
@@ -59,7 +56,11 @@ namespace Segment.Flush
 
             try
             {
+#if !NET35
                 await _semaphore.WaitAsync();
+#else
+                _semaphore.Wait();
+#endif
                 await FlushImpl();
             }
             finally
@@ -115,7 +116,7 @@ namespace Segment.Flush
             }
         }
 
-        public Task Process(BaseAction action)
+        public async Task Process(BaseAction action)
         {
             _queue.Enqueue(action);
 
@@ -130,7 +131,6 @@ namespace Segment.Flush
                 _ = PerformFlush();
             }
 
-            return Task.FromResult(0);
         }
 
         public void Dispose()
@@ -138,8 +138,8 @@ namespace Segment.Flush
             Logger.Debug("Disposing AsyncIntervalFlushHandler");
             _semaphore.Dispose();
             _continue.Cancel();
+            _timer.Dispose();
         }
 
     }
 }
-#endif

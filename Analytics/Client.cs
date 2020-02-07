@@ -44,7 +44,7 @@ namespace Segment
         /// <param name="config"></param>
         public Client(string writeKey, Config config)
         {
-            if (String.IsNullOrEmpty(writeKey))
+            if (string.IsNullOrEmpty(writeKey))
                 throw new InvalidOperationException("Please supply a valid writeKey to initialize.");
 
             this.Statistics = new Statistics();
@@ -57,11 +57,7 @@ namespace Segment
 
             if (config.Async)
             {
-            #if NET35
-                _flushHandler = new AsyncFlushHandler(batchFactory, requestHandler, config.MaxQueueSize, config.MaxBatchSize, config.FlushIntervalInMillis);
-            #else
                 _flushHandler = new AsyncIntervalFlushHandler(batchFactory, requestHandler, config.MaxQueueSize, config.MaxBatchSize, config.FlushIntervalInMillis);
-            #endif
             }
             else
                 _flushHandler = new BlockingFlushHandler(batchFactory, requestHandler);

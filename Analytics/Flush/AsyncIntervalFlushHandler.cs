@@ -1,3 +1,4 @@
+#if !NET35
 using Segment.Model;
 using Segment.Request;
 using System.Collections.Concurrent;
@@ -56,11 +57,7 @@ namespace Segment.Flush
 
             try
             {
-#if !NET35
                 await _semaphore.WaitAsync();
-#else
-                _semaphore.Wait();
-#endif
                 await FlushImpl();
             }
             finally
@@ -116,7 +113,7 @@ namespace Segment.Flush
             }
         }
 
-        public async Task Process(BaseAction action)
+        public Task Process(BaseAction action)
         {
             _queue.Enqueue(action);
 
@@ -131,15 +128,17 @@ namespace Segment.Flush
                 _ = PerformFlush();
             }
 
+            return Task.FromResult(0);
         }
 
         public void Dispose()
         {
             Logger.Debug("Disposing AsyncIntervalFlushHandler");
-            _semaphore.Dispose();
-            _continue.Cancel();
-            _timer.Dispose();
+            _timer?.Dispose();
+            _semaphore?.Dispose();
+            _continue?.Cancel();
         }
 
     }
 }
+#endif

@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "minicover": {
+      "version": "3.0.6",
+      "commands": [
+        "minicover"
+      ]
+    }
+  }
+}

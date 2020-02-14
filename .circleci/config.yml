@@ -42,6 +42,7 @@ jobs:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       DOTNET_CLI_TELEMETRY_OUTPUT: 1
     steps:
+      - run: dotnet tool install --global minicover --version 3.0.6
       - checkout
       - run: chmod +x Test.NetStandard20/coverage_report.sh
       - run: cd Test.NetStandard20 && ./coverage_report.sh

@@ -37,7 +37,7 @@ jobs:
   coverage:
     working_directory: /coverage
     docker:  
-      - image: microsoft/dotnet:2.0-sdk
+      - image: microsoft/dotnet:2.2-sdk
     environment:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       DOTNET_CLI_TELEMETRY_OUTPUT: 1

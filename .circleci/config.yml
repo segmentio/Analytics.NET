@@ -163,7 +163,7 @@ workflows:
       - test_35
       - test_45
       - test_e2e
-    scheduled_e2e_test:
+  scheduled_e2e_test:
     triggers:
       - schedule:
           cron: "25 * * * *"

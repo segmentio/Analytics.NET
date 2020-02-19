@@ -72,7 +72,7 @@ jobs:
       - run: 
           name: "Validating coverage"
           command: | 
-            & .\ValidateCoverage.ps1 -threshold 80
+            & .\ValidateCoverage.ps1 -threshold 70
       - run: 
           command: bash <(curl -s https://codecov.io/bash) -f ./opencover.xml
           shell: bash.exe
@@ -94,7 +94,7 @@ jobs:
       - run: 
           name: "Validating coverage"
           command: | 
-            & .\ValidateCoverage.ps1 -threshold 80
+            & .\ValidateCoverage.ps1 -threshold 70
       - run: 
           command: bash <(curl -s https://codecov.io/bash) -f ./opencover.xml
           shell: bash.exe

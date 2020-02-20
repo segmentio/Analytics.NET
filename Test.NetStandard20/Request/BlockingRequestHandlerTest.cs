@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Test.NetStandard20.Request
+namespace Segment.Test.Request
 {
 
     [TestFixture()]

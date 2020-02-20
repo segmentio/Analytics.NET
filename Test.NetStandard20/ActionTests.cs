@@ -1,6 +1,9 @@
 using System;
 using NUnit.Framework;
 using System.Collections.Generic;
+using Moq;
+using Segment.Request;
+using Segment.Model;
 using System.Threading.Tasks;
 
 namespace Segment.Test
@@ -8,13 +11,24 @@ namespace Segment.Test
     [TestFixture()]
     public class ActionTests
     {
+        private Mock<IRequestHandler> _mockRequestHandler;
 
         [SetUp]
         public void Init()
         {
+            _mockRequestHandler = new Mock<IRequestHandler>();
+            _mockRequestHandler
+                .Setup(x => x.MakeRequest(It.IsAny<Batch>()))
+                .Returns((Batch b) =>
+                {
+                    Analytics.Client.Statistics.Succeeded += b.batch.Count;
+                    return Task.CompletedTask;
+                });
+
             Analytics.Dispose();
             Logger.Handlers += LoggingHandler;
-            Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false));
+            var client = new Client(Constants.WRITE_KEY, new Config().SetAsync(false), _mockRequestHandler.Object);
+            Analytics.Initialize(client);
         }
 
         [Test ()]

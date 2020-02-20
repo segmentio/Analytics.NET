@@ -1,16 +1,29 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Moq;
 using NUnit.Framework;
+using Segment.Model;
+using Segment.Request;
 
 namespace Segment.Test
 {
     [TestFixture()]
     public class ConnectionTests
     {
+        private Mock<IRequestHandler> _mockRequestHandler;
+
         [SetUp]
         public void Init()
         {
+            _mockRequestHandler = new Mock<IRequestHandler>();
+            _mockRequestHandler
+                .Setup(x => x.MakeRequest(It.IsAny<Batch>()))
+                .Returns(async (Batch b) =>
+                {
+                    Analytics.Client.Statistics.Succeeded += b.batch.Count;
+                });
+
             Analytics.Dispose();
             Logger.Handlers += LoggingHandler;
         }
@@ -19,7 +32,8 @@ namespace Segment.Test
         public void ProxyTestNet35()
         {
             // Set proxy address, like as "http://localhost:8888"
-            Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false).SetProxy(""));
+            var client = new Client(Constants.WRITE_KEY, new Config().SetAsync(false).SetProxy(""), _mockRequestHandler.Object);
+            Analytics.Initialize(client);
 
             Actions.Identify(Analytics.Client);
 
@@ -32,7 +46,8 @@ namespace Segment.Test
         public void GZipTestNet35()
         {
             // Set GZip/Deflate on request header
-            Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false).SetRequestCompression(true));
+            var client = new Client(Constants.WRITE_KEY, new Config().SetAsync(false).SetRequestCompression(true), _mockRequestHandler.Object);
+            Analytics.Initialize(client);
 
             Actions.Identify(Analytics.Client);
 

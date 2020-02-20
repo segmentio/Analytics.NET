@@ -5,15 +5,27 @@ using System.Threading.Tasks;
 using Segment.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
+using Moq;
+using Segment.Request;
 
 namespace Segment.Test
 {
 	[TestClass]
 	public class FlushTests
 	{
+		private Mock<IRequestHandler> _mockRequestHandler;
+
 		[TestInitialize]
 		public void Init()
 		{
+			_mockRequestHandler = new Mock<IRequestHandler>();
+			_mockRequestHandler
+				.Setup(x => x.MakeRequest(It.IsAny<Batch>()))
+				.Returns((Batch b) =>
+				{
+					Analytics.Client.Statistics.Succeeded += b.batch.Count;
+					return Task.CompletedTask;
+				});
 			Analytics.Dispose();
 			Logger.Handlers += LoggingHandler;
 		}
@@ -21,7 +33,8 @@ namespace Segment.Test
 		[TestMethod]
 		public void SynchronousFlushTestNetPortable()
 		{
-			Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false));
+			var client = new Client(Constants.WRITE_KEY, new Config().SetAsync(false), _mockRequestHandler.Object);
+			Analytics.Initialize(client);
 			Analytics.Client.Succeeded += Client_Succeeded;
 			Analytics.Client.Failed += Client_Failed;
 
@@ -37,7 +50,8 @@ namespace Segment.Test
 		[TestMethod]
 		public void AsynchronousFlushTestNetPortable()
 		{
-			Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(true));
+			var client = new Client(Constants.WRITE_KEY, new Config().SetAsync(true), _mockRequestHandler.Object);
+			Analytics.Initialize(client);
 
 			Analytics.Client.Succeeded += Client_Succeeded;
 			Analytics.Client.Failed += Client_Failed;
@@ -56,7 +70,8 @@ namespace Segment.Test
 		[TestMethod]
 		public async Task PerformanceTestNetPortable()
 		{
-			Analytics.Initialize(Constants.WRITE_KEY);
+			var client = new Client(Constants.WRITE_KEY, new Config(), _mockRequestHandler.Object);
+			Analytics.Initialize(client);
 
 			Analytics.Client.Succeeded += Client_Succeeded;
 			Analytics.Client.Failed += Client_Failed;

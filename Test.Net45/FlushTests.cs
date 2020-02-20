@@ -2,17 +2,30 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Moq;
 using NUnit.Framework;
 using Segment.Model;
+using Segment.Request;
 
 namespace Segment.Test
 {
     [TestFixture()]
     public class FlushTests
     {
+        private Mock<IRequestHandler> _mockRequestHandler;
+
         [SetUp]
         public void Init()
         {
+            _mockRequestHandler = new Mock<IRequestHandler>();
+            _mockRequestHandler
+                .Setup(x => x.MakeRequest(It.IsAny<Batch>()))
+                .Returns((Batch b) =>
+                {
+                    Analytics.Client.Statistics.Succeeded += b.batch.Count;
+                    return Task.FromResult(true);
+                });
+
             Analytics.Dispose();
             Logger.Handlers += LoggingHandler;
         }
@@ -20,7 +33,8 @@ namespace Segment.Test
         [Test()]
         public void SynchronousFlushTestNet45()
         {
-            Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false));
+            var client = new Client(Constants.WRITE_KEY, new Config().SetAsync(false), _mockRequestHandler.Object);
+            Analytics.Initialize(client);
             Analytics.Client.Succeeded += Client_Succeeded;
             Analytics.Client.Failed += Client_Failed;
 
@@ -36,7 +50,8 @@ namespace Segment.Test
         [Test()]
         public void AsynchronousFlushTestNet45()
         {
-            Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(true));
+            var client = new Client(Constants.WRITE_KEY, new Config().SetAsync(true), _mockRequestHandler.Object);
+            Analytics.Initialize(client);
 
             Analytics.Client.Succeeded += Client_Succeeded;
             Analytics.Client.Failed += Client_Failed;
@@ -55,7 +70,8 @@ namespace Segment.Test
         [Test()]
         public void PerformanceTestNet45()
         {
-            Analytics.Initialize(Constants.WRITE_KEY);
+            var client = new Client(Constants.WRITE_KEY, new Config(), _mockRequestHandler.Object);
+            Analytics.Initialize(client);
 
             Analytics.Client.Succeeded += Client_Succeeded;
             Analytics.Client.Failed += Client_Failed;

@@ -19,7 +19,14 @@ using System.IO.Compression;
 namespace Segment.Request
 {
 #if NET35
-    internal class HttpClient : WebClient
+    internal interface IHttpClient
+    {
+        WebHeaderCollection Headers { get; set; }
+        IWebProxy Proxy { get; set; }
+        byte[] UploadData(Uri address, string method, byte[] data);
+    }
+
+    internal class HttpClient : WebClient, IHttpClient
     {
         public TimeSpan Timeout { get; set; }
 
@@ -72,8 +79,11 @@ namespace Segment.Request
         /// </summary>
         private readonly Client _client;
 
+#if NET35
+        private readonly IHttpClient _httpClient;
+#else
         private readonly HttpClient _httpClient;
-
+#endif
         /// <summary>
         /// The maximum amount of time to wait before calling
         /// the HTTP flush a timeout failure.
@@ -83,8 +93,12 @@ namespace Segment.Request
         internal BlockingRequestHandler(Client client, TimeSpan timeout) : this(client, timeout, null)
         {
         }
+#if NET35
 
+        internal BlockingRequestHandler(Client client, TimeSpan timeout, IHttpClient httpClient)
+#else
         internal BlockingRequestHandler(Client client, TimeSpan timeout, HttpClient httpClient)
+#endif
         {
             this._client = client;
             this.Timeout = timeout;

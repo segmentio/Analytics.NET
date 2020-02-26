@@ -11,59 +11,70 @@ namespace Segment.Test
     [TestFixture ()]
     public class ClientTests
     {
-        class TestClient : Client
+        Client _client;
+
+        [SetUp]
+        public void Init()
         {
-            public TestClient() : base("catpants")
-            {
-            }
+            _client = new Client("foo");
+        }
 
-            public bool EnsureId(String userId, Options options)
-            {
-                try
-                {
-                    base.ensureId(userId, options);
-                }
-                catch
-                {
-                    return false;
-                }
 
-                return true;
-            }
+        [Test]
+        public void InitilizationThrowsInvalidOperationExceptionWhenWriteKeyIsEmpty()
+        {
+            var ex = Assert.Throws<InvalidOperationException>(() => new Client(""));
+            Assert.AreEqual("Please supply a valid writeKey to initialize.", ex.Message);
         }
 
         [Test]
-        public void HasUserId_NoOptions()
+        public void PageThrowsInvalidOperationExceptionWhenPageNameIsEmtpy()
         {
-            var test = new TestClient();
-            Assert.IsTrue(test.EnsureId("user id", null));
+            var ex = Assert.Throws<InvalidOperationException>(() => _client.Page("userId", ""));
+
+            Assert.AreEqual("Please supply a valid name to call #Page.", ex.Message);
         }
 
         [Test]
-        public void NoUserId_HasAnonId()
+        public void PageThrowsInvalidOperationExceptionWhenUserIdIsEmtpy()
         {
-            var test = new TestClient();
+            var ex = Assert.Throws<InvalidOperationException>(() => _client.Page("", ""));
 
-            var options = new Options();
-            options.SetAnonymousId("anon id");
-            Assert.IsTrue(test.EnsureId("", options));
+            Assert.AreEqual("Please supply a valid userId or anonymousId to call #Page.", ex.Message);
         }
 
         [Test]
-        public void NoUserId_NoAnon()
+        public void AliasThrowsInvalidOperationExceptionWhenUserIdIsEmtpy()
         {
-            var test = new TestClient();
+            var ex = Assert.Throws<InvalidOperationException>(() => _client.Alias("previousId", ""));
 
-            Assert.IsFalse(test.EnsureId("", new Options()));
+            Assert.AreEqual("Please supply a valid 'userId' to Alias.", ex.Message);
         }
 
         [Test]
-        public void NoUserId_NoOptions()
+        public void AliasThrowsInvalidOperationExceptionWhenPreviousIdIsEmtpy()
         {
-            var test = new TestClient();
+            var ex = Assert.Throws<InvalidOperationException>(() => _client.Alias("", ""));
 
-            Assert.IsFalse(test.EnsureId("", null));
+            Assert.AreEqual("Please supply a valid 'previousId' to Alias.", ex.Message);
         }
+
+        [Test]
+        public void GroupThrowsInvalidOperationExceptionWhenGroupIdIsEmtpy()
+        {
+            var ex = Assert.Throws<InvalidOperationException>(() => _client.Group("userId", "", new Options()));
+
+            Assert.AreEqual("Please supply a valid groupId to call #Group.", ex.Message);
+        }
+
+        [Test]
+        public void GroupThrowsInvalidOperationExceptionWhenUserIdIsEmtpy()
+        {
+            var ex = Assert.Throws<InvalidOperationException>(() => _client.Group("", "", (Options)null));
+
+            Assert.AreEqual("Please supply a valid userId or anonymousId to call #Group.", ex.Message);
+        }
+
     }
 }
 

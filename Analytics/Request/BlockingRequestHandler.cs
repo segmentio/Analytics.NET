@@ -282,7 +282,7 @@ namespace Segment.Request
         {
             foreach (BaseAction action in batch.batch)
             {
-                _client.Statistics.Failed = Statistics.Increment(_client.Statistics.Failed);
+                _client.Statistics.IncrementFailed();
                 _client.RaiseFailure(action, e);
             }
 
@@ -298,7 +298,7 @@ namespace Segment.Request
         {
             foreach (BaseAction action in batch.batch)
             {
-                _client.Statistics.Succeeded = Statistics.Increment(_client.Statistics.Succeeded);
+                _client.Statistics.IncrementSucceeded();
                 _client.RaiseSuccess(action);
             }
 

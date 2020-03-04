@@ -27,6 +27,8 @@ namespace Segment
 
         internal TimeSpan Timeout { get; set; }
 
+        internal int FlushIntervalInMillis { get; private set; }
+
         public Config()
         {
             this.Host = Defaults.Host;
@@ -35,6 +37,7 @@ namespace Segment
             this.MaxQueueSize = Defaults.MaxQueueCapacity;
             this.MaxBatchSize = Defaults.MaxBatchSize;
             this.Async = Defaults.Async;
+            this.FlushIntervalInMillis = Defaults.FlushIntervalInMillis;
         }
 
         /// <summary>
@@ -120,6 +123,26 @@ namespace Segment
         public Config SetRequestCompression(bool bCompress)
         {
             this.CompressRequest = bCompress;
+            return this;
+        }
+
+#if NET35
+        /// <summary>
+        /// Set the interval at which the client should flush events. 
+        /// This is relative to the last flush
+        /// </summary>
+        /// <param name="interval">Time in milliseconds</param>
+        /// <returns></returns>
+#else
+        /// <summary>
+        /// Set the interval at which the client should flush events. 
+        /// </summary>
+        /// <param name="interval"></param>
+        /// <returns></returns>
+#endif
+        public Config SetFlushIntervalInMillis(int interval)
+        {
+            this.FlushIntervalInMillis = interval;
             return this;
         }
     }

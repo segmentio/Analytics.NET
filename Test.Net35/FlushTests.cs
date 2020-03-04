@@ -17,6 +17,12 @@ namespace Segment.Test
             Logger.Handlers += LoggingHandler;
         }
 
+        [TearDown]
+        public void CleanUp()
+        {
+            Logger.Handlers -= LoggingHandler;
+        }
+
         [Test()]
         public void SynchronousFlushTestNet35()
         {
@@ -45,7 +51,7 @@ namespace Segment.Test
 
             RunTests(Analytics.Client, trials);
 
-            Thread.Sleep(1000); // cant use flush to wait during asynchronous flushing
+            Analytics.Client.Flush();
 
             Assert.AreEqual(trials, Analytics.Client.Statistics.Submitted);
             Assert.AreEqual(trials, Analytics.Client.Statistics.Succeeded);

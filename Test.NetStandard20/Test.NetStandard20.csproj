@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <DotNetCliToolReference Include="MiniCover" Version="2.0.0-ci-20180729170656" />
+    <DotNetCliToolReference Include="MiniCover" Version="2.0.0-ci-20181108093139" />
   </ItemGroup>
 
   <ItemGroup>

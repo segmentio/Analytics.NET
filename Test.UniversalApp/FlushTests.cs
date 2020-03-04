@@ -46,7 +46,7 @@ namespace Segment.Test
 
 			RunTests(Analytics.Client, trials);
 
-			Task.Delay(1000).Wait(); // cant use flush to wait during asynchronous flushing
+            Analytics.Client.Flush();
 
 			Assert.AreEqual(trials, Analytics.Client.Statistics.Submitted);
 			Assert.AreEqual(trials, Analytics.Client.Statistics.Succeeded);

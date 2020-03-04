@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using Segment.Model;
 
@@ -45,7 +43,7 @@ namespace Segment.Test
 
             RunTests(Analytics.Client, trials);
 
-            Thread.Sleep(1000); // cant use flush to wait during asynchronous flushing
+            Analytics.Client.Flush();
 
             Assert.AreEqual(trials, Analytics.Client.Statistics.Submitted);
             Assert.AreEqual(trials, Analytics.Client.Statistics.Succeeded);

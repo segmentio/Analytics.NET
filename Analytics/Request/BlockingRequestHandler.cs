@@ -149,7 +149,6 @@ namespace Segment.Request
 #else
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", BasicAuthHeader(batch.WriteKey, string.Empty));
 #endif
-
                 // Prepare request data;
                 var requestData = Encoding.UTF8.GetBytes(json);
 

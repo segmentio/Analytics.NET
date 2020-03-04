@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+using System;
 using Segment.Model;
 
 namespace Segment.Test

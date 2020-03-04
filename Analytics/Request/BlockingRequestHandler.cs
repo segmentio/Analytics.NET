@@ -238,7 +238,7 @@ namespace Segment.Request
                     var response = await _httpClient.PostAsync(uri, content).ConfigureAwait(false);
 
                     watch.Stop();
-					statusCode = (int)response.StatusCode;
+                    statusCode = (int)response.StatusCode;
 
                     if (statusCode == (int)HttpStatusCode.OK)
                     {

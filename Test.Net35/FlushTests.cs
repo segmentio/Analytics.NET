@@ -22,11 +22,17 @@ namespace Segment.Test
                 .Setup(x => x.MakeRequest(It.IsAny<Batch>()))
                 .Returns(async (Batch b) =>
                 {
-                    Analytics.Client.Statistics.Succeeded += b.batch.Count;
+                    b.batch.ForEach(_ => Analytics.Client.Statistics.IncrementSucceeded());
                 });
 
             Analytics.Dispose();
             Logger.Handlers += LoggingHandler;
+        }
+
+        [TearDown]
+        public void CleanUp()
+        {
+            Logger.Handlers -= LoggingHandler;
         }
 
         [Test()]
@@ -59,7 +65,7 @@ namespace Segment.Test
 
             RunTests(Analytics.Client, trials);
 
-            Thread.Sleep(1000); // cant use flush to wait during asynchronous flushing
+            Analytics.Client.Flush();
 
             Assert.AreEqual(trials, Analytics.Client.Statistics.Submitted);
             Assert.AreEqual(trials, Analytics.Client.Statistics.Succeeded);

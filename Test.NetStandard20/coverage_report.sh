@@ -3,7 +3,7 @@ set -ex
 
 dotnet restore
 dotnet build
-dotnet minicover instrument --workdir ../ --assemblies Test.NetStandard20/**/bin/**/*.dll --sources /**/*.cs
-dotnet minicover reset
+minicover instrument --workdir ../ --assemblies Test.NetStandard20/**/bin/**/*.dll --sources Analytics/**/*.cs --tests Test.NetStandard20/**/*.cs
+minicover reset
 dotnet test --no-build
-dotnet minicover opencoverreport --workdir ../ --threshold 80
+minicover opencoverreport --workdir ../ --threshold 80

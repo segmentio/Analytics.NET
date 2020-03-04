@@ -22,12 +22,18 @@ namespace Segment.Test
                 .Setup(x => x.MakeRequest(It.IsAny<Batch>()))
                 .Returns((Batch b) =>
                 {
-                    Analytics.Client.Statistics.Succeeded += b.batch.Count;
+                    b.batch.ForEach(_ => Analytics.Client.Statistics.IncrementSucceeded());
                     return Task.CompletedTask;
                 });
 
             Analytics.Dispose();
             Logger.Handlers += LoggingHandler;
+        }
+
+        [TearDown]
+        public void CleanUp()
+        {
+            Logger.Handlers -= LoggingHandler;
         }
 
         [Test()]
@@ -41,6 +47,8 @@ namespace Segment.Test
             int trials = 10;
 
             RunTests(Analytics.Client, trials);
+
+            Analytics.Client.Flush();
 
             Assert.AreEqual(trials, Analytics.Client.Statistics.Submitted);
             Assert.AreEqual(trials, Analytics.Client.Statistics.Succeeded);
@@ -60,7 +68,7 @@ namespace Segment.Test
 
             RunTests(Analytics.Client, trials);
 
-            Thread.Sleep(1000); // cant use flush to wait during asynchronous flushing
+            Analytics.Client.Flush();
 
             Assert.AreEqual(trials, Analytics.Client.Statistics.Submitted);
             Assert.AreEqual(trials, Analytics.Client.Statistics.Succeeded);
@@ -80,7 +88,9 @@ namespace Segment.Test
 
             DateTime start = DateTime.Now;
 
+            Console.WriteLine("starting to trigger events");
             RunTests(Analytics.Client, trials);
+            Console.WriteLine("finnishing to trigger events");
 
             Analytics.Client.Flush();
 
@@ -98,6 +108,7 @@ namespace Segment.Test
             for (int i = 0; i < trials; i += 1)
             {
                 Actions.Random(client);
+                if (i % 100 == 0) Thread.Sleep(500);
             }
         }
 

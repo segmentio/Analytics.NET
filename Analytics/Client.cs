@@ -61,7 +61,13 @@ namespace Segment
             IBatchFactory batchFactory = new SimpleBatchFactory(this._writeKey);
 
             if (config.Async)
-                _flushHandler = new AsyncFlushHandler(batchFactory, requestHandler, config.MaxQueueSize, config.MaxBatchSize);
+            {
+            #if NET35
+                _flushHandler = new AsyncFlushHandler(batchFactory, requestHandler, config.MaxQueueSize, config.MaxBatchSize, config.FlushIntervalInMillis);
+            #else
+                _flushHandler = new AsyncIntervalFlushHandler(batchFactory, requestHandler, config.MaxQueueSize, config.MaxBatchSize, config.FlushIntervalInMillis);
+            #endif
+            }
             else
                 _flushHandler = new BlockingFlushHandler(batchFactory, requestHandler);
         }
@@ -651,8 +657,7 @@ namespace Segment
         private void Enqueue(BaseAction action)
         {
             _flushHandler.Process(action).GetAwaiter().GetResult();
-
-            this.Statistics.Submitted = Statistics.Increment(this.Statistics.Submitted);
+            this.Statistics.IncrementSubmitted();
         }
 
         protected void ensureId(String userId, Options options)

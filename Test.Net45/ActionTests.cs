@@ -21,7 +21,7 @@ namespace Segment.Test
                 .Setup(x => x.MakeRequest(It.IsAny<Batch>()))
                 .Returns((Batch b) =>
                 {
-                    Analytics.Client.Statistics.Succeeded += b.batch.Count;
+                    b.batch.ForEach(_ => Analytics.Client.Statistics.IncrementSucceeded());
                     return Task.FromResult(true);
                 });
 

@@ -21,13 +21,19 @@ namespace Segment.Test
                 .Setup(x => x.MakeRequest(It.IsAny<Batch>()))
                 .Returns(async (Batch b) =>
                 {
-                    Analytics.Client.Statistics.Succeeded += b.batch.Count;
+                    b.batch.ForEach(_ => Analytics.Client.Statistics.IncrementSucceeded());
                 });
 
             Analytics.Dispose();
             Logger.Handlers += LoggingHandler;
             var client = new Client(Constants.WRITE_KEY, new Config().SetAsync(false), _mockRequestHandler.Object);
             Analytics.Initialize(client);
+        }
+
+        [TearDown]
+        public void CleanUp()
+        {
+            Logger.Handlers -= LoggingHandler;
         }
 
         [Test ()]

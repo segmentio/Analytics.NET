@@ -163,7 +163,6 @@ namespace Segment.Request
 #else
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", BasicAuthHeader(batch.WriteKey, string.Empty));
 #endif
-
                 // Prepare request data;
                 var requestData = Encoding.UTF8.GetBytes(json);
 
@@ -252,7 +251,7 @@ namespace Segment.Request
                     var response = await _httpClient.PostAsync(uri, content).ConfigureAwait(false);
 
                     watch.Stop();
-					statusCode = (int)response.StatusCode;
+                    statusCode = (int)response.StatusCode;
 
                     if (statusCode == (int)HttpStatusCode.OK)
                     {
@@ -296,7 +295,7 @@ namespace Segment.Request
         {
             foreach (BaseAction action in batch.batch)
             {
-                _client.Statistics.Failed = Statistics.Increment(_client.Statistics.Failed);
+                _client.Statistics.IncrementFailed();
                 _client.RaiseFailure(action, e);
             }
 
@@ -312,7 +311,7 @@ namespace Segment.Request
         {
             foreach (BaseAction action in batch.batch)
             {
-                _client.Statistics.Succeeded = Statistics.Increment(_client.Statistics.Succeeded);
+                _client.Statistics.IncrementSucceeded();
                 _client.RaiseSuccess(action);
             }
 

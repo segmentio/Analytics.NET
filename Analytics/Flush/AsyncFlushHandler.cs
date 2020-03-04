@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,6 +22,7 @@ namespace Segment.Flush
         /// Performs the actual HTTP request to our server
         /// </summary>
         private IRequestHandler _requestHandler;
+        private readonly int _flushIntervalInMillis;
 
 #if NET_NOTHREAD
         /// <summary>
@@ -37,6 +39,11 @@ namespace Segment.Flush
         /// </summary>
         private volatile bool _continue;
 #endif
+
+        /// <summary>
+        /// Used to break interval waiting time
+        /// </summary>
+        private volatile bool _forcedFlush = false;
 
         /// <summary>
         /// Marks that the current queue is empty and no flush is happening.
@@ -59,7 +66,8 @@ namespace Segment.Flush
         internal AsyncFlushHandler(IBatchFactory batchFactory, 
                                  IRequestHandler requestHandler, 
                                  int maxQueueSize,
-                                 int maxBatchSize)
+                                 int maxBatchSize,
+                                 int flushIntervalInMillis)
         {
             _queue = new BlockingQueue<BaseAction>();
 
@@ -68,6 +76,7 @@ namespace Segment.Flush
             
             this.MaxQueueSize = maxQueueSize;
             this.MaxBatchSize = maxBatchSize;
+            _flushIntervalInMillis = flushIntervalInMillis;
 
 #if NET_NOTHREAD
             // set that the queue is currently empty
@@ -118,9 +127,9 @@ namespace Segment.Flush
             if (_queue.Count > 0) _idle.Reset(); 
 
             Logger.Debug("Blocking flush waiting until the queue if fully empty ..");
-
+            _forcedFlush = true;
             _idle.WaitOne ();
-
+            _forcedFlush = false;
             Logger.Debug("Blocking flush completed.");
         }
 
@@ -132,6 +141,8 @@ namespace Segment.Flush
             Logger.Debug("Starting async flush thread ..");
 
             List<BaseAction> current = new List<BaseAction>();
+            DateTime lastSend = DateTime.Now;
+            TimeSpan enlasepTime;
 
             // keep looping while flushing thread is active
 #if NET_NOTHREAD
@@ -142,13 +153,21 @@ namespace Segment.Flush
             {
                 do
                 {
+                    enlasepTime = DateTime.Now - lastSend;
                     // the only time we're actually not flushing
                     // is if the condition that the queue is empty here
                     if (_queue.Count == 0)
                     {
-                        _idle.Set();
-
-                        Logger.Debug("Queue is empty, flushing is finished.");
+                        if (_forcedFlush) {
+                            Logger.Debug("Queue is empty, flushing is finished.");
+                            break;
+                        }
+#if NET_NOTHREAD
+                        Task.Delay(100).GetAwaiter().GetResult(); 
+#else           
+                        Thread.Sleep(100);
+#endif
+                        continue;
                     }
 
                     // blocks and waits for a dequeue
@@ -176,9 +195,9 @@ namespace Segment.Flush
                 // we'd prefer to add more to the current batch to send more
                 // at once. But only if we're not disposed yet (_continue is true).
 #if NET_NOTHREAD
-                while (!_continue.Token.IsCancellationRequested && _queue.Count > 0 && current.Count <= MaxBatchSize);
+                while (!_continue.Token.IsCancellationRequested && enlasepTime.TotalMilliseconds < _flushIntervalInMillis && current.Count <= MaxBatchSize);
 #else
-                while (_continue && _queue.Count > 0 && current.Count <= MaxBatchSize);
+                while (_continue && enlasepTime.TotalMilliseconds < _flushIntervalInMillis && current.Count <= MaxBatchSize) ;
 #endif
 
                 if (current.Count > 0) 
@@ -197,6 +216,10 @@ namespace Segment.Flush
                     current = new List<BaseAction>();
                 }
 
+                if (_queue.Count == 0)
+                    _idle.Set();
+
+                lastSend = DateTime.Now;
 #if !NET_NOTHREAD
                 // thread context switch to avoid resource contention
                 Thread.Sleep (0);

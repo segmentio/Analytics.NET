@@ -20,7 +20,7 @@ namespace Segment.Test
                 .Setup(x => x.MakeRequest(It.IsAny<Batch>()))
                 .Returns(async (Batch b) =>
                 {
-                    Analytics.Client.Statistics.Succeeded += b.batch.Count;
+                    b.batch.ForEach(_=>Analytics.Client.Statistics.IncrementSucceeded());
                 });
 
             Analytics.Dispose();

@@ -57,7 +57,7 @@ namespace Test.NetStandard20.Request
             //Assert
             Assert.AreEqual(0, _client.Statistics.Succeeded);
             Assert.AreEqual(1, _client.Statistics.Failed);
-            AssertSendAsyncWasCalled(7);
+            AssertSendAsyncWasCalled(8);
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace Test.NetStandard20.Request
             //Assert
             Assert.AreEqual(0, _client.Statistics.Succeeded);
             Assert.AreEqual(1, _client.Statistics.Failed);
-            AssertSendAsyncWasCalled(7);
+            AssertSendAsyncWasCalled(8);
         }
 
 

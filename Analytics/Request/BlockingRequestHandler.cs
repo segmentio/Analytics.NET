@@ -86,7 +86,7 @@ namespace Segment.Request
         {
         }
 
-        internal BlockingRequestHandler(Client client, TimeSpan timeout, HttpClient httpClient, int maxBackOffDuration = 10000)
+        internal BlockingRequestHandler(Client client, TimeSpan timeout, HttpClient httpClient, int maxBackOffDuration = 10000) // Set maximum waiting limit to 10s
         {
             this._client = client;
             _maxBackOffDuration = maxBackOffDuration;
@@ -184,7 +184,7 @@ namespace Segment.Request
                 int statusCode = (int)HttpStatusCode.OK;
                 string responseStr = "";
 
-                var backo = new Backo(max: _maxBackOffDuration, jitter: 0); // Set maximum waiting limit to 10s
+                var backo = new Backo(max: _maxBackOffDuration, jitter: 0); 
 
                 while (!backo.HasReachedMax)
                 {
@@ -263,7 +263,7 @@ namespace Segment.Request
 #endif
                 }
 
-                if (backo.has || statusCode != (int)HttpStatusCode.OK)
+                if (backo.HasReachedMax || statusCode != (int)HttpStatusCode.OK)
                 {
                     Fail(batch, new APIException("Unexpected Status Code", responseStr), watch.ElapsedMilliseconds);
                 }

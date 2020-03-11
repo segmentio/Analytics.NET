@@ -63,5 +63,42 @@ namespace Test.NetStandard20.Request
             //Assert
             return time;
         }
+
+        [TestCase(3, 2, ExpectedResult = 400)]
+        [TestCase(3, 4, ExpectedResult = 1600)]
+        [TestCase(3, 10, ExpectedResult = 10000)]
+        public int TimeShouldDependOnFactor(int calls, byte factor)
+        {
+            //Arrange
+            var backo = new Backo(jitter: 0, factor: factor);
+
+            //Act
+            for (var i = 0; i < calls - 1; i++)
+                backo.AttemptTime();
+
+            var time = backo.AttemptTime();
+
+            //Assert
+            return time;
+        }
+
+        [TestCase(1, (ushort)200, 100)]
+        [TestCase(3, (ushort)400, 400)]
+        [TestCase(5, (ushort)800, 1600)]
+        public void AJitterShouldBeAdded(int calls, ushort jitter, int expectedTime)
+        {
+            //Arrange
+            var backo = new Backo(jitter: jitter);
+
+            //Act
+            for (var i = 0; i < calls - 1; i++)
+                backo.AttemptTime();
+
+            var time = backo.AttemptTime();
+
+            //Assert
+            Assert.IsTrue(time >= expectedTime);
+            Assert.IsTrue(time - expectedTime <= jitter);
+        }
     }
 }

@@ -1,7 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Segment
 {
     public class Analytics
@@ -44,6 +40,17 @@ namespace Segment
                 if (Client == null)
                 {
                     Client = new Client(writeKey, config);
+                }
+            }
+        }
+
+        internal static void Initialize(Client client)
+        {
+            lock (padlock)
+            {
+                if (Client == null)
+                {
+                    Client = client;
                 }
             }
         }

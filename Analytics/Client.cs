@@ -42,17 +42,22 @@ namespace Segment
         /// </summary>
         /// <param name="writeKey"></param>
         /// <param name="config"></param>
-        public Client(string writeKey, Config config)
+        public Client(string writeKey, Config config) : this(writeKey, config, null)
         {
             if (string.IsNullOrEmpty(writeKey))
                 throw new InvalidOperationException("Please supply a valid writeKey to initialize.");
+
+        }
+
+        internal Client(string writeKey, Config config, IRequestHandler requestHandler)
+        {
 
             this.Statistics = new Statistics();
 
             this._writeKey = writeKey;
             this._config = config;
 
-            IRequestHandler requestHandler = new BlockingRequestHandler(this, config.Timeout);
+            requestHandler = requestHandler ?? new BlockingRequestHandler(this, config.Timeout);
             IBatchFactory batchFactory = new SimpleBatchFactory(this._writeKey);
 
             if (config.Async)

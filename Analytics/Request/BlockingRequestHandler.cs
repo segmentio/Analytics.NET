@@ -72,6 +72,8 @@ namespace Segment.Request
         /// </summary>
         private readonly Client _client;
 
+        private readonly Backo _backo;
+
         private readonly int _maxBackOffDuration;
 
         private readonly HttpClient _httpClient;
@@ -82,14 +84,15 @@ namespace Segment.Request
         /// </summary>
         public TimeSpan Timeout { get; set; }
 
-        internal BlockingRequestHandler(Client client, TimeSpan timeout) : this(client, timeout, null)
+        internal BlockingRequestHandler(Client client, TimeSpan timeout) : this(client, timeout, null, new Backo(max: 10000, jitter: 5000)) // Set maximum waiting limit to 10s and jitter to 5s
         {
         }
 
-        internal BlockingRequestHandler(Client client, TimeSpan timeout, HttpClient httpClient, int maxBackOffDuration = 10000) // Set maximum waiting limit to 10s
+        internal BlockingRequestHandler(Client client, TimeSpan timeout, HttpClient httpClient, Backo backo)
         {
             this._client = client;
-            _maxBackOffDuration = maxBackOffDuration;
+            _backo = backo;
+
             this.Timeout = timeout;
 
             if (httpClient != null)
@@ -184,9 +187,7 @@ namespace Segment.Request
                 int statusCode = (int)HttpStatusCode.OK;
                 string responseStr = "";
 
-                var backo = new Backo(max: _maxBackOffDuration, jitter: 0); 
-
-                while (!backo.HasReachedMax)
+                while (!_backo.HasReachedMax)
                 {
 #if NET35
                     watch.Start();
@@ -213,7 +214,7 @@ namespace Segment.Request
                                 // If status code is greater than 500 and less than 600, it indicates server error
                                 // Error code 429 indicates rate limited.
                                 // Retry uploading in these cases.
-                                Thread.Sleep(backo.AttemptTime());
+                                Thread.Sleep(_backo.AttemptTime());
                                 continue;
                             }
                             else if (statusCode >= 400)
@@ -250,7 +251,7 @@ namespace Segment.Request
                             // If status code is greater than 500 and less than 600, it indicates server error
                             // Error code 429 indicates rate limited.
                             // Retry uploading in these cases.
-                            await backo.AttemptAsync();
+                            await _backo.AttemptAsync();
                             continue;
                         }
                         else if (statusCode >= 400)
@@ -263,7 +264,7 @@ namespace Segment.Request
 #endif
                 }
 
-                if (backo.HasReachedMax || statusCode != (int)HttpStatusCode.OK)
+                if (_backo.HasReachedMax || statusCode != (int)HttpStatusCode.OK)
                 {
                     Fail(batch, new APIException("Unexpected Status Code", responseStr), watch.ElapsedMilliseconds);
                 }

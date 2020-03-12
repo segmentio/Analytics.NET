@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Test.NetStandard20.Request
+namespace Segment.Test
 {
 
     [TestFixture()]
@@ -41,7 +41,7 @@ namespace Test.NetStandard20.Request
             .Verifiable();
 
             _client = new Client("foo");
-            _handler = new BlockingRequestHandler(_client, new TimeSpan(0, 0, 10), new HttpClient(_mockHttpMessageHandler.Object), 500);
+            _handler = new BlockingRequestHandler(_client, new TimeSpan(0, 0, 10), new HttpClient(_mockHttpMessageHandler.Object), new Backo(max: 500, jitter: 0));
         }
 
         [Test]

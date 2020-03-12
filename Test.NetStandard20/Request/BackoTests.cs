@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using Segment.Request;
 
-namespace Test.NetStandard20.Request
+namespace Segment.Test
 {
     [TestFixture]
     class BackoTests

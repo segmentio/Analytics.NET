@@ -1,18 +1,34 @@
 using System;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Segment.Request;
+using Moq;
+using Segment.Model;
 
 namespace Segment.Test
 {
     [TestFixture()]
     public class ActionTests
     {
+        private Mock<IRequestHandler> _mockRequestHandler;
+
         [SetUp]
         public void Init()
         {
+            _mockRequestHandler = new Mock<IRequestHandler>();
+            _mockRequestHandler
+                .Setup(x => x.MakeRequest(It.IsAny<Batch>()))
+                .Returns((Batch b) =>
+                {
+                    b.batch.ForEach(_ => Analytics.Client.Statistics.IncrementSucceeded());
+                    return Task.FromResult(true);
+                });
+
             Analytics.Dispose();
             Logger.Handlers += LoggingHandler;
-            Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false));
+            var client = new Client(Constants.WRITE_KEY, new Config().SetAsync(false), _mockRequestHandler.Object);
+            Analytics.Initialize(client);
         }
 
         [Test ()]

@@ -1,7 +1,6 @@
 using Moq;
 using Moq.Protected;
 using NUnit.Framework;
-using Segment;
 using Segment.Model;
 using Segment.Request;
 using System;

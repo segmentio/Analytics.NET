@@ -18,5 +18,7 @@ namespace Segment
         public static bool Async = true;
 
         public static int FlushIntervalInMillis = 30000;
+
+        public static int Threads = 1;
     }
 }

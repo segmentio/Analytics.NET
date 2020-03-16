@@ -19,15 +19,16 @@ namespace Segment.Flush
         private readonly int _maxQueueSize;
         private readonly CancellationTokenSource _continue;
         private readonly int _flushIntervalInMillis;
-        private const int _workloads = 1;
-        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(_workloads);
+        private readonly int _threads;
+        private readonly SemaphoreSlim _semaphore;
         private Timer _timer;
 
         internal AsyncIntervalFlushHandler(IBatchFactory batchFactory,
             IRequestHandler requestHandler,
             int maxQueueSize,
             int maxBatchSize,
-            int flushIntervalInMillis)
+            int flushIntervalInMillis,
+            int threads)
         {
             _queue = new ConcurrentQueue<BaseAction>();
             _batchFactory = batchFactory;
@@ -36,6 +37,8 @@ namespace Segment.Flush
             _maxBatchSize = maxBatchSize;
             _continue = new CancellationTokenSource();
             _flushIntervalInMillis = flushIntervalInMillis;
+            _threads = threads;
+            _semaphore = new SemaphoreSlim(_threads);
 
             RunInterval();
         }
@@ -74,8 +77,8 @@ namespace Segment.Flush
             PerformFlush().GetAwaiter().GetResult();
 
             //waiting for all workers to be released
-            for (var i = 0; i < _workloads; i++) _semaphore.Wait();
-            _semaphore.Release(_workloads);
+            for (var i = 0; i < _threads; i++) _semaphore.Wait();
+            _semaphore.Release(_threads);
         }
 
         private async Task FlushImpl()

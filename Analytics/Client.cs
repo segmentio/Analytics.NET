@@ -63,9 +63,9 @@ namespace Segment
             if (config.Async)
             {
             #if NET35
-                _flushHandler = new AsyncFlushHandler(batchFactory, requestHandler, config.MaxQueueSize, config.MaxBatchSize, config.FlushIntervalInMillis);
+                _flushHandler = new AsyncFlushHandler(batchFactory, requestHandler, config.MaxQueueSize, config.FlushAt, config.FlushIntervalInMillis);
             #else
-                _flushHandler = new AsyncIntervalFlushHandler(batchFactory, requestHandler, config.MaxQueueSize, config.MaxBatchSize, config.FlushIntervalInMillis, config.Threads);
+                _flushHandler = new AsyncIntervalFlushHandler(batchFactory, requestHandler, config.MaxQueueSize, config.FlushAt, config.FlushIntervalInMillis, config.Threads);
             #endif
             }
             else

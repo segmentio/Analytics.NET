@@ -19,7 +19,7 @@ namespace Segment
 
         internal int MaxQueueSize { get; set; }
 
-        internal int MaxBatchSize { get; set; }
+        internal int FlushAt { get; set; }
 
         internal bool Async { get; set; }
 
@@ -36,7 +36,7 @@ namespace Segment
             string proxy = null,
             TimeSpan? timeout = null,
             int? maxQueueSize = null,
-            int? maxBatchSize = null,
+            int? flushAt = null,
             bool? async = null,
 #if !NET35
             int? threads = null,
@@ -48,7 +48,7 @@ namespace Segment
             this.Proxy = proxy ?? "";
             this.Timeout = timeout ?? Defaults.Timeout;
             this.MaxQueueSize = maxQueueSize ?? Defaults.MaxQueueCapacity;
-            this.MaxBatchSize = maxBatchSize ?? Defaults.MaxBatchSize;
+            this.FlushAt = flushAt ?? Defaults.FlushAt;
             this.Async = async ?? Defaults.Async;
             this.FlushIntervalInMillis = flushIntervalInMillis ?? Defaults.FlushIntervalInMillis;
 #if !NET35
@@ -105,11 +105,35 @@ namespace Segment
         /// </summary>
         /// <param name="maxBatchSize"></param>
         /// <returns></returns>
+        [Obsolete("Use the new method SetFlushAt")]
         public Config SetMaxBatchSize(int maxBatchSize)
         {
-            this.MaxBatchSize = maxBatchSize;
+            return SetFlushAt(maxBatchSize);
+        }
+
+        /// <summary>
+        /// Sets the maximum amount of messages to send per batch
+        /// </summary>
+        /// <param name="flushAt"></param>
+        /// <returns></returns>
+        public Config SetFlushAt(int flushAt)
+        {
+            this.FlushAt = flushAt;
             return this;
         }
+
+#if !NET35
+        /// <summary>
+        /// Count of concurrent internal threads to post data from queue
+        /// </summary>
+        /// <param name="threads"></param>
+        /// <returns></returns>
+        public Config SetThreads(int threads)
+        {
+            Threads = threads;
+            return this;
+        }
+#endif
 
         /// <summary>
         /// Sets whether the flushing to the server is synchronous or asynchronous.

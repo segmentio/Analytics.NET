@@ -28,18 +28,32 @@ namespace Segment
         internal TimeSpan Timeout { get; set; }
 
         internal int FlushIntervalInMillis { get; private set; }
-        public int Threads { get; set; }
 
-        public Config()
+        internal int Threads { get; set; }
+
+        public Config(
+            string host = null,
+            string proxy = null,
+            TimeSpan? timeout = null,
+            int? maxQueueSize = null,
+            int? maxBatchSize = null,
+            bool? async = null,
+#if !NET35
+            int? threads = null,
+#endif
+            int? flushIntervalInMillis = null
+            )
         {
-            this.Host = Defaults.Host;
-            this.Proxy = "";
-            this.Timeout = Defaults.Timeout;
-            this.MaxQueueSize = Defaults.MaxQueueCapacity;
-            this.MaxBatchSize = Defaults.MaxBatchSize;
-            this.Async = Defaults.Async;
-            this.FlushIntervalInMillis = Defaults.FlushIntervalInMillis;
-            this.Threads = Defaults.Threads;
+            this.Host = host ?? Defaults.Host;
+            this.Proxy = proxy ?? "";
+            this.Timeout = timeout ?? Defaults.Timeout;
+            this.MaxQueueSize = maxQueueSize ?? Defaults.MaxQueueCapacity;
+            this.MaxBatchSize = maxBatchSize ?? Defaults.MaxBatchSize;
+            this.Async = async ?? Defaults.Async;
+            this.FlushIntervalInMillis = flushIntervalInMillis ?? Defaults.FlushIntervalInMillis;
+#if !NET35
+            this.Threads = threads ?? Defaults.Threads;
+#endif
         }
 
         /// <summary>
@@ -74,7 +88,7 @@ namespace Segment
             this.Timeout = timeout;
             return this;
         }
-        
+
         /// <summary>
         /// Sets the maximum amount of items that can be in the queue before no more are accepted.
         /// </summary>

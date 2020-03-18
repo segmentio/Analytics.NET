@@ -15,7 +15,7 @@ namespace Segment
 
         public static int FlushAt = 20;
 
-        public static bool Async = true;
+        public static bool SyncMode = false;
 
         public static int FlushIntervalInMillis = 30000;
 

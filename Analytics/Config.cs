@@ -21,7 +21,7 @@ namespace Segment
 
         internal int FlushAt { get; set; }
 
-        internal bool Async { get; set; }
+        internal bool SyncMode { get; set; }
 
         internal bool Gzip { get; set; }
 
@@ -39,7 +39,7 @@ namespace Segment
         /// <param name="timeout"></param>
         /// <param name="maxQueueSize">Queue size</param>
         /// <param name="flushAt"></param>
-        /// <param name="async"></param>
+        /// <param name="syncMode">Disable threading and send requests sync</param>
         /// <param name="threads"></param>
         /// <param name="flushIntervalInMillis"></param>
         /// <param name="gzip">Compress data w/ gzip before dispatch</param>
@@ -49,7 +49,7 @@ namespace Segment
             TimeSpan? timeout = null,
             int? maxQueueSize = null,
             int? flushAt = null,
-            bool? async = null,
+            bool? syncMode = null,
 #if !NET35
             int? threads = null,
 #endif
@@ -62,7 +62,7 @@ namespace Segment
             this.Timeout = timeout ?? Defaults.Timeout;
             this.MaxQueueSize = maxQueueSize ?? Defaults.MaxQueueCapacity;
             this.FlushAt = flushAt ?? Defaults.FlushAt;
-            this.Async = async ?? Defaults.Async;
+            this.SyncMode = syncMode ?? Defaults.SyncMode;
             this.FlushIntervalInMillis = flushIntervalInMillis ?? Defaults.FlushIntervalInMillis;
             this.Gzip = gzip ?? Defaults.Gzip;
 #if !NET35
@@ -159,11 +159,16 @@ namespace Segment
         /// HTTP requests to happen immediately.
         /// 
         /// </summary>
-        /// <param name="async">True for async flushing, false for blocking flushing</param>
+        /// <param name="async">True for syncMode flushing, false for blocking flushing</param>
         /// <returns></returns>
         public Config SetAsync(bool async)
         {
-            this.Async = async;
+            return SetSyncMode(!async);
+        }
+
+        public Config SetSyncMode(bool syncMode)
+        {
+            this.SyncMode = syncMode;
             return this;
         }
 

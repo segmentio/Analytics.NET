@@ -22,7 +22,7 @@ namespace Segment.Test
 				.Setup(x => x.MakeRequest(It.IsAny<Batch>()))
 				.Returns((Batch b) =>
 				{
-                    b.batch.ForEach(_ => Analytics.Client.Statistics.IncrementSucceeded());
+					b.batch.ForEach(_ => Analytics.Client.Statistics.IncrementSucceeded());
 					return Task.CompletedTask;
 				});
 

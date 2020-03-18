@@ -23,7 +23,7 @@ namespace Segment
 
         internal bool Async { get; set; }
 
-        internal bool CompressRequest { get; set; }
+        internal bool Gzip { get; set; }
 
         internal TimeSpan Timeout { get; set; }
 
@@ -31,6 +31,18 @@ namespace Segment
 
         internal int Threads { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="host">Endpoint for tracking api for Proxy Service</param>
+        /// <param name="proxy"></param>
+        /// <param name="timeout"></param>
+        /// <param name="maxQueueSize">Queue size</param>
+        /// <param name="flushAt"></param>
+        /// <param name="async"></param>
+        /// <param name="threads"></param>
+        /// <param name="flushIntervalInMillis"></param>
+        /// <param name="gzip">Compress data w/ gzip before dispatch</param>
         public Config(
             string host = null,
             string proxy = null,
@@ -41,7 +53,8 @@ namespace Segment
 #if !NET35
             int? threads = null,
 #endif
-            int? flushIntervalInMillis = null
+            int? flushIntervalInMillis = null,
+            bool? gzip = null
             )
         {
             this.Host = host ?? Defaults.Host;
@@ -51,6 +64,7 @@ namespace Segment
             this.FlushAt = flushAt ?? Defaults.FlushAt;
             this.Async = async ?? Defaults.Async;
             this.FlushIntervalInMillis = flushIntervalInMillis ?? Defaults.FlushIntervalInMillis;
+            this.Gzip = gzip ?? Defaults.Gzip;
 #if !NET35
             this.Threads = threads ?? Defaults.Threads;
 #endif
@@ -160,9 +174,22 @@ namespace Segment
         /// </summary>
         /// <param name="bCompress">True to compress request header, false for no compression</param>
         /// <returns></returns>
+        [Obsolete("Use the new method SetGzip")]
         public Config SetRequestCompression(bool bCompress)
         {
-            this.CompressRequest = bCompress;
+            return SetGzip(bCompress);
+        }
+
+        /// <summary>
+        /// Sets the API request header uses GZip option.
+        /// Enable this when the network is the bottleneck for your application (typically in client side applications).
+        /// If useGZip is set, it compresses request content with GZip algorithm
+        /// </summary>
+        /// <param name="gzip">True to compress request header, false for no compression</param>
+        /// <returns></returns>
+        public Config SetGzip(bool gzip)
+        {
+            this.Gzip = gzip;
             return this;
         }
 

@@ -167,7 +167,7 @@ namespace Segment.Request
                 var requestData = Encoding.UTF8.GetBytes(json);
 
                 // Compress request data if compression is set
-                if (_client.Config.CompressRequest)
+                if (_client.Config.Gzip)
                 {
 #if NET35
                     _httpClient.Headers.Add(HttpRequestHeader.ContentEncoding, "gzip");
@@ -245,7 +245,7 @@ namespace Segment.Request
 
                     ByteArrayContent content = new ByteArrayContent(requestData);
                     content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                    if (_client.Config.CompressRequest)
+                    if (_client.Config.Gzip)
                         content.Headers.ContentEncoding.Add("gzip");
 
                     var response = await _httpClient.PostAsync(uri, content).ConfigureAwait(false);

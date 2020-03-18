@@ -20,5 +20,7 @@ namespace Segment
         public static int FlushIntervalInMillis = 30000;
 
         public static int Threads = 1;
+
+        public static bool Gzip = false;
     }
 }

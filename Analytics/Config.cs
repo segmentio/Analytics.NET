@@ -41,7 +41,7 @@ namespace Segment
         /// <param name="flushAt"></param>
         /// <param name="syncMode">Disable threading and send requests sync</param>
         /// <param name="threads"></param>
-        /// <param name="flushIntervalInMillis"></param>
+        /// <param name="flushInterval">The frequency, in seconds, to send data to Segment</param>
         /// <param name="gzip">Compress data w/ gzip before dispatch</param>
         public Config(
             string host = null,
@@ -53,7 +53,7 @@ namespace Segment
 #if !NET35
             int? threads = null,
 #endif
-            int? flushIntervalInMillis = null,
+            double? flushInterval = null,
             bool? gzip = null
             )
         {
@@ -63,7 +63,7 @@ namespace Segment
             this.MaxQueueSize = maxQueueSize ?? Defaults.MaxQueueCapacity;
             this.FlushAt = flushAt ?? Defaults.FlushAt;
             this.SyncMode = syncMode ?? Defaults.SyncMode;
-            this.FlushIntervalInMillis = flushIntervalInMillis ?? Defaults.FlushIntervalInMillis;
+            this.FlushIntervalInMillis = (int)((flushInterval ?? Defaults.FlushInterval) * 1000);
             this.Gzip = gzip ?? Defaults.Gzip;
 #if !NET35
             this.Threads = threads ?? Defaults.Threads;
@@ -166,6 +166,11 @@ namespace Segment
             return SetSyncMode(!async);
         }
 
+        /// <summary>
+        /// Disable threading and send requests sync
+        /// </summary>
+        /// <param name="syncMode"></param>
+        /// <returns></returns>
         public Config SetSyncMode(bool syncMode)
         {
             this.SyncMode = syncMode;
@@ -200,21 +205,21 @@ namespace Segment
 
 #if NET35
         /// <summary>
-        /// Set the interval at which the client should flush events. 
+        /// Set the interval in seconds at which the client should flush events. 
         /// This is relative to the last flush
         /// </summary>
         /// <param name="interval">Time in milliseconds</param>
         /// <returns></returns>
 #else
         /// <summary>
-        /// Set the interval at which the client should flush events. 
+        /// Set the interval in seconds at which the client should flush events. 
         /// </summary>
         /// <param name="interval"></param>
         /// <returns></returns>
 #endif
-        public Config SetFlushIntervalInMillis(int interval)
+        public Config SetFlushInterval(double interval)
         {
-            this.FlushIntervalInMillis = interval;
+            this.FlushIntervalInMillis = (int)(interval * 1000);
             return this;
         }
     }

@@ -161,6 +161,7 @@ namespace Segment
         /// </summary>
         /// <param name="async">True for syncMode flushing, false for blocking flushing</param>
         /// <returns></returns>
+        [Obsolete("Use the new method SetSyncMode")]
         public Config SetAsync(bool async)
         {
             return SetSyncMode(!async);

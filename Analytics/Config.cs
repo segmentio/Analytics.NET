@@ -38,9 +38,9 @@ namespace Segment
         /// <param name="proxy"></param>
         /// <param name="timeout"></param>
         /// <param name="maxQueueSize">Queue size</param>
-        /// <param name="flushAt"></param>
+        /// <param name="flushAt">Number of items in a batch to upload</param>
         /// <param name="syncMode">Disable threading and send requests sync</param>
-        /// <param name="threads"></param>
+        /// <param name="threads">Count of concurrent internal threads to post data from queue</param>
         /// <param name="flushInterval">The frequency, in seconds, to send data to Segment</param>
         /// <param name="gzip">Compress data w/ gzip before dispatch</param>
         public Config(

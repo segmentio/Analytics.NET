@@ -36,6 +36,7 @@
   <ItemGroup>
     <Compile Include="../Analytics/**/*.cs" Exclude="../Analytics/obj/**/*.cs">
     </Compile>
+    <Compile Include="_AssemblyConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />

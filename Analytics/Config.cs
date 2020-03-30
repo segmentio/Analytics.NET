@@ -128,20 +128,12 @@ namespace Segment
             return this;
         }
 
-#if NET35
-        /// <summary>
-        /// Set the interval at which the client should flush events. 
-        /// This is relative to the last flush
-        /// </summary>
-        /// <param name="interval">Time in milliseconds</param>
-        /// <returns></returns>
-#else
+
         /// <summary>
         /// Set the interval at which the client should flush events. 
         /// </summary>
         /// <param name="interval"></param>
         /// <returns></returns>
-#endif
         public Config SetFlushIntervalInMillis(int interval)
         {
             this.FlushIntervalInMillis = interval;

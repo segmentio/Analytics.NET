@@ -13,6 +13,7 @@ namespace Segment
     /// </summary>
     public class Client : IDisposable
     {
+
         private IFlushHandler _flushHandler;
         private string _writeKey;
         private Config _config;

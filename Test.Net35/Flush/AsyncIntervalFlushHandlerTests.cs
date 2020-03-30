@@ -23,7 +23,7 @@ namespace Segment.Test.Flush
         [SetUp]
         public void Init()
         {
-            _requestHandlerBehavior = SingleTaskResponseBehavior(Wait(10));
+            _requestHandlerBehavior = SingleTaskResponseBehavior(10);
             _mockRequestHandler = new Mock<IRequestHandler>();
 
             _mockRequestHandler.Setup(r => r.MakeRequest(It.IsAny<Batch>()))
@@ -83,7 +83,6 @@ namespace Segment.Test.Flush
         {
             var queueSize = 100;
             _handler = GetFlushHandler(queueSize, 20, 20000);
-            _requestHandlerBehavior = MultipleTaskResponseBehavior(Wait(0), Wait(0), Wait(0), Wait(0), Wait(0));
             Wait(100, true).GetAwaiter().GetResult();
 
             for (int i = 0; i < queueSize; i++)
@@ -189,13 +188,9 @@ namespace Segment.Test.Flush
             return new AsyncIntervalFlushHandler(_mockBatchFactory.Object, _mockRequestHandler.Object, maxQueueSize, maxBatchSize, flushIntervalInMillis, threads);
         }
 
-        private Func<Task> SingleTaskResponseBehavior(Task task)
+        private Func<Task> SingleTaskResponseBehavior(int time)
         {
-            return () =>
-            {
-                task.Start();
-                return task;
-            };
+            return () => Wait(time, true);
         }
 
         private Func<Task> MultipleTaskResponseBehavior(params Task[] tasks)
@@ -222,7 +217,7 @@ namespace Segment.Test.Flush
 
         private Task Wait(int time, bool start = false)
         {
-            var wait = time <= 0 ? new Task(async () => { }) : new Task(async () => Thread.Sleep(time));
+            var wait = time <= 0 ? new Task(() => { }) : new Task(() => Thread.Sleep(time));
 
             if (start) wait.Start();
             return wait;

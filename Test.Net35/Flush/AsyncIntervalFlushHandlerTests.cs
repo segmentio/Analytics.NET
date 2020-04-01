@@ -4,7 +4,6 @@ using Segment.Flush;
 using Segment.Model;
 using Segment.Request;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Threading;
@@ -116,7 +115,7 @@ namespace Segment.Test.Flush
         {
             var time = 1500;
             _handler = GetFlushHandler(100, 20, 500);
-            _requestHandlerBehavior = MultipleTaskResponseBehavior(Wait(time));
+            _requestHandlerBehavior = MultipleTaskResponseBehavior(time);
 
             DateTime start = DateTime.Now;
             _ = _handler.Process(new Track(null, null, null, null));
@@ -138,7 +137,7 @@ namespace Segment.Test.Flush
         {
             var time = 2000;
             _handler = GetFlushHandler(100, 20, 300);
-            _requestHandlerBehavior = MultipleTaskResponseBehavior(Wait(time), Wait(0), Wait(time));
+            _requestHandlerBehavior = MultipleTaskResponseBehavior(time, 0, time);
 
             _ = _handler.Process(new Track(null, null, null, null));
             Thread.Sleep(400);
@@ -163,7 +162,7 @@ namespace Segment.Test.Flush
 
             var time = 2000;
             _handler = GetFlushHandler(100, 20, 300, 2);
-            _requestHandlerBehavior = MultipleTaskResponseBehavior(Wait(time), Wait(0), Wait(time));
+            _requestHandlerBehavior = MultipleTaskResponseBehavior(time, 0, time);
 
             _ = _handler.Process(new Track(null, null, null, null));
             Thread.Sleep(400);
@@ -190,17 +189,16 @@ namespace Segment.Test.Flush
 
         private Func<Task> SingleTaskResponseBehavior(int time)
         {
-            return () => Wait(time, true);
+            return async () => Thread.Sleep(time);
         }
 
-        private Func<Task> MultipleTaskResponseBehavior(params Task[] tasks)
+        private Func<Task> MultipleTaskResponseBehavior(params int[] time)
         {
-            var response = new Queue<Task>(tasks);
-            return () =>
+            var response = new Queue<int>(time);
+            return async () =>
             {
-                var task = response.Count > 0 ? response.Dequeue() : null;
-                task?.Start();
-                return task;
+                var t = response.Count > 0 ? response.Dequeue() : 0;
+                Thread.Sleep(t);
             };
         }
         static void LoggingHandler(Logger.Level level, string message, IDictionary<string, object> args)
@@ -212,15 +210,9 @@ namespace Segment.Test.Flush
                     message += String.Format(" {0}: {1},", "" + key, "" + args[key]);
                 }
             }
+
             Console.WriteLine(String.Format("[FlushTests] [{0}] {1}", level, message));
         }
 
-        private Task Wait(int time, bool start = false)
-        {
-            var wait = time <= 0 ? new Task(() => { }) : new Task(() => Thread.Sleep(time));
-
-            if (start) wait.Start();
-            return wait;
-        }
     }
 }

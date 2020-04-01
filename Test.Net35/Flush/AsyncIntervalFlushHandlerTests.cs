@@ -83,7 +83,7 @@ namespace Segment.Test.Flush
         {
             var queueSize = 100;
             _handler = GetFlushHandler(queueSize, 20, 20000);
-            Wait(100, true).GetAwaiter().GetResult();
+            Thread.Sleep(100);
 
             for (int i = 0; i < queueSize; i++)
             {
@@ -100,7 +100,7 @@ namespace Segment.Test.Flush
         {
             var queueSize = 10;
             _handler = GetFlushHandler(queueSize, 20, 20000);
-            Wait(50, true).GetAwaiter().GetResult();
+            Thread.Sleep(50);
 
             for (int i = 0; i < queueSize + 1; i++)
             {
@@ -121,7 +121,7 @@ namespace Segment.Test.Flush
             DateTime start = DateTime.Now;
             _ = _handler.Process(new Track(null, null, null, null));
 
-            Wait(500, true).GetAwaiter().GetResult();
+            Thread.Sleep(500);
 
             _handler.Flush();
 
@@ -141,14 +141,14 @@ namespace Segment.Test.Flush
             _requestHandlerBehavior = MultipleTaskResponseBehavior(Wait(time), Wait(0), Wait(time));
 
             _ = _handler.Process(new Track(null, null, null, null));
-            Wait(400, true).GetAwaiter().GetResult();
+            Thread.Sleep(400);
 
             for (int i = 0; i < 3; i++)
             {
                 _handler.Process(new Track(null, null, null, null)).GetAwaiter().GetResult();
                 _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), times: Times.Exactly(1));
 
-                Wait(300, true).GetAwaiter().GetResult();
+                Thread.Sleep(300);
             }
 
             _handler.Flush();
@@ -166,7 +166,7 @@ namespace Segment.Test.Flush
             _requestHandlerBehavior = MultipleTaskResponseBehavior(Wait(time), Wait(0), Wait(time));
 
             _ = _handler.Process(new Track(null, null, null, null));
-            Wait(400, true).GetAwaiter().GetResult();
+            Thread.Sleep(400);
 
             for (int i = 0; i < 3; i++)
             {
@@ -175,7 +175,7 @@ namespace Segment.Test.Flush
                 _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), times: Times.Exactly(1));
             }
 
-            Wait(400, true).GetAwaiter().GetResult();
+            Thread.Sleep(400);
             //The second process should be triggered
             _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), times: Times.Exactly(2));
             _handler.Flush();

@@ -41,7 +41,7 @@ namespace Segment.Test.Flush
             Logger.Handlers -= LoggingHandler;
         }
 
-        [Test()]
+        [Test]
         public void FlushDoesNotMakeARequestWhenThereAreNotEvents()
         {
             _handler.Flush();

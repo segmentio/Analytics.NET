@@ -11,6 +11,15 @@ namespace Segment.Flush
 
     internal class AsyncIntervalFlushHandler : IFlushHandler
     {
+        /// <summary>
+        /// Our servers only accept payloads smaller than 32KB we left 2kb as margin error
+        /// </summary>
+        private const int ActionMaxSize = 30 * 1024;
+
+        /// <summary>
+        /// Our servers only accept request smaller than 512KB we left 12kb as margin error
+        /// </summary>
+        private const int BatchMaxSize = 500 * 1024;
 
         private readonly ConcurrentQueue<BaseAction> _queue;
         private readonly int _maxBatchSize;
@@ -81,6 +90,7 @@ namespace Segment.Flush
         private async Task FlushImpl()
         {
             var current = new List<BaseAction>();
+            var currentSize = 0;
             while (!_queue.IsEmpty && !_continue.Token.IsCancellationRequested)
             {
                 do
@@ -93,7 +103,8 @@ namespace Segment.Flush
                          });
 
                     current.Add(action);
-                } while (!_queue.IsEmpty && current.Count <= _maxBatchSize && !_continue.Token.IsCancellationRequested);
+                    currentSize += action.Size;
+                } while (!_queue.IsEmpty && current.Count <= _maxBatchSize && !_continue.Token.IsCancellationRequested && currentSize < BatchMaxSize - ActionMaxSize);
 
                 if (current.Count > 0)
                 {
@@ -109,12 +120,15 @@ namespace Segment.Flush
 
                     // mark the current batch as null
                     current = new List<BaseAction>();
+                    currentSize = 0;
                 }
             }
         }
 
         public Task Process(BaseAction action)
         {
+            action.Size = ActionSizeCalculator.Calculate(action);
+
             _queue.Enqueue(action);
 
             Logger.Debug("Enqueued action in async loop.", new Dict{

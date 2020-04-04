@@ -111,12 +111,30 @@ namespace Segment.Test.Flush
         }
 
         [Test]
+        public void ProcessDropsActionsThatAreBiggerThan32Kb()
+        {
+            _handler = GetFlushHandler(10, 20, 20000);
+
+            var actions = GetActions(2, GetEventName(32 * 1024));
+
+            foreach (var action in actions)
+            {
+                _ = _handler.Process(action);
+            }
+
+            _handler.Flush();
+
+            _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), times: Times.Never);
+
+        }
+
+        [Test]
         public async Task FlushWaitsForPreviousFlushesTriggeredByInterval()
         {
             var time = 1500;
             _handler = GetFlushHandler(100, 20, 500);
             _requestHandlerBehavior = MultipleTaskResponseBehavior(Task.Delay(time));
-            
+
             DateTime start = DateTime.Now;
             _ = _handler.Process(new Track(null, null, null, null));
 
@@ -133,7 +151,7 @@ namespace Segment.Test.Flush
         }
 
         [Test]
-        public async Task IntervalFlushLimitConcurrentProcesses ()
+        public async Task IntervalFlushLimitConcurrentProcesses()
         {
             var time = 2000;
             _handler = GetFlushHandler(100, 20, 300);
@@ -157,9 +175,11 @@ namespace Segment.Test.Flush
         }
 
         [Test]
-        public  void IntervalFlushSplitsBatchesThatAreBiggerThan512Kb()
+        public async Task IntervalFlushSplitsBatchesThatAreBiggerThan512Kb()
         {
             _handler = GetFlushHandler(100, 100, 10000);
+
+            await Task.Delay(100);
 
             var actions = GetActions(20, GetEventName(30 * 1024));
 
@@ -175,9 +195,11 @@ namespace Segment.Test.Flush
 
 
         [Test]
-        public void IntervalFlushSendsBatchesThatAreSmallerThan512Kb()
+        public async Task IntervalFlushSendsBatchesThatAreSmallerThan512Kb()
         {
             _handler = GetFlushHandler(1000, 1000, 10000);
+
+            await Task.Delay(100);
 
             var actions = GetActions(999, GetEventName(30));
 

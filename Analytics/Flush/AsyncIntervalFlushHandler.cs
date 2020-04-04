@@ -12,9 +12,9 @@ namespace Segment.Flush
     internal class AsyncIntervalFlushHandler : IFlushHandler
     {
         /// <summary>
-        /// Our servers only accept payloads smaller than 32KB we left 2kb as margin error
+        /// Our servers only accept payloads smaller than 32KB
         /// </summary>
-        private const int ActionMaxSize = 30 * 1024;
+        private const int ActionMaxSize = 32 * 1024;
 
         /// <summary>
         /// Our servers only accept request smaller than 512KB we left 12kb as margin error
@@ -128,6 +128,12 @@ namespace Segment.Flush
         public Task Process(BaseAction action)
         {
             action.Size = ActionSizeCalculator.Calculate(action);
+
+            if (action.Size > ActionMaxSize)
+            {
+                Logger.Error($"Action was dropped cause is bigger than {ActionMaxSize} bytes");
+                return Task.FromResult(0);
+            }
 
             _queue.Enqueue(action);
 

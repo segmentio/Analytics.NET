@@ -1,15 +1,14 @@
 version: 2.1
 
 _run:
-    notify_on_fail: &notify_on_fail
-      when: on_fail
-      command: |
-        wget https://raw.githubusercontent.com/segmentio/circleci-notifications/master/slack-notify-branch.sh
-        chmod u+x slack-notify-branch.sh
-        BUILD_STATUS="Failed" NOTIFY_BRANCH="master scheduled_e2e_testing" ./slack-notify-branch.sh
+  notify_on_fail: &notify_on_fail
+    when: on_fail
+    command: |
+      wget https://raw.githubusercontent.com/segmentio/circleci-notifications/master/slack-notify-branch.sh
+      chmod u+x slack-notify-branch.sh
+      BUILD_STATUS="Failed" NOTIFY_BRANCH="master scheduled_e2e_testing" ./slack-notify-branch.sh
 orbs:
   win: circleci/windows@2.2.0
-
 
 jobs:
   build:
@@ -37,9 +36,15 @@ jobs:
       - run: msbuild Analytics.Portable/Analytics.Portable.csproj /t:restore
       - run: msbuild Analytics.Portable/Analytics.Portable.csproj /p:Configuration=Release
       - run: nuget pack Analytics.nuspec
+      - run:
+          name: Snyk
+          command: curl -sL https://raw.githubusercontent.com/segmentio/snyk_helpers/master/initialization/snyk.sh | sh
+          environment:
+            SNYK_FAIL_ON: upgradable
+            SNYK_SEVERITY_THRESHOLD: high
   coverage:
     working_directory: /coverage
-    docker:  
+    docker:
       - image: microsoft/dotnet:2.2-sdk
     environment:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
@@ -56,7 +61,7 @@ jobs:
       - run: bash <(curl -s https://codecov.io/bash)
   coverage_net35:
     working_directory: /coverage_net35
-    executor:  
+    executor:
       name: win/default
     steps:
       - run:
@@ -69,16 +74,16 @@ jobs:
       - run: msbuild Test.Net35/Test.Net35.csproj /t:restore
       - run: msbuild Test.Net35/Test.Net35.csproj /p:Configuration=Debug
       - run: OpenCover.Console.exe "-target:./packages/NUnit.ConsoleRunner.3.7.0/tools/nunit3-console.exe" "-register:user" "-output:opencover.xml" "-targetargs:.\Test.Net35\bin\Debug\Test.Net35.dll" -filter:"+[Analytics*]* -[Test*]*"
-      - run: 
+      - run:
           name: "Validating coverage"
-          command: | 
+          command: |
             & .\ValidateCoverage.ps1 -threshold 80
-      - run: 
+      - run:
           command: bash <(curl -s https://codecov.io/bash) -f ./opencover.xml
           shell: bash.exe
   coverage_net45:
     working_directory: /coverage_net45
-    executor:  
+    executor:
       name: win/default
     steps:
       - run:
@@ -91,11 +96,11 @@ jobs:
       - run: msbuild Test.Net45/Test.Net45.csproj /t:restore
       - run: msbuild Test.Net45/Test.Net45.csproj /p:Configuration=Debug
       - run: OpenCover.Console.exe "-target:./packages/NUnit.ConsoleRunner.3.7.0/tools/nunit3-console.exe" "-register" "-output:opencover.xml" "-targetargs:.\Test.Net45\bin\Debug\Test.Net45.dll" -filter:"+[Analytics*]* -[Test*]*"
-      - run: 
+      - run:
           name: "Validating coverage"
-          command: | 
+          command: |
             & .\ValidateCoverage.ps1 -threshold 80
-      - run: 
+      - run:
           command: bash <(curl -s https://codecov.io/bash) -f ./opencover.xml
           shell: bash.exe
   test:
@@ -164,9 +169,10 @@ workflows:
   version: 2
   build_and_test:
     jobs:
-      - build
+      - build:
+          context: snyk
       - coverage
-      - coverage_net35  
+      - coverage_net35
       - coverage_net45
       - test
       - test_20

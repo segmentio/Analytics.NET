@@ -38,10 +38,11 @@ jobs:
       - run: nuget pack Analytics.nuspec
       - run:
           name: Snyk
-          command: curl -sL https://raw.githubusercontent.com/segmentio/snyk_helpers/master/initialization/snyk.sh | sh
+          command: curl -sL https://raw.githubusercontent.com/segmentio/snyk_helpers/custom-args/initialization/snyk.sh | sh
           environment:
             SNYK_FAIL_ON: upgradable
             SNYK_SEVERITY_THRESHOLD: high
+            SNYK_CUSTOM_ARGS: "--file=Analytics.NET.sln"
   coverage:
     working_directory: /coverage
     docker:

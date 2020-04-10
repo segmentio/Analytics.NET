@@ -42,6 +42,7 @@ jobs:
           environment:
             SNYK_FAIL_ON: upgradable
             SNYK_SEVERITY_THRESHOLD: high
+            SNYK_CUSTOM_ARGS: --file=Analytics.NET.sln
   coverage:
     working_directory: /coverage
     docker:

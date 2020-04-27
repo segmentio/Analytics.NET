@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../Analytics.NetStandard20/Analytics.NetStandard20.csproj" />
+    <ProjectReference Include="..\Analytics\Analytics.csproj" />
   </ItemGroup>
 
   <ItemGroup>

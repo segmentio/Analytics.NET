@@ -31,7 +31,7 @@ namespace Segment.Test
         }
 
         [Test()]
-        public void SynchronousFlushTestNetStanard20()
+        public void SynchronousFlushTestNetStandard20()
         {
             var client = new Client(Constants.WRITE_KEY, new Config().SetAsync(false), _mockRequestHandler.Object);
             Analytics.Initialize(client);
@@ -48,7 +48,7 @@ namespace Segment.Test
         }
 
         [Test()]
-        public void AsynchronousFlushTestNetStanard20()
+        public void AsynchronousFlushTestNetStandard20()
         {
             var client = new Client(Constants.WRITE_KEY, new Config().SetAsync(true), _mockRequestHandler.Object);
             Analytics.Initialize(client);
@@ -68,7 +68,7 @@ namespace Segment.Test
         }
 
         [Test()]
-        public async Task PerformanceTestNetStanard20()
+        public async Task PerformanceTestNetStandard20()
         {
             var client = new Client(Constants.WRITE_KEY, new Config(), _mockRequestHandler.Object);
             Analytics.Initialize(client);
@@ -82,7 +82,7 @@ namespace Segment.Test
 
             RunTests(Analytics.Client, trials);
 
-            Analytics.Client.Flush();
+            await Analytics.Client.FlushAsync();
 
             TimeSpan duration = DateTime.Now.Subtract(start);
 

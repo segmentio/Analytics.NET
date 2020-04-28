@@ -15,6 +15,8 @@ namespace Segment
         /// </summary>
         internal string Host { get; set; }
 
+        internal string UserAgentHeader { get; set; }
+
         internal string Proxy { get; set; }
 
         internal int MaxQueueSize { get; set; }
@@ -38,6 +40,7 @@ namespace Segment
             this.MaxBatchSize = Defaults.MaxBatchSize;
             this.Async = Defaults.Async;
             this.FlushIntervalInMillis = Defaults.FlushIntervalInMillis;
+            UserAgentHeader = Defaults.UserAgentHeader;
         }
 
         /// <summary>

@@ -15,34 +15,64 @@ namespace Segment
         /// </summary>
         internal string Host { get; set; }
 
-        internal string UserAgentHeader { get; set; }
+        internal string UserAgent { get; set; }
 
         internal string Proxy { get; set; }
 
         internal int MaxQueueSize { get; set; }
 
-        internal int MaxBatchSize { get; set; }
+        internal int FlushAt { get; set; }
 
         internal bool Async { get; set; }
 
-        internal bool CompressRequest { get; set; }
+        internal bool Gzip { get; set; }
 
         internal TimeSpan Timeout { get; set; }
 
         internal int FlushIntervalInMillis { get; private set; }
+
         internal int Threads { get; set; }
 
-        public Config()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="host">Endpoint for tracking api for Proxy Service</param>
+        /// <param name="proxy"></param>
+        /// <param name="timeout"></param>
+        /// <param name="maxQueueSize">Queue size</param>
+        /// <param name="flushAt">Number of items in a batch to upload</param>
+        /// <param name="async">Sets whether the flushing to the server is synchronous or asynchronous</param>
+        /// <param name="threads">Count of concurrent internal threads to post data from queue</param>
+        /// <param name="flushInterval">The frequency, in seconds, to send data to Segment</param>
+        /// <param name="gzip">Compress data w/ gzip before dispatch</param>
+        /// <param name="userAgent">Sets User Agent Header</param>
+        public Config(
+            string host = null,
+            string proxy = null,
+            TimeSpan? timeout = null,
+            int? maxQueueSize = null,
+            int? flushAt = null,
+            bool? async = null,
+#if !NET35
+            int? threads = null,
+#endif
+            double? flushInterval = null,
+            bool? gzip = null,
+            string userAgent = null
+            )
         {
-            this.Host = Defaults.Host;
-            this.Proxy = "";
-            this.Timeout = Defaults.Timeout;
-            this.MaxQueueSize = Defaults.MaxQueueCapacity;
-            this.MaxBatchSize = Defaults.MaxBatchSize;
-            this.Async = Defaults.Async;
-            this.FlushIntervalInMillis = Defaults.FlushIntervalInMillis;
-            this.Threads = Defaults.Threads;
-            this.UserAgentHeader = Defaults.UserAgentHeader;
+            this.Host = host ?? Defaults.Host;
+            this.Proxy = proxy ?? "";
+            this.Timeout = timeout ?? Defaults.Timeout;
+            this.MaxQueueSize = maxQueueSize ?? Defaults.MaxQueueCapacity;
+            this.FlushAt = flushAt ?? Defaults.FlushAt;
+            this.Async = async ?? Defaults.Async;
+            this.FlushIntervalInMillis = (int)((flushInterval ?? Defaults.FlushInterval) * 1000);
+            this.Gzip = gzip ?? Defaults.Gzip;
+            this.UserAgent = userAgent ?? Defaults.UserAgent;
+#if !NET35
+            this.Threads = threads ?? Defaults.Threads;
+#endif
         }
 
         /// <summary>
@@ -77,7 +107,7 @@ namespace Segment
             this.Timeout = timeout;
             return this;
         }
-        
+
         /// <summary>
         /// Sets the maximum amount of items that can be in the queue before no more are accepted.
         /// </summary>
@@ -94,11 +124,35 @@ namespace Segment
         /// </summary>
         /// <param name="maxBatchSize"></param>
         /// <returns></returns>
+        [Obsolete("Use the new method SetFlushAt")]
         public Config SetMaxBatchSize(int maxBatchSize)
         {
-            this.MaxBatchSize = maxBatchSize;
+            return SetFlushAt(maxBatchSize);
+        }
+
+        /// <summary>
+        /// Sets the maximum amount of messages to send per batch
+        /// </summary>
+        /// <param name="flushAt"></param>
+        /// <returns></returns>
+        public Config SetFlushAt(int flushAt)
+        {
+            this.FlushAt = flushAt;
             return this;
         }
+
+#if !NET35
+        /// <summary>
+        /// Count of concurrent internal threads to post data from queue
+        /// </summary>
+        /// <param name="threads"></param>
+        /// <returns></returns>
+        public Config SetThreads(int threads)
+        {
+            Threads = threads;
+            return this;
+        }
+#endif
 
         /// <summary>
         /// Sets whether the flushing to the server is synchronous or asynchronous.
@@ -125,21 +179,40 @@ namespace Segment
         /// </summary>
         /// <param name="bCompress">True to compress request header, false for no compression</param>
         /// <returns></returns>
+        [Obsolete("Use the new method SetGzip")]
         public Config SetRequestCompression(bool bCompress)
         {
-            this.CompressRequest = bCompress;
+            return SetGzip(bCompress);
+        }
+
+        /// <summary>
+        /// Sets the API request header uses GZip option.
+        /// Enable this when the network is the bottleneck for your application (typically in client side applications).
+        /// If useGZip is set, it compresses request content with GZip algorithm
+        /// </summary>
+        /// <param name="gzip">True to compress request header, false for no compression</param>
+        /// <returns></returns>
+        public Config SetGzip(bool gzip)
+        {
+            this.Gzip = gzip;
+            return this;
+        }
+
+        public Config SetUserAgent(string userAgent)
+        {
+            this.UserAgent = userAgent;
             return this;
         }
 
 
         /// <summary>
-        /// Set the interval at which the client should flush events. 
+        /// Set the interval in seconds at which the client should flush events. 
         /// </summary>
         /// <param name="interval"></param>
         /// <returns></returns>
-        public Config SetFlushIntervalInMillis(int interval)
+        public Config SetFlushInterval(double interval)
         {
-            this.FlushIntervalInMillis = interval;
+            this.FlushIntervalInMillis = (int)(interval * 1000);
             return this;
         }
     }

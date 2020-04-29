@@ -66,7 +66,7 @@ namespace Segment
 
             if (config.Async)
             {
-                _flushHandler = new AsyncIntervalFlushHandler(batchFactory, requestHandler, config.MaxQueueSize, config.MaxBatchSize, config.FlushIntervalInMillis, config.Threads);
+                _flushHandler = new AsyncIntervalFlushHandler(batchFactory, requestHandler, config.MaxQueueSize, config.FlushAt, config.FlushIntervalInMillis, config.Threads);
             }
             else
                 _flushHandler = new BlockingFlushHandler(batchFactory, requestHandler);

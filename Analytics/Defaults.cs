@@ -13,9 +13,7 @@ namespace Segment
 
         public static readonly bool Async = true;
 
-        public static int FlushAt = 20;
-
-        public static bool SyncMode = false;
+        public static readonly int FlushAt = 20;
 
         public static readonly string UserAgent = GetDefaultUserContext();
 

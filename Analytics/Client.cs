@@ -64,7 +64,7 @@ namespace Segment
             requestHandler = requestHandler ?? new BlockingRequestHandler(this, config.Timeout);
             IBatchFactory batchFactory = new SimpleBatchFactory(this._writeKey);
 
-            if (!config.SyncMode)
+            if (config.Async)
             {
             #if NET35
                 _flushHandler = new AsyncFlushHandler(batchFactory, requestHandler, config.MaxQueueSize, config.FlushAt, config.FlushIntervalInMillis);

@@ -23,7 +23,7 @@ namespace Segment
 
         internal int FlushAt { get; set; }
 
-        internal bool SyncMode { get; set; }
+        internal bool Async { get; set; }
 
         internal bool Gzip { get; set; }
 
@@ -41,17 +41,18 @@ namespace Segment
         /// <param name="timeout"></param>
         /// <param name="maxQueueSize">Queue size</param>
         /// <param name="flushAt">Number of items in a batch to upload</param>
-        /// <param name="syncMode">Disable threading and send requests sync</param>
+        /// <param name="async">Sets whether the flushing to the server is synchronous or asynchronous</param>
         /// <param name="threads">Count of concurrent internal threads to post data from queue</param>
         /// <param name="flushInterval">The frequency, in seconds, to send data to Segment</param>
         /// <param name="gzip">Compress data w/ gzip before dispatch</param>
+        /// <param name="userAgent">Sets User Agent Header</param>
         public Config(
             string host = null,
             string proxy = null,
             TimeSpan? timeout = null,
             int? maxQueueSize = null,
             int? flushAt = null,
-            bool? syncMode = null,
+            bool? async = null,
 #if !NET35
             int? threads = null,
 #endif
@@ -65,7 +66,7 @@ namespace Segment
             this.Timeout = timeout ?? Defaults.Timeout;
             this.MaxQueueSize = maxQueueSize ?? Defaults.MaxQueueCapacity;
             this.FlushAt = flushAt ?? Defaults.FlushAt;
-            this.SyncMode = syncMode ?? Defaults.SyncMode;
+            this.Async = async ?? Defaults.Async;
             this.FlushIntervalInMillis = (int)((flushInterval ?? Defaults.FlushInterval) * 1000);
             this.Gzip = gzip ?? Defaults.Gzip;
             this.UserAgent = userAgent ?? Defaults.UserAgent;
@@ -163,22 +164,11 @@ namespace Segment
         /// HTTP requests to happen immediately.
         /// 
         /// </summary>
-        /// <param name="async">True for syncMode flushing, false for blocking flushing</param>
+        /// <param name="async">True for async flushing, false for blocking flushing</param>
         /// <returns></returns>
-        [Obsolete("Use the new method SetSyncMode")]
         public Config SetAsync(bool async)
         {
-            return SetSyncMode(!async);
-        }
-
-        /// <summary>
-        /// Disable threading and send requests sync
-        /// </summary>
-        /// <param name="syncMode"></param>
-        /// <returns></returns>
-        public Config SetSyncMode(bool syncMode)
-        {
-            this.SyncMode = syncMode;
+            this.Async = async;
             return this;
         }
 

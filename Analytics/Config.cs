@@ -56,7 +56,8 @@ namespace Segment
             int? threads = null,
 #endif
             double? flushInterval = null,
-            bool? gzip = null
+            bool? gzip = null,
+            string userAgentHeader = null
             )
         {
             this.Host = host ?? Defaults.Host;
@@ -67,6 +68,7 @@ namespace Segment
             this.SyncMode = syncMode ?? Defaults.SyncMode;
             this.FlushIntervalInMillis = (int)((flushInterval ?? Defaults.FlushInterval) * 1000);
             this.Gzip = gzip ?? Defaults.Gzip;
+            this.UserAgentHeader = userAgentHeader ?? Defaults.UserAgentHeader;
 #if !NET35
             this.Threads = threads ?? Defaults.Threads;
 #endif
@@ -203,6 +205,12 @@ namespace Segment
         public Config SetGzip(bool gzip)
         {
             this.Gzip = gzip;
+            return this;
+        }
+
+        public Config SetUserAgentHeader(string userAgentHeader)
+        {
+            this.UserAgentHeader = userAgentHeader;
             return this;
         }
 

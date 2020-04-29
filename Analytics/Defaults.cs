@@ -11,8 +11,6 @@ namespace Segment
 
         public static readonly int MaxQueueCapacity = 10000;
 
-        public static readonly int MaxBatchSize = 20;
-
         public static readonly bool Async = true;
 
         public static int FlushAt = 20;

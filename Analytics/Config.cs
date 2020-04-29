@@ -30,6 +30,7 @@ namespace Segment
         internal TimeSpan Timeout { get; set; }
 
         internal int FlushIntervalInMillis { get; private set; }
+        internal int Threads { get; set; }
 
         public Config()
         {
@@ -40,7 +41,8 @@ namespace Segment
             this.MaxBatchSize = Defaults.MaxBatchSize;
             this.Async = Defaults.Async;
             this.FlushIntervalInMillis = Defaults.FlushIntervalInMillis;
-            UserAgentHeader = Defaults.UserAgentHeader;
+            this.Threads = Defaults.Threads;
+            this.UserAgentHeader = Defaults.UserAgentHeader;
         }
 
         /// <summary>

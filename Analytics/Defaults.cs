@@ -19,6 +19,8 @@ namespace Segment
 
         public static readonly string UserAgentHeader = GetDefaultUserContext();
 
+        public static readonly int Threads = 1;
+
         private static string GetDefaultUserContext()
         {
             var lib = new Context()["library"] as Dict;

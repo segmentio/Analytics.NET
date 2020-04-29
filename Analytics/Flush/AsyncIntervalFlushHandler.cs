@@ -85,8 +85,8 @@ namespace Segment.Flush
 
         private async Task WaitWorkersToBeReleased()
         {
-            for (var i = 0; i < _workloads; i++) await _semaphore.WaitAsync().ConfigureAwait(false);
-            _semaphore.Release(_workloads);
+            for (var i = 0; i < _threads; i++) await _semaphore.WaitAsync().ConfigureAwait(false);
+            _semaphore.Release(_threads);
         }
 
         private async Task FlushImpl()

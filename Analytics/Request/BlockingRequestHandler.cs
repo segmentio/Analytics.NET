@@ -138,7 +138,7 @@ namespace Segment.Request
             _httpClient = new HttpClient(handler) { Timeout = Timeout };
 #endif
             // Send user agent in the form of {library_name}/{library_version} as per RFC 7231.
-            var szUserAgent = _client.Config.UserAgentHeader;
+            var szUserAgent = _client.Config.UserAgent;
 #if NET35
             _httpClient.Headers.Add("User-Agent", szUserAgent);
 #else

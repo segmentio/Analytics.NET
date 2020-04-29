@@ -15,7 +15,7 @@ namespace Segment
         /// </summary>
         internal string Host { get; set; }
 
-        internal string UserAgentHeader { get; set; }
+        internal string UserAgent { get; set; }
 
         internal string Proxy { get; set; }
 
@@ -57,7 +57,7 @@ namespace Segment
 #endif
             double? flushInterval = null,
             bool? gzip = null,
-            string userAgentHeader = null
+            string userAgent = null
             )
         {
             this.Host = host ?? Defaults.Host;
@@ -68,7 +68,7 @@ namespace Segment
             this.SyncMode = syncMode ?? Defaults.SyncMode;
             this.FlushIntervalInMillis = (int)((flushInterval ?? Defaults.FlushInterval) * 1000);
             this.Gzip = gzip ?? Defaults.Gzip;
-            this.UserAgentHeader = userAgentHeader ?? Defaults.UserAgentHeader;
+            this.UserAgent = userAgent ?? Defaults.UserAgent;
 #if !NET35
             this.Threads = threads ?? Defaults.Threads;
 #endif
@@ -208,9 +208,9 @@ namespace Segment
             return this;
         }
 
-        public Config SetUserAgentHeader(string userAgentHeader)
+        public Config SetUserAgent(string userAgent)
         {
-            this.UserAgentHeader = userAgentHeader;
+            this.UserAgent = userAgent;
             return this;
         }
 

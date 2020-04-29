@@ -17,7 +17,7 @@ namespace Segment
 
         public static bool SyncMode = false;
 
-        public static readonly string UserAgentHeader = GetDefaultUserContext();
+        public static readonly string UserAgent = GetDefaultUserContext();
 
         public static double FlushInterval = 10;
 

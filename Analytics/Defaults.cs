@@ -19,9 +19,7 @@ namespace Segment
 
         public static readonly string UserAgentHeader = GetDefaultUserContext();
 
-        public static int FlushIntervalInMillis = 30000;
-
-        public static int Threads = 1;
+        public static readonly int Threads = 1;
 
         private static string GetDefaultUserContext()
         {

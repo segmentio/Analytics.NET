@@ -15,6 +15,8 @@ namespace Segment
         /// </summary>
         internal string Host { get; set; }
 
+        internal string UserAgentHeader { get; set; }
+
         internal string Proxy { get; set; }
 
         internal int MaxQueueSize { get; set; }
@@ -28,7 +30,7 @@ namespace Segment
         internal TimeSpan Timeout { get; set; }
 
         internal int FlushIntervalInMillis { get; private set; }
-        public int Threads { get; set; }
+        internal int Threads { get; set; }
 
         public Config()
         {
@@ -40,6 +42,7 @@ namespace Segment
             this.Async = Defaults.Async;
             this.FlushIntervalInMillis = Defaults.FlushIntervalInMillis;
             this.Threads = Defaults.Threads;
+            this.UserAgentHeader = Defaults.UserAgentHeader;
         }
 
         /// <summary>

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Segment.Flush
 {
 
-    internal class AsyncIntervalFlushHandler : IFlushHandler
+    internal class AsyncIntervalFlushHandler : IAsyncFlushHandler
     {
 
         private readonly ConcurrentQueue<BaseAction> _queue;
@@ -74,11 +74,19 @@ namespace Segment.Flush
         /// </summary>
         public void Flush()
         {
-            PerformFlush().GetAwaiter().GetResult();
+            FlushAsync().GetAwaiter().GetResult();
+        }
 
-            //waiting for all workers to be released
-            for (var i = 0; i < _threads; i++) _semaphore.Wait();
-            _semaphore.Release(_threads);
+        public async Task FlushAsync()
+        {
+            await PerformFlush().ConfigureAwait(false);
+            await WaitWorkersToBeReleased();
+        }
+
+        private async Task WaitWorkersToBeReleased()
+        {
+            for (var i = 0; i < _workloads; i++) await _semaphore.WaitAsync().ConfigureAwait(false);
+            _semaphore.Release(_workloads);
         }
 
         private async Task FlushImpl()

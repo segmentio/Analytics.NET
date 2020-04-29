@@ -88,7 +88,7 @@ namespace Segment.Test.Flush
                 _ = _handler.Process(new Track(null, null, null, null));
             }
 
-            _handler.Flush();
+            await _handler.FlushAsync();
 
             _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), times: Times.Exactly(5));
         }
@@ -120,7 +120,7 @@ namespace Segment.Test.Flush
 
             await Task.Delay(500);
 
-            _handler.Flush();
+            await _handler.FlushAsync();
 
             TimeSpan duration = DateTime.Now.Subtract(start);
 

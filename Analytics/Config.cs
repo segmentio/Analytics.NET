@@ -15,6 +15,8 @@ namespace Segment
         /// </summary>
         internal string Host { get; set; }
 
+        internal string UserAgentHeader { get; set; }
+
         internal string Proxy { get; set; }
 
         internal int MaxQueueSize { get; set; }

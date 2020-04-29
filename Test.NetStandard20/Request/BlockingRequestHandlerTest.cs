@@ -41,7 +41,7 @@ namespace Segment.Test.Request
             .Verifiable();
 
             _client = new Client("foo");
-            _handler = new BlockingRequestHandler(_client, new TimeSpan(0, 0, 10), new HttpClient(_mockHttpMessageHandler.Object));
+            _handler = new BlockingRequestHandler(_client, new TimeSpan(0, 0, 10), new HttpClient(_mockHttpMessageHandler.Object), new Backo(max: 500, jitter: 0));
         }
 
         [Test]
@@ -57,7 +57,7 @@ namespace Segment.Test.Request
             //Assert
             Assert.AreEqual(0, _client.Statistics.Succeeded);
             Assert.AreEqual(1, _client.Statistics.Failed);
-            AssertSendAsyncWasCalled(7);
+            AssertSendAsyncWasCalled(4);
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace Segment.Test.Request
             //Assert
             Assert.AreEqual(0, _client.Statistics.Succeeded);
             Assert.AreEqual(1, _client.Statistics.Failed);
-            AssertSendAsyncWasCalled(7);
+            AssertSendAsyncWasCalled(4);
         }
 
 

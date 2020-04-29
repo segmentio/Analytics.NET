@@ -79,6 +79,10 @@ namespace Segment.Request
         /// </summary>
         private readonly Client _client;
 
+        private readonly Backo _backo;
+
+        private readonly int _maxBackOffDuration;
+
 #if NET35
         private readonly IHttpClient _httpClient;
 #else
@@ -90,17 +94,19 @@ namespace Segment.Request
         /// </summary>
         public TimeSpan Timeout { get; set; }
 
-        internal BlockingRequestHandler(Client client, TimeSpan timeout) : this(client, timeout, null)
+        internal BlockingRequestHandler(Client client, TimeSpan timeout) : this(client, timeout, null, new Backo(max: 10000, jitter: 5000)) // Set maximum waiting limit to 10s and jitter to 5s
         {
         }
 #if NET35
 
-        internal BlockingRequestHandler(Client client, TimeSpan timeout, IHttpClient httpClient)
+        internal BlockingRequestHandler(Client client, TimeSpan timeout, IHttpClient httpClient, Backo backo)
 #else
-        internal BlockingRequestHandler(Client client, TimeSpan timeout, HttpClient httpClient)
+        internal BlockingRequestHandler(Client client, TimeSpan timeout, HttpClient httpClient, Backo backo)
 #endif
         {
             this._client = client;
+            _backo = backo;
+
             this.Timeout = timeout;
 
             if (httpClient != null)
@@ -132,9 +138,7 @@ namespace Segment.Request
             _httpClient = new HttpClient(handler) { Timeout = Timeout };
 #endif
             // Send user agent in the form of {library_name}/{library_version} as per RFC 7231.
-            var context = new Context();
-            var library = context["library"] as Dict;
-            string szUserAgent = string.Format("{0}/{1}", library["name"], library["version"]);
+            var szUserAgent = _client.Config.UserAgentHeader;
 #if NET35
             _httpClient.Headers.Add("User-Agent", szUserAgent);
 #else
@@ -194,13 +198,10 @@ namespace Segment.Request
                 });
 
                 // Retries with exponential backoff
-                const int MAXIMUM_BACKOFF_DURATION = 10000; // Set maximum waiting limit to 10s
-                int backoff = 100;  // Set initial waiting time to 100ms
-
                 int statusCode = (int)HttpStatusCode.OK;
                 string responseStr = "";
 
-                while (backoff < MAXIMUM_BACKOFF_DURATION)
+                while (!_backo.HasReachedMax)
                 {
 #if NET35
                     watch.Start();
@@ -227,8 +228,7 @@ namespace Segment.Request
                                 // If status code is greater than 500 and less than 600, it indicates server error
                                 // Error code 429 indicates rate limited.
                                 // Retry uploading in these cases.
-                                Thread.Sleep(backoff);
-                                backoff *= 2;
+                                Thread.Sleep(_backo.AttemptTime());
                                 continue;
                             }
                             else if (statusCode >= 400)
@@ -265,8 +265,7 @@ namespace Segment.Request
                             // If status code is greater than 500 and less than 600, it indicates server error
                             // Error code 429 indicates rate limited.
                             // Retry uploading in these cases.
-                            await Task.Delay(backoff);
-                            backoff *= 2;
+                            await _backo.AttemptAsync();
                             continue;
                         }
                         else if (statusCode >= 400)
@@ -279,7 +278,7 @@ namespace Segment.Request
 #endif
                 }
 
-                if (backoff >= MAXIMUM_BACKOFF_DURATION || statusCode != (int)HttpStatusCode.OK)
+                if (_backo.HasReachedMax || statusCode != (int)HttpStatusCode.OK)
                 {
                     Fail(batch, new APIException("Unexpected Status Code", responseStr), watch.ElapsedMilliseconds);
                 }

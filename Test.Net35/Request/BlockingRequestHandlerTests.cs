@@ -30,7 +30,7 @@ namespace Segment.Test.Request
             _mockHttpClient.Setup(x => x.Headers).Returns(() => _mockHeaders.Object);
 
             _client = new Client("foo");
-            _handler = new BlockingRequestHandler(_client, new TimeSpan(0, 0, 10), _mockHttpClient.Object);
+            _handler = new BlockingRequestHandler(_client, new TimeSpan(0, 0, 10), _mockHttpClient.Object, new Backo(max: 500, jitter: 0));
         }
 
 
@@ -50,7 +50,7 @@ namespace Segment.Test.Request
         {
             var batch = GetBatch();
             _client.Config.SetRequestCompression(true);
-            
+
             _handler.MakeRequest(batch).GetAwaiter().GetResult();
 
             _mockHeaders.Verify(x => x.Add("Content-Encoding", "gzip"), Times.Once);
@@ -82,7 +82,7 @@ namespace Segment.Test.Request
 
             Assert.AreEqual(0, _client.Statistics.Succeeded);
             Assert.AreEqual(1, _client.Statistics.Failed);
-            AssertSendAsyncWasCalled(7);
+            AssertSendAsyncWasCalled(4);
         }
 
         [Test]
@@ -98,7 +98,7 @@ namespace Segment.Test.Request
             //Assert
             Assert.AreEqual(0, _client.Statistics.Succeeded);
             Assert.AreEqual(1, _client.Statistics.Failed);
-            AssertSendAsyncWasCalled(7);
+            AssertSendAsyncWasCalled(4);
         }
 
 

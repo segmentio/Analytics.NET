@@ -11,15 +11,17 @@ namespace Segment
 
         public static readonly int MaxQueueCapacity = 10000;
 
-        public static readonly int MaxBatchSize = 20;
-
         public static readonly bool Async = true;
 
-        public static readonly int FlushIntervalInMillis = 30000;
+        public static readonly int FlushAt = 20;
 
-        public static readonly string UserAgentHeader = GetDefaultUserContext();
+        public static readonly string UserAgent = GetDefaultUserContext();
+
+        public static double FlushInterval = 10;
 
         public static readonly int Threads = 1;
+
+        public static bool Gzip = false;
 
         private static string GetDefaultUserContext()
         {

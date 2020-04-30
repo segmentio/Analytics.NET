@@ -1,4 +1,3 @@
-#if !NET35
 using Segment.Model;
 using Segment.Request;
 using System.Collections.Concurrent;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 namespace Segment.Flush
 {
 
-    internal class AsyncIntervalFlushHandler : IFlushHandler
+    internal class AsyncIntervalFlushHandler : IAsyncFlushHandler
     {
 
         private readonly ConcurrentQueue<BaseAction> _queue;
@@ -19,15 +18,16 @@ namespace Segment.Flush
         private readonly int _maxQueueSize;
         private readonly CancellationTokenSource _continue;
         private readonly int _flushIntervalInMillis;
-        private const int _workloads = 1;
-        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(_workloads);
+        private readonly int _threads;
+        private readonly Semaphore _semaphore;
         private Timer _timer;
 
         internal AsyncIntervalFlushHandler(IBatchFactory batchFactory,
             IRequestHandler requestHandler,
             int maxQueueSize,
             int maxBatchSize,
-            int flushIntervalInMillis)
+            int flushIntervalInMillis,
+            int threads)
         {
             _queue = new ConcurrentQueue<BaseAction>();
             _batchFactory = batchFactory;
@@ -36,6 +36,8 @@ namespace Segment.Flush
             _maxBatchSize = maxBatchSize;
             _continue = new CancellationTokenSource();
             _flushIntervalInMillis = flushIntervalInMillis;
+            _threads = threads;
+            _semaphore = new Semaphore(_threads, _threads);
 
             RunInterval();
         }
@@ -45,11 +47,11 @@ namespace Segment.Flush
             var initialDelay = _queue.Count == 0 ? _flushIntervalInMillis : 0;
             _timer = new Timer(new TimerCallback(async (b) => await PerformFlush()), new { }, 0, _flushIntervalInMillis);
         }
-      
+
 
         private async Task PerformFlush()
         {
-            if (_semaphore.CurrentCount <= 0)
+            if (!_semaphore.WaitOne(1))
             {
                 Logger.Debug("Skipping flush. Workload limit has been reached");
                 return;
@@ -57,7 +59,6 @@ namespace Segment.Flush
 
             try
             {
-                await _semaphore.WaitAsync();
                 await FlushImpl();
             }
             finally
@@ -67,15 +68,23 @@ namespace Segment.Flush
         }
 
         /// <summary>
-        /// Blocks until all the messages are flushed
+        /// Blocks until all the messages are flushed 
         /// </summary>
         public void Flush()
         {
-            PerformFlush().GetAwaiter().GetResult();
+            FlushAsync().GetAwaiter().GetResult();
+        }
 
-            //waiting for all workers to be released
-            for (var i = 0; i < _workloads; i++) _semaphore.Wait();
-            _semaphore.Release(_workloads);
+        public async Task FlushAsync()
+        {
+            await PerformFlush().ConfigureAwait(false);
+            WaitWorkersToBeReleased();
+        }
+
+        private void WaitWorkersToBeReleased()
+        {
+            for (var i = 0; i < _threads; i++) _semaphore.WaitOne();
+            _semaphore.Release(_threads);
         }
 
         private async Task FlushImpl()
@@ -113,7 +122,7 @@ namespace Segment.Flush
             }
         }
 
-        public Task Process(BaseAction action)
+        public async Task Process(BaseAction action)
         {
             _queue.Enqueue(action);
 
@@ -128,17 +137,17 @@ namespace Segment.Flush
                 _ = PerformFlush();
             }
 
-            return Task.FromResult(0);
         }
 
         public void Dispose()
         {
             Logger.Debug("Disposing AsyncIntervalFlushHandler");
             _timer?.Dispose();
+#if !NET35
             _semaphore?.Dispose();
+#endif
             _continue?.Cancel();
         }
 
     }
 }
-#endif

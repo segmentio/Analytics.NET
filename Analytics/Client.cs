@@ -13,7 +13,11 @@ namespace Segment
     /// </summary>
     public class Client : IAnalyticsClient
     {
+#if NET35
         private IFlushHandler _flushHandler;
+#else
+        private IAsyncFlushHandler _flushHandler;
+#endif
         private string _writeKey;
         private Config _config;
 
@@ -59,11 +63,7 @@ namespace Segment
 
             if (config.Async)
             {
-#if NET35
-                _flushHandler = new AsyncFlushHandler(batchFactory, requestHandler, config.MaxQueueSize, config.MaxBatchSize, config.FlushIntervalInMillis);
-#else
-                _flushHandler = new AsyncIntervalFlushHandler(batchFactory, requestHandler, config.MaxQueueSize, config.MaxBatchSize, config.FlushIntervalInMillis);
-#endif
+                _flushHandler = new AsyncIntervalFlushHandler(batchFactory, requestHandler, config.MaxQueueSize, config.FlushAt, config.FlushIntervalInMillis, config.Threads);
             }
             else
                 _flushHandler = new BlockingFlushHandler(batchFactory, requestHandler);
@@ -296,6 +296,12 @@ namespace Segment
         {
             _flushHandler.Flush();
         }
+#if !NET35
+        public Task FlushAsync()
+        {
+            return _flushHandler.FlushAsync();
+        }
+#endif
 
         /// <inheritdoc />
         public void Dispose()

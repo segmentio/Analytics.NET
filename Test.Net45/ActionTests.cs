@@ -31,6 +31,13 @@ namespace Segment.Test
             Analytics.Initialize(client);
         }
 
+        [TearDown]
+        public void CleanUp()
+        {
+            Analytics.Dispose();
+            Logger.Handlers -= LoggingHandler;
+        }
+
         [Test ()]
         public void IdentifyTestNet45()
         {

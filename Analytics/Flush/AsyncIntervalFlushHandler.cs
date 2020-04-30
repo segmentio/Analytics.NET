@@ -68,7 +68,7 @@ namespace Segment.Flush
         }
 
         /// <summary>
-        /// Blocks until all the messages are flushed
+        /// Blocks until all the messages are flushed 
         /// </summary>
         public void Flush()
         {

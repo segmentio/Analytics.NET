@@ -89,7 +89,7 @@ namespace Segment.Test.Flush
                 _ = _handler.Process(new Track(null, null, null, null));
             }
 
-            _handler.Flush();
+            await _handler.FlushAsync();
 
             _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), times: Times.Exactly(5));
         }
@@ -140,7 +140,7 @@ namespace Segment.Test.Flush
 
             await Task.Delay(500);
 
-            _handler.Flush();
+            await _handler.FlushAsync();
 
             TimeSpan duration = DateTime.Now.Subtract(start);
 
@@ -172,6 +172,32 @@ namespace Segment.Test.Flush
 
             _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), times: Times.Exactly(2));
 
+        }
+
+        [Test]
+        public async Task IntervalFlushTriggerTwoConcurrentProcesses()
+        {
+
+            var time = 2000;
+            _handler = GetFlushHandler(100, 20, 300, 2);
+            _requestHandlerBehavior = MultipleTaskResponseBehavior(Task.Delay(time), Task.FromResult(0), Task.Delay(time));
+
+            _ = _handler.Process(new Track(null, null, null, null));
+            await Task.Delay(400);
+
+            for (int i = 0; i < 3; i++)
+            {
+                await _handler.Process(new Track(null, null, null, null));
+                //There is only the first process 
+                _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), times: Times.Exactly(1));
+            }
+
+            await Task.Delay(400);
+            //The second process should be triggered
+            _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), times: Times.Exactly(2));
+            _handler.Flush();
+            //Validating that flush doesn't triggered another process
+            _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), times: Times.Exactly(2));
         }
 
         [Test]
@@ -225,9 +251,9 @@ namespace Segment.Test.Flush
             return new List<BaseAction>(Enumerable.Range(0, actionsNumber).Select(n => new Track("user", eventName, null, null)));
         }
 
-        private AsyncIntervalFlushHandler GetFlushHandler(int maxQueueSize, int maxBatchSize, int flushIntervalInMillis)
+        private AsyncIntervalFlushHandler GetFlushHandler(int maxQueueSize, int maxBatchSize, int flushIntervalInMillis, int threads = 1)
         {
-            return new AsyncIntervalFlushHandler(new SimpleBatchFactory("TestKey"), _mockRequestHandler.Object, maxQueueSize, maxBatchSize, flushIntervalInMillis);
+            return new AsyncIntervalFlushHandler(new SimpleBatchFactory("TestKey"), _mockRequestHandler.Object, maxQueueSize, maxBatchSize, flushIntervalInMillis, threads);
         }
 
         private Func<Task> SingleTaskResponseBehavior(Task task)

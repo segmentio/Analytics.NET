@@ -53,9 +53,7 @@ namespace Segment
             int? maxQueueSize = null,
             int? flushAt = null,
             bool? async = null,
-#if !NET35
             int? threads = null,
-#endif
             double? flushInterval = null,
             bool? gzip = null,
             string userAgent = null
@@ -70,9 +68,7 @@ namespace Segment
             this.FlushIntervalInMillis = (int)((flushInterval ?? Defaults.FlushInterval) * 1000);
             this.Gzip = gzip ?? Defaults.Gzip;
             this.UserAgent = userAgent ?? Defaults.UserAgent;
-#if !NET35
             this.Threads = threads ?? Defaults.Threads;
-#endif
         }
 
         /// <summary>
@@ -141,7 +137,6 @@ namespace Segment
             return this;
         }
 
-#if !NET35
         /// <summary>
         /// Count of concurrent internal threads to post data from queue
         /// </summary>
@@ -152,7 +147,6 @@ namespace Segment
             Threads = threads;
             return this;
         }
-#endif
 
         /// <summary>
         /// Sets whether the flushing to the server is synchronous or asynchronous.
@@ -204,20 +198,12 @@ namespace Segment
             return this;
         }
 
-#if NET35
-        /// <summary>
-        /// Set the interval in seconds at which the client should flush events. 
-        /// This is relative to the last flush
-        /// </summary>
-        /// <param name="interval">Time in milliseconds</param>
-        /// <returns></returns>
-#else
+
         /// <summary>
         /// Set the interval in seconds at which the client should flush events. 
         /// </summary>
         /// <param name="interval"></param>
         /// <returns></returns>
-#endif
         public Config SetFlushInterval(double interval)
         {
             this.FlushIntervalInMillis = (int)(interval * 1000);

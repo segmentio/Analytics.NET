@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2008
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Analytics", "Analytics/Analytics.csproj", "{A386CF02-D902-4B22-90A8-E828093E3AA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Analytics", "Analytics\Analytics.csproj", "{A386CF02-D902-4B22-90A8-E828093E3AA4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test/Test.csproj", "{6AE99FF7-EECF-4639-B6B1-3E7CF1CC3048}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{6AE99FF7-EECF-4639-B6B1-3E7CF1CC3048}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C316F1BB-6C70-4DEB-BC04-5664C39313F3}"
 	ProjectSection(SolutionItems) = preProject
@@ -13,23 +13,27 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Net35", "Test.Net35/Test.Net35.csproj", "{14046A5D-168B-4320-B031-C72BEE19F206}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Net35", "Test.Net35\Test.Net35.csproj", "{14046A5D-168B-4320-B031-C72BEE19F206}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Analytics.Net35", "Analytics.Net35/Analytics.Net35.csproj", "{6A4B32F2-0A3D-4031-A2DF-EED9BD99501D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Analytics.Net35", "Analytics.Net35\Analytics.Net35.csproj", "{6A4B32F2-0A3D-4031-A2DF-EED9BD99501D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Analytics.NetStandard20", "Analytics.NetStandard20/Analytics.NetStandard20.csproj", "{57CCBFA9-8CE3-4260-8E83-951E281372FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Analytics.NetStandard20", "Analytics.NetStandard20\Analytics.NetStandard20.csproj", "{57CCBFA9-8CE3-4260-8E83-951E281372FC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.NetStandard20", "Test.NetStandard20/Test.NetStandard20.csproj", "{9D2DF2FC-3977-418C-8E0B-B98A48F596B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.NetStandard20", "Test.NetStandard20\Test.NetStandard20.csproj", "{9D2DF2FC-3977-418C-8E0B-B98A48F596B7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Analytics.Net45", "Analytics.Net45/Analytics.Net45.csproj", "{3EBD38D6-E04D-4E23-88C1-2BC32689EE8B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Analytics.Net45", "Analytics.Net45\Analytics.Net45.csproj", "{3EBD38D6-E04D-4E23-88C1-2BC32689EE8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Net45", "Test.Net45/Test.Net45.csproj", "{A7B43E75-BA62-4543-A467-27C6D9B28EB8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Net45", "Test.Net45\Test.Net45.csproj", "{A7B43E75-BA62-4543-A467-27C6D9B28EB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Analytics.Portable", "Analytics.Portable/Analytics.Portable.csproj", "{D693713D-25B3-4632-9FD8-8F597B74EC53}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Analytics.Portable", "Analytics.Portable\Analytics.Portable.csproj", "{D693713D-25B3-4632-9FD8-8F597B74EC53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.UniversalApp", "Test.UniversalApp/Test.UniversalApp.csproj", "{E54D766D-3E91-47C5-901B-FFCCCACD60CC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.UniversalApp", "Test.UniversalApp\Test.UniversalApp.csproj", "{E54D766D-3E91-47C5-901B-FFCCCACD60CC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.E2E", "Test.E2E/Test.E2E.csproj", "{E6D4DE50-ED07-4F7C-ABD8-F0600BD17D24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.E2E", "Test.E2E\Test.E2E.csproj", "{E6D4DE50-ED07-4F7C-ABD8-F0600BD17D24}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DI", "DI", "{72D463DB-E9BA-4F11-B1D2-92192470D1D3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Analytics.Extensions.Microsoft.DependencyInjection", "DI\Analytics.Extensions.Microsoft.DependencyInjection\Analytics.Extensions.Microsoft.DependencyInjection.csproj", "{8F9143ED-2926-404F-8402-352D2282B3B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -223,9 +227,28 @@ Global
 		{E6D4DE50-ED07-4F7C-ABD8-F0600BD17D24}.Release|x64.Build.0 = Release|Any CPU
 		{E6D4DE50-ED07-4F7C-ABD8-F0600BD17D24}.Release|x86.ActiveCfg = Release|Any CPU
 		{E6D4DE50-ED07-4F7C-ABD8-F0600BD17D24}.Release|x86.Build.0 = Release|Any CPU
+		{8F9143ED-2926-404F-8402-352D2282B3B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F9143ED-2926-404F-8402-352D2282B3B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F9143ED-2926-404F-8402-352D2282B3B8}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{8F9143ED-2926-404F-8402-352D2282B3B8}.Debug|ARM.Build.0 = Debug|Any CPU
+		{8F9143ED-2926-404F-8402-352D2282B3B8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8F9143ED-2926-404F-8402-352D2282B3B8}.Debug|x64.Build.0 = Debug|Any CPU
+		{8F9143ED-2926-404F-8402-352D2282B3B8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8F9143ED-2926-404F-8402-352D2282B3B8}.Debug|x86.Build.0 = Debug|Any CPU
+		{8F9143ED-2926-404F-8402-352D2282B3B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F9143ED-2926-404F-8402-352D2282B3B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F9143ED-2926-404F-8402-352D2282B3B8}.Release|ARM.ActiveCfg = Release|Any CPU
+		{8F9143ED-2926-404F-8402-352D2282B3B8}.Release|ARM.Build.0 = Release|Any CPU
+		{8F9143ED-2926-404F-8402-352D2282B3B8}.Release|x64.ActiveCfg = Release|Any CPU
+		{8F9143ED-2926-404F-8402-352D2282B3B8}.Release|x64.Build.0 = Release|Any CPU
+		{8F9143ED-2926-404F-8402-352D2282B3B8}.Release|x86.ActiveCfg = Release|Any CPU
+		{8F9143ED-2926-404F-8402-352D2282B3B8}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8F9143ED-2926-404F-8402-352D2282B3B8} = {72D463DB-E9BA-4F11-B1D2-92192470D1D3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {424C3E96-6F35-4A0F-8626-D085289A3999}

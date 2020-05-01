@@ -141,7 +141,6 @@ namespace Segment.Flush
             if (action.Size > ActionMaxSize)
             {
                 Logger.Error($"Action was dropped cause is bigger than {ActionMaxSize} bytes");
-                return Task.FromResult(0);
             }
 
             _queue.Enqueue(action);

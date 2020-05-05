@@ -30,6 +30,13 @@ namespace Segment.Test
             Logger.Handlers += LoggingHandler;
         }
 
+        [TearDown]
+        public void CleanUp()
+        {
+            Analytics.Dispose();
+            Logger.Handlers -= LoggingHandler;
+        }
+
         [Test()]
         public void SynchronousFlushTestNet45()
         {

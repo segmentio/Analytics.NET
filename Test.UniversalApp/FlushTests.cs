@@ -30,6 +30,12 @@ namespace Segment.Test
 			Logger.Handlers += LoggingHandler;
 		}
 
+        [TestCleanup]
+        public void CleanUp()
+        {
+            Logger.Handlers -= LoggingHandler;
+        }
+
 		[TestMethod]
 		public void SynchronousFlushTestNetPortable()
 		{

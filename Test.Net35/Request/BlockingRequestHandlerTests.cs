@@ -55,12 +55,10 @@ namespace Segment.Test.Request
         }
 
         [Test]
-        public void RequestIncludes()
+        public void RequestIncludesUserAgentHeader()
         {
             _mockHeaders.Verify(x => x.Set("User-Agent", Defaults.UserAgent), Times.Once);
         }
-
-
 
         [Test]
         public void MakeRequestWith200StatusCode()

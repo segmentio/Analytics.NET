@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Segment.Model;
 
@@ -19,5 +19,10 @@ namespace Segment.Flush
         /// Blocks until all processing messages are flushed to the server
         /// </summary>
         void Flush();
+    }
+
+    public interface IAsyncFlushHandler : IFlushHandler
+    {
+        Task FlushAsync();
     }
 }

@@ -23,13 +23,19 @@ namespace Segment.Test
 				.Setup(x => x.MakeRequest(It.IsAny<Batch>()))
 				.Returns((Batch b) =>
 				{
-					Analytics.Client.Statistics.Succeeded += b.batch.Count;
+					b.batch.ForEach(_ => Analytics.Client.Statistics.IncrementSucceeded());
 					return Task.CompletedTask;
 				});
 
 			Analytics.Dispose();
 			Logger.Handlers += LoggingHandler;
 		}
+
+        [TestCleanup]
+        public void CleanUp()
+        {
+            Logger.Handlers -= LoggingHandler;
+        }
 
 		[TestMethod]
 		public void ProxyTestNetPortable()

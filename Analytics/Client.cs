@@ -13,7 +13,11 @@ namespace Segment
     /// </summary>
     public class Client : IDisposable
     {
+#if NET35
         private IFlushHandler _flushHandler;
+#else
+        private IAsyncFlushHandler _flushHandler;
+#endif
         private string _writeKey;
         private Config _config;
 
@@ -35,7 +39,7 @@ namespace Segment
         /// Creates a new REST client with a specified API writeKey and default config
         /// </summary>
         /// <param name="writeKey"></param>
-        public Client(string writeKey) : this(writeKey, new Config()) {}
+        public Client(string writeKey) : this(writeKey, new Config()) { }
 
         /// <summary>
         /// Creates a new REST client with a specified API writeKey and default config
@@ -62,11 +66,7 @@ namespace Segment
 
             if (config.Async)
             {
-            #if NET35
-                _flushHandler = new AsyncFlushHandler(batchFactory, requestHandler, config.MaxQueueSize, config.MaxBatchSize, config.FlushIntervalInMillis);
-            #else
-                _flushHandler = new AsyncIntervalFlushHandler(batchFactory, requestHandler, config.MaxQueueSize, config.MaxBatchSize, config.FlushIntervalInMillis);
-            #endif
+                _flushHandler = new AsyncIntervalFlushHandler(batchFactory, requestHandler, config.MaxQueueSize, config.FlushAt, config.FlushIntervalInMillis, config.Threads);
             }
             else
                 _flushHandler = new BlockingFlushHandler(batchFactory, requestHandler);
@@ -165,7 +165,7 @@ namespace Segment
         ///
         public void Group(string userId, string groupId, Options options)
         {
-            Group (userId, groupId, null, options);
+            Group(userId, groupId, null, options);
         }
 
         /// <summary>
@@ -187,7 +187,7 @@ namespace Segment
         ///
         public void Group(string userId, string groupId, IDictionary<string, object> traits)
         {
-            Group (userId, groupId, traits, null);
+            Group(userId, groupId, traits, null);
         }
 
         /// <summary>
@@ -373,7 +373,7 @@ namespace Segment
         ///
         public void Page(string userId, string name)
         {
-            Page (userId, name, null, null, null);
+            Page(userId, name, null, null, null);
         }
 
         /// <summary>
@@ -392,7 +392,7 @@ namespace Segment
         ///
         public void Page(string userId, string name, Options options)
         {
-            Page (userId, name, null, null, options);
+            Page(userId, name, null, null, options);
         }
 
         /// <summary>
@@ -410,7 +410,7 @@ namespace Segment
         ///
         public void Page(string userId, string name, string category)
         {
-            Page (userId, name, category, null, null);
+            Page(userId, name, category, null, null);
         }
 
         /// <summary>
@@ -430,7 +430,7 @@ namespace Segment
         ///
         public void Page(string userId, string name, IDictionary<string, object> properties)
         {
-            Page (userId, name, null, properties, null);
+            Page(userId, name, null, properties, null);
         }
 
         /// <summary>
@@ -453,7 +453,7 @@ namespace Segment
         ///
         public void Page(string userId, string name, IDictionary<string, object> properties, Options options)
         {
-            Page (userId, name, null, properties, options);
+            Page(userId, name, null, properties, options);
         }
 
         /// <summary>
@@ -505,7 +505,7 @@ namespace Segment
         ///
         public void Screen(string userId, string name)
         {
-            Screen (userId, name, null, null, null);
+            Screen(userId, name, null, null, null);
         }
 
         /// <summary>
@@ -525,7 +525,7 @@ namespace Segment
         ///
         public void Screen(string userId, string name, Options options)
         {
-            Screen (userId, name, null, null, options);
+            Screen(userId, name, null, null, options);
         }
 
         /// <summary>
@@ -544,7 +544,7 @@ namespace Segment
         ///
         public void Screen(string userId, string name, string category)
         {
-            Screen (userId, name, category, null, null);
+            Screen(userId, name, category, null, null);
         }
 
         /// <summary>
@@ -565,7 +565,7 @@ namespace Segment
         ///
         public void Screen(string userId, string name, IDictionary<string, object> properties)
         {
-            Screen (userId, name, null, properties, null);
+            Screen(userId, name, null, properties, null);
         }
 
         /// <summary>
@@ -589,7 +589,7 @@ namespace Segment
         ///
         public void Screen(string userId, string name, IDictionary<string, object> properties, Options options)
         {
-            Screen (userId, name, null, properties, options);
+            Screen(userId, name, null, properties, options);
         }
 
         /// <summary>
@@ -635,6 +635,12 @@ namespace Segment
         {
             _flushHandler.Flush();
         }
+#if !NET35
+        public Task FlushAsync()
+        {
+            return _flushHandler.FlushAsync();
+        }
+#endif
 
         /// <summary>
         /// Disposes of the flushing thread and the message queue. Note, this does not call Flush() first.
@@ -643,7 +649,7 @@ namespace Segment
         /// <see cref="Dispose"/> method leaves the <see cref="Segment.Client"/> in an unusable state. After calling
         /// <see cref="Dispose"/>, you must release all references to the <see cref="Segment.Client"/> so the garbage
         /// collector can reclaim the memory that the <see cref="Segment.Client"/> was occupying.</remarks>
-        public void Dispose() 
+        public void Dispose()
         {
             _flushHandler.Dispose();
         }
@@ -687,7 +693,7 @@ namespace Segment
         /// <param name="options">Options.</param>
         internal static bool HasAnonymousId(Options options)
         {
-            return options != null &&  !String.IsNullOrEmpty(options.AnonymousId);
+            return options != null && !String.IsNullOrEmpty(options.AnonymousId);
         }
 
         #endregion

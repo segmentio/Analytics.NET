@@ -24,7 +24,6 @@ namespace Segment.Test.Request
             _mockHttpClient = new Mock<IHttpClient>(MockBehavior.Strict);
             _mockHeaders = new Mock<WebHeaderCollection>(MockBehavior.Strict);
             _mockHeaders.Setup(x => x.Set(It.IsAny<string>(), It.IsAny<string>())).Verifiable();
-            _mockHeaders.Setup(x => x.Add(It.IsAny<string>(), It.IsAny<string>())).Verifiable();
 
             _mockHttpClient.Setup(x => x.UploadData(It.IsAny<Uri>(), "POST", It.IsAny<byte[]>())).Returns(new byte[] { });
             _mockHttpClient.Setup(x => x.Headers).Returns(() => _mockHeaders.Object);
@@ -49,12 +48,18 @@ namespace Segment.Test.Request
         public void RequestIncludesGzipHeaderWhenCompressRequestIsTrue()
         {
             var batch = GetBatch();
-            _client.Config.SetRequestCompression(true);
+            _client.Config.SetGzip(true);
 
             _handler.MakeRequest(batch).GetAwaiter().GetResult();
-
-            _mockHeaders.Verify(x => x.Add("Content-Encoding", "gzip"), Times.Once);
+            _mockHeaders.Verify(x => x.Set("Content-Encoding", "gzip"), Times.Once);
         }
+
+        [Test]
+        public void RequestIncludes()
+        {
+            _mockHeaders.Verify(x => x.Set("User-Agent", Defaults.UserAgent), Times.Once);
+        }
+
 
 
         [Test]

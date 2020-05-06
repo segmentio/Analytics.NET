@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using Segment.Stats;
 
-namespace Segment.Net35.Stats
+namespace Segment.Test.Stats
 {
     [TestFixture]
     public class StatisticsTests

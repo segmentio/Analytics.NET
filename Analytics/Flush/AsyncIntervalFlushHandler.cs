@@ -70,6 +70,10 @@ namespace Segment.Flush
             {
                 await FlushImpl();
             }
+            catch
+            {
+                Logger.Error("Flush couldn't be completed");
+            }
             finally
             {
                 _semaphore.Release();

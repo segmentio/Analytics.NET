@@ -22,7 +22,7 @@ namespace Segment.Test
 				.Setup(x => x.MakeRequest(It.IsAny<Batch>()))
 				.Returns((Batch b) =>
 				{
-					Analytics.Client.Statistics.Succeeded += b.batch.Count;
+					b.batch.ForEach(_ => Analytics.Client.Statistics.IncrementSucceeded());
 					return Task.CompletedTask;
 				});
 
@@ -31,6 +31,12 @@ namespace Segment.Test
 			var client = new Client(Constants.WRITE_KEY, new Config().SetAsync(false), _mockRequestHandler.Object);
 			Analytics.Initialize(client);
 		}
+
+        [TestCleanup]
+        public void CleanUp()
+        {
+            Logger.Handlers -= LoggingHandler;
+        }
 
 		[TestMethod]
 		public void IdentifyTestNetPortable()

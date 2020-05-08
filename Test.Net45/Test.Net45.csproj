@@ -65,6 +65,7 @@
     <Compile Include="Actions.cs" />
     <Compile Include="ActionTests.cs" />
     <Compile Include="ClientTests.cs" />
+    <Compile Include="ConfigTests.cs" />
     <Compile Include="ConnectionTests.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="FlushTests.cs" />

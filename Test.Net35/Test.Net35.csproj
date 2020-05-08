@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <StartupObject />
     <OutputPath>bin/$(Configuration)/</OutputPath>
-    <RootNamespace>Test.Net35</RootNamespace>
+    <RootNamespace>Segment.Test</RootNamespace>
     <AssemblyName>Test.Net35</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -57,6 +57,7 @@
     <Compile Include="Actions.cs" />
     <Compile Include="ActionTests.cs" />
     <Compile Include="ClientTests.cs" />
+    <Compile Include="ConfigTests.cs" />
     <Compile Include="ConnectionTests.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="FlushTests.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="Properties/AssemblyInfo.cs" />
     <Compile Include="RequestHandlerTest.cs" />
     <Compile Include="Request\BlockingRequestHandlerTests.cs" />
+    <Compile Include="Stats\StatisticsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -5,6 +5,7 @@
     <StartupObject></StartupObject>
     <ApplicationIcon />
     <OutputType>Library</OutputType>
+    <RootNamespace>Segment.Test</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

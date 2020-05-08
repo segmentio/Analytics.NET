@@ -35,7 +35,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DI", "DI", "{72D463DB-E9BA-
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Analytics.Extensions.Microsoft.DependencyInjection", "DI\Analytics.Extensions.Microsoft.DependencyInjection\Analytics.Extensions.Microsoft.DependencyInjection.csproj", "{8F9143ED-2926-404F-8402-352D2282B3B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Analytics.Extensions.Microsoft.DependencyInjection.Test", "Analytics.Extensions.Microsoft.DependencyInjection.Test\Analytics.Extensions.Microsoft.DependencyInjection.Test.csproj", "{61FE13AB-15AE-4086-B343-81F3B1F892D7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Analytics.Extensions.Microsoft.DependencyInjection.Test", "DI\Analytics.Extensions.Microsoft.DependencyInjection.Test\Analytics.Extensions.Microsoft.DependencyInjection.Test.csproj", "{61FE13AB-15AE-4086-B343-81F3B1F892D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

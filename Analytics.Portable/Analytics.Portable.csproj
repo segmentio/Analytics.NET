@@ -34,8 +34,36 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="../Analytics/**/*.cs" Exclude="../Analytics/obj/**/*.cs">
-    </Compile>
+    <Compile Include="..\Analytics\Analytics.cs" />
+    <Compile Include="..\Analytics\Client.cs" />
+    <Compile Include="..\Analytics\Config.cs" />
+    <Compile Include="..\Analytics\Exception\BadParameter.cs" />
+    <Compile Include="..\Analytics\Exception\NotInitializedException.cs" />
+    <Compile Include="..\Analytics\Flush\ActionSizeCalculator.cs" />
+    <Compile Include="..\Analytics\Flush\AsyncIntervalFlushHandler.cs" />
+    <Compile Include="..\Analytics\Flush\BlockingFlushHandler.cs" />
+    <Compile Include="..\Analytics\Flush\IBatchFactory.cs" />
+    <Compile Include="..\Analytics\Flush\IFlushHandler.cs" />
+    <Compile Include="..\Analytics\Flush\SimpleBatchFactory.cs" />
+    <Compile Include="..\Analytics\Logger.cs" />
+    <Compile Include="..\Analytics\Model\Alias.cs" />
+    <Compile Include="..\Analytics\Model\BaseAction.cs" />
+    <Compile Include="..\Analytics\Model\Batch.cs" />
+    <Compile Include="..\Analytics\Model\Context.cs" />
+    <Compile Include="..\Analytics\Model\Dict.cs" />
+    <Compile Include="..\Analytics\Model\Group.cs" />
+    <Compile Include="..\Analytics\Model\Identify.cs" />
+    <Compile Include="..\Analytics\Model\Options.cs" />
+    <Compile Include="..\Analytics\Model\Page.cs" />
+    <Compile Include="..\Analytics\Model\Properties.cs" />
+    <Compile Include="..\Analytics\Model\Providers.cs" />
+    <Compile Include="..\Analytics\Model\Screen.cs" />
+    <Compile Include="..\Analytics\Model\Track.cs" />
+    <Compile Include="..\Analytics\Model\Traits.cs" />
+    <Compile Include="..\Analytics\Request\Backo.cs" />
+    <Compile Include="..\Analytics\Request\BlockingRequestHandler.cs" />
+    <Compile Include="..\Analytics\Request\IRequestHandler.cs" />
+    <Compile Include="..\Analytics\Stats\Statistics.cs" />
     <Compile Include="_AssemblyConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>

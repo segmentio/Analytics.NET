@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../Analytics/Analytics.csproj" />
+    <ProjectReference Include="..\Analytics\Analytics.csproj" />
   </ItemGroup>
 
   <ItemGroup>

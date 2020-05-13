@@ -32,6 +32,12 @@ namespace Segment.Test
 			Analytics.Initialize(client);
 		}
 
+        [TestCleanup]
+        public void CleanUp()
+        {
+            Logger.Handlers -= LoggingHandler;
+        }
+
 		[TestMethod]
 		public void IdentifyTestNetPortable()
 		{

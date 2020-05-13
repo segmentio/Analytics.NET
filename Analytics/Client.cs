@@ -8,6 +8,7 @@ using Segment.Stats;
 
 namespace Segment
 {
+
     /// <summary>
     /// A Segment.io .NET client
     /// </summary>

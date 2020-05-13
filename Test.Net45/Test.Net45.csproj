@@ -65,6 +65,7 @@
     <Compile Include="Actions.cs" />
     <Compile Include="ActionTests.cs" />
     <Compile Include="ClientTests.cs" />
+    <Compile Include="ConfigTests.cs" />
     <Compile Include="ConnectionTests.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="FlushTests.cs" />
@@ -82,9 +83,9 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="../Analytics.Net45/Analytics.Net45.csproj">
-      <Project>{3EBD38D6-E04D-4E23-88C1-2BC32689EE8B}</Project>
-      <Name>Analytics.Net45</Name>
+    <ProjectReference Include="..\Analytics\Analytics.csproj">
+      <Project>{a386cf02-d902-4b22-90a8-e828093e3aa4}</Project>
+      <Name>Analytics</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)/Microsoft.CSharp.targets" />

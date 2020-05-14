@@ -1,39 +1,84 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.3</TargetFrameworks>
+    <TargetFrameworks>netstandard1.3;netstandard2.0;net45;net35;net461</TargetFrameworks>
+    <RootNamespace>Segment</RootNamespace>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageId>Analytics</PackageId>
     <Version>3.1.0-alpha</Version>
     <Authors>Segment Team</Authors>
     <Company />
     <Product>Analytics.NET</Product>
-    <Description>The .NET API for analytics, by Segment.</Description>
+    <Description>The .NET API for analytics, by Segment. Install and immediately send data to 150+ analytics and business intelligence tools with the flip of a switch.</Description>
+    <PackageProjectUrl>https://segment.com</PackageProjectUrl>
+    <PackageReleaseNotes>Check out the changelog at: https://raw.githubusercontent.com/segmentio/Analytics.NET/master/Analytics/History.md</PackageReleaseNotes>
+    <PackageTags>analytics, Segment</PackageTags>
+    <PackageIcon>packageIcon.png</PackageIcon>
+    <PackageLicenseFile>README.md</PackageLicenseFile>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.3|AnyCPU'">
-    <WarningLevel>2</WarningLevel>
+  <PropertyGroup Condition="'$(TargetFramework)'=='net35'">
+    <DefineConstants>NET35</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType></DebugType>
+  <PropertyGroup Condition="'$(TargetFramework)'=='net45'">
+    <DefineConstants>NET45</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard1.3|AnyCPU'">
-    <DebugType>full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3'">
     <PackageReference Include="System.Threading.Thread" Version="4.3.0" />
   </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='net35'">
+    <PackageReference Include="AsyncBridge.Net35" Version="0.2.0" />
+    <!-- Work arround to build with dotnet cli https://github.com/dotnet/installer/issues/2022#issuecomment-561910674 -->
+    <PackageReference Include="jnm2.ReferenceAssemblies.net35" Version="1.0.0" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='net45'">
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='net461'">
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
+
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
       <_Parameter1>Test</_Parameter1>
     </AssemblyAttribute>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Test.Net35</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Test.Net45</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Test.NetStandard20</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Test.UniversalApp</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
       <_Parameter1>DynamicProxyGenAssembly2</_Parameter1>
     </AssemblyAttribute>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="packageIcon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

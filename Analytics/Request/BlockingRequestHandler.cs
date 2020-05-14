@@ -112,11 +112,11 @@ namespace Segment.Request
             if (httpClient != null)
             {
                 _httpClient = httpClient;
-                return;
             }
             // Create HttpClient instance in .Net 3.5
 #if NET35
-            _httpClient = new HttpClient { Timeout = Timeout };
+            if (httpClient == null)
+                _httpClient = new HttpClient { Timeout = Timeout };
 #else
             var handler = new HttpClientHandler();
 #endif
@@ -133,14 +133,14 @@ namespace Segment.Request
             }
 
             // Initialize HttpClient instance with given configuration
-#if NET35
-#else
-            _httpClient = new HttpClient(handler) { Timeout = Timeout };
+#if !NET35
+            if (httpClient == null)
+                _httpClient = new HttpClient(handler) { Timeout = Timeout };
 #endif
             // Send user agent in the form of {library_name}/{library_version} as per RFC 7231.
             var szUserAgent = _client.Config.UserAgent;
 #if NET35
-            _httpClient.Headers.Add("User-Agent", szUserAgent);
+            _httpClient.Headers.Set("User-Agent", szUserAgent);
 #else
             _httpClient.DefaultRequestHeaders.Add("User-Agent", szUserAgent);
 #endif
@@ -174,7 +174,7 @@ namespace Segment.Request
                 if (_client.Config.Gzip)
                 {
 #if NET35
-                    _httpClient.Headers.Add(HttpRequestHeader.ContentEncoding, "gzip");
+                    _httpClient.Headers.Set(HttpRequestHeader.ContentEncoding, "gzip");
 #else
                     //_httpClient.DefaultRequestHeaders.Add("Content-Encoding", "gzip");
 #endif

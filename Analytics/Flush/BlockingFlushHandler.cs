@@ -5,7 +5,7 @@ using Segment.Request;
 
 namespace Segment.Flush
 {
-    internal class BlockingFlushHandler : IFlushHandler
+    internal class BlockingFlushHandler : IAsyncFlushHandler
     {
         /// <summary>
         /// Creates a series of actions into a batch that we can send to the server
@@ -34,6 +34,11 @@ namespace Segment.Flush
         /// Returns immediately since the blocking flush handler does not queue
         /// </summary>
         public void Flush() 
+        {
+            // do nothing
+        }
+
+        public async Task FlushAsync()
         {
             // do nothing
         }

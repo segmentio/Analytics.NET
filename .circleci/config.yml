@@ -27,16 +27,18 @@ jobs:
       # Checkout source code and try to build & pack
       - checkout
       - run: msbuild Analytics/Analytics.csproj /t:restore
-      - run: msbuild Analytics/Analytics.csproj /p:Configuration=Release
-      - run: msbuild Analytics.NetStandard20/Analytics.NetStandard20.csproj /t:restore
-      - run: msbuild Analytics.NetStandard20/Analytics.NetStandard20.csproj /p:Configuration=Release
-      - run: msbuild Analytics.Net35/Analytics.Net35.csproj /t:restore
-      - run: msbuild Analytics.Net35/Analytics.Net35.csproj /p:Configuration=Release
-      - run: msbuild Analytics.Net45/Analytics.Net45.csproj /t:restore
-      - run: msbuild Analytics.Net45/Analytics.Net45.csproj /p:Configuration=Release
-      - run: msbuild Analytics.Portable/Analytics.Portable.csproj /t:restore
-      - run: msbuild Analytics.Portable/Analytics.Portable.csproj /p:Configuration=Release
-      - run: nuget pack Analytics.nuspec
+      - run: msbuild Analytics/Analytics.csproj /p:Configuration=Release  
+  pack:
+    working_directory: /pack
+    executor:  
+      name: win/default
+    steps:
+      - checkout
+      - run:
+          name: Generating Nuget Package
+          command: dotnet pack -o /packages -c Release Analytics\Analytics.csproj
+      - store_artifacts:
+          path: /packages/
   coverage:
     working_directory: /coverage
     docker:  
@@ -165,14 +167,27 @@ workflows:
   build_and_test:
     jobs:
       - build
-      - coverage
-      - coverage_net35  
-      - coverage_net45
       - test
       - test_20
       - test_35
       - test_45
       - test_e2e
+      - coverage:
+          requires:
+            - test_20
+      - coverage_net35:
+          requires:
+            - test_35
+      - coverage_net45:
+          requires:
+            - test_45
+      - pack:
+          requires:
+            - build
+            - coverage
+            - coverage_net35
+            - coverage_net45
+            - test_e2e
   scheduled_e2e_test:
     triggers:
       - schedule:

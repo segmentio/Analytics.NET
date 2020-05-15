@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Segment</RootNamespace>
+    <Version>1.0.4</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Analytics" Version="[3.4.0,)" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[2.0.0,)" />
+  </ItemGroup>
+
+</Project>

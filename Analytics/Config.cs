@@ -31,6 +31,8 @@ namespace Segment
 
         internal int FlushIntervalInMillis { get; private set; }
 
+        public bool Send { get; set; }
+
         internal int Threads { get; set; }
 
         /// <summary>
@@ -45,6 +47,7 @@ namespace Segment
         /// <param name="threads">Count of concurrent internal threads to post data from queue</param>
         /// <param name="flushInterval">The frequency, in seconds, to send data to Segment</param>
         /// <param name="gzip">Compress data w/ gzip before dispatch</param>
+        /// <param name="send">Don’t send data to Segment</param>
         /// <param name="userAgent">Sets User Agent Header</param>
         public Config(
             string host = null,
@@ -56,6 +59,7 @@ namespace Segment
             int? threads = null,
             double? flushInterval = null,
             bool? gzip = null,
+            bool? send = null,
             string userAgent = null
             )
         {
@@ -67,9 +71,11 @@ namespace Segment
             this.Async = async ?? Defaults.Async;
             this.FlushIntervalInMillis = (int)((flushInterval ?? Defaults.FlushInterval) * 1000);
             this.Gzip = gzip ?? Defaults.Gzip;
+            this.Send = send ?? false;
             this.UserAgent = userAgent ?? Defaults.UserAgent;
             this.Threads = threads ?? Defaults.Threads;
         }
+
 
         /// <summary>
         /// Set the API host server address, instead of default server "https://api.segment.io"
@@ -198,6 +204,16 @@ namespace Segment
             return this;
         }
 
+        /// <summary>
+        /// Don’t send data to Segment
+        /// </summary>
+        /// <param name="send"></param>
+        /// <returns></returns>
+        public Config SetSend(bool send)
+        {
+            this.Send = send;
+            return this;
+        }
 
         /// <summary>
         /// Set the interval in seconds at which the client should flush events. 

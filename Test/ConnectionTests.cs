@@ -30,6 +30,12 @@ namespace Segment.Test
             Logger.Handlers += LoggingHandler;
         }
 
+        [TearDown]
+        public void CleanUp()
+        {
+            Logger.Handlers -= LoggingHandler;
+        }
+
         [Test()]
         public void ProxyTest()
         {

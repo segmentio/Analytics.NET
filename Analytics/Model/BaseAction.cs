@@ -29,6 +29,9 @@ namespace Segment.Model
         [JsonProperty(PropertyName = "userId")]
         public string UserId { get; private set; }
 
+        [JsonIgnore]
+        public int Size { get; set; }
+
         internal BaseAction(string type, string UserId, Options options)
         {
             options = options ?? new Options ();

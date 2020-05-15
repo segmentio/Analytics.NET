@@ -4,35 +4,34 @@ using Segment.Flush;
 using Segment.Model;
 using Segment.Request;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Net.Sockets;
+using System.Threading;
+using Task = System.Threading.Tasks.Task;
 
 namespace Segment.Test.Flush
 {
     [TestFixture]
     public class AsyncIntervalFlushHandlerTests
     {
-        private const int MaxBatchSize = 512 * 1024;
-
         AsyncIntervalFlushHandler _handler;
         Mock<IRequestHandler> _mockRequestHandler;
+        Mock<IBatchFactory> _mockBatchFactory;
         Func<Task> _requestHandlerBehavior;
 
         [SetUp]
         public void Init()
         {
-            _requestHandlerBehavior = SingleTaskResponseBehavior(Task.CompletedTask);
+            _requestHandlerBehavior = SingleTaskResponseBehavior(10);
             _mockRequestHandler = new Mock<IRequestHandler>();
 
             _mockRequestHandler.Setup(r => r.MakeRequest(It.IsAny<Batch>()))
                 .Returns(() => _requestHandlerBehavior())
                 .Verifiable();
 
+            _mockBatchFactory = new Mock<IBatchFactory>();
             _handler = GetFlushHandler(100, 20, 2000);
             Logger.Handlers += LoggingHandler;
-
         }
 
         [TearDown]
@@ -42,7 +41,7 @@ namespace Segment.Test.Flush
             Logger.Handlers -= LoggingHandler;
         }
 
-        [Test()]
+        [Test]
         public void FlushDoesNotMakeARequestWhenThereAreNotEvents()
         {
             _handler.Flush();
@@ -53,7 +52,7 @@ namespace Segment.Test.Flush
         [Test()]
         public void FlushMakesARequestWhenThereAreEvents()
         {
-            _handler.Process(new Track(null, null, null, null));
+            _handler.Process(new Track(null, null, null, null)).GetAwaiter().GetResult();
             _handler.Flush();
 
             _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), times: Times.Exactly(1));
@@ -61,29 +60,29 @@ namespace Segment.Test.Flush
 
 
         [Test]
-        public async Task IntervalFlushIsTriggeredPeriodically()
+        public void IntervalFlushIsTriggeredPeriodically()
         {
             var interval = 600;
             _handler = GetFlushHandler(100, 20, interval);
-            await Task.Delay(100);
+            Thread.Sleep(100);
             int trials = 5;
 
             for (int i = 0; i < trials; i++)
             {
-                await _handler.Process(new Track(null, null, null, null));
+                _handler.Process(new Track(null, null, null, null)).GetAwaiter().GetResult();
                 _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), times: Times.Exactly(i));
-                await Task.Delay(interval);
+                Thread.Sleep(interval);
             }
 
             _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), times: Times.Exactly(trials));
         }
 
         [Test]
-        public async Task FlushSplitEventsInBatches()
+        public void FlushSplitEventsInBatches()
         {
             var queueSize = 100;
             _handler = GetFlushHandler(queueSize, 20, 20000);
-            await Task.Delay(100);
+            Thread.Sleep(100);
 
             for (int i = 0; i < queueSize; i++)
             {
@@ -96,11 +95,11 @@ namespace Segment.Test.Flush
         }
 
         [Test]
-        public async Task ProcessActionFlushWhenQueueIsFull()
+        public void ProcessActionFlushWhenQueueIsFull()
         {
             var queueSize = 10;
             _handler = GetFlushHandler(queueSize, 20, 20000);
-            await Task.Delay(50);
+            Thread.Sleep(50);
 
             for (int i = 0; i < queueSize + 1; i++)
             {
@@ -110,35 +109,18 @@ namespace Segment.Test.Flush
             _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), times: Times.Exactly(1));
         }
 
-        [Test]
-        public void ProcessDropsActionsThatAreBiggerThan32Kb()
-        {
-            _handler = GetFlushHandler(10, 20, 20000);
-
-            var actions = GetActions(2, GetEventName(32 * 1024));
-
-            foreach (var action in actions)
-            {
-                _ = _handler.Process(action);
-            }
-
-            _handler.Flush();
-
-            _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), times: Times.Never);
-
-        }
 
         [Test]
-        public async Task FlushWaitsForPreviousFlushesTriggeredByInterval()
+        public void FlushWaitsForPreviousFlushesTriggeredByInterval()
         {
             var time = 1500;
             _handler = GetFlushHandler(100, 20, 500);
-            _requestHandlerBehavior = MultipleTaskResponseBehavior(Task.Delay(time));
+            _requestHandlerBehavior = MultipleTaskResponseBehavior(time);
 
             DateTime start = DateTime.Now;
             _ = _handler.Process(new Track(null, null, null, null));
 
-            await Task.Delay(500);
+            Thread.Sleep(500);
 
             _handler.Flush();
 
@@ -151,21 +133,21 @@ namespace Segment.Test.Flush
         }
 
         [Test]
-        public async Task IntervalFlushLimitConcurrentProcesses()
+        public void IntervalFlushLimitConcurrentProcesses()
         {
             var time = 2000;
             _handler = GetFlushHandler(100, 20, 300);
-            _requestHandlerBehavior = MultipleTaskResponseBehavior(Task.Delay(time), Task.CompletedTask, Task.Delay(time));
+            _requestHandlerBehavior = MultipleTaskResponseBehavior(time, 0, time);
 
             _ = _handler.Process(new Track(null, null, null, null));
-            await Task.Delay(400);
+            Thread.Sleep(400);
 
             for (int i = 0; i < 3; i++)
             {
-                await _handler.Process(new Track(null, null, null, null));
+                _handler.Process(new Track(null, null, null, null)).GetAwaiter().GetResult();
                 _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), times: Times.Exactly(1));
 
-                await Task.Delay(300);
+                Thread.Sleep(300);
             }
 
             _handler.Flush();
@@ -175,24 +157,24 @@ namespace Segment.Test.Flush
         }
 
         [Test]
-        public async Task IntervalFlushTriggerTwoConcurrentProcesses()
+        public void IntervalFlushTriggerTwoConcurrentProcesses()
         {
 
             var time = 2000;
             _handler = GetFlushHandler(100, 20, 300, 2);
-            _requestHandlerBehavior = MultipleTaskResponseBehavior(Task.Delay(time), Task.CompletedTask, Task.Delay(time));
+            _requestHandlerBehavior = MultipleTaskResponseBehavior(time, 0, time);
 
             _ = _handler.Process(new Track(null, null, null, null));
-            await Task.Delay(400);
+            Thread.Sleep(400);
 
             for (int i = 0; i < 3; i++)
             {
-                await _handler.Process(new Track(null, null, null, null));
+                _handler.Process(new Track(null, null, null, null)).GetAwaiter().GetResult();
                 //There is only the first process 
                 _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), times: Times.Exactly(1));
             }
 
-            await Task.Delay(400);
+            Thread.Sleep(400);
             //The second process should be triggered
             _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), times: Times.Exactly(2));
             _handler.Flush();
@@ -200,72 +182,24 @@ namespace Segment.Test.Flush
             _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), times: Times.Exactly(2));
         }
 
-        [Test]
-        public async Task IntervalFlushSplitsBatchesThatAreBiggerThan512Kb()
-        {
-            _handler = GetFlushHandler(100, 100, 10000);
-
-            await Task.Delay(100);
-
-            var actions = GetActions(20, GetEventName(30 * 1024));
-
-            foreach (var action in actions)
-            {
-                _ = _handler.Process(action);
-            }
-
-            _handler.Flush();
-
-            _mockRequestHandler.Verify(r => r.MakeRequest(It.Is<Batch>(b => b.batch.Sum(a => a.Size) < MaxBatchSize)), times: Times.Exactly(2));
-        }
-
-
-        [Test]
-        public async Task IntervalFlushSendsBatchesThatAreSmallerThan512Kb()
-        {
-            _handler = GetFlushHandler(1000, 1000, 10000);
-
-            await Task.Delay(100);
-
-            var actions = GetActions(999, GetEventName(30));
-
-            foreach (var action in actions)
-            {
-                _ = _handler.Process(action);
-            }
-
-            _handler.Flush();
-
-            _mockRequestHandler.Verify(r => r.MakeRequest(It.Is<Batch>(b => b.batch.Sum(a => a.Size) < MaxBatchSize)), times: Times.Exactly(1));
-
-
-        }
-
-        private string GetEventName(int size)
-        {
-            return string.Join("", Enumerable.Range(0, size).Select(_ => "a"));
-        }
-
-        private List<BaseAction> GetActions(int actionsNumber, string eventName)
-        {
-            return new List<BaseAction>(Enumerable.Range(0, actionsNumber).Select(n => new Track("user", eventName, null, null)));
-        }
-
-
         private AsyncIntervalFlushHandler GetFlushHandler(int maxQueueSize, int maxBatchSize, int flushIntervalInMillis, int threads = 1)
         {
-            return new AsyncIntervalFlushHandler(new SimpleBatchFactory("temp_key"), _mockRequestHandler.Object, maxQueueSize, maxBatchSize, flushIntervalInMillis, threads);
+            return new AsyncIntervalFlushHandler(_mockBatchFactory.Object, _mockRequestHandler.Object, maxQueueSize, maxBatchSize, flushIntervalInMillis, threads);
         }
 
-        private Func<Task> SingleTaskResponseBehavior(Task task)
+        private Func<Task> SingleTaskResponseBehavior(int time)
         {
-            return () => task;
+            return async () => Thread.Sleep(time);
         }
 
-        private Func<Task> MultipleTaskResponseBehavior(params Task[] tasks)
+        private Func<Task> MultipleTaskResponseBehavior(params int[] time)
         {
-            var response = new Queue<Task>(tasks);
-            return () => response.Count > 0 ? response.Dequeue() : null;
+            var response = new Queue<int>(time);
+            return async () =>
+            {
+                var t = response.Count > 0 ? response.Dequeue() : 0;
+                Thread.Sleep(t);
+            };
         }
         static void LoggingHandler(Logger.Level level, string message, IDictionary<string, object> args)
         {
@@ -276,7 +210,9 @@ namespace Segment.Test.Flush
                     message += String.Format(" {0}: {1},", "" + key, "" + args[key]);
                 }
             }
+
             Console.WriteLine(String.Format("[FlushTests] [{0}] {1}", level, message));
         }
+
     }
 }

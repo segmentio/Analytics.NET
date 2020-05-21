@@ -1,14 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using Segment;
 using Segment.Model;
-using Segment.Request;
 
-namespace Analytics.Request
+namespace Segment.Request
 {
-    class FakeRequestHandler : IRequestHandler
+    internal class FakeRequestHandler : IRequestHandler
     {
         private readonly Client _client;
 

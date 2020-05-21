@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Analytics.Request;
 using Segment.Flush;
 using Segment.Model;
 using Segment.Request;

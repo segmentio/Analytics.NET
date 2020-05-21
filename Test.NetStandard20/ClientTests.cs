@@ -1,7 +1,6 @@
 using NUnit.Framework;
 
 using System;
-using Analytics.Request;
 using Moq;
 using Segment.Flush;
 using Segment.Model;

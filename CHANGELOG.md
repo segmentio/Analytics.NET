@@ -1,5 +1,9 @@
 
-3.4.0-alpha / 2020-05-15
+3.4.1-alpha / 2020-05-21
+========================
+  * [Fix](https://github.com/segmentio/Analytics.NET/pull/136): Critical bug fixes
+
+3.4.0-alpha / 2020-05-20
 ========================
 
 Note: 3.4.0-alpha contains a change to configuration parameter names that may trigger obsolete messages. It is recommended you migrate to the new parameters defined in [#118](https://github.com/segmentio/Analytics.NET/pull/118).

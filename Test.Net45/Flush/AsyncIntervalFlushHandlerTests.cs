@@ -253,6 +253,28 @@ namespace Segment.Test.Flush
             _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), times: Times.Exactly(1));
         }
 
+        [Test]
+        public async Task BatchMeetTheMaxNumberOfActions()
+        {
+            var flushAt = 20;
+            var actionNumber = 45;
+            _handler = GetFlushHandler(1000, flushAt, 10000);
+
+            await Task.Delay(100);
+
+            var actions = GetActions(actionNumber, GetEventName(30));
+
+            foreach (var action in actions)
+            {
+                _ = _handler.Process(action);
+            }
+
+            _handler.Flush();
+            _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), Times.Exactly(3));
+            _mockRequestHandler.Verify(r => r.MakeRequest(It.Is<Batch>(b => b.batch.Count == flushAt)), Times.Exactly(2));
+            _mockRequestHandler.Verify(r => r.MakeRequest(It.Is<Batch>(b => b.batch.Count == 5)), Times.Exactly(1));
+        }
+
         private string GetEventName(int size)
         {
             return string.Join("", Enumerable.Range(0, size).Select(_ => "a"));

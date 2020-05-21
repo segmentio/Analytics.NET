@@ -184,6 +184,18 @@ namespace Segment.Test.Flush
         }
 
         [Test]
+        public void FlushCatchExceptions()
+        {
+            _mockRequestHandler.Setup(r => r.MakeRequest(It.IsAny<Batch>())).Throws<System.Exception>();
+            
+            _ = _handler.Process(new Track(null, null, null, null));
+
+            _handler.Flush();
+
+            _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), times: Times.Exactly(1));
+        }
+
+        [Test]
         public void IntervalFlushSendsBatchesThatAreSmallerThan512Kb()
         {
             _handler = GetFlushHandler(1000, 1000, 10000);

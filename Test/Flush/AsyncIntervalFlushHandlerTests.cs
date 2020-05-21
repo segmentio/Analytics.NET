@@ -237,6 +237,18 @@ namespace Segment.Test.Flush
             _mockRequestHandler.Verify(r => r.MakeRequest(It.Is<Batch>(b => b.batch.Count == 5)), Times.Exactly(1));
         }
 
+        [Test]
+        public void FlushCatchExceptions()
+        {
+            _mockRequestHandler.Setup(r => r.MakeRequest(It.IsAny<Batch>())).Throws<System.Exception>();
+
+            _ = _handler.Process(new Track(null, null, null, null));
+
+            _handler.Flush();
+
+            _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), times: Times.Exactly(1));
+        }
+
         private string GetEventName(int size)
         {
             return string.Join("", Enumerable.Range(0, size).Select(_ => "a"));

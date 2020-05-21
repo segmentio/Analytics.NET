@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Segment.Model;
 
 namespace Segment
 {
@@ -50,30 +51,36 @@ namespace Segment
         /// <param name="send">Don’t send data to Segment</param>
         /// <param name="userAgent">Sets User Agent Header</param>
         public Config(
-            string host = null,
+            string host = "https://api.segment.io",
             string proxy = null,
             TimeSpan? timeout = null,
-            int? maxQueueSize = null,
-            int? flushAt = null,
-            bool? async = null,
-            int? threads = null,
-            double? flushInterval = null,
-            bool? gzip = null,
-            bool? send = null,
+            int maxQueueSize = 10000,
+            int flushAt = 20,
+            bool async = true,
+            int threads = 1,
+            double flushInterval = 10,
+            bool gzip = false,
+            bool send = false,
             string userAgent = null
             )
         {
-            this.Host = host ?? Defaults.Host;
+            this.Host = host;
             this.Proxy = proxy ?? "";
-            this.Timeout = timeout ?? Defaults.Timeout;
-            this.MaxQueueSize = maxQueueSize ?? Defaults.MaxQueueCapacity;
-            this.FlushAt = flushAt ?? Defaults.FlushAt;
-            this.Async = async ?? Defaults.Async;
-            this.FlushIntervalInMillis = (int)((flushInterval ?? Defaults.FlushInterval) * 1000);
-            this.Gzip = gzip ?? Defaults.Gzip;
-            this.Send = send ?? false;
-            this.UserAgent = userAgent ?? Defaults.UserAgent;
-            this.Threads = threads ?? Defaults.Threads;
+            this.Timeout = timeout ?? TimeSpan.FromSeconds(5);
+            this.MaxQueueSize = maxQueueSize;
+            this.FlushAt = flushAt;
+            this.Async = async;
+            this.FlushIntervalInMillis = (int)(flushInterval * 1000);
+            this.Gzip = gzip;
+            this.Send = send;
+            this.UserAgent = userAgent ?? GetDefaultUserAgent();
+            this.Threads = threads;
+        }
+
+        private static string GetDefaultUserAgent()
+        {
+            var lib = new Context()["library"] as Dict;
+            return $"{lib["name"]}/{lib["version"]}";
         }
 
 

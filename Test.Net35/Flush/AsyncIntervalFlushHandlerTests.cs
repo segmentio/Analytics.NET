@@ -5,6 +5,7 @@ using Segment.Model;
 using Segment.Request;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
 using Task = System.Threading.Tasks.Task;
@@ -14,9 +15,10 @@ namespace Segment.Test.Flush
     [TestFixture]
     public class AsyncIntervalFlushHandlerTests
     {
+        private const int MaxBatchSize = 512 * 1024;
+
         AsyncIntervalFlushHandler _handler;
         Mock<IRequestHandler> _mockRequestHandler;
-        Mock<IBatchFactory> _mockBatchFactory;
         Func<Task> _requestHandlerBehavior;
 
         [SetUp]
@@ -29,7 +31,6 @@ namespace Segment.Test.Flush
                 .Returns(() => _requestHandlerBehavior())
                 .Verifiable();
 
-            _mockBatchFactory = new Mock<IBatchFactory>();
             _handler = GetFlushHandler(100, 20, 2000);
             Logger.Handlers += LoggingHandler;
         }
@@ -182,9 +183,62 @@ namespace Segment.Test.Flush
             _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), times: Times.Exactly(2));
         }
 
+        [Test]
+        public void IntervalFlushSendsBatchesThatAreSmallerThan512Kb()
+        {
+            _handler = GetFlushHandler(1000, 1000, 10000);
+
+            Thread.Sleep(100);
+
+            var actions = GetActions(999, GetEventName(30));
+
+            foreach (var action in actions)
+            {
+                _ = _handler.Process(action);
+            }
+
+            _handler.Flush();
+
+            _mockRequestHandler.Verify(r => r.MakeRequest(It.Is<Batch>(b => b.batch.Sum(a => a.Size) < MaxBatchSize)), times: Times.Exactly(1));
+
+
+        }
+
+        [Test]
+        public void BatchMeetTheMaxNumberOfActions()
+        {
+            var flushAt = 20;
+            var actionNumber = 45;
+            _handler = GetFlushHandler(1000, flushAt, 10000);
+
+            Thread.Sleep(100);
+
+            var actions = GetActions(actionNumber, GetEventName(30));
+
+            foreach (var action in actions)
+            {
+                _ = _handler.Process(action);
+            }
+
+            _handler.Flush();
+            _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), Times.Exactly(3));
+            _mockRequestHandler.Verify(r => r.MakeRequest(It.Is<Batch>(b => b.batch.Count == flushAt)), Times.Exactly(2));
+            _mockRequestHandler.Verify(r => r.MakeRequest(It.Is<Batch>(b => b.batch.Count == 5)), Times.Exactly(1));
+        }
+        private string GetEventName(int size)
+        {
+            return string.Join("", Enumerable.Range(0, size).Select(_ => "a").ToArray());
+        }
+
+        private List<BaseAction> GetActions(int actionsNumber, string eventName)
+        {
+            return new List<BaseAction>(Enumerable.Range(0, actionsNumber).Select(n => new Track("user", eventName, null, null)).ToArray());
+        }
+
+
         private AsyncIntervalFlushHandler GetFlushHandler(int maxQueueSize, int maxBatchSize, int flushIntervalInMillis, int threads = 1)
         {
-            return new AsyncIntervalFlushHandler(_mockBatchFactory.Object, _mockRequestHandler.Object, maxQueueSize, maxBatchSize, flushIntervalInMillis, threads);
+            return new AsyncIntervalFlushHandler(new SimpleBatchFactory("TestKey"), _mockRequestHandler.Object, maxQueueSize, maxBatchSize, flushIntervalInMillis, threads);
         }
 
         private Func<Task> SingleTaskResponseBehavior(int time)

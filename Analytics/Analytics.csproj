@@ -5,13 +5,13 @@
     <RootNamespace>Segment</RootNamespace>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageId>Analytics</PackageId>
-    <Version>3.1.0-alpha</Version>
+    <Version>3.4.0-alpha</Version>
     <Authors>Segment Team</Authors>
     <Company />
     <Product>Analytics.NET</Product>
     <Description>The .NET API for analytics, by Segment. Install and immediately send data to 150+ analytics and business intelligence tools with the flip of a switch.</Description>
     <PackageProjectUrl>https://segment.com</PackageProjectUrl>
-    <PackageReleaseNotes>Check out the changelog at: https://raw.githubusercontent.com/segmentio/Analytics.NET/master/Analytics/History.md</PackageReleaseNotes>
+    <PackageReleaseNotes>Check out the changelog at: https://raw.githubusercontent.com/segmentio/Analytics.NET/master/CHANGELOG.md</PackageReleaseNotes>
     <PackageTags>analytics, Segment</PackageTags>
     <PackageIcon>packageIcon.png</PackageIcon>
     <PackageLicenseFile>README.md</PackageLicenseFile>

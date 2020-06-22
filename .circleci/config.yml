@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 
 _run:
     notify_on_fail: &notify_on_fail
@@ -7,6 +7,9 @@ _run:
         wget https://raw.githubusercontent.com/segmentio/circleci-notifications/master/slack-notify-branch.sh
         chmod u+x slack-notify-branch.sh
         BUILD_STATUS="Failed" NOTIFY_BRANCH="master scheduled_e2e_testing" ./slack-notify-branch.sh
+orbs:
+  win: circleci/windows@2.2.0
+
 
 jobs:
   build:
@@ -24,28 +27,79 @@ jobs:
       # Checkout source code and try to build & pack
       - checkout
       - run: msbuild Analytics/Analytics.csproj /t:restore
-      - run: msbuild Analytics/Analytics.csproj /p:Configuration=Release
-      - run: msbuild Analytics.NetStandard20/Analytics.NetStandard20.csproj /t:restore
-      - run: msbuild Analytics.NetStandard20/Analytics.NetStandard20.csproj /p:Configuration=Release
-      - run: msbuild Analytics.Net35/Analytics.Net35.csproj /t:restore
-      - run: msbuild Analytics.Net35/Analytics.Net35.csproj /p:Configuration=Release
-      - run: msbuild Analytics.Net45/Analytics.Net45.csproj /t:restore
-      - run: msbuild Analytics.Net45/Analytics.Net45.csproj /p:Configuration=Release
-      - run: msbuild Analytics.Portable/Analytics.Portable.csproj /t:restore
-      - run: msbuild Analytics.Portable/Analytics.Portable.csproj /p:Configuration=Release
-      - run: nuget pack Analytics.nuspec
+      - run: msbuild Analytics/Analytics.csproj /p:Configuration=Release  
+  pack:
+    working_directory: /pack
+    executor:  
+      name: win/default
+    steps:
+      - checkout
+      - run:
+          name: Generating Nuget Package
+          command: dotnet pack -o /packages -c Release Analytics\Analytics.csproj
+      - store_artifacts:
+          path: /packages/
   coverage:
     working_directory: /coverage
     docker:  
-      - image: microsoft/dotnet:2.0-sdk
+      - image: microsoft/dotnet:2.2-sdk
     environment:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       DOTNET_CLI_TELEMETRY_OUTPUT: 1
     steps:
+      - run:
+          name: Install minicover tool
+          command: |
+            echo 'export PATH=$HOME/.dotnet/tools:$PATH' >> $BASH_ENV
+            dotnet tool install -g minicover --version 3.0.6
       - checkout
       - run: chmod +x Test.NetStandard20/coverage_report.sh
       - run: cd Test.NetStandard20 && ./coverage_report.sh
       - run: bash <(curl -s https://codecov.io/bash)
+  coverage_net35:
+    working_directory: /coverage_net35
+    executor:  
+      name: win/default
+    steps:
+      - run:
+          name: Install code coverage tools
+          command: |
+            choco install opencover.portable
+            dotnet tool install -g dotnet-reportgenerator-globaltool --version 4.4.7
+      - checkout
+      - run: nuget restore Test.Net35/Test.Net35.csproj -SolutionDirectory ./
+      - run: msbuild Test.Net35/Test.Net35.csproj /t:restore
+      - run: msbuild Test.Net35/Test.Net35.csproj /p:Configuration=Debug
+      - run: OpenCover.Console.exe "-target:./packages/NUnit.ConsoleRunner.3.7.0/tools/nunit3-console.exe" "-register:user" "-output:opencover.xml" "-targetargs:.\Test.Net35\bin\Debug\Test.Net35.dll" -filter:"+[Analytics*]* -[Test*]*"
+      - run: 
+          name: "Validating coverage"
+          command: | 
+            & .\ValidateCoverage.ps1 -threshold 80
+      - run: 
+          command: bash <(curl -s https://codecov.io/bash) -f ./opencover.xml
+          shell: bash.exe
+  coverage_net45:
+    working_directory: /coverage_net45
+    executor:  
+      name: win/default
+    steps:
+      - run:
+          name: Install code coverage tools
+          command: |
+            choco install opencover.portable
+            dotnet tool install -g dotnet-reportgenerator-globaltool --version 4.4.7
+      - checkout
+      - run: nuget restore Test.Net45/Test.Net45.csproj -SolutionDirectory ./
+      - run: msbuild Test.Net45/Test.Net45.csproj /t:restore
+      - run: msbuild Test.Net45/Test.Net45.csproj /p:Configuration=Debug
+      - run: OpenCover.Console.exe "-target:./packages/NUnit.ConsoleRunner.3.7.0/tools/nunit3-console.exe" "-register" "-output:opencover.xml" "-targetargs:.\Test.Net45\bin\Debug\Test.Net45.dll" -filter:"+[Analytics*]* -[Test*]*"
+      - run: 
+          name: "Validating coverage"
+          command: | 
+            & .\ValidateCoverage.ps1 -threshold 80
+      - run: 
+          command: bash <(curl -s https://codecov.io/bash) -f ./opencover.xml
+          shell: bash.exe
   test:
     working_directory: /test
     docker:
@@ -113,12 +167,27 @@ workflows:
   build_and_test:
     jobs:
       - build
-      - coverage
       - test
       - test_20
       - test_35
       - test_45
       - test_e2e
+      - coverage:
+          requires:
+            - test_20
+      - coverage_net35:
+          requires:
+            - test_35
+      - coverage_net45:
+          requires:
+            - test_45
+      - pack:
+          requires:
+            - build
+            - coverage
+            - coverage_net35
+            - coverage_net45
+            - test_e2e
   scheduled_e2e_test:
     triggers:
       - schedule:

@@ -5,6 +5,7 @@
     <StartupObject></StartupObject>
     <ApplicationIcon />
     <OutputType>Library</OutputType>
+    <RootNamespace>Segment.Test</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,11 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../Analytics.NetStandard20/Analytics.NetStandard20.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <DotNetCliToolReference Include="MiniCover" Version="2.0.0-ci-20181108093139" />
+    <ProjectReference Include="..\Analytics\Analytics.csproj" />
   </ItemGroup>
 
   <ItemGroup>

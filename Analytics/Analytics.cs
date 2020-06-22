@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Segment
 {
     public class Analytics
     {
         // REMINDER: don't forget to set Properties.AssemblyInfo.AssemblyVersion as well
-        public static string VERSION = "3.3.1-alpha";
+        public static string VERSION = "3.4.1-alpha";
 
         /// <summary>
         /// Lock for thread-safety
@@ -44,6 +40,17 @@ namespace Segment
                 if (Client == null)
                 {
                     Client = new Client(writeKey, config);
+                }
+            }
+        }
+
+        internal static void Initialize(Client client)
+        {
+            lock (padlock)
+            {
+                if (Client == null)
+                {
+                    Client = client;
                 }
             }
         }

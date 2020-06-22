@@ -2,25 +2,45 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Moq;
 using NUnit.Framework;
 using Segment.Model;
+using Segment.Request;
 
 namespace Segment.Test
 {
     [TestFixture()]
     public class FlushTests
     {
+        private Mock<IRequestHandler> _mockRequestHandler;
+
         [SetUp]
         public void Init()
         {
+            _mockRequestHandler = new Mock<IRequestHandler>();
+            _mockRequestHandler
+                .Setup(x => x.MakeRequest(It.IsAny<Batch>()))
+                .Returns((Batch b) =>
+                {
+                    b.batch.ForEach(_ => Analytics.Client.Statistics.IncrementSucceeded());
+                    return Task.CompletedTask;
+                });
+
             Analytics.Dispose();
             Logger.Handlers += LoggingHandler;
         }
 
-        [Test()]
-        public void SynchronousFlushTestNetStanard20()
+        [TearDown]
+        public void CleanUp()
         {
-            Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false));
+            Logger.Handlers -= LoggingHandler;
+        }
+
+        [Test()]
+        public void SynchronousFlushTestNetStandard20()
+        {
+            var client = new Client(Constants.WRITE_KEY, new Config().SetAsync(false), _mockRequestHandler.Object);
+            Analytics.Initialize(client);
             Analytics.Client.Succeeded += Client_Succeeded;
             Analytics.Client.Failed += Client_Failed;
 
@@ -34,9 +54,10 @@ namespace Segment.Test
         }
 
         [Test()]
-        public void AsynchronousFlushTestNetStanard20()
+        public void AsynchronousFlushTestNetStandard20()
         {
-            Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(true));
+            var client = new Client(Constants.WRITE_KEY, new Config().SetAsync(true), _mockRequestHandler.Object);
+            Analytics.Initialize(client);
 
             Analytics.Client.Succeeded += Client_Succeeded;
             Analytics.Client.Failed += Client_Failed;
@@ -53,9 +74,10 @@ namespace Segment.Test
         }
 
         [Test()]
-        public async Task PerformanceTestNetStanard20()
+        public async Task PerformanceTestNetStandard20()
         {
-            Analytics.Initialize(Constants.WRITE_KEY);
+            var client = new Client(Constants.WRITE_KEY, new Config(), _mockRequestHandler.Object);
+            Analytics.Initialize(client);
 
             Analytics.Client.Succeeded += Client_Succeeded;
             Analytics.Client.Failed += Client_Failed;
@@ -66,7 +88,7 @@ namespace Segment.Test
 
             RunTests(Analytics.Client, trials);
 
-            Analytics.Client.Flush();
+            await Analytics.Client.FlushAsync();
 
             TimeSpan duration = DateTime.Now.Subtract(start);
 

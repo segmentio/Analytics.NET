@@ -3,19 +3,40 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using Segment.Model;
+using Segment.Request;
 
 namespace Segment.Test
 {
 	[TestClass]
 	public class ActionTests
 	{
+		private Mock<IRequestHandler> _mockRequestHandler;
+
 		[TestInitialize]
 		public void Init()
 		{
+			_mockRequestHandler = new Mock<IRequestHandler>();
+			_mockRequestHandler
+				.Setup(x => x.MakeRequest(It.IsAny<Batch>()))
+				.Returns((Batch b) =>
+				{
+					b.batch.ForEach(_ => Analytics.Client.Statistics.IncrementSucceeded());
+					return Task.CompletedTask;
+				});
+
 			Analytics.Dispose();
 			Logger.Handlers += LoggingHandler;
-			Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false));
+			var client = new Client(Constants.WRITE_KEY, new Config().SetAsync(false), _mockRequestHandler.Object);
+			Analytics.Initialize(client);
 		}
+
+        [TestCleanup]
+        public void CleanUp()
+        {
+            Logger.Handlers -= LoggingHandler;
+        }
 
 		[TestMethod]
 		public void IdentifyTestNetPortable()

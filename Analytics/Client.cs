@@ -59,7 +59,14 @@ namespace Segment
             this._writeKey = writeKey;
             this._config = config;
 
-            requestHandler = requestHandler ?? new BlockingRequestHandler(this, config.Timeout);
+            if (requestHandler == null)
+            {
+                if (config.Send)
+                    requestHandler = new FakeRequestHandler(this);
+                else
+                    requestHandler = new BlockingRequestHandler(this, config.Timeout);
+            }
+
             IBatchFactory batchFactory = new SimpleBatchFactory(this._writeKey);
 
             if (config.Async)

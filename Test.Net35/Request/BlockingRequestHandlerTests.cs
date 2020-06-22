@@ -57,7 +57,7 @@ namespace Segment.Test.Request
         [Test]
         public void RequestIncludesUserAgentHeader()
         {
-            _mockHeaders.Verify(x => x.Set("User-Agent", Defaults.UserAgent), Times.Once);
+            _mockHeaders.Verify(x => x.Set("User-Agent", _client.Config.UserAgent), Times.Once);
         }
 
         [Test]

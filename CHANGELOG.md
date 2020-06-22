@@ -1,4 +1,28 @@
 
+3.4.1-alpha / 2020-05-21
+========================
+  * [Fix](https://github.com/segmentio/Analytics.NET/pull/136): Critical bug fixes
+
+3.4.0-alpha / 2020-05-20
+========================
+
+Note: 3.4.0-alpha contains a change to configuration parameter names that may trigger obsolete messages. It is recommended you migrate to the new parameters defined in [#118](https://github.com/segmentio/Analytics.NET/pull/118).
+
+  * [Fix](https://github.com/segmentio/Analytics.NET/pull/103): Additional fixes with sending requests that are too large.
+  * [Fix](https://github.com/segmentio/Analytics.NET/pull/109): Fix first event is never being batched.
+  * [Improvement](https://github.com/segmentio/Analytics.NET/pull/116): Expose ability to FlushAsync in a non-blocking manner.
+  * [Improvement](https://github.com/segmentio/Analytics.NET/pull/118): Update configuration parameters to unified names with other Segment libraries.
+  * [Improvement](https://github.com/segmentio/Analytics.NET/pull/126): Unified project structure.
+  * [Improvement](https://github.com/segmentio/Analytics.NET/pull/132): Project can now be built on any operating system supporting .NET Core SDK.
+  * [Improvement](https://github.com/segmentio/Analytics.NET/pull/130): Supports Dependency Injection for better support within .NET Core SDK.
+  * [Improvement](https://github.com/segmentio/Analytics.NET/pull/120): Maximum batch size of 500KB and message size of 32KB is now enforced.
+  * [Improvement](https://github.com/segmentio/Analytics.NET/pull/119): Added capability for multi-threading using .NET Framework 3.5.
+  * [Feature](https://github.com/segmentio/Analytics.NET/pull/109): Allow user defined interval for flushing events.
+  * [Feature](https://github.com/segmentio/Analytics.NET/pull/115): Network requests now have exponential back-off and jitter.
+  * [Feature](https://github.com/segmentio/Analytics.NET/pull/118): Allow user defined user agent header.
+  * [Feature](https://github.com/segmentio/Analytics.NET/pull/117): Enable configurable concurrency.
+  * [Feature](https://github.com/segmentio/Analytics.NET/pull/134): Added send configuration parameter to toggle making HTTP requests on event send.
+
 3.3.1-alpha / 2018-07-09
 ========================
 

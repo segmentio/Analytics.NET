@@ -2,6 +2,7 @@ using NUnit.Framework;
 
 using System;
 using Moq;
+using Segment.Flush;
 using Segment.Model;
 using Segment.Request;
 
@@ -180,6 +181,40 @@ namespace Segment.Test
             var ex = Assert.Throws<InvalidOperationException>(() => _client.Identify("", null));
 
             Assert.AreEqual("Please supply a valid userId to Identify.", ex.Message);
+        }
+
+        [Test]
+        public void ClientUsesFakeRequestHandlerWhenSendIsTrue()
+        {
+            var client = new Client("writeKey", new Config(send: true));
+
+            var flushHandler = GetPrivateFieldValue<AsyncIntervalFlushHandler>(client, "_flushHandler");
+
+            var requestHandler = GetPrivateFieldValue<object>(flushHandler, "_requestHandler");
+
+            Assert.IsInstanceOf<FakeRequestHandler>(requestHandler);
+        }
+
+        [Test]
+        public void ClientUsesBlockingRequestHandlerWhenSendIsFalse()
+        {
+            var client = new Client("writeKey", new Config(send: false));
+
+            var flushHandler = GetPrivateFieldValue<AsyncIntervalFlushHandler>(client, "_flushHandler");
+
+            var requestHandler = GetPrivateFieldValue<object>(flushHandler, "_requestHandler");
+
+            Assert.IsInstanceOf<BlockingRequestHandler>(requestHandler);
+        }
+
+        private static T GetPrivateFieldValue<T>(object obj, string field)
+        {
+            var type = obj.GetType();
+            var prop = type.GetField(field,
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+            return (T) prop?.GetValue(obj);
+
         }
     }
 }

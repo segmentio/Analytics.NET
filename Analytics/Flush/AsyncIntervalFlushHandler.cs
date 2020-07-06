@@ -54,7 +54,7 @@ namespace Segment.Flush
         private void RunInterval()
         {
             var initialDelay = _queue.Count == 0 ? _flushIntervalInMillis : 0;
-            _timer = new Timer(new TimerCallback(async (b) => await PerformFlush()), new { }, 0, _flushIntervalInMillis);
+            _timer = new Timer(new TimerCallback(async (b) => await PerformFlush()), new { }, initialDelay, _flushIntervalInMillis);
         }
 
 
@@ -69,6 +69,10 @@ namespace Segment.Flush
             try
             {
                 await FlushImpl();
+            }
+            catch
+            {
+                Logger.Error("Flush couldn't be completed");
             }
             finally
             {
@@ -113,7 +117,7 @@ namespace Segment.Flush
 
                     current.Add(action);
                     currentSize += action.Size;
-                } while (!_queue.IsEmpty && current.Count <= _maxBatchSize && !_continue.Token.IsCancellationRequested && currentSize < BatchMaxSize - ActionMaxSize);
+                } while (!_queue.IsEmpty && current.Count < _maxBatchSize && !_continue.Token.IsCancellationRequested && currentSize < BatchMaxSize - ActionMaxSize);
 
                 if (current.Count > 0)
                 {

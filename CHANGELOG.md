@@ -1,3 +1,6 @@
+3.4.2-beta / 2020-07-16
+=======================
+ * [Fix](https://github.com/segmentio/Analytics.NET/pull/143) Patched security vulnerabilities in dependencies
 
 3.4.1-alpha / 2020-05-21
 ========================

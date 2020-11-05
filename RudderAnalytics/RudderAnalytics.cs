@@ -3,7 +3,7 @@ namespace RudderStack
     public class RudderAnalytics
     {
         // REMINDER: don't forget to set Properties.AssemblyInfo.AssemblyVersion as well
-        public static string VERSION = "1.0.0";
+        public static string VERSION = "1.0.0-pre";
 
         /// <summary>
         /// Lock for thread-safety

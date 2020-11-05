@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 
-using Segment.Model;
+using RudderStack.Model;
 
-namespace Segment.Flush
+namespace RudderStack.Flush
 {
     internal class SimpleBatchFactory : IBatchFactory
     {
@@ -14,7 +14,7 @@ namespace Segment.Flush
             this._writeKey = writeKey;
         }
 
-        public Batch Create(List<BaseAction> actions) 
+        public Batch Create(List<BaseAction> actions)
         {
             return new Batch(_writeKey, actions);
         }

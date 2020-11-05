@@ -1,5 +1,5 @@
 using System;
-using Segment;
+using RudderStack;
 using Sloth.Common;
 
 namespace Sloth.Enterprise
@@ -22,7 +22,7 @@ namespace Sloth.Enterprise
         {
             var config = new Config()
                 .SetMaxQueueSize(100000)
-                .SetHost("https://api.segment.dev")
+                .SetHost("https://hosted.rudderlabs.com")
                 .SetMaxBatchSize(40)
                 .SetRequestCompression(true);
 

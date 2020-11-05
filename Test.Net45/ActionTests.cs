@@ -2,11 +2,11 @@ using System;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Segment.Request;
+using RudderStack.Request;
 using Moq;
-using Segment.Model;
+using RudderStack.Model;
 
-namespace Segment.Test
+namespace RudderStack.Test
 {
     [TestFixture()]
     public class ActionTests
@@ -49,7 +49,7 @@ namespace Segment.Test
         public void IdentifyWithCustomOptionsTestNet45()
         {
             var traits = new Model.Traits() {
-                { "email", "friends@segment.com" }
+                { "email", "friends@rudder.com" }
             };
             var options = new Model.Options()
                 .SetIntegration("Vero", new Model.Dict() {

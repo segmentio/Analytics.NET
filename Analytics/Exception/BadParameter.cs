@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Segment.Exception
+namespace RudderStack.Exception
 {
     public class APIException : System.Exception
     {

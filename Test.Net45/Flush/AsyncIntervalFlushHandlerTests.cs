@@ -1,15 +1,15 @@
 using Moq;
 using NUnit.Framework;
-using Segment.Flush;
-using Segment.Model;
-using Segment.Request;
+using RudderStack.Flush;
+using RudderStack.Model;
+using RudderStack.Request;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Task = System.Threading.Tasks.Task;
 
-namespace Segment.Test.Flush
+namespace RudderStack.Test.Flush
 {
     [TestFixture]
     public class AsyncIntervalFlushHandlerTests
@@ -134,7 +134,7 @@ namespace Segment.Test.Flush
             var time = 1500;
             _handler = GetFlushHandler(100, 20, 500);
             _requestHandlerBehavior = MultipleTaskResponseBehavior(Task.Delay(time));
-            
+
             DateTime start = DateTime.Now;
             _ = _handler.Process(new Track(null, null, null, null));
 
@@ -188,7 +188,7 @@ namespace Segment.Test.Flush
             for (int i = 0; i < 3; i++)
             {
                 await _handler.Process(new Track(null, null, null, null));
-                //There is only the first process 
+                //There is only the first process
                 _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), times: Times.Exactly(1));
             }
 
@@ -204,7 +204,7 @@ namespace Segment.Test.Flush
         public async Task IntervalFlushSplitsBatchesThatAreBiggerThan512Kb()
         {
             _handler = GetFlushHandler(100, 100, 10000);
-            
+
             await Task.Delay(100);
 
             var actions = GetActions(20, GetEventName(30 * 1024));
@@ -224,7 +224,7 @@ namespace Segment.Test.Flush
         public async Task IntervalFlushSendsBatchesThatAreSmallerThan512Kb()
         {
             _handler = GetFlushHandler(1000, 1000, 10000);
-            
+
             await Task.Delay(100);
 
             var actions = GetActions(999, GetEventName(30));

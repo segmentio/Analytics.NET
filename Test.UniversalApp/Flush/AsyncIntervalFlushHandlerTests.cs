@@ -1,14 +1,14 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Segment.Flush;
-using Segment.Model;
-using Segment.Request;
+using RudderStack.Flush;
+using RudderStack.Model;
+using RudderStack.Request;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Segment.Test.Flush
+namespace RudderStack.Test.Flush
 {
     [TestClass]
     public class AsyncIntervalFlushHandlerTests
@@ -114,7 +114,7 @@ namespace Segment.Test.Flush
             var time = 1500;
             _handler = GetFlushHandler(100, 20, 500);
             _requestHandlerBehavior = MultipleTaskResponseBehavior(Task.Delay(time));
-            
+
             DateTime start = DateTime.Now;
             _ = _handler.Process(new Track(null, null, null, null));
 

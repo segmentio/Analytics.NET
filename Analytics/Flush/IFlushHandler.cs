@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
-using Segment.Model;
+using RudderStack.Model;
 
-namespace Segment.Flush
+namespace RudderStack.Flush
 {
     /// <summary>
     /// A component responsibe for flushing an action to the server

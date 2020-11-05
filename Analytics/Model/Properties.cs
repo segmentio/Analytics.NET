@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Segment.Model
+namespace RudderStack.Model
 {
     public class Properties : Dict
     {

@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace Segment.Test
+namespace RudderStack.Test
 {
     [TestFixture]
     class ConfigTests

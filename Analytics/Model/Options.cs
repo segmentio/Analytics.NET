@@ -1,8 +1,8 @@
 using System;
 
-using Segment.Model;
+using RudderStack.Model;
 
-namespace Segment.Model
+namespace RudderStack.Model
 {
     public class Options
     {
@@ -12,7 +12,7 @@ namespace Segment.Model
         public Context Context { get; private set; }
 
         /// <summary>
-        /// Options object that allows the specification of a timestamp, 
+        /// Options object that allows the specification of a timestamp,
         /// an anonymousId, a context, or target integrations.
         /// </summary>
         public Options ()
@@ -34,8 +34,8 @@ namespace Segment.Model
         }
 
         /// <summary>
-        /// Sets the timestamp of when an analytics call occurred. The timestamp is primarily used for 
-        /// historical imports or if this event happened in the past. The timestamp is not required, 
+        /// Sets the timestamp of when an analytics call occurred. The timestamp is primarily used for
+        /// historical imports or if this event happened in the past. The timestamp is not required,
         /// and if it's not provided, our servers will timestamp the call as if it just happened.
         /// </summary>
         /// <returns>This Options object for chaining.</returns>
@@ -75,7 +75,6 @@ namespace Segment.Model
 
         /// <summary>
         /// Enable destination specific options for integration.
-        /// For example, to send tags in https://segment.com/docs/destinations/vero/#tags, use following
         ///   new Options()
         ///     .Integration("Vero", new Model.Dict() {
         ///         "tags", new Model.Dict() {

@@ -1,10 +1,10 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Segment.Stats;
+using RudderStack.Stats;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Segment.Test.Stats
+namespace RudderStack.Test.Stats
 {
     [TestClass]
     public class StatisticsTests

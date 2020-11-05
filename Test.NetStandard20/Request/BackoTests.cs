@@ -4,9 +4,9 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using Segment.Request;
+using RudderStack.Request;
 
-namespace Segment.Test
+namespace RudderStack.Test
 {
     [TestFixture]
     class BackoTests

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using Moq;
 using NUnit.Framework;
-using Segment.Model;
-using Segment.Request;
+using RudderStack.Model;
+using RudderStack.Request;
 
-namespace Segment.Test
+namespace RudderStack.Test
 {
     [TestFixture()]
     public class ConnectionTests

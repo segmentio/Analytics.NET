@@ -4,7 +4,7 @@ using System.Text;
 
 using Newtonsoft.Json;
 
-namespace Segment.Model
+namespace RudderStack.Model
 {
     public class Identify : BaseAction
     {
@@ -12,7 +12,7 @@ namespace Segment.Model
         public IDictionary<string, object> Traits { get; set; }
 
         internal Identify(string userId,
-                          IDictionary<string, object> traits, 
+                          IDictionary<string, object> traits,
                           Options options)
 
             : base("identify", userId, options)

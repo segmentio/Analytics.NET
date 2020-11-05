@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Segment.Model;
+using RudderStack.Model;
 
-namespace Segment
+namespace RudderStack
 {
     /// <summary>
     /// Analytics Logging
@@ -25,9 +25,9 @@ namespace Segment
         #region Events
 
         /// <summary>
-        /// A logging event handler.   
+        /// A logging event handler.
         /// </summary>
-        /// <param name="level">The <see cref="Segment.Logger.Level"/> of the log event (debug, info, warn, error)</param>
+        /// <param name="level">The <see cref="RudderStack.Logger.Level"/> of the log event (debug, info, warn, error)</param>
         /// <param name="message">The log message</param>
         /// <param name="args">Optional arguments for the message</param>
         public delegate void LogHandler(Level level, string message, IDictionary<string, object> args);
@@ -77,6 +77,6 @@ namespace Segment
         {
             _Log(Level.ERROR, message, args);
         }
-     
+
     }
 }

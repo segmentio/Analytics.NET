@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Serialization;
 
-namespace Segment.Model
+namespace RudderStack.Model
 {
     /// <summary>
     /// An API object wrapper over Dictionary<string, object>
@@ -17,7 +17,7 @@ namespace Segment.Model
         /// <param name="key">Key</param>
         /// <param name="val">Value</param>
         /// <returns>An instance of the Props for chaining</returns>
-        public new Dict Add(string key, object val) 
+        public new Dict Add(string key, object val)
         {
             base.Add (key, val);
             return this;

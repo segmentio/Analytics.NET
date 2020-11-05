@@ -4,11 +4,11 @@ using System.Text;
 using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Segment.Request;
-using Segment.Model;
+using RudderStack.Request;
+using RudderStack.Model;
 using System.Threading.Tasks;
 
-namespace Segment.Test
+namespace RudderStack.Test
 {
 	[TestClass]
 	public class ConnectionTests

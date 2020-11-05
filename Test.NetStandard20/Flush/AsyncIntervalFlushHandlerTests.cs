@@ -1,15 +1,15 @@
 using Moq;
 using NUnit.Framework;
-using Segment.Flush;
-using Segment.Model;
-using Segment.Request;
+using RudderStack.Flush;
+using RudderStack.Model;
+using RudderStack.Request;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Segment.Test.Flush
+namespace RudderStack.Test.Flush
 {
     [TestFixture]
     public class AsyncIntervalFlushHandlerTests
@@ -188,7 +188,7 @@ namespace Segment.Test.Flush
             for (int i = 0; i < 3; i++)
             {
                 await _handler.Process(new Track(null, null, null, null));
-                //There is only the first process 
+                //There is only the first process
                 _mockRequestHandler.Verify(r => r.MakeRequest(It.IsAny<Batch>()), times: Times.Exactly(1));
             }
 

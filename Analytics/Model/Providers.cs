@@ -1,6 +1,6 @@
 using System;
 
-namespace Segment.Model
+namespace RudderStack.Model
 {
     /// <summary>
     /// Providers is a context object that helps specify which providers this action should go to.
@@ -26,9 +26,8 @@ namespace Segment.Model
         /// <summary>
         /// Specifies whether this provider is enabled or disabled.
         /// </summary>
-        /// <param name="providerName">The provider name. Check out the docs 
-        /// for context.providers for a full list of provider 
-        /// names: https://segment.io/docs/methods/identify#choosing-providers</param>
+        /// <param name="providerName">The provider name. Check out the docs
+        /// for context.providers for a full list of provider
         /// <param name="enabled">True for enabled, false for disabled.</param>
         /// <returns>The Providers object for chaining.</returns>
         public Providers SetEnabled(string providerName, bool enabled) {

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Segment.Test
+namespace RudderStack.Test
 {
     class Program
     {
@@ -9,7 +9,7 @@ namespace Segment.Test
         {
             Logger.Handlers += Logger_Handlers;
 
-            Analytics.Initialize(Segment.Test.Constants.WRITE_KEY);
+            Analytics.Initialize(RudderStack.Test.Constants.WRITE_KEY);
 
             Analytics.Client.Track("prateek", "Item Purchased (with .Net 3.5)");
             Analytics.Client.Flush();

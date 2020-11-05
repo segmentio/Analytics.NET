@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Segment.Model;
+using RudderStack.Model;
 
-namespace Segment
+namespace RudderStack
 {
     /// <summary>
     /// Config required to initialize the client
@@ -37,7 +37,7 @@ namespace Segment
         internal int Threads { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="host">Endpoint for tracking api for Proxy Service</param>
         /// <param name="proxy"></param>
@@ -46,12 +46,12 @@ namespace Segment
         /// <param name="flushAt">Number of items in a batch to upload</param>
         /// <param name="async">Sets whether the flushing to the server is synchronous or asynchronous</param>
         /// <param name="threads">Count of concurrent internal threads to post data from queue</param>
-        /// <param name="flushInterval">The frequency, in seconds, to send data to Segment</param>
+        /// <param name="flushInterval">The frequency, in seconds, to send data to RudderStack</param>
         /// <param name="gzip">Compress data w/ gzip before dispatch</param>
-        /// <param name="send">Don’t send data to Segment</param>
+        /// <param name="send">Don’t send data to RudderStack</param>
         /// <param name="userAgent">Sets User Agent Header</param>
         public Config(
-            string host = "https://api.segment.io",
+            string host = "https://hosted.rudderlabs.com",
             string proxy = null,
             TimeSpan? timeout = null,
             int maxQueueSize = 10000,
@@ -85,7 +85,7 @@ namespace Segment
 
 
         /// <summary>
-        /// Set the API host server address, instead of default server "https://api.segment.io"
+        /// Set the API host server address, instead of default server "https://hosted.rudderlabs.com"
         /// </summary>
         /// <param name="host">Host server url</param>
         /// <returns></returns>
@@ -163,13 +163,13 @@ namespace Segment
 
         /// <summary>
         /// Sets whether the flushing to the server is synchronous or asynchronous.
-        /// 
+        ///
         /// True is the default and will allow your calls to Analytics.Client.Identify(...), Track(...), etc
         /// to return immediately and to be queued to be flushed on a different thread.
-        /// 
-        /// False is convenient for testing but should not be used in production. False will cause the 
+        ///
+        /// False is convenient for testing but should not be used in production. False will cause the
         /// HTTP requests to happen immediately.
-        /// 
+        ///
         /// </summary>
         /// <param name="async">True for async flushing, false for blocking flushing</param>
         /// <returns></returns>
@@ -212,7 +212,7 @@ namespace Segment
         }
 
         /// <summary>
-        /// Don’t send data to Segment
+        /// Don’t send data to RudderStack
         /// </summary>
         /// <param name="send"></param>
         /// <returns></returns>
@@ -223,7 +223,7 @@ namespace Segment
         }
 
         /// <summary>
-        /// Set the interval in seconds at which the client should flush events. 
+        /// Set the interval in seconds at which the client should flush events.
         /// </summary>
         /// <param name="interval"></param>
         /// <returns></returns>

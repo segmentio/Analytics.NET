@@ -4,7 +4,7 @@ using System.Text;
 
 using Newtonsoft.Json;
 
-namespace Segment.Model
+namespace RudderStack.Model
 {
     internal class Batch
     {

@@ -1,16 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Segment.Flush;
-using Segment.Model;
-using Segment.Request;
-using Segment.Stats;
+using RudderStack.Flush;
+using RudderStack.Model;
+using RudderStack.Request;
+using RudderStack.Stats;
 
-namespace Segment
+namespace RudderStack
 {
 
     /// <summary>
-    /// A Segment.io .NET client
+    /// A RudderStack .NET client
     /// </summary>
     public class Client : IAnalyticsClient
     {

@@ -2,10 +2,10 @@ using NUnit.Framework;
 
 using System.Collections.Generic;
 
-using Segment;
-using Segment.Model;
+using RudderStack;
+using RudderStack.Model;
 
-namespace Segment.Test
+namespace RudderStack.Test
 {
     [TestFixture()]
     public class ClientTests

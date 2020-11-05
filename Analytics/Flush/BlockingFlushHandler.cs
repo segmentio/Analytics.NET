@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Segment.Model;
-using Segment.Request;
+using RudderStack.Model;
+using RudderStack.Request;
 
-namespace Segment.Flush
+namespace RudderStack.Flush
 {
     internal class BlockingFlushHandler : IAsyncFlushHandler
     {
@@ -16,7 +16,7 @@ namespace Segment.Flush
         /// </summary>
         private IRequestHandler _requestHandler;
 
-        internal BlockingFlushHandler(IBatchFactory batchFactory, 
+        internal BlockingFlushHandler(IBatchFactory batchFactory,
                                  IRequestHandler requestHandler)
         {
 
@@ -33,7 +33,7 @@ namespace Segment.Flush
         /// <summary>
         /// Returns immediately since the blocking flush handler does not queue
         /// </summary>
-        public void Flush() 
+        public void Flush()
         {
             // do nothing
         }
@@ -46,10 +46,10 @@ namespace Segment.Flush
         /// <summary>
         /// Does nothing, as nothing needs to be disposed here
         /// </summary>
-        public void Dispose() 
+        public void Dispose()
         {
             // do nothing
         }
-        
+
     }
 }

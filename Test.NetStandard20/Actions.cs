@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Segment.Model;
+using RudderStack.Model;
 
-namespace Segment.Test
+namespace RudderStack.Test
 {
     public class Actions
     {

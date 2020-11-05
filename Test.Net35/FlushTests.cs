@@ -4,10 +4,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using Segment.Model;
-using Segment.Request;
+using RudderStack.Model;
+using RudderStack.Request;
 
-namespace Segment.Test
+namespace RudderStack.Test
 {
     [TestFixture()]
     public class FlushTests

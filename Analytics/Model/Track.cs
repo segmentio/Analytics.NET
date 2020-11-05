@@ -4,7 +4,7 @@ using System.Text;
 
 using Newtonsoft.Json;
 
-namespace Segment.Model
+namespace RudderStack.Model
 {
     public class Track : BaseAction
     {
@@ -14,9 +14,9 @@ namespace Segment.Model
         [JsonProperty(PropertyName = "properties")]
         private IDictionary<string, object> Properties { get; set; }
 
-        internal Track(string userId, 
+        internal Track(string userId,
                        string eventName,
-                       IDictionary<string, object> properties, 
+                       IDictionary<string, object> properties,
                        Options options)
 
             : base("track", userId, options)

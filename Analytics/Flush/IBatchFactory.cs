@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 
-using Segment.Model;
+using RudderStack.Model;
 
-namespace Segment.Flush
+namespace RudderStack.Flush
 {
     internal interface IBatchFactory
     {

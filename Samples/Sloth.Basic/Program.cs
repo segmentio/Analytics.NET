@@ -1,5 +1,5 @@
 using System;
-using Segment;
+using RudderStack;
 using Sloth.Common;
 using Environment = System.Environment;
 

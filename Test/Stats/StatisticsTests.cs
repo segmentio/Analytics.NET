@@ -1,10 +1,10 @@
 using NUnit.Framework;
-using Segment.Stats;
+using RudderStack.Stats;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Segment.Test.Stats
+namespace RudderStack.Test.Stats
 {
     [TestFixture]
     public class StatisticsTests

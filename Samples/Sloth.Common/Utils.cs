@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Segment;
+using RudderStack;
 
 namespace Sloth.Common
 {

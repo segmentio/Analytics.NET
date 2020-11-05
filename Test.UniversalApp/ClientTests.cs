@@ -3,10 +3,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 
-using Segment;
-using Segment.Model;
+using RudderStack;
+using RudderStack.Model;
 
-namespace Segment.Test
+namespace RudderStack.Test
 {
 	[TestClass]
 	public class ClientTests

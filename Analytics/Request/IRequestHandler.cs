@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Segment.Model;
+using RudderStack.Model;
 
-namespace Segment.Request
+namespace RudderStack.Request
 {
     internal interface IRequestHandler
     {

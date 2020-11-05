@@ -1,15 +1,15 @@
 using Moq;
 using NUnit.Framework;
-using Segment.Flush;
-using Segment.Model;
-using Segment.Request;
+using RudderStack.Flush;
+using RudderStack.Model;
+using RudderStack.Request;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Segment.Test.Flush
+namespace RudderStack.Test.Flush
 {
     [TestFixture]
     public class AsyncIntervalFlushHandlerTests

@@ -1,6 +1,6 @@
 using NUnit.Framework;
 using Microsoft.Extensions.DependencyInjection;
-using Segment;
+using RudderStack;
 
 namespace Analytics.Extensions.Microsoft.DependencyInjection.Test
 {

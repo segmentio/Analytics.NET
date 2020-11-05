@@ -4,7 +4,7 @@ using System.Text;
 
 using Newtonsoft.Json;
 
-namespace Segment.Model
+namespace RudderStack.Model
 {
     public class Page : BaseAction
     {
@@ -17,10 +17,10 @@ namespace Segment.Model
         [JsonProperty(PropertyName = "properties")]
         private IDictionary<string, object> Properties { get; set; }
 
-        internal Page(string userId, 
+        internal Page(string userId,
                       string name,
                       string category,
-                      IDictionary<string, object> properties, 
+                      IDictionary<string, object> properties,
                       Options options)
 
             : base("page", userId, options)

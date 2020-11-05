@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
-using Segment.Model;
+using RudderStack.Model;
 
-namespace Segment.Flush
+namespace RudderStack.Flush
 {
     class ActionSizeCalculator
     {

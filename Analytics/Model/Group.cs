@@ -4,7 +4,7 @@ using System.Text;
 
 using Newtonsoft.Json;
 
-namespace Segment.Model
+namespace RudderStack.Model
 {
     public class Group : BaseAction
     {
@@ -16,7 +16,7 @@ namespace Segment.Model
 
         internal Group(string userId,
                        string groupId,
-                       IDictionary<string, object> traits, 
+                       IDictionary<string, object> traits,
                        Options options)
             : base("group", userId, options)
         {

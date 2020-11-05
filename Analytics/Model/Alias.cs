@@ -4,13 +4,13 @@ using System.Text;
 
 using Newtonsoft.Json;
 
-namespace Segment.Model
+namespace RudderStack.Model
 {
     public class Alias : BaseAction
     {
         [JsonProperty(PropertyName = "previousId")]
         private string PreviousId { get; set; }
-        
+
         internal Alias(string previousId, string userId, Options options)
             : base("alias", userId, options)
         {

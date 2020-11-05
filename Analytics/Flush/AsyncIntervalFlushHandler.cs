@@ -1,11 +1,11 @@
-using Segment.Model;
-using Segment.Request;
+using RudderStack.Model;
+using RudderStack.Request;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Segment.Flush
+namespace RudderStack.Flush
 {
 
     internal class AsyncIntervalFlushHandler : IAsyncFlushHandler
@@ -81,7 +81,7 @@ namespace Segment.Flush
         }
 
         /// <summary>
-        /// Blocks until all the messages are flushed 
+        /// Blocks until all the messages are flushed
         /// </summary>
         public void Flush()
         {

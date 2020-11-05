@@ -1,24 +1,22 @@
 using System;
 
-using RudderStack.Model;
-
 namespace RudderStack.Model
 {
-    public class Options
+    public class RudderOptions
     {
         public string AnonymousId { get; private set; }
         public Dict Integrations { get; private set; }
         public DateTime? Timestamp { get; private set; }
-        public Context Context { get; private set; }
+        public RudderContext Context { get; private set; }
 
         /// <summary>
         /// Options object that allows the specification of a timestamp,
         /// an anonymousId, a context, or target integrations.
         /// </summary>
-        public Options ()
+        public RudderOptions ()
         {
             this.Integrations = new Dict ();
-            this.Context = new Context ();
+            this.Context = new RudderContext ();
         }
 
         /// <summary>
@@ -27,7 +25,7 @@ namespace RudderStack.Model
         /// </summary>
         /// <returns>This Options object for chaining.</returns>
         /// <param name="anonymousId">The visitor's anonymousId.</param>
-        public Options SetAnonymousId (string anonymousId)
+        public RudderOptions SetAnonymousId (string anonymousId)
         {
             this.AnonymousId = anonymousId;
             return this;
@@ -40,7 +38,7 @@ namespace RudderStack.Model
         /// </summary>
         /// <returns>This Options object for chaining.</returns>
         /// <param name="timestamp">The call's timestamp.</param>
-        public Options SetTimestamp (DateTime? timestamp)
+        public RudderOptions SetTimestamp (DateTime? timestamp)
         {
             this.Timestamp = timestamp;
             return this;
@@ -52,7 +50,7 @@ namespace RudderStack.Model
         /// </summary>
         /// <returns>This Options object for chaining.</returns>
         /// <param name="context">The visitor's context.</param>
-        public Options SetContext (Context context)
+        public RudderOptions SetContext (RudderContext context)
         {
             this.Context = context;
             return this;
@@ -67,7 +65,7 @@ namespace RudderStack.Model
         /// </summary>
         /// <param name="integration">The integration name.</param>
         /// <param name="enabled">If set to <c>true</c>, then the integration is enabled.</param>
-        public Options SetIntegration (string integration, bool enabled)
+        public RudderOptions SetIntegration (string integration, bool enabled)
         {
             this.Integrations.Add (integration, enabled);
             return this;
@@ -86,7 +84,7 @@ namespace RudderStack.Model
         /// </summary>
         /// <param name="integration">The integration name.</param>
         /// <param name="value">Dict value</param>
-        public Options SetIntegration (string integration, Dict value)
+        public RudderOptions SetIntegration (string integration, Dict value)
         {
             this.Integrations.Add (integration, value);
             return this;

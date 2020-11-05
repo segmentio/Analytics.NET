@@ -5,9 +5,9 @@ namespace RudderStack.Request
 {
     internal class FakeRequestHandler : IRequestHandler
     {
-        private readonly Client _client;
+        private readonly RudderClient _client;
 
-        public FakeRequestHandler(Client client)
+        public FakeRequestHandler(RudderClient client)
         {
             _client = client;
         }

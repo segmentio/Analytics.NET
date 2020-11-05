@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 using Newtonsoft.Json;
 
@@ -17,7 +15,7 @@ namespace RudderStack.Model
         internal Track(string userId,
                        string eventName,
                        IDictionary<string, object> properties,
-                       Options options)
+                       RudderOptions options)
 
             : base("track", userId, options)
         {

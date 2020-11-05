@@ -9,7 +9,7 @@ namespace RudderStack
     /// <summary>
     /// Config required to initialize the client
     /// </summary>
-    public class Config
+    public class RudderConfig
     {
         /// <summary>
         /// The REST API endpoint
@@ -25,8 +25,6 @@ namespace RudderStack
         internal int FlushAt { get; set; }
 
         internal bool Async { get; set; }
-
-        internal bool Gzip { get; set; }
 
         internal TimeSpan Timeout { get; set; }
 
@@ -47,10 +45,9 @@ namespace RudderStack
         /// <param name="async">Sets whether the flushing to the server is synchronous or asynchronous</param>
         /// <param name="threads">Count of concurrent internal threads to post data from queue</param>
         /// <param name="flushInterval">The frequency, in seconds, to send data to RudderStack</param>
-        /// <param name="gzip">Compress data w/ gzip before dispatch</param>
         /// <param name="send">Don’t send data to RudderStack</param>
         /// <param name="userAgent">Sets User Agent Header</param>
-        public Config(
+        public RudderConfig(
             string host = "https://hosted.rudderlabs.com",
             string proxy = null,
             TimeSpan? timeout = null,
@@ -59,7 +56,6 @@ namespace RudderStack
             bool async = true,
             int threads = 1,
             double flushInterval = 10,
-            bool gzip = false,
             bool send = false,
             string userAgent = null
             )
@@ -71,7 +67,6 @@ namespace RudderStack
             this.FlushAt = flushAt;
             this.Async = async;
             this.FlushIntervalInMillis = (int)(flushInterval * 1000);
-            this.Gzip = gzip;
             this.Send = send;
             this.UserAgent = userAgent ?? GetDefaultUserAgent();
             this.Threads = threads;
@@ -79,7 +74,7 @@ namespace RudderStack
 
         private static string GetDefaultUserAgent()
         {
-            var lib = new Context()["library"] as Dict;
+            var lib = new RudderContext()["library"] as Dict;
             return $"{lib["name"]}/{lib["version"]}";
         }
 
@@ -89,7 +84,7 @@ namespace RudderStack
         /// </summary>
         /// <param name="host">Host server url</param>
         /// <returns></returns>
-        public Config SetHost(string host)
+        public RudderConfig SetHost(string host)
         {
             this.Host = host;
             return this;
@@ -100,7 +95,7 @@ namespace RudderStack
         /// </summary>
         /// <param name="proxy">Proxy server Uri</param>
         /// <returns></returns>
-        public Config SetProxy(string proxy)
+        public RudderConfig SetProxy(string proxy)
         {
             this.Proxy = proxy;
             return this;
@@ -111,7 +106,7 @@ namespace RudderStack
         /// </summary>
         /// <param name="timeout"></param>
         /// <returns></returns>
-        public Config SetTimeout(TimeSpan timeout)
+        public RudderConfig SetTimeout(TimeSpan timeout)
         {
             this.Timeout = timeout;
             return this;
@@ -122,7 +117,7 @@ namespace RudderStack
         /// </summary>
         /// <param name="maxQueueSize"></param>
         /// <returns></returns>
-        public Config SetMaxQueueSize(int maxQueueSize)
+        public RudderConfig SetMaxQueueSize(int maxQueueSize)
         {
             this.MaxQueueSize = maxQueueSize;
             return this;
@@ -134,7 +129,7 @@ namespace RudderStack
         /// <param name="maxBatchSize"></param>
         /// <returns></returns>
         [Obsolete("Use the new method SetFlushAt")]
-        public Config SetMaxBatchSize(int maxBatchSize)
+        public RudderConfig SetMaxBatchSize(int maxBatchSize)
         {
             return SetFlushAt(maxBatchSize);
         }
@@ -144,7 +139,7 @@ namespace RudderStack
         /// </summary>
         /// <param name="flushAt"></param>
         /// <returns></returns>
-        public Config SetFlushAt(int flushAt)
+        public RudderConfig SetFlushAt(int flushAt)
         {
             this.FlushAt = flushAt;
             return this;
@@ -155,7 +150,7 @@ namespace RudderStack
         /// </summary>
         /// <param name="threads"></param>
         /// <returns></returns>
-        public Config SetThreads(int threads)
+        public RudderConfig SetThreads(int threads)
         {
             Threads = threads;
             return this;
@@ -173,39 +168,13 @@ namespace RudderStack
         /// </summary>
         /// <param name="async">True for async flushing, false for blocking flushing</param>
         /// <returns></returns>
-        public Config SetAsync(bool async)
+        public RudderConfig SetAsync(bool async)
         {
             this.Async = async;
             return this;
         }
 
-        /// <summary>
-        /// Sets the API request header uses GZip option.
-        /// Enable this when the network is the bottleneck for your application (typically in client side applications).
-        /// If useGZip is set, it compresses request content with GZip algorithm
-        /// </summary>
-        /// <param name="bCompress">True to compress request header, false for no compression</param>
-        /// <returns></returns>
-        [Obsolete("Use the new method SetGzip")]
-        public Config SetRequestCompression(bool bCompress)
-        {
-            return SetGzip(bCompress);
-        }
-
-        /// <summary>
-        /// Sets the API request header uses GZip option.
-        /// Enable this when the network is the bottleneck for your application (typically in client side applications).
-        /// If useGZip is set, it compresses request content with GZip algorithm
-        /// </summary>
-        /// <param name="gzip">True to compress request header, false for no compression</param>
-        /// <returns></returns>
-        public Config SetGzip(bool gzip)
-        {
-            this.Gzip = gzip;
-            return this;
-        }
-
-        public Config SetUserAgent(string userAgent)
+        public RudderConfig SetUserAgent(string userAgent)
         {
             this.UserAgent = userAgent;
             return this;
@@ -216,7 +185,7 @@ namespace RudderStack
         /// </summary>
         /// <param name="send"></param>
         /// <returns></returns>
-        public Config SetSend(bool send)
+        public RudderConfig SetSend(bool send)
         {
             this.Send = send;
             return this;
@@ -227,7 +196,7 @@ namespace RudderStack
         /// </summary>
         /// <param name="interval"></param>
         /// <returns></returns>
-        public Config SetFlushInterval(double interval)
+        public RudderConfig SetFlushInterval(double interval)
         {
             this.FlushIntervalInMillis = (int)(interval * 1000);
             return this;

@@ -77,7 +77,7 @@ namespace RudderStack.Request
         /// <summary>
         /// RudderStack client to mark statistics
         /// </summary>
-        private readonly Client _client;
+        private readonly RudderClient _client;
 
         private readonly Backo _backo;
 
@@ -94,14 +94,14 @@ namespace RudderStack.Request
         /// </summary>
         public TimeSpan Timeout { get; set; }
 
-        internal BlockingRequestHandler(Client client, TimeSpan timeout) : this(client, timeout, null, new Backo(max: 10000, jitter: 5000)) // Set maximum waiting limit to 10s and jitter to 5s
+        internal BlockingRequestHandler(RudderClient client, TimeSpan timeout) : this(client, timeout, null, new Backo(max: 10000, jitter: 5000)) // Set maximum waiting limit to 10s and jitter to 5s
         {
         }
 #if NET35
 
-        internal BlockingRequestHandler(Client client, TimeSpan timeout, IHttpClient httpClient, Backo backo)
+        internal BlockingRequestHandler(RudderClient client, TimeSpan timeout, IHttpClient httpClient, Backo backo)
 #else
-        internal BlockingRequestHandler(Client client, TimeSpan timeout, HttpClient httpClient, Backo backo)
+        internal BlockingRequestHandler(RudderClient client, TimeSpan timeout, HttpClient httpClient, Backo backo)
 #endif
         {
             this._client = client;
@@ -170,24 +170,24 @@ namespace RudderStack.Request
                 var requestData = Encoding.UTF8.GetBytes(json);
 
                 // Compress request data if compression is set
-                if (_client.Config.Gzip)
-                {
-#if NET35
-                    _httpClient.Headers.Set(HttpRequestHeader.ContentEncoding, "gzip");
-#else
-                    //_httpClient.DefaultRequestHeaders.Add("Content-Encoding", "gzip");
-#endif
-
-                    // Compress request data with GZip
-                    using (MemoryStream memory = new MemoryStream())
-                    {
-                        using (GZipStream gzip = new GZipStream(memory, CompressionMode.Compress, true))
-                        {
-                            gzip.Write(requestData, 0, requestData.Length);
-                        }
-                        requestData = memory.ToArray();
-                    }
-                }
+//                 if (_client.Config.Gzip)
+//                 {
+// #if NET35
+//                     _httpClient.Headers.Set(HttpRequestHeader.ContentEncoding, "gzip");
+// #else
+//                     //_httpClient.DefaultRequestHeaders.Add("Content-Encoding", "gzip");
+// #endif
+//
+//                     // Compress request data with GZip
+//                     using (MemoryStream memory = new MemoryStream())
+//                     {
+//                         using (GZipStream gzip = new GZipStream(memory, CompressionMode.Compress, true))
+//                         {
+//                             gzip.Write(requestData, 0, requestData.Length);
+//                         }
+//                         requestData = memory.ToArray();
+//                     }
+//                 }
 
                 Logger.Info("Sending analytics request to RudderStack ..", new Dict
                 {
@@ -244,8 +244,10 @@ namespace RudderStack.Request
 
                     ByteArrayContent content = new ByteArrayContent(requestData);
                     content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                    if (_client.Config.Gzip)
-                        content.Headers.ContentEncoding.Add("gzip");
+//                     if (_client.Config.Gzip)
+//                     {
+//                       content.Headers.ContentEncoding.Add("gzip");
+//                     }
 
                     var response = await _httpClient.PostAsync(uri, content).ConfigureAwait(false);
 

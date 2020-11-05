@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 using Newtonsoft.Json;
 
@@ -18,7 +16,7 @@ namespace RudderStack.Model
         public string Timestamp { get; private set; }
 
         [JsonProperty(PropertyName="context")]
-        public Context Context { get; set; }
+        public RudderContext Context { get; set; }
 
         [JsonProperty(PropertyName="integrations")]
         public Dict Integrations { get; set; }
@@ -32,9 +30,9 @@ namespace RudderStack.Model
         [JsonIgnore]
         public int Size { get; set; }
 
-        internal BaseAction(string type, string UserId, Options options)
+        internal BaseAction(string type, string UserId, RudderOptions options)
         {
-            options = options ?? new Options ();
+            options = options ?? new RudderOptions ();
 
             this.Type = type;
             this.MessageId = Guid.NewGuid ().ToString();

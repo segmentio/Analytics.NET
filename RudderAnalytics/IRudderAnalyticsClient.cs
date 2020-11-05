@@ -8,11 +8,11 @@ namespace RudderStack
     public delegate void FailedHandler(BaseAction action, System.Exception e);
     public delegate void SucceededHandler(BaseAction action);
 
-    public interface IAnalyticsClient : IDisposable
+    public interface IRudderAnalyticsClient : IDisposable
     {
         Statistics Statistics { get; set; }
         string WriteKey { get; }
-        Config Config { get; }
+        RudderConfig Config { get; }
 
         event FailedHandler Failed;
         event SucceededHandler Succeeded;
@@ -50,7 +50,7 @@ namespace RudderStack
         ///
         /// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
         /// and the context of the message.</param>
-        void Identify(string userId, IDictionary<string, object> traits, Options options);
+        void Identify(string userId, IDictionary<string, object> traits, RudderOptions options);
 
         #endregion
 
@@ -71,7 +71,7 @@ namespace RudderStack
         ///
         /// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
         /// and the context of the message.</param>
-        void Group(string userId, string groupId, Options options);
+        void Group(string userId, string groupId, RudderOptions options);
 
         /// <summary>
         /// The `group` method lets you associate a user with a group. Be it a company,
@@ -110,7 +110,7 @@ namespace RudderStack
         ///
         /// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
         /// and the context of the message.</param>
-        void Group(string userId, string groupId, IDictionary<string, object> traits, Options options);
+        void Group(string userId, string groupId, IDictionary<string, object> traits, RudderOptions options);
 
         #endregion
 
@@ -160,7 +160,7 @@ namespace RudderStack
         ///
         /// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
         /// and the context of the message.</param>
-        void Track(string userId, string eventName, Options options);
+        void Track(string userId, string eventName, RudderOptions options);
 
         /// <summary>
         /// Whenever a user triggers an event on your site, you’ll want to track it
@@ -182,7 +182,7 @@ namespace RudderStack
         ///
         /// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
         /// and the context of the message.</param>
-        void Track(string userId, string eventName, IDictionary<string, object> properties, Options options);
+        void Track(string userId, string eventName, IDictionary<string, object> properties, RudderOptions options);
 
         #endregion
 
@@ -207,7 +207,7 @@ namespace RudderStack
         ///
         /// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
         /// and the context of the message.</param>
-        void Alias(string previousId, string userId, Options options);
+        void Alias(string previousId, string userId, RudderOptions options);
 
         #endregion
 
@@ -238,7 +238,7 @@ namespace RudderStack
         ///
         /// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
         /// and the context of the message.</param>
-        void Page(string userId, string name, Options options);
+        void Page(string userId, string name, RudderOptions options);
 
         /// <summary>
         /// The `page` method let your record whenever a user sees a webpage on
@@ -287,7 +287,7 @@ namespace RudderStack
         ///
         /// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
         /// and the context of the message.</param>
-        void Page(string userId, string name, IDictionary<string, object> properties, Options options);
+        void Page(string userId, string name, IDictionary<string, object> properties, RudderOptions options);
 
         /// <summary>
         /// The `page` method let your record whenever a user sees a webpage on
@@ -308,7 +308,7 @@ namespace RudderStack
         ///
         /// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
         /// and the context of the message.</param>
-        void Page(string userId, string name, string category, IDictionary<string, object> properties, Options options);
+        void Page(string userId, string name, string category, IDictionary<string, object> properties, RudderOptions options);
 
         #endregion
 
@@ -341,7 +341,7 @@ namespace RudderStack
         ///
         /// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
         /// and the context of the message.</param>
-        void Screen(string userId, string name, Options options);
+        void Screen(string userId, string name, RudderOptions options);
 
         /// <summary>
         /// The `screen` method let your record whenever a user sees a mobile screen on
@@ -393,7 +393,7 @@ namespace RudderStack
         ///
         /// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
         /// and the context of the message.</param>
-        void Screen(string userId, string name, IDictionary<string, object> properties, Options options);
+        void Screen(string userId, string name, IDictionary<string, object> properties, RudderOptions options);
 
         /// <summary>
         /// The `screen` method let your record whenever a user sees a mobile screen on
@@ -415,7 +415,7 @@ namespace RudderStack
         ///
         /// <param name="options">Options allowing you to set timestamp, anonymousId, target integrations,
         /// and the context of the message.</param>
-        void Screen(string userId, string name, string category, IDictionary<string, object> properties, Options options);
+        void Screen(string userId, string name, string category, IDictionary<string, object> properties, RudderOptions options);
 
         #endregion
 

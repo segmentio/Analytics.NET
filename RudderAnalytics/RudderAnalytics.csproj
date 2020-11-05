@@ -2,17 +2,16 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard1.3;netstandard2.0;net45;net35;net461</TargetFrameworks>
-    <RootNamespace>Segment</RootNamespace>
+    <RootNamespace>RudderStack</RootNamespace>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <PackageId>Analytics</PackageId>
-    <Version>3.4.2-beta</Version>
-    <Authors>Segment Team</Authors>
+    <PackageId>RudderAnalytics</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>RudderStack Team</Authors>
     <Company />
-    <Product>Analytics.NET</Product>
-    <Description>The .NET API for analytics, by Segment. Install and immediately send data to 150+ analytics and business intelligence tools with the flip of a switch.</Description>
+    <Product>RudderAnalytics.NET</Product>
+    <Description>Rudder is a platform for collecting, storing and routing customer event data to dozens of tools. Rudder is open-source, can run in your cloud environment (AWS, GCP, Azure or even your data-centre) and provides a powerful transformation framework to process your event data on the fly.</Description>
     <PackageProjectUrl>https://rudderstack.com</PackageProjectUrl>
-    <PackageReleaseNotes>Check out the changelog at: https://raw.githubusercontent.com/segmentio/Analytics.NET/master/CHANGELOG.md</PackageReleaseNotes>
-    <PackageTags>analytics, Segment</PackageTags>
+    <PackageTags>rudderstack, RudderAnalytics</PackageTags>
     <PackageIcon>packageIcon.png</PackageIcon>
     <PackageLicenseFile>README.md</PackageLicenseFile>
   </PropertyGroup>

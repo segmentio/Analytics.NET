@@ -12,7 +12,7 @@ namespace RudderStack
     /// <summary>
     /// A RudderStack .NET client
     /// </summary>
-    public class Client : IAnalyticsClient
+    public class RudderClient : IRudderAnalyticsClient
     {
 #if NET35
         private IFlushHandler _flushHandler;
@@ -20,7 +20,7 @@ namespace RudderStack
         private IAsyncFlushHandler _flushHandler;
 #endif
         private string _writeKey;
-        private Config _config;
+        private RudderConfig _config;
 
         public Statistics Statistics { get; set; }
 
@@ -37,21 +37,21 @@ namespace RudderStack
         /// Creates a new REST client with a specified API writeKey and default config
         /// </summary>
         /// <param name="writeKey"></param>
-        public Client(string writeKey) : this(writeKey, new Config()) { }
+        public RudderClient(string writeKey) : this(writeKey, new RudderConfig()) { }
 
         /// <summary>
         /// Creates a new REST client with a specified API writeKey and default config
         /// </summary>
         /// <param name="writeKey"></param>
         /// <param name="config"></param>
-        public Client(string writeKey, Config config) : this(writeKey, config, null)
+        public RudderClient(string writeKey, RudderConfig config) : this(writeKey, config, null)
         {
             if (string.IsNullOrEmpty(writeKey))
                 throw new InvalidOperationException("Please supply a valid writeKey to initialize.");
 
         }
 
-        internal Client(string writeKey, Config config, IRequestHandler requestHandler)
+        internal RudderClient(string writeKey, RudderConfig config, IRequestHandler requestHandler)
         {
 
             this.Statistics = new Statistics();
@@ -90,7 +90,7 @@ namespace RudderStack
         }
 
 
-        public Config Config
+        public RudderConfig Config
         {
             get
             {
@@ -111,7 +111,7 @@ namespace RudderStack
         }
 
         /// <inheritdoc />
-        public void Identify(string userId, IDictionary<string, object> traits, Options options)
+        public void Identify(string userId, IDictionary<string, object> traits, RudderOptions options)
         {
             if (String.IsNullOrEmpty(userId) && !HasAnonymousId(options))
                 throw new InvalidOperationException("Please supply a valid userId to Identify.");
@@ -124,7 +124,7 @@ namespace RudderStack
         #region Group
 
         /// <inheritdoc />
-        public void Group(string userId, string groupId, Options options)
+        public void Group(string userId, string groupId, RudderOptions options)
         {
             Group(userId, groupId, null, options);
         }
@@ -136,7 +136,7 @@ namespace RudderStack
         }
 
         /// <inheritdoc />
-        public void Group(string userId, string groupId, IDictionary<string, object> traits, Options options)
+        public void Group(string userId, string groupId, IDictionary<string, object> traits, RudderOptions options)
         {
             if (String.IsNullOrEmpty(userId) && !HasAnonymousId(options))
                 throw new InvalidOperationException("Please supply a valid userId or anonymousId to call #Group.");
@@ -164,13 +164,13 @@ namespace RudderStack
         }
 
         /// <inheritdoc />
-        public void Track(string userId, string eventName, Options options)
+        public void Track(string userId, string eventName, RudderOptions options)
         {
             Track(userId, eventName, null, options);
         }
 
         /// <inheritdoc />
-        public void Track(string userId, string eventName, IDictionary<string, object> properties, Options options)
+        public void Track(string userId, string eventName, IDictionary<string, object> properties, RudderOptions options)
         {
             if (String.IsNullOrEmpty(userId) && !HasAnonymousId(options))
                 throw new InvalidOperationException("Please supply a valid userId or anonymousId to call #Track.");
@@ -192,7 +192,7 @@ namespace RudderStack
         }
 
         /// <inheritdoc />
-        public void Alias(string previousId, string userId, Options options)
+        public void Alias(string previousId, string userId, RudderOptions options)
         {
             if (String.IsNullOrEmpty(previousId))
                 throw new InvalidOperationException("Please supply a valid 'previousId' to Alias.");
@@ -214,7 +214,7 @@ namespace RudderStack
         }
 
         /// <inheritdoc />
-        public void Page(string userId, string name, Options options)
+        public void Page(string userId, string name, RudderOptions options)
         {
             Page(userId, name, null, null, options);
         }
@@ -232,13 +232,13 @@ namespace RudderStack
         }
 
         /// <inheritdoc />
-        public void Page(string userId, string name, IDictionary<string, object> properties, Options options)
+        public void Page(string userId, string name, IDictionary<string, object> properties, RudderOptions options)
         {
             Page(userId, name, null, properties, options);
         }
 
         /// <inheritdoc />
-        public void Page(string userId, string name, string category, IDictionary<string, object> properties, Options options)
+        public void Page(string userId, string name, string category, IDictionary<string, object> properties, RudderOptions options)
         {
             if (String.IsNullOrEmpty(userId) && !HasAnonymousId(options))
                 throw new InvalidOperationException("Please supply a valid userId or anonymousId to call #Page.");
@@ -260,7 +260,7 @@ namespace RudderStack
         }
 
         /// <inheritdoc />
-        public void Screen(string userId, string name, Options options)
+        public void Screen(string userId, string name, RudderOptions options)
         {
             Screen(userId, name, null, null, options);
         }
@@ -278,13 +278,13 @@ namespace RudderStack
         }
 
         /// <inheritdoc />
-        public void Screen(string userId, string name, IDictionary<string, object> properties, Options options)
+        public void Screen(string userId, string name, IDictionary<string, object> properties, RudderOptions options)
         {
             Screen(userId, name, null, properties, options);
         }
 
         /// <inheritdoc />
-        public void Screen(string userId, string name, string category, IDictionary<string, object> properties, Options options)
+        public void Screen(string userId, string name, string category, IDictionary<string, object> properties, RudderOptions options)
         {
             if (String.IsNullOrEmpty(userId) && !HasAnonymousId(options))
                 throw new InvalidOperationException("Please supply a valid userId or anonymousId to call #Screen.");
@@ -329,7 +329,7 @@ namespace RudderStack
             this.Statistics.IncrementSubmitted();
         }
 
-        protected void ensureId(String userId, Options options)
+        protected void ensureId(String userId, RudderOptions options)
         {
             if (String.IsNullOrEmpty(userId) && String.IsNullOrEmpty(options.AnonymousId))
                 throw new InvalidOperationException("Please supply a valid id (either userId or anonymousId.");
@@ -354,7 +354,7 @@ namespace RudderStack
         /// </summary>
         /// <returns><c>true</c> if the specified options have an anonymous identifier; otherwise, <c>false</c>.</returns>
         /// <param name="options">Options.</param>
-        internal static bool HasAnonymousId(Options options)
+        internal static bool HasAnonymousId(RudderOptions options)
         {
             return options != null && !String.IsNullOrEmpty(options.AnonymousId);
         }

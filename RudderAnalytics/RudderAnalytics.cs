@@ -1,16 +1,16 @@
 namespace RudderStack
 {
-    public class Analytics
+    public class RudderAnalytics
     {
         // REMINDER: don't forget to set Properties.AssemblyInfo.AssemblyVersion as well
-        public static string VERSION = "3.4.2-beta";
+        public static string VERSION = "1.0.0";
 
         /// <summary>
         /// Lock for thread-safety
         /// </summary>
         static readonly object padlock = new object();
 
-        public static Client Client { get; private set; }
+        public static RudderClient Client { get; private set; }
 
         /// <summary>
         /// Initialized the default RudderStack client with your API writeKey.
@@ -24,7 +24,7 @@ namespace RudderStack
             {
                 if (Client == null)
                 {
-                    Client = new Client(writeKey);
+                    Client = new RudderClient(writeKey);
                 }
             }
         }
@@ -33,18 +33,18 @@ namespace RudderStack
         /// Initialized the default RudderStack client with your API writeKey.
         /// </summary>
         /// <param name="writeKey"></param>
-        public static void Initialize(string writeKey, Config config)
+        public static void Initialize(string writeKey, RudderConfig config)
         {
             lock (padlock)
             {
                 if (Client == null)
                 {
-                    Client = new Client(writeKey, config);
+                    Client = new RudderClient(writeKey, config);
                 }
             }
         }
 
-        internal static void Initialize(Client client)
+        internal static void Initialize(RudderClient client)
         {
             lock (padlock)
             {

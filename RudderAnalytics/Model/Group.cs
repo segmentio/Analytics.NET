@@ -17,7 +17,7 @@ namespace RudderStack.Model
         internal Group(string userId,
                        string groupId,
                        IDictionary<string, object> traits,
-                       Options options)
+                       RudderOptions options)
             : base("group", userId, options)
         {
             this.GroupId = groupId;

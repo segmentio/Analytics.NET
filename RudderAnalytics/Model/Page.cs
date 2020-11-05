@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 using Newtonsoft.Json;
 
@@ -21,7 +19,7 @@ namespace RudderStack.Model
                       string name,
                       string category,
                       IDictionary<string, object> properties,
-                      Options options)
+                      RudderOptions options)
 
             : base("page", userId, options)
         {

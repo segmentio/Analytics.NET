@@ -13,7 +13,7 @@ namespace RudderStack.Model
 
         internal Identify(string userId,
                           IDictionary<string, object> traits,
-                          Options options)
+                          RudderOptions options)
 
             : base("identify", userId, options)
         {

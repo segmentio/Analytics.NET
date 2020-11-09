@@ -11,7 +11,7 @@ namespace RudderStack.Model
         public RudderContext() {
             // default the context library
             this.Add("library", new Dict() {
-                { "name", "Analytics.NET" },
+                { "name", "RudderAnalytics.NET" },
                 { "version", RudderAnalytics.VERSION }
             });
         }

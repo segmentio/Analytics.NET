@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Analytics", "Analytics\Analytics.csproj", "{A386CF02-D902-4B22-90A8-E828093E3AA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RudderAnalytics", "RudderAnalytics\RudderAnalytics.csproj", "{A386CF02-D902-4B22-90A8-E828093E3AA4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{6AE99FF7-EECF-4639-B6B1-3E7CF1CC3048}"
 EndProject
@@ -19,8 +19,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Net45", "Test.Net45\Test.Net45.csproj", "{A7B43E75-BA62-4543-A467-27C6D9B28EB8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.UniversalApp", "Test.UniversalApp\Test.UniversalApp.csproj", "{E54D766D-3E91-47C5-901B-FFCCCACD60CC}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.E2E", "Test.E2E\Test.E2E.csproj", "{E6D4DE50-ED07-4F7C-ABD8-F0600BD17D24}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DI", "DI", "{72D463DB-E9BA-4F11-B1D2-92192470D1D3}"
 EndProject

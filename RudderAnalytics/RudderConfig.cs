@@ -14,7 +14,7 @@ namespace RudderStack
         /// <summary>
         /// The REST API endpoint
         /// </summary>
-        internal string Host { get; set; }
+        internal string DataPlaneUrl { get; set; }
 
         internal string UserAgent { get; set; }
 
@@ -37,7 +37,7 @@ namespace RudderStack
         /// <summary>
         ///
         /// </summary>
-        /// <param name="host">Endpoint for tracking api for Proxy Service</param>
+        /// <param name="dataPlaneUrl">Endpoint for tracking api for Proxy Service</param>
         /// <param name="proxy"></param>
         /// <param name="timeout"></param>
         /// <param name="maxQueueSize">Queue size</param>
@@ -48,7 +48,7 @@ namespace RudderStack
         /// <param name="send">Don’t send data to RudderStack</param>
         /// <param name="userAgent">Sets User Agent Header</param>
         public RudderConfig(
-            string host = "https://hosted.rudderlabs.com",
+            string dataPlaneUrl = "https://hosted.rudderlabs.com",
             string proxy = null,
             TimeSpan? timeout = null,
             int maxQueueSize = 10000,
@@ -60,7 +60,7 @@ namespace RudderStack
             string userAgent = null
             )
         {
-            this.Host = host;
+            this.DataPlaneUrl = dataPlaneUrl;
             this.Proxy = proxy ?? "";
             this.Timeout = timeout ?? TimeSpan.FromSeconds(5);
             this.MaxQueueSize = maxQueueSize;
@@ -86,7 +86,7 @@ namespace RudderStack
         /// <returns></returns>
         public RudderConfig SetHost(string host)
         {
-            this.Host = host;
+            this.DataPlaneUrl = host;
             return this;
         }
 

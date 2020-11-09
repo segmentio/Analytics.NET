@@ -8,12 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Analytics" Version="3.4.2-beta" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Sloth.Common\Sloth.Common.csproj" />
+    <ProjectReference Include="..\..\RudderAnalytics\RudderAnalytics.csproj" />
   </ItemGroup>
 
   <ItemGroup>

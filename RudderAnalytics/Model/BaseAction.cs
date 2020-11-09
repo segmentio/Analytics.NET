@@ -39,7 +39,7 @@ namespace RudderStack.Model
             if (options.Timestamp.HasValue)
                 this.Timestamp = options.Timestamp.Value.ToString("o");
             else
-                this.Timestamp = DateTime.Now.ToString("o");
+                this.Timestamp = DateTime.UtcNow.ToString("o");
             this.Context = options.Context;
             this.Integrations = options.Integrations;
             this.AnonymousId = options.AnonymousId;

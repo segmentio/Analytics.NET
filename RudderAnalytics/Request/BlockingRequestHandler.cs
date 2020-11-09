@@ -152,10 +152,10 @@ namespace RudderStack.Request
 
             try
             {
-                Uri uri = new Uri(_client.Config.Host + "/v1/import");
+                Uri uri = new Uri(_client.Config.DataPlaneUrl + "/v1/batch");
 
                 // set the current request time
-                batch.SentAt = DateTime.Now.ToString("o");
+                batch.SentAt = DateTime.UtcNow.ToString("o");
 
                 string json = JsonConvert.SerializeObject(batch);
 

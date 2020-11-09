@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Segment.Model;
+using RudderStack.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
 using Moq;
-using Segment.Request;
+using RudderStack.Request;
 
-namespace Segment.Test
+namespace RudderStack.Test
 {
 	[TestClass]
 	public class FlushTests

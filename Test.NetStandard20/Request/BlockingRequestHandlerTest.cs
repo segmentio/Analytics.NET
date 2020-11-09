@@ -1,9 +1,9 @@
 using Moq;
 using Moq.Protected;
 using NUnit.Framework;
-using Segment;
-using Segment.Model;
-using Segment.Request;
+using RudderStack;
+using RudderStack.Model;
+using RudderStack.Request;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Segment.Test.Request
+namespace RudderStack.Test.Request
 {
 
     [TestFixture()]

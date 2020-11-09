@@ -1,7 +1,7 @@
 using System;
-using Segment.Model;
+using RudderStack.Model;
 
-namespace Segment.Test
+namespace RudderStack.Test
 {
     public class Actions
     {

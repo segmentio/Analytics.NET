@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Segment
+namespace RudderStack
 {
     public static class ServiceCollectionExtensions
     {

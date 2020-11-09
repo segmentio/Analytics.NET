@@ -1,12 +1,12 @@
 using NUnit.Framework;
-using Segment.Model;
+using RudderStack.Model;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace Segment.Test
+namespace RudderStack.Test
 {
 	[TestFixture()]
 	public class RequestHandlerTest

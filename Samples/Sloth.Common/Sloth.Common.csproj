@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Analytics" Version="3.4.2-beta" />
+    <ProjectReference Include="..\..\RudderAnalytics\RudderAnalytics.csproj" />
   </ItemGroup>
-
 </Project>

@@ -2,11 +2,11 @@ using NUnit.Framework;
 
 using System;
 using Moq;
-using Segment.Flush;
-using Segment.Model;
-using Segment.Request;
+using RudderStack.Flush;
+using RudderStack.Model;
+using RudderStack.Request;
 
-namespace Segment.Test
+namespace RudderStack.Test
 {
     [TestFixture()]
     public class ClientTests

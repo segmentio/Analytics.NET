@@ -1,13 +1,13 @@
 using Moq;
 using NUnit.Framework;
-using Segment;
-using Segment.Model;
-using Segment.Request;
+using RudderStack;
+using RudderStack.Model;
+using RudderStack.Request;
 using System;
 using System.Collections.Generic;
 using System.Net;
 
-namespace Segment.Test.Request
+namespace RudderStack.Test.Request
 {
     [TestFixture]
     public class BlockingRequestHandlerTests
@@ -95,7 +95,7 @@ namespace Segment.Test.Request
             var batch = GetBatch();
             ClientThrowWebException((HttpStatusCode)429);
 
-            //Act            
+            //Act
             _handler.MakeRequest(batch).GetAwaiter().GetResult();
 
             //Assert

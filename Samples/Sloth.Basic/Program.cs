@@ -1,28 +1,28 @@
 using System;
-using Segment;
+using RudderStack;
 using Sloth.Common;
-using Environment = System.Environment;
 
 namespace Sloth.Basic
 {
     class Program
     {
-        private const int UserJourneys = 500;
+        private const int UserJourneys = 1;
 
         static void Main(string[] args)
         {
-            var writeKey = Environment.GetEnvironmentVariable("writeKey");
+            var writeKey = "testWriteKey";
+            var dataPlaneUrl = "https://8244956a91ea.ngrok.io";
 
             if (string.IsNullOrWhiteSpace(writeKey)) throw new ArgumentException(nameof(writeKey));
 
-            OnExecute(writeKey);
+            OnExecute(writeKey, dataPlaneUrl);
         }
 
-        private static void OnExecute(string writeKey)
+        private static void OnExecute(string writeKey, string dataPlaneUrl)
         {
-            Analytics.Initialize(writeKey);
+            //RudderAnalytics.Initialize(writeKey);
 
-            Logger.Handlers += Utils.LoggerOnHandlers;
+            RudderAnalytics.Initialize(writeKey, new RudderConfig(dataPlaneUrl: dataPlaneUrl));
 
             for (var i = 0; i < UserJourneys; i++)
             {
@@ -30,11 +30,11 @@ namespace Sloth.Basic
             }
 
             // sending all pendant messages
-            Analytics.Client.Flush();
+            RudderAnalytics.Client.Flush();
 
             Utils.PrintSummary();
 
-            Analytics.Client.Dispose();
+            RudderAnalytics.Client.Dispose();
         }
 
     }

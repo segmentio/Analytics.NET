@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Segment;
-using Segment.Test;
+using RudderStack;
+using RudderStack.Test;
 
-namespace Segment.Test
+namespace RudderStack.Test
 {
     class Program
     {
@@ -13,7 +13,7 @@ namespace Segment.Test
         {
             Logger.Handlers += Logger_Handlers;
 
-            //Analytics.Initialize(Segment.Test.Constants.WRITE_KEY);
+            //Analytics.Initialize(RudderStack.Test.Constants.WRITE_KEY);
 
             //FlushTests tests = new FlushTests();
             //tests.PerformanceTestNet45();

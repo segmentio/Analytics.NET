@@ -4,10 +4,10 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Segment.Model;
-using Segment.Request;
+using RudderStack.Model;
+using RudderStack.Request;
 
-namespace Segment.Test
+namespace RudderStack.Test
 {
 	[TestClass]
 	public class ActionTests

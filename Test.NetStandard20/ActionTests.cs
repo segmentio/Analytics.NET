@@ -2,11 +2,11 @@ using System;
 using NUnit.Framework;
 using System.Collections.Generic;
 using Moq;
-using Segment.Request;
-using Segment.Model;
+using RudderStack.Request;
+using RudderStack.Model;
 using System.Threading.Tasks;
 
-namespace Segment.Test
+namespace RudderStack.Test
 {
     [TestFixture()]
     public class ActionTests

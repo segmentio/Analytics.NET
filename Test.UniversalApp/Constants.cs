@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace Segment.Test
+namespace RudderStack.Test
 {
 	public class Constants
 	{
-		// project segmentio/dotnet-test
+		// project rudder/dotnet-test
 		public static string WRITE_KEY = "r7bxis28wy";
 	}
 }

@@ -1,7 +1,7 @@
 using NUnit.Framework;
-using Segment.Stats;
+using RudderStack.Stats;
 
-namespace Segment.Test.Stats
+namespace RudderStack.Test.Stats
 {
     [TestFixture]
     public class StatisticsTests

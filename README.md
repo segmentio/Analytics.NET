@@ -14,7 +14,7 @@ Released under MIT License
 
 ## Getting Started with Python SDK
 
-Install `rudder-sdk-python` using `pip`
+Install `RudderAnalytics` using `NuGet`
 ```
 Install-Package RudderAnalytics -Version <version>
 ```

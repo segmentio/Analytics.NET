@@ -34,7 +34,7 @@ RudderAnalytics.Initialize(
 RudderAnalytics.Client.Track(
     "userId",
     "CTA Clicked",
-    new Dictionary<string, object> {# {"plan", "premium"}, }
+    new Dictionary<string, object> { {"plan", "premium"}, }
 );
 ```
 

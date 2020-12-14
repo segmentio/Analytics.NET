@@ -48,7 +48,7 @@ namespace Segment
         /// <param name="threads">Count of concurrent internal threads to post data from queue</param>
         /// <param name="flushInterval">The frequency, in seconds, to send data to Segment</param>
         /// <param name="gzip">Compress data w/ gzip before dispatch</param>
-        /// <param name="send">Don’t send data to Segment</param>
+        /// <param name="send">Send data to Segment</param>
         /// <param name="userAgent">Sets User Agent Header</param>
         public Config(
             string host = "https://api.segment.io",
@@ -60,7 +60,7 @@ namespace Segment
             int threads = 1,
             double flushInterval = 10,
             bool gzip = false,
-            bool send = false,
+            bool send = true,
             string userAgent = null
             )
         {

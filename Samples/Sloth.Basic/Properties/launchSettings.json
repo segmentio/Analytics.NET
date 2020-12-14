@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "Sloth.Basic": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "environmentVariables": {
+        "writeKey": ""
+      }
+    }
+  }
+}

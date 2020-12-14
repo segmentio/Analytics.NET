@@ -1,3 +1,10 @@
+3.5.0 / 2020-12-09
+==================
+ * [Improvement](https://github.com/segmentio/Analytics.NET/pull/151): Fixed behavior of confusing configuration parameter `Send`. It now defaults to `true` and means data will be sent to Segment.
+
+3.4.2-beta / 2020-07-16
+=======================
+ * [Fix](https://github.com/segmentio/Analytics.NET/pull/143) Patched security vulnerabilities in dependencies
 
 3.4.1-alpha / 2020-05-21
 ========================

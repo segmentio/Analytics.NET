@@ -62,9 +62,9 @@ namespace Segment
             if (requestHandler == null)
             {
                 if (config.Send)
-                    requestHandler = new FakeRequestHandler(this);
-                else
                     requestHandler = new BlockingRequestHandler(this, config.Timeout);
+                else
+                    requestHandler = new FakeRequestHandler(this);
             }
 
             IBatchFactory batchFactory = new SimpleBatchFactory(this._writeKey);

@@ -5,7 +5,7 @@
     <RootNamespace>Segment</RootNamespace>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageId>Analytics</PackageId>
-    <Version>3.4.1-alpha</Version>
+    <Version>3.5.0</Version>
     <Authors>Segment Team</Authors>
     <Company />
     <Product>Analytics.NET</Product>
@@ -31,6 +31,7 @@
 
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3'">
     <PackageReference Include="System.Threading.Thread" Version="4.3.0" />
+    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='net35'">

@@ -184,9 +184,9 @@ namespace Segment.Test
         }
 
         [Test]
-        public void ClientUsesFakeRequestHandlerWhenSendIsTrue()
+        public void ClientUsesFakeRequestHandlerWhenSendIsFalse()
         {
-            var client = new Client("writeKey", new Config(send: true));
+            var client = new Client("writeKey", new Config(send: false));
 
             var flushHandler = GetPrivateFieldValue<AsyncIntervalFlushHandler>(client, "_flushHandler");
 
@@ -196,9 +196,9 @@ namespace Segment.Test
         }
 
         [Test]
-        public void ClientUsesBlockingRequestHandlerWhenSendIsFalse()
+        public void ClientUsesBlockingRequestHandlerWhenSendIsTrue()
         {
-            var client = new Client("writeKey", new Config(send: false));
+            var client = new Client("writeKey", new Config(send: true));
 
             var flushHandler = GetPrivateFieldValue<AsyncIntervalFlushHandler>(client, "_flushHandler");
 

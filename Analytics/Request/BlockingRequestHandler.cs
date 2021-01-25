@@ -34,7 +34,7 @@ namespace Segment.Request
         {
             WebRequest w = base.GetWebRequest(address);
             if (Timeout.Milliseconds != 0)
-                w.Timeout = Timeout.Milliseconds;
+                w.Timeout = Convert.ToInt32(Timeout.Milliseconds);
             return w;
         }
     }
@@ -220,24 +220,22 @@ namespace Segment.Request
                         watch.Stop();
 
                         var response = (HttpWebResponse)ex.Response;
-                        if (response != null)
+                        statusCode = (response != null) ? (int)response.StatusCode : 0;
+                        if ((statusCode >= 500 && statusCode <= 600) || statusCode == 429 || statusCode == 0)
                         {
-                            statusCode = (int)response.StatusCode;
-                            if ((statusCode >= 500 && statusCode <= 600) || statusCode == 429)
-                            {
-                                // If status code is greater than 500 and less than 600, it indicates server error
-                                // Error code 429 indicates rate limited.
-                                // Retry uploading in these cases.
-                                Thread.Sleep(_backo.AttemptTime());
-                                continue;
-                            }
-                            else if (statusCode >= 400)
-                            {
-                                responseStr = String.Format("Status Code {0}. ", statusCode);
-                                responseStr += ex.Message;
-                                break;
-                            }
+                            // If status code is greater than 500 and less than 600, it indicates server error
+                            // Error code 429 indicates rate limited.
+                            // Retry uploading in these cases.
+                            Thread.Sleep(_backo.AttemptTime());
+                            continue;
                         }
+                        else if (statusCode >= 400)
+                        {
+                            responseStr = String.Format("Status Code {0}. ", statusCode);
+                            responseStr += ex.Message;
+                            break;
+                        }
+
                     }
 
 #else
@@ -248,19 +246,32 @@ namespace Segment.Request
                     if (_client.Config.Gzip)
                         content.Headers.ContentEncoding.Add("gzip");
 
-                    var response = await _httpClient.PostAsync(uri, content).ConfigureAwait(false);
+                    HttpResponseMessage response = null;
+                    bool retry = false;
+                    try
+                    {
+                        response = await _httpClient.PostAsync(uri, content).ConfigureAwait(false);
+                    }
+                    catch (TaskCanceledException)
+                    {
+                        retry = true;
+                    }
+                    catch (HttpRequestException)
+                    {
+                        retry = true;
+                    }
 
                     watch.Stop();
-                    statusCode = (int)response.StatusCode;
+                    statusCode = response != null ? (int)response.StatusCode : 0;
 
-                    if (statusCode == (int)HttpStatusCode.OK)
+                    if (response != null && response.StatusCode == HttpStatusCode.OK)
                     {
                         Succeed(batch, watch.ElapsedMilliseconds);
                         break;
                     }
                     else
                     {
-                        if ((statusCode >= 500 && statusCode <= 600) || statusCode == 429)
+                        if ((statusCode >= 500 && statusCode <= 600) || statusCode == 429 || retry)
                         {
                             // If status code is greater than 500 and less than 600, it indicates server error
                             // Error code 429 indicates rate limited.

@@ -15,6 +15,9 @@
     <PackageTags>analytics, Segment</PackageTags>
     <PackageIcon>packageIcon.png</PackageIcon>
     <PackageLicenseFile>README.md</PackageLicenseFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/segmentio/Analytics.NET.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)'=='net35'">

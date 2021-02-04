@@ -292,6 +292,10 @@ namespace Segment.Request
                 if (_backo.HasReachedMax || statusCode != (int)HttpStatusCode.OK)
                 {
                     Fail(batch, new APIException("Unexpected Status Code", responseStr), watch.ElapsedMilliseconds);
+                    if (_backo.HasReachedMax)
+                    {
+                        _backo.Reset();
+                    }
                 }
             }
             catch (System.Exception e)

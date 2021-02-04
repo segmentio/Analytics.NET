@@ -76,8 +76,8 @@ namespace Segment.Test
         [Test()]
         public void RetryServerErrorTestNetStandard20()
         {
-            Stopwatch watch = new Stopwatch();
 
+            Stopwatch watch = new Stopwatch();
             string DummyServerUrl = "http://localhost:9696";
             using (var DummyServer = new WebServer(DummyServerUrl))
             {
@@ -121,7 +121,7 @@ namespace Segment.Test
                     // Setup Action module which returns error code
                     var actionModule = new ActionModule("/", HttpVerbs.Any,(ctx) =>
                     {
-                        throw new HttpException(testCase.ResponseCode, testCase.ErrorMessage);
+                        return ctx.SendStandardHtmlAsync((int)testCase.ResponseCode);
                     });
                     DummyServer.WithModule(actionModule);
                 }
@@ -131,6 +131,7 @@ namespace Segment.Test
                 foreach (var testCase in TestCases) 
                 {
                     // Calculate working time for Identiy message with invalid host address
+                    watch.Reset();
                     watch.Start();
                     Actions.Identify(Analytics.Client);
                     watch.Stop();

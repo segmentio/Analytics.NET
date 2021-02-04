@@ -71,6 +71,7 @@ namespace Segment.Test
             public string ErrorMessage;
             public int Timeout;
             public bool ShouldRetry;
+            public string BaseActionUrl;
         }
 
         [Test()]
@@ -96,7 +97,8 @@ namespace Segment.Test
                         ErrorMessage = "Server Gone",
                         ResponseCode = HttpStatusCode.Gone,
                         ShouldRetry = false,
-                        Timeout = 10000
+                        Timeout = 10000,
+                        BaseActionUrl = "/ServerGone"
                     },
                     // 429 error requires retry
                     new RetryErrorTestCase()
@@ -104,7 +106,8 @@ namespace Segment.Test
                         ErrorMessage = "Too many requests",
                         ResponseCode = (HttpStatusCode)429,
                         ShouldRetry = true,
-                        Timeout = 10000
+                        Timeout = 10000,
+                        BaseActionUrl = "/TooManyRequests"
                     },
                     // Server errors require retry
                     new RetryErrorTestCase()
@@ -112,14 +115,15 @@ namespace Segment.Test
                         ErrorMessage = "Bad Gateway",
                         ResponseCode = HttpStatusCode.BadGateway,
                         ShouldRetry = true,
-                        Timeout = 10000
+                        Timeout = 10000,
+                        BaseActionUrl = "/BadGateWay"
                     }
                 };
 
                 foreach (var testCase in TestCases)
                 {
                     // Setup Action module which returns error code
-                    var actionModule = new ActionModule("/", HttpVerbs.Any,(ctx) =>
+                    var actionModule = new ActionModule(testCase.BaseActionUrl, HttpVerbs.Any,(ctx) =>
                     {
                         return ctx.SendStandardHtmlAsync((int)testCase.ResponseCode);
                     });
@@ -130,6 +134,7 @@ namespace Segment.Test
 
                 foreach (var testCase in TestCases) 
                 {
+                    Analytics.Client.Config.SetHost(DummyServerUrl + testCase.BaseActionUrl);
                     // Calculate working time for Identiy message with invalid host address
                     watch.Reset();
                     watch.Start();

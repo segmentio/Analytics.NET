@@ -141,9 +141,13 @@ namespace Segment.Test
                     // Handling Identify message will less than 10s because the server returns GONE message.
                     // That's because it retries submit when it's failed.
                     if (testCase.ShouldRetry)
+                    {
                         Assert.IsTrue(watch.ElapsedMilliseconds > testCase.Timeout);
-                    else
+                    }
+                    else 
+                    {
                         Assert.IsFalse(watch.ElapsedMilliseconds > testCase.Timeout);
+                    }       
                 }
             }
         }

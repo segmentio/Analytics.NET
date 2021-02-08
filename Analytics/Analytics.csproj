@@ -14,7 +14,6 @@
     <PackageReleaseNotes>Check out the changelog at: https://raw.githubusercontent.com/segmentio/Analytics.NET/master/CHANGELOG.md</PackageReleaseNotes>
     <PackageTags>analytics, Segment</PackageTags>
     <PackageIcon>packageIcon.png</PackageIcon>
-    <PackageLicenseFile>README.md</PackageLicenseFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/segmentio/Analytics.NET.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>

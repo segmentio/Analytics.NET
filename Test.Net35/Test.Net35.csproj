@@ -67,6 +67,7 @@
     <Compile Include="RequestHandlerTest.cs" />
     <Compile Include="Request\BlockingRequestHandlerTests.cs" />
     <Compile Include="Stats\StatisticsTests.cs" />
+    <Compile Include="WebServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

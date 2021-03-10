@@ -1,3 +1,9 @@
+3.6.0 / 2021-03-10
+==================
+ * [Improvement](https://github.com/segmentio/Analytics.NET/pull/159): Updating NuGet metadata 
+ * [Improvement](https://github.com/segmentio/Analytics.NET/pull/158): Catch post async network exceptions and retry 
+ * [Improvement](https://github.com/segmentio/Analytics.NET/pull/155): Adding support for dependency injection
+
 3.5.0 / 2020-12-09
 ==================
  * [Improvement](https://github.com/segmentio/Analytics.NET/pull/151): Fixed behavior of confusing configuration parameter `Send`. It now defaults to `true` and means data will be sent to Segment.

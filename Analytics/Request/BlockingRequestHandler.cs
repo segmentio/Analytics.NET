@@ -223,6 +223,8 @@ namespace Segment.Request
                         if (response != null)
                         {
                             statusCode = (int)response.StatusCode;
+                            responseStr = string.Format("Status Code {0}. ", statusCode);
+                            responseStr += ex.Message;
                             if ((statusCode >= 500 && statusCode <= 600) || statusCode == 429)
                             {
                                 // If status code is greater than 500 and less than 600, it indicates server error
@@ -233,8 +235,6 @@ namespace Segment.Request
                             }
                             else if (statusCode >= 400)
                             {
-                                responseStr = String.Format("Status Code {0}. ", statusCode);
-                                responseStr += ex.Message;
                                 break;
                             }
                         }
@@ -260,6 +260,8 @@ namespace Segment.Request
                     }
                     else
                     {
+                        responseStr = string.Format("Status Code {0}. ", response.StatusCode);
+                        responseStr += await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                         if ((statusCode >= 500 && statusCode <= 600) || statusCode == 429)
                         {
                             // If status code is greater than 500 and less than 600, it indicates server error
@@ -270,17 +272,17 @@ namespace Segment.Request
                         }
                         else if (statusCode >= 400)
                         {
-                            responseStr = String.Format("Status Code {0}. ", response.StatusCode);
-                            responseStr += await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                             break;
                         }
                     }
 #endif
                 }
 
-                if (_backo.HasReachedMax || statusCode != (int)HttpStatusCode.OK)
+                var hasBackoReachedMax = _backo.HasReachedMax;
+                if (hasBackoReachedMax || statusCode != (int)HttpStatusCode.OK)
                 {
-                    Fail(batch, new APIException("Unexpected Status Code", responseStr), watch.ElapsedMilliseconds);
+                    var message = $"Has backo reached max: {hasBackoReachedMax}\n, Status Code: {statusCode}\n, response message: {responseStr}";
+                    Fail(batch, new APIException(statusCode.ToString(), message), watch.ElapsedMilliseconds);
                 }
             }
             catch (System.Exception e)

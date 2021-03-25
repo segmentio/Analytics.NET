@@ -227,10 +227,30 @@ namespace Segment.Request
                             // Error code 429 indicates rate limited.
                             // Retry uploading in these cases.
                             Thread.Sleep(_backo.AttemptTime());
+                            if (statusCode == 429)
+                            {
+                                Logger.Info($"Too many request at the moment CurrentAttempt:{_backo.CurrentAttempt} Retrying to send request", new Dict
+                                {
+                                    { "batch id", batch.MessageId },
+                                    { "statusCode", statusCode },
+                                    { "duration (ms)", watch.ElapsedMilliseconds }
+                                });
+                            }
+                            else
+                            {
+                                Logger.Info($"Internal Segment Server error CurrentAttempt:{_backo.CurrentAttempt} Retrying to send request", new Dict
+                                {
+                                    { "batch id", batch.MessageId },
+                                    { "statusCode", statusCode },
+                                    { "duration (ms)", watch.ElapsedMilliseconds }
+                                });
+                            }
                             continue;
                         }
-                        else if (statusCode >= 400)
+                        else
                         {
+                            //If status code is greater or equal than 400 but not 429 should indicate is client error.
+                            //All other types of HTTP Status code are not errors (Between 100 and 399)
                             responseStr = String.Format("Status Code {0}. ", statusCode);
                             responseStr += ex.Message;
                             break;
@@ -277,9 +297,27 @@ namespace Segment.Request
                             // Error code 429 indicates rate limited.
                             // Retry uploading in these cases.
                             await _backo.AttemptAsync();
+                            if (statusCode == 429)
+                            {
+                                Logger.Info($"Too many request at the moment CurrentAttempt:{_backo.CurrentAttempt} Retrying to send request", new Dict
+                                {
+                                    { "batch id", batch.MessageId },
+                                    { "statusCode", statusCode },
+                                    { "duration (ms)", watch.ElapsedMilliseconds }
+                                });
+                            }
+                            else
+                            {
+                                Logger.Info($"Internal Segment Server error CurrentAttempt:{_backo.CurrentAttempt} Retrying to send request", new Dict
+                                {
+                                    { "batch id", batch.MessageId },
+                                    { "statusCode", statusCode },
+                                    { "duration (ms)", watch.ElapsedMilliseconds }
+                                });
+                            }
                             continue;
                         }
-                        else if (statusCode >= 400)
+                        else
                         {
                             break;
                         }
@@ -290,7 +328,7 @@ namespace Segment.Request
                 var hasBackoReachedMax = _backo.HasReachedMax;
                 if (hasBackoReachedMax || statusCode != (int)HttpStatusCode.OK)
                 {
-                    var message = $"Has backo reached max: {hasBackoReachedMax}\n, Status Code: {statusCode}\n, response message: {responseStr}";
+                    var message = $"Has Backoff reached max: {hasBackoReachedMax} with number of Attempts:{_backo.CurrentAttempt},\n Status Code: {statusCode}\n, response message: {responseStr}";
                     Fail(batch, new APIException(statusCode.ToString(), message), watch.ElapsedMilliseconds);
                     if (_backo.HasReachedMax)
                     {

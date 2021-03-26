@@ -1,4 +1,5 @@
 3.7.0 / 2021-03-26
+==================
 * [Improvement](https://github.com/segmentio/Analytics.NET/pull/162): Exception handling improvements 
 
 3.6.0 / 2021-03-10

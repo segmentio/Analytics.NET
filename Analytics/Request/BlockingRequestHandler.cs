@@ -272,12 +272,24 @@ namespace Segment.Request
                     {
                         response = await _httpClient.PostAsync(uri, content).ConfigureAwait(false);
                     }
-                    catch (TaskCanceledException)
+                    catch (TaskCanceledException e)
                     {
+                        Logger.Info("HTTP Post failed with exception of type TaskCanceledException", new Dict
+                        {
+                            { "batch id", batch.MessageId },
+                            { "reason", e.Message },
+                            { "duration (ms)", watch.ElapsedMilliseconds }
+                        });
                         retry = true;
                     }
-                    catch (HttpRequestException)
+                    catch (HttpRequestException e)
                     {
+                        Logger.Info("HTTP Post failed with exception of type HttpRequestException", new Dict
+                        {
+                            { "batch id", batch.MessageId },
+                            { "reason", e.Message },
+                            { "duration (ms)", watch.ElapsedMilliseconds }
+                        });
                         retry = true;
                     }
 
@@ -315,10 +327,11 @@ namespace Segment.Request
                                     { "duration (ms)", watch.ElapsedMilliseconds }
                                 });
                             }
-                            continue;
                         }
                         else
                         {
+                            //HTTP status codes smaller than 500 or greater than 600 except for 429 are either Client errors or a correct status
+                            //This means it should not retry 
                             break;
                         }
                     }

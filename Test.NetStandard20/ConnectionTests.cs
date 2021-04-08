@@ -113,6 +113,7 @@ namespace Segment.Test
                 var config = new Config().SetAsync(false);
                 config.SetHost(DummyServerUrl);
                 config.SetTimeout(new TimeSpan(0, 0, 1));
+                config.SetMaxRetryTime(new TimeSpan(0, 0, 10));
                 Analytics.Initialize(Constants.WRITE_KEY, config);
 
                 var TestCases = new RetryErrorTestCase[]
@@ -184,7 +185,7 @@ namespace Segment.Test
         {
 
             Stopwatch watch = new Stopwatch();
-            string DummyServerUrl = "http://localhost:9696";
+            string DummyServerUrl = "http://localhost:8181";
             using (var DummyServer = new WebServer(DummyServerUrl))
             {
 
@@ -192,7 +193,6 @@ namespace Segment.Test
                 var config = new Config().SetAsync(false);
                 config.SetHost(DummyServerUrl);
                 config.SetTimeout(new TimeSpan(0, 0, 1));
-                config.SetMaxRetryTime(new TimeSpan(0, 0, 10));
                 Analytics.Initialize(Constants.WRITE_KEY, config);
 
                 var TestCases = new RetryErrorTestCase[]

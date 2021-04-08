@@ -97,6 +97,9 @@ namespace Segment.Request
         internal BlockingRequestHandler(Client client, TimeSpan timeout) : this(client, timeout, null, new Backo(max: 10000, jitter: 5000)) // Set maximum waiting limit to 10s and jitter to 5s
         {
         }
+        internal BlockingRequestHandler(Client client, TimeSpan timeout, Backo backo) : this(client, timeout, null, backo) 
+        {
+        }
 #if NET35
 
         internal BlockingRequestHandler(Client client, TimeSpan timeout, IHttpClient httpClient, Backo backo)

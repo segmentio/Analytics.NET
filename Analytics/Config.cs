@@ -30,6 +30,8 @@ namespace Segment
 
         internal TimeSpan Timeout { get; set; }
 
+        internal TimeSpan? MaxRetryTime { get; set; }
+
         internal int FlushIntervalInMillis { get; private set; }
 
         public bool Send { get; set; }
@@ -50,6 +52,7 @@ namespace Segment
         /// <param name="gzip">Compress data w/ gzip before dispatch</param>
         /// <param name="send">Send data to Segment</param>
         /// <param name="userAgent">Sets User Agent Header</param>
+        /// <param name="maxRetryTime">Max Amount of time to retry request when server timeout occurs</param>
         public Config(
             string host = "https://api.segment.io",
             string proxy = null,
@@ -61,7 +64,8 @@ namespace Segment
             double flushInterval = 10,
             bool gzip = false,
             bool send = true,
-            string userAgent = null
+            string userAgent = null,
+            TimeSpan? maxRetryTime = null
             )
         {
             this.Host = host;
@@ -75,6 +79,7 @@ namespace Segment
             this.Send = send;
             this.UserAgent = userAgent ?? GetDefaultUserAgent();
             this.Threads = threads;
+            this.MaxRetryTime = maxRetryTime;
         }
 
         private static string GetDefaultUserAgent()
@@ -114,6 +119,17 @@ namespace Segment
         public Config SetTimeout(TimeSpan timeout)
         {
             this.Timeout = timeout;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the maximum amount of retry time for request to flush to the server when Timeout or error occurs.
+        /// </summary>
+        /// <param name="timeout"></param>
+        /// <returns></returns>
+        public Config SetMaxRetryTime(TimeSpan maxRetryTime)
+        {
+            this.MaxRetryTime = maxRetryTime;
             return this;
         }
 

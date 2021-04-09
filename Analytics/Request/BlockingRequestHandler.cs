@@ -97,6 +97,9 @@ namespace Segment.Request
         internal BlockingRequestHandler(Client client, TimeSpan timeout) : this(client, timeout, null, new Backo(max: 10000, jitter: 5000)) // Set maximum waiting limit to 10s and jitter to 5s
         {
         }
+        internal BlockingRequestHandler(Client client, TimeSpan timeout, Backo backo) : this(client, timeout, null, backo) 
+        {
+        }
 #if NET35
 
         internal BlockingRequestHandler(Client client, TimeSpan timeout, IHttpClient httpClient, Backo backo)
@@ -272,12 +275,24 @@ namespace Segment.Request
                     {
                         response = await _httpClient.PostAsync(uri, content).ConfigureAwait(false);
                     }
-                    catch (TaskCanceledException)
+                    catch (TaskCanceledException e)
                     {
+                        Logger.Info("HTTP Post failed with exception of type TaskCanceledException", new Dict
+                        {
+                            { "batch id", batch.MessageId },
+                            { "reason", e.Message },
+                            { "duration (ms)", watch.ElapsedMilliseconds }
+                        });
                         retry = true;
                     }
-                    catch (HttpRequestException)
+                    catch (HttpRequestException e)
                     {
+                        Logger.Info("HTTP Post failed with exception of type HttpRequestException", new Dict
+                        {
+                            { "batch id", batch.MessageId },
+                            { "reason", e.Message },
+                            { "duration (ms)", watch.ElapsedMilliseconds }
+                        });
                         retry = true;
                     }
 
@@ -315,10 +330,11 @@ namespace Segment.Request
                                     { "duration (ms)", watch.ElapsedMilliseconds }
                                 });
                             }
-                            continue;
                         }
                         else
                         {
+                            //HTTP status codes smaller than 500 or greater than 600 except for 429 are either Client errors or a correct status
+                            //This means it should not retry 
                             break;
                         }
                     }

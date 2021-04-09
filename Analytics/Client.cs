@@ -61,10 +61,23 @@ namespace Segment
 
             if (requestHandler == null)
             {
-                if (config.Send)
-                    requestHandler = new BlockingRequestHandler(this, config.Timeout);
-                else
+                if (config.Send) 
+                {
+                    if (config.MaxRetryTime.HasValue)
+                    {
+                        requestHandler = new BlockingRequestHandler(this, config.Timeout, new Backo(max: (Convert.ToInt32(config.MaxRetryTime.Value.TotalSeconds) * 1000), jitter: 5000));
+                    }
+                    else 
+                    {
+                        requestHandler = new BlockingRequestHandler(this, config.Timeout);
+                    }
+                    
+                }
+                else 
+                {
                     requestHandler = new FakeRequestHandler(this);
+                }
+                    
             }
 
             IBatchFactory batchFactory = new SimpleBatchFactory(this._writeKey);

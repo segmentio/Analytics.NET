@@ -1,3 +1,8 @@
+3.7.1 / 2021-04-16
+==================
+* [Improvement](https://github.com/segmentio/Analytics.NET/pull/163): Better flexibility and logging around retries
+
+
 3.7.0 / 2021-03-26
 ==================
 * [Improvement](https://github.com/segmentio/Analytics.NET/pull/162): Exception handling improvements 

@@ -46,6 +46,7 @@ namespace Segment.Test
             var config = new Config().SetAsync(false);
             config.SetHost("https://fake.segment-server.com");
             config.SetTimeout(new TimeSpan(0, 0, 1));
+            config.SetMaxRetryTime(new TimeSpan(0, 0, 10));
             Analytics.Initialize(Constants.WRITE_KEY, config);
             // Calculate working time for Identiy message with invalid host address
             watch.Start();
@@ -58,7 +59,31 @@ namespace Segment.Test
 
             // Handling Identify message will take more than 5s even though the timeout is 1s.
             // That's because it retries submit when it's failed.
-            Assert.AreEqual(true, watch.ElapsedMilliseconds > 5000);
+            Assert.AreEqual(true, watch.ElapsedMilliseconds > 10000);
+        }
+
+        [Test()]
+        public void RetryErrorWithDefaultMaxRetryTimeTest()
+        {
+            Stopwatch watch = new Stopwatch();
+
+            // Set invalid host address and make timeout to 1s
+            var config = new Config().SetAsync(false);
+            config.SetHost("https://fake.segment-server.com");
+            config.SetTimeout(new TimeSpan(0, 0, 1));
+            Analytics.Initialize(Constants.WRITE_KEY, config);
+            // Calculate working time for Identiy message with invalid host address
+            watch.Start();
+            Actions.Identify(Analytics.Client);
+            watch.Stop();
+
+            Assert.AreEqual(1, Analytics.Client.Statistics.Submitted);
+            Assert.AreEqual(0, Analytics.Client.Statistics.Succeeded);
+            Assert.AreEqual(1, Analytics.Client.Statistics.Failed);
+
+            // Handling Identify message will take more than 5s even though the timeout is 1s.
+            // That's because it retries submit when it's failed.
+            Assert.AreEqual(true, watch.ElapsedMilliseconds > 10000);
         }
 
         [Test()]

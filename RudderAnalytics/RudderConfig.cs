@@ -25,8 +25,11 @@ namespace RudderStack
         internal int FlushAt { get; set; }
 
         internal bool Async { get; set; }
+        internal bool Gzip { get; set; }
 
         internal TimeSpan Timeout { get; set; }
+
+        internal TimeSpan? MaxRetryTime { get; set; }
 
         internal int FlushIntervalInMillis { get; private set; }
 
@@ -44,9 +47,11 @@ namespace RudderStack
         /// <param name="flushAt">Number of items in a batch to upload</param>
         /// <param name="async">Sets whether the flushing to the server is synchronous or asynchronous</param>
         /// <param name="threads">Count of concurrent internal threads to post data from queue</param>
-        /// <param name="flushInterval">The frequency, in seconds, to send data to RudderStack</param>
-        /// <param name="send">Don’t send data to RudderStack</param>
+        /// <param name="flushInterval">The frequency, in seconds, to send data to Segment</param>
+        /// <param name="gzip">Compress data w/ gzip before dispatch</param>
+        /// <param name="send">Send data to Segment</param>
         /// <param name="userAgent">Sets User Agent Header</param>
+        /// <param name="maxRetryTime">Max Amount of time to retry request when server timeout occurs</param>
         public RudderConfig(
             string dataPlaneUrl = "https://hosted.rudderlabs.com",
             string proxy = null,
@@ -56,8 +61,10 @@ namespace RudderStack
             bool async = true,
             int threads = 1,
             double flushInterval = 10,
-            bool send = false,
-            string userAgent = null
+            bool gzip = false,
+            bool send = true,
+            string userAgent = null,
+            TimeSpan? maxRetryTime = null
             )
         {
             this.DataPlaneUrl = dataPlaneUrl;
@@ -67,9 +74,11 @@ namespace RudderStack
             this.FlushAt = flushAt;
             this.Async = async;
             this.FlushIntervalInMillis = (int)(flushInterval * 1000);
+            this.Gzip = gzip;
             this.Send = send;
             this.UserAgent = userAgent ?? GetDefaultUserAgent();
             this.Threads = threads;
+            this.MaxRetryTime = maxRetryTime;
         }
 
         private static string GetDefaultUserAgent()
@@ -109,6 +118,17 @@ namespace RudderStack
         public RudderConfig SetTimeout(TimeSpan timeout)
         {
             this.Timeout = timeout;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the maximum amount of retry time for request to flush to the server when Timeout or error occurs.
+        /// </summary>
+        /// <param name="timeout"></param>
+        /// <returns></returns>
+        public RudderConfig SetMaxRetryTime(TimeSpan maxRetryTime)
+        {
+            this.MaxRetryTime = maxRetryTime;
             return this;
         }
 

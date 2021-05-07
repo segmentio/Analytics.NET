@@ -34,7 +34,7 @@ namespace RudderStack.Request
         {
             WebRequest w = base.GetWebRequest(address);
             if (Timeout.Milliseconds != 0)
-                w.Timeout = Timeout.Milliseconds;
+                w.Timeout = Convert.ToInt32(Timeout.Milliseconds);
             return w;
         }
     }
@@ -95,6 +95,9 @@ namespace RudderStack.Request
         public TimeSpan Timeout { get; set; }
 
         internal BlockingRequestHandler(RudderClient client, TimeSpan timeout) : this(client, timeout, null, new Backo(max: 10000, jitter: 5000)) // Set maximum waiting limit to 10s and jitter to 5s
+        {
+        }
+        internal BlockingRequestHandler(Client client, TimeSpan timeout, Backo backo) : this(client, timeout, null, backo) 
         {
         }
 #if NET35
@@ -219,24 +222,42 @@ namespace RudderStack.Request
                         watch.Stop();
 
                         var response = (HttpWebResponse)ex.Response;
-                        if (response != null)
+                        statusCode = (response != null) ? (int)response.StatusCode : 0;
+                        if ((statusCode >= 500 && statusCode <= 600) || statusCode == 429 || statusCode == 0)
                         {
-                            statusCode = (int)response.StatusCode;
-                            if ((statusCode >= 500 && statusCode <= 600) || statusCode == 429)
+                            // If status code is greater than 500 and less than 600, it indicates server error
+                            // Error code 429 indicates rate limited.
+                            // Retry uploading in these cases.
+                            Thread.Sleep(_backo.AttemptTime());
+                            if (statusCode == 429)
                             {
-                                // If status code is greater than 500 and less than 600, it indicates server error
-                                // Error code 429 indicates rate limited.
-                                // Retry uploading in these cases.
-                                Thread.Sleep(_backo.AttemptTime());
-                                continue;
+                                Logger.Info($"Too many request at the moment CurrentAttempt:{_backo.CurrentAttempt} Retrying to send request", new Dict
+                                {
+                                    { "batch id", batch.MessageId },
+                                    { "statusCode", statusCode },
+                                    { "duration (ms)", watch.ElapsedMilliseconds }
+                                });
                             }
-                            else if (statusCode >= 400)
+                            else
                             {
-                                responseStr = String.Format("Status Code {0}. ", statusCode);
-                                responseStr += ex.Message;
-                                break;
+                                Logger.Info($"Internal Segment Server error CurrentAttempt:{_backo.CurrentAttempt} Retrying to send request", new Dict
+                                {
+                                    { "batch id", batch.MessageId },
+                                    { "statusCode", statusCode },
+                                    { "duration (ms)", watch.ElapsedMilliseconds }
+                                });
                             }
+                            continue;
                         }
+                        else
+                        {
+                            //If status code is greater or equal than 400 but not 429 should indicate is client error.
+                            //All other types of HTTP Status code are not errors (Between 100 and 399)
+                            responseStr = String.Format("Status Code {0}. ", statusCode);
+                            responseStr += ex.Message;
+                            break;
+                        }
+
                     }
 
 #else
@@ -249,39 +270,87 @@ namespace RudderStack.Request
 //                       content.Headers.ContentEncoding.Add("gzip");
 //                     }
 
-                    var response = await _httpClient.PostAsync(uri, content).ConfigureAwait(false);
+                    HttpResponseMessage response = null;
+                    bool retry = false;
+                    try
+                    {
+                        response = await _httpClient.PostAsync(uri, content).ConfigureAwait(false);
+                    }
+                    catch (TaskCanceledException e)
+                    {
+                        Logger.Info("HTTP Post failed with exception of type TaskCanceledException", new Dict
+                        {
+                            { "batch id", batch.MessageId },
+                            { "reason", e.Message },
+                            { "duration (ms)", watch.ElapsedMilliseconds }
+                        });
+                        retry = true;
+                    }
+                    catch (HttpRequestException e)
+                    {
+                        Logger.Info("HTTP Post failed with exception of type HttpRequestException", new Dict
+                        {
+                            { "batch id", batch.MessageId },
+                            { "reason", e.Message },
+                            { "duration (ms)", watch.ElapsedMilliseconds }
+                        });
+                        retry = true;
+                    }
 
                     watch.Stop();
-                    statusCode = (int)response.StatusCode;
+                    statusCode = response != null ? (int)response.StatusCode : 0;
 
-                    if (statusCode == (int)HttpStatusCode.OK)
+                    if (response != null && response.StatusCode == HttpStatusCode.OK)
                     {
                         Succeed(batch, watch.ElapsedMilliseconds);
                         break;
                     }
                     else
                     {
-                        if ((statusCode >= 500 && statusCode <= 600) || statusCode == 429)
+                        if ((statusCode >= 500 && statusCode <= 600) || statusCode == 429 || retry)
                         {
                             // If status code is greater than 500 and less than 600, it indicates server error
                             // Error code 429 indicates rate limited.
                             // Retry uploading in these cases.
                             await _backo.AttemptAsync();
-                            continue;
+                            if (statusCode == 429)
+                            {
+                                Logger.Info($"Too many request at the moment CurrentAttempt:{_backo.CurrentAttempt} Retrying to send request", new Dict
+                                {
+                                    { "batch id", batch.MessageId },
+                                    { "statusCode", statusCode },
+                                    { "duration (ms)", watch.ElapsedMilliseconds }
+                                });
+                            }
+                            else
+                            {
+                                Logger.Info($"Internal Segment Server error CurrentAttempt:{_backo.CurrentAttempt} Retrying to send request", new Dict
+                                {
+                                    { "batch id", batch.MessageId },
+                                    { "statusCode", statusCode },
+                                    { "duration (ms)", watch.ElapsedMilliseconds }
+                                });
+                            }
                         }
-                        else if (statusCode >= 400)
+                        else
                         {
-                            responseStr = String.Format("Status Code {0}. ", response.StatusCode);
-                            responseStr += await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            //HTTP status codes smaller than 500 or greater than 600 except for 429 are either Client errors or a correct status
+                            //This means it should not retry 
                             break;
                         }
                     }
 #endif
                 }
 
-                if (_backo.HasReachedMax || statusCode != (int)HttpStatusCode.OK)
+                var hasBackoReachedMax = _backo.HasReachedMax;
+                if (hasBackoReachedMax || statusCode != (int)HttpStatusCode.OK)
                 {
-                    Fail(batch, new APIException("Unexpected Status Code", responseStr), watch.ElapsedMilliseconds);
+                    var message = $"Has Backoff reached max: {hasBackoReachedMax} with number of Attempts:{_backo.CurrentAttempt},\n Status Code: {statusCode}\n, response message: {responseStr}";
+                    Fail(batch, new APIException(statusCode.ToString(), message), watch.ElapsedMilliseconds);
+                    if (_backo.HasReachedMax)
+                    {
+                        _backo.Reset();
+                    }
                 }
             }
             catch (System.Exception e)

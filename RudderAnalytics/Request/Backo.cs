@@ -17,6 +17,7 @@ namespace RudderStack.Request
 
 
         public bool HasReachedMax => _currentAttemptTime >= _max;
+        public int CurrentAttempt => _attempt;
 
         public Backo(int min = 100, int max = 10000, byte factor = 2, ushort jitter = 10000)
         {

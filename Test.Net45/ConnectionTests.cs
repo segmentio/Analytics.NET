@@ -43,20 +43,20 @@ namespace RudderStack.Test
             Stopwatch watch = new Stopwatch();
 
             // Set invalid host address and make timeout to 1s
-            var config = new Config().SetAsync(false);
-            config.SetHost("https://fake.segment-server.com");
+            var config = new RudderConfig().SetAsync(false);
+            config.SetHost("https://fake.rudder-server.com");
             config.SetTimeout(new TimeSpan(0, 0, 1));
             config.SetMaxRetryTime(new TimeSpan(0, 0, 10));
-            Analytics.Initialize(Constants.WRITE_KEY, config);
+            RudderAnalytics.Initialize(Constants.WRITE_KEY, config);
 
             // Calculate working time for Identiy message with invalid host address
             watch.Start();
-            Actions.Identify(Analytics.Client);
+            Actions.Identify(RudderAnalytics.Client);
             watch.Stop();
 
-            Assert.AreEqual(1, Analytics.Client.Statistics.Submitted);
-            Assert.AreEqual(0, Analytics.Client.Statistics.Succeeded);
-            Assert.AreEqual(1, Analytics.Client.Statistics.Failed);
+            Assert.AreEqual(1, RudderAnalytics.Client.Statistics.Submitted);
+            Assert.AreEqual(0, RudderAnalytics.Client.Statistics.Succeeded);
+            Assert.AreEqual(1, RudderAnalytics.Client.Statistics.Failed);
 
             // Handling Identify message will take more than 10s even though the timeout is 1s.
             // That's because it retries submit when it's failed.
@@ -69,19 +69,19 @@ namespace RudderStack.Test
             Stopwatch watch = new Stopwatch();
 
             // Set invalid host address and make timeout to 1s
-            var config = new Config().SetAsync(false);
-            config.SetHost("https://fake.segment-server.com");
+            var config = new RudderConfig().SetAsync(false);
+            config.SetHost("https://fake.rudder-server.com");
             config.SetTimeout(new TimeSpan(0, 0, 1));
-            Analytics.Initialize(Constants.WRITE_KEY, config);
+            RudderAnalytics.Initialize(Constants.WRITE_KEY, config);
 
             // Calculate working time for Identiy message with invalid host address
             watch.Start();
-            Actions.Identify(Analytics.Client);
+            Actions.Identify(RudderAnalytics.Client);
             watch.Stop();
 
-            Assert.AreEqual(1, Analytics.Client.Statistics.Submitted);
-            Assert.AreEqual(0, Analytics.Client.Statistics.Succeeded);
-            Assert.AreEqual(1, Analytics.Client.Statistics.Failed);
+            Assert.AreEqual(1, RudderAnalytics.Client.Statistics.Submitted);
+            Assert.AreEqual(0, RudderAnalytics.Client.Statistics.Succeeded);
+            Assert.AreEqual(1, RudderAnalytics.Client.Statistics.Failed);
 
             // Handling Identify message will take more than 10s even though the timeout is 1s.
             // That's because it retries submit when it's failed.

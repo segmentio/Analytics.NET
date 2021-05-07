@@ -5,7 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 
-namespace Segment.Test
+namespace RudderStack.Test
 {
     class WebServer :IDisposable
     {

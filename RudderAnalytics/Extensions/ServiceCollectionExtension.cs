@@ -2,22 +2,22 @@
 using Microsoft.Extensions.DependencyInjection;
 #endif
 
-namespace Segment.Extensions
+namespace RudderStack.Extensions
 {
     public static class ServiceCollectionExtension
     {
 #if NETSTANDARD2_0 || NET461
-        public static void AddAnalytics(this IServiceCollection services, string writeKey, Config config = null)
+        public static void AddAnalytics(this IServiceCollection services, string writeKey, RudderConfig config = null)
         {
-            Config configuration;
+            RudderConfig configuration;
 
             if(config == null)
-                configuration = new Config();
+                configuration = new RudderConfig();
             else
                 configuration = config;
 
-            var client = new Client(writeKey, configuration);
-            services.AddSingleton<IAnalyticsClient>(client);
+            var client = new RudderClient(writeKey, configuration);
+            services.AddSingleton<IRudderAnalyticsClient>(client);
         }
 #endif
     }

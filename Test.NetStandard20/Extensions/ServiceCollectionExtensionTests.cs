@@ -3,10 +3,10 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Segment.Extensions;
+using RudderStack.Extensions;
 
 
-namespace Segment.Test.Extensions
+namespace RudderStack.Test.Extensions
 {
     [TestFixture]
     public class ServiceCollectionExtensionTests
@@ -20,11 +20,11 @@ namespace Segment.Test.Extensions
             services.AddAnalytics(writeKey);
 
             var provider = services.BuildServiceProvider();
-            var analyticsInstance = provider.GetRequiredService(typeof(IAnalyticsClient));
+            var analyticsInstance = provider.GetRequiredService(typeof(IRudderAnalyticsClient));
 
             Assert.IsNotNull(analyticsInstance);
 
-            var client = analyticsInstance as Client;
+            var client = analyticsInstance as RudderClient;
             Assert.AreEqual("writeKey", client.WriteKey);
         }
 
@@ -33,17 +33,17 @@ namespace Segment.Test.Extensions
         {
             var writeKey = "writeKey";
             var threadCount = 10;
-            var config = new Config { Threads = threadCount };
+            var config = new RudderConfig { Threads = threadCount };
 
             var services = new ServiceCollection();
             services.AddAnalytics(writeKey, config);
 
             var provider = services.BuildServiceProvider();
-            var analyticsInstance = provider.GetRequiredService(typeof(IAnalyticsClient));
+            var analyticsInstance = provider.GetRequiredService(typeof(IRudderAnalyticsClient));
 
             Assert.IsNotNull(analyticsInstance);
 
-            var client = analyticsInstance as Client;
+            var client = analyticsInstance as RudderClient;
             Assert.AreEqual("writeKey", client.WriteKey);
             Assert.AreEqual(threadCount, client.Config.Threads);
         }

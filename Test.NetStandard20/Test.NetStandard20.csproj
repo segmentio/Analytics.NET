@@ -5,7 +5,7 @@
     <StartupObject></StartupObject>
     <ApplicationIcon />
     <OutputType>Library</OutputType>
-    <RootNamespace>Segment.Test</RootNamespace>
+    <RootNamespace>RudderStack.Test</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

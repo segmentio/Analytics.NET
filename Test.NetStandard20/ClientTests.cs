@@ -186,7 +186,6 @@ namespace RudderStack.Test
         [Test]
         public void ClientUsesFakeRequestHandlerWhenSendIsFalse()
         {
-            //desu was false
             var client = new RudderClient("writeKey", new RudderConfig(send: true));
 
             var flushHandler = GetPrivateFieldValue<AsyncIntervalFlushHandler>(client, "_flushHandler");
@@ -199,7 +198,6 @@ namespace RudderStack.Test
         [Test]
         public void ClientUsesBlockingRequestHandlerWhenSendIsTrue()
         {
-            //desu was true
             var client = new RudderClient("writeKey", new RudderConfig(send: false));
 
             var flushHandler = GetPrivateFieldValue<AsyncIntervalFlushHandler>(client, "_flushHandler");

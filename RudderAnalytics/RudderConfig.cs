@@ -25,8 +25,7 @@ namespace RudderStack
         internal int FlushAt { get; set; }
 
         internal bool Async { get; set; }
-        internal bool Gzip { get; set; }
-
+        
         internal TimeSpan Timeout { get; set; }
 
         internal TimeSpan? MaxRetryTime { get; set; }
@@ -47,9 +46,8 @@ namespace RudderStack
         /// <param name="flushAt">Number of items in a batch to upload</param>
         /// <param name="async">Sets whether the flushing to the server is synchronous or asynchronous</param>
         /// <param name="threads">Count of concurrent internal threads to post data from queue</param>
-        /// <param name="flushInterval">The frequency, in seconds, to send data to Segment</param>
-        /// <param name="gzip">Compress data w/ gzip before dispatch</param>
-        /// <param name="send">Send data to Segment</param>
+        /// <param name="flushInterval">The frequency, in seconds, to send data to RudderStack</param>
+        /// <param name="send">Send data to RudderStack</param>
         /// <param name="userAgent">Sets User Agent Header</param>
         /// <param name="maxRetryTime">Max Amount of time to retry request when server timeout occurs</param>
         public RudderConfig(
@@ -61,7 +59,6 @@ namespace RudderStack
             bool async = true,
             int threads = 1,
             double flushInterval = 10,
-            bool gzip = false,
             bool send = true,
             string userAgent = null,
             TimeSpan? maxRetryTime = null
@@ -74,7 +71,6 @@ namespace RudderStack
             this.FlushAt = flushAt;
             this.Async = async;
             this.FlushIntervalInMillis = (int)(flushInterval * 1000);
-            this.Gzip = gzip;
             this.Send = send;
             this.UserAgent = userAgent ?? GetDefaultUserAgent();
             this.Threads = threads;

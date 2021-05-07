@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <StartupObject />
     <OutputPath>bin/$(Configuration)/</OutputPath>
-    <RootNamespace>Segment.Test</RootNamespace>
+    <RootNamespace>RudderStack.Test</RootNamespace>
     <AssemblyName>Test.Net35</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

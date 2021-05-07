@@ -97,7 +97,7 @@ namespace RudderStack.Request
         internal BlockingRequestHandler(RudderClient client, TimeSpan timeout) : this(client, timeout, null, new Backo(max: 10000, jitter: 5000)) // Set maximum waiting limit to 10s and jitter to 5s
         {
         }
-        internal BlockingRequestHandler(Client client, TimeSpan timeout, Backo backo) : this(client, timeout, null, backo) 
+        internal BlockingRequestHandler(RudderClient client, TimeSpan timeout, Backo backo) : this(client, timeout, null, backo) 
         {
         }
 #if NET35
@@ -240,7 +240,7 @@ namespace RudderStack.Request
                             }
                             else
                             {
-                                Logger.Info($"Internal Segment Server error CurrentAttempt:{_backo.CurrentAttempt} Retrying to send request", new Dict
+                                Logger.Info($"Internal RudderStack Server error CurrentAttempt:{_backo.CurrentAttempt} Retrying to send request", new Dict
                                 {
                                     { "batch id", batch.MessageId },
                                     { "statusCode", statusCode },
@@ -324,7 +324,7 @@ namespace RudderStack.Request
                             }
                             else
                             {
-                                Logger.Info($"Internal Segment Server error CurrentAttempt:{_backo.CurrentAttempt} Retrying to send request", new Dict
+                                Logger.Info($"Internal RudderStack Server error CurrentAttempt:{_backo.CurrentAttempt} Retrying to send request", new Dict
                                 {
                                     { "batch id", batch.MessageId },
                                     { "statusCode", statusCode },

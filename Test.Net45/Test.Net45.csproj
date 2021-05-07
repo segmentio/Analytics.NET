@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <StartupObject />
     <OutputPath>bin/$(Configuration)/</OutputPath>
-    <RootNamespace>Segment.Test</RootNamespace>
+    <RootNamespace>RudderStack.Test</RootNamespace>
     <AssemblyName>Test.Net45</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

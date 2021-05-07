@@ -21,10 +21,10 @@ namespace RudderStack.Test
                 .Setup(x => x.MakeRequest(It.IsAny<Batch>()))
                 .Returns(async (Batch b) =>
                 {
-                    b.batch.ForEach(_ => Analytics.Client.Statistics.IncrementSucceeded());
+                    b.batch.ForEach(_ => RudderAnalytics.Client.Statistics.IncrementSucceeded());
                 });
 
-            Analytics.Dispose();
+            RudderAnalytics.Dispose();
             Logger.Handlers += LoggingHandler;
         }
 
@@ -38,28 +38,28 @@ namespace RudderStack.Test
         public void ProxyTestNet35()
         {
             // Set proxy address, like as "http://localhost:8888"
-            var client = new Client(Constants.WRITE_KEY, new Config().SetAsync(false).SetProxy(""), _mockRequestHandler.Object);
-            Analytics.Initialize(client);
+            var client = new RudderClient(Constants.WRITE_KEY, new RudderConfig().SetAsync(false).SetProxy(""), _mockRequestHandler.Object);
+            RudderAnalytics.Initialize(client);
 
-            Actions.Identify(Analytics.Client);
+            Actions.Identify(RudderAnalytics.Client);
 
-            Assert.AreEqual(1, Analytics.Client.Statistics.Submitted);
-            Assert.AreEqual(1, Analytics.Client.Statistics.Succeeded);
-            Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
+            Assert.AreEqual(1, RudderAnalytics.Client.Statistics.Submitted);
+            Assert.AreEqual(1, RudderAnalytics.Client.Statistics.Succeeded);
+            Assert.AreEqual(0, RudderAnalytics.Client.Statistics.Failed);
         }
 
         [Test()]
         public void GZipTestNet35()
         {
             // Set GZip/Deflate on request header
-            var client = new Client(Constants.WRITE_KEY, new Config().SetAsync(false).SetRequestCompression(true), _mockRequestHandler.Object);
-            Analytics.Initialize(client);
+            var client = new RudderClient(Constants.WRITE_KEY, new RudderConfig().SetAsync(false), _mockRequestHandler.Object);
+            RudderAnalytics.Initialize(client);
 
-            Actions.Identify(Analytics.Client);
+            Actions.Identify(RudderAnalytics.Client);
 
-            Assert.AreEqual(1, Analytics.Client.Statistics.Submitted);
-            Assert.AreEqual(1, Analytics.Client.Statistics.Succeeded);
-            Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
+            Assert.AreEqual(1, RudderAnalytics.Client.Statistics.Submitted);
+            Assert.AreEqual(1, RudderAnalytics.Client.Statistics.Succeeded);
+            Assert.AreEqual(0, RudderAnalytics.Client.Statistics.Failed);
         }
 
         static void LoggingHandler(Logger.Level level, string message, IDictionary<string, object> args)

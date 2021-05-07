@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Analytics\Analytics.csproj" />
+    <ProjectReference Include="..\RudderAnalytics\RudderAnalytics.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -17,9 +17,9 @@ namespace RudderStack.Test
 
             //FlushTests tests = new FlushTests();
             //tests.PerformanceTestNet45();
-            Analytics.Initialize("nAZ4rSBdQMoMJ6bswze53Jorbpjtne78");
-            Analytics.Client.Track("prateek", "Item Purchased");
-            Analytics.Client.Flush();
+            RudderAnalytics.Initialize("1sCR76JzHpQohjl33pi8qA5jQD2", new RudderConfig(dataPlaneUrl: "https://75652af01e6d.ngrok.io"));
+            RudderAnalytics.Client.Track("prateek", "Item Purchased");
+            RudderAnalytics.Client.Flush();
         }
 
         private static void Logger_Handlers(Logger.Level level, string message, IDictionary<string, object> args)

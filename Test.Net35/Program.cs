@@ -9,10 +9,10 @@ namespace RudderStack.Test
         {
             Logger.Handlers += Logger_Handlers;
 
-            Analytics.Initialize(RudderStack.Test.Constants.WRITE_KEY);
+            RudderAnalytics.Initialize(RudderStack.Test.Constants.WRITE_KEY);
 
-            Analytics.Client.Track("prateek", "Item Purchased (with .Net 3.5)");
-            Analytics.Client.Flush();
+            RudderAnalytics.Client.Track("prateek", "Item Purchased (with .Net 3.5)");
+            RudderAnalytics.Client.Flush();
         }
 
         private static void Logger_Handlers(Logger.Level level, string message, IDictionary<string, object> args)

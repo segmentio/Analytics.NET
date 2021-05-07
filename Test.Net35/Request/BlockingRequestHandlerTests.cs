@@ -14,7 +14,7 @@ namespace RudderStack.Test.Request
     {
         private Mock<IHttpClient> _mockHttpClient;
         private Mock<WebHeaderCollection> _mockHeaders;
-        private Client _client;
+        private RudderClient _client;
 
         private BlockingRequestHandler _handler;
 
@@ -28,7 +28,7 @@ namespace RudderStack.Test.Request
             _mockHttpClient.Setup(x => x.UploadData(It.IsAny<Uri>(), "POST", It.IsAny<byte[]>())).Returns(new byte[] { });
             _mockHttpClient.Setup(x => x.Headers).Returns(() => _mockHeaders.Object);
 
-            _client = new Client("foo");
+            _client = new RudderClient("foo");
             _handler = new BlockingRequestHandler(_client, new TimeSpan(0, 0, 10), _mockHttpClient.Object, new Backo(max: 500, jitter: 0));
         }
 
@@ -48,7 +48,7 @@ namespace RudderStack.Test.Request
         public void RequestIncludesGzipHeaderWhenCompressRequestIsTrue()
         {
             var batch = GetBatch();
-            _client.Config.SetGzip(true);
+            //_client.Config.SetGzip(true);
 
             _handler.MakeRequest(batch).GetAwaiter().GetResult();
             _mockHeaders.Verify(x => x.Set("Content-Encoding", "gzip"), Times.Once);

@@ -3,7 +3,7 @@
 [![CircleCI](https://circleci.com/gh/segmentio/Analytics.NET.svg?style=svg&circle-token=9d5be6bcbf6f5e8c6f74025a899d1a5e04bb54e0)](https://circleci.com/gh/segmentio/Analytics.NET)
 [![codecov](https://codecov.io/gh/segmentio/Analytics.NET/branch/master/graph/badge.svg)](https://codecov.io/gh/segmentio/Analytics.NET)
 
-Analytics.NET is a .NET / C# client for [Segment](https://segment.com).
+Analytics.NET is a .NET / C# / F# client for [Segment](https://segment.com).
 
 <div align="center">
   <img src="https://user-images.githubusercontent.com/16131737/53616452-690beb00-3b97-11e9-94a1-4ec219002644.png"/>

@@ -152,7 +152,7 @@ namespace Segment.Request
         public async Task MakeRequest(Batch batch)
         {
             Stopwatch watch = new Stopwatch();
-
+            _backo.Reset();
             try
             {
                 Uri uri = new Uri(_client.Config.Host + "/v1/import");
@@ -346,10 +346,6 @@ namespace Segment.Request
                 {
                     var message = $"Has Backoff reached max: {hasBackoReachedMax} with number of Attempts:{_backo.CurrentAttempt},\n Status Code: {statusCode}\n, response message: {responseStr}";
                     Fail(batch, new APIException(statusCode.ToString(), message), watch.ElapsedMilliseconds);
-                    if (_backo.HasReachedMax)
-                    {
-                        _backo.Reset();
-                    }
                 }
             }
             catch (System.Exception e)

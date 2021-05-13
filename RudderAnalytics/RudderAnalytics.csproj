@@ -5,7 +5,7 @@
     <RootNamespace>RudderStack</RootNamespace>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageId>RudderAnalytics</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Authors>RudderStack Team</Authors>
     <Company />
     <Product>RudderAnalytics.NET</Product>
@@ -16,6 +16,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/rudderlabs/rudder-sdk-.net</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <ReleaseVersion>1.0.1</ReleaseVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)'=='net35'">
@@ -85,15 +86,13 @@
 
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
-      <Version>2.0.0</Version>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.0.0">
     </PackageReference>
   </ItemGroup>
 
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
-      <Version>2.0.0</Version>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.0.0">
     </PackageReference>
   </ItemGroup>
 

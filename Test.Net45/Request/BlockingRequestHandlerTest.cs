@@ -19,7 +19,7 @@ namespace RudderStack.Test.Request
     class BlockingRequestHandlerTest
     {
         private Mock<HttpMessageHandler> _mockHttpMessageHandler;
-        private Client _client;
+        private RudderClient _client;
 
         private BlockingRequestHandler _handler;
         Func<HttpResponseMessage> _httpBehavior;
@@ -39,7 +39,7 @@ namespace RudderStack.Test.Request
             .ReturnsAsync(() => _httpBehavior())
             .Verifiable();
 
-            _client = new Client("foo");
+            _client = new RudderClient("foo");
             _handler = new BlockingRequestHandler(_client, new TimeSpan(0, 0, 10), new HttpClient(_mockHttpMessageHandler.Object), new Backo(max: 500, jitter: 0));
         }
 

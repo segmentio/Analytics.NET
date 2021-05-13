@@ -1,40 +1,43 @@
-Reference Apps
-================
+# What is RudderStack?
 
-These reference apps are provided as an example of using the Analytics.NET library. The folder is structure in the following way:
+[RudderStack](https://rudderstack.com/) is a **customer data pipeline** tool for collecting, routing and processing data from your websites, apps, cloud tools, and data warehouse.
 
-### `Sloth.Basic`
-A sample app which imports the Segment SDK and exhibits the full functionality exposed without major configuration changes.
+More information on RudderStack can be found [here](https://github.com/rudderlabs/rudder-server).
 
-### `Sloth.Enterprise`
-A sample app which imports the Segment SDK and exhibits how to configure Segment SDK to operate at high throughput, operate under proxy service, leverage batching and data compression.
+Released under the MIT License.
 
-This app demonstrates common configuration changes such as custom queue size, API hostname, and compression.
+### Latest Version
 
-### `Sloth.Common`
-A library of common functionality shared by both reference apps. This is not meant to function as a standalone app.
+`1.0.0`
 
-Usage
-=====
+## Getting Started with .NET SDK
 
-Create a new Source (or use an existing one) from within the [Segment App](https://app.segment.com/). Take note of your [write key](https://segment.com/docs/connections/find-writekey/).
-
-First, set an environment variable `writeKey` to your source's write key:
-
+Install `RudderAnalytics` using `NuGet`
 ```
-export writeKey=YOURWRITEKEY
+Install-Package RudderAnalytics -Version <version>
 ```
 
-Within either `Sloth.Basic` or `Sloth.Enterprise`, the easiest way to run the apps is to use Docker:
+## Initialize the ```Client```
 
 ```
-make docker_run
+using RudderStack;
+
+RudderAnalytics.Initialize(
+    WRITE_KEY,
+    new RudderConfig(dataPlaneUrl: DATA_PLANE_URL)
+);
 ```
 
-Alternatively, you can run the apps directly on your machine, using [.NET Core 2.1](https://dotnet.microsoft.com/download/dotnet-core/2.1):
+## Send Events
 
 ```
-make run
+RudderAnalytics.Client.Track(
+    "userId",
+    "CTA Clicked",
+    new Dictionary<string, object> { {"plan", "premium"}, }
+);
 ```
 
-**Note:** out of the box, `Sloth.Enterprise` is configured to send data to `https://api.segment.dev`, which doesn't exist. This is purely done as a demonstration of the host configuration functionality. If you want to see the library working, you can point it to a working hostname or remove that configuration parameter.
+## Contact Us
+
+If you come across any issues while configuring or using this integration, please feel free to start a conversation on our [Slack](https://resources.rudderstack.com/join-rudderstack-slack) channel. We will be happy to help you.

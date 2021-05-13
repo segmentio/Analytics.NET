@@ -5,17 +5,16 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{A7B43E75-BA62-4543-A467-27C6D9B28EB8}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <StartupObject />
     <OutputPath>bin/$(Configuration)/</OutputPath>
-    <RootNamespace>Segment.Test</RootNamespace>
+    <RootNamespace>RudderStack.Test</RootNamespace>
     <AssemblyName>Test.Net45</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -83,9 +82,9 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Analytics\Analytics.csproj">
-      <Project>{a386cf02-d902-4b22-90a8-e828093e3aa4}</Project>
-      <Name>Analytics</Name>
+    <ProjectReference Include="..\RudderAnalytics\RudderAnalytics.csproj">
+      <Project>{A386CF02-D902-4B22-90A8-E828093E3AA4}</Project>
+      <Name>RudderAnalytics</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)/Microsoft.CSharp.targets" />

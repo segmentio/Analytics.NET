@@ -14,7 +14,7 @@ namespace RudderStack.Test
 		[SetUp]
 		public void Init()
 		{
-			Analytics.Dispose();
+			RudderAnalytics.Dispose();
 			Logger.Handlers += LoggingHandler;
 		}
 
@@ -28,15 +28,15 @@ namespace RudderStack.Test
 		public void HeaderTestNet35()
 		{
 			// Arrange: Init SDK:
-			Analytics.Initialize(Constants.WRITE_KEY, new Config().SetAsync(false));
+			RudderAnalytics.Initialize(Constants.WRITE_KEY, new RudderConfig().SetAsync(false));
 
 			// Act: Perform some tracking events:
 			for (int i = 0; i < 10; i += 1)
 			{
-				Analytics.Client.Track("mockUserId", "mockEvent", new Properties(), new Options());
+				RudderAnalytics.Client.Track("mockUserId", "mockEvent", new Properties(), new RudderOptions());
 			}
 
-			var flushHandler = GetPrivateFieldByReflection(Analytics.Client, "_flushHandler");
+			var flushHandler = GetPrivateFieldByReflection(RudderAnalytics.Client, "_flushHandler");
 			var requestHandler = GetPrivateFieldByReflection(flushHandler, "_requestHandler");
 			var httpClient = GetPrivateFieldByReflection(requestHandler, "_httpClient") as WebClient;
 			var authorizationHeader = httpClient.Headers.Get("Authorization");

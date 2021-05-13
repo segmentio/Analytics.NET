@@ -18,12 +18,12 @@ namespace Analytics.Extensions.Microsoft.DependencyInjection.Test
             services.AddAnalytics("writeKey");
             var sp = services.BuildServiceProvider();
 
-            IAnalyticsClient actual;
+            IRudderAnalyticsClient actual;
 
             //act
             using (var scope = sp.CreateScope())
             {
-                actual = scope.ServiceProvider.GetService<IAnalyticsClient>();
+                actual = scope.ServiceProvider.GetService<IRudderAnalyticsClient>();
             }
 
             Assert.IsNotNull(actual);

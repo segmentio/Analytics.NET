@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>Segment</RootNamespace>
-    <Version>1.0.4</Version>
+    <RootNamespace>RudderStack</RootNamespace>
+    <Version>1.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,4 +11,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[2.0.0,)" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\RudderAnalytics\RudderAnalytics.csproj" />
+  </ItemGroup>
 </Project>

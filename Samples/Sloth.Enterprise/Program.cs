@@ -20,13 +20,13 @@ namespace Sloth.Enterprise
 
         private static void OnExecute(string writeKey)
         {
-            var config = new Config()
+            var config = new RudderConfig()
                 .SetMaxQueueSize(100000)
                 .SetHost("https://hosted.rudderlabs.com")
-                .SetMaxBatchSize(40)
-                .SetRequestCompression(true);
+                .SetMaxBatchSize(40);
+                //.SetRequestCompression(true);
 
-            Analytics.Initialize(writeKey, config);
+            RudderAnalytics.Initialize(writeKey, config);
 
             Logger.Handlers += Utils.LoggerOnHandlers;
 
@@ -36,11 +36,11 @@ namespace Sloth.Enterprise
             }
 
             // sending all pendant messages
-            Analytics.Client.Flush();
+            RudderAnalytics.Client.Flush();
 
             Utils.PrintSummary();
 
-            Analytics.Client.Dispose();
+            RudderAnalytics.Client.Dispose();
         }
     }
 }

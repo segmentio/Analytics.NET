@@ -22,85 +22,85 @@ namespace RudderStack.Test
                 .Setup(x => x.MakeRequest(It.IsAny<Batch>()))
                 .Returns((Batch b) =>
                 {
-                    b.batch.ForEach(_ => Analytics.Client.Statistics.IncrementSucceeded());
+                    b.batch.ForEach(_ => RudderAnalytics.Client.Statistics.IncrementSucceeded());
                     return Task.FromResult(true);
                 });
 
-            Analytics.Dispose();
+            RudderAnalytics.Dispose();
             Logger.Handlers += LoggingHandler;
         }
 
         [TearDown]
         public void CleanUp()
         {
-            Analytics.Dispose();
+            RudderAnalytics.Dispose();
             Logger.Handlers -= LoggingHandler;
         }
 
         [Test()]
         public void SynchronousFlushTestNet45()
         {
-            var client = new Client(Constants.WRITE_KEY, new Config().SetAsync(false), _mockRequestHandler.Object);
-            Analytics.Initialize(client);
-            Analytics.Client.Succeeded += Client_Succeeded;
-            Analytics.Client.Failed += Client_Failed;
+            var client = new RudderClient(Constants.WRITE_KEY, new RudderConfig().SetAsync(false), _mockRequestHandler.Object);
+            RudderAnalytics.Initialize(client);
+            RudderAnalytics.Client.Succeeded += Client_Succeeded;
+            RudderAnalytics.Client.Failed += Client_Failed;
 
             int trials = 10;
 
-            RunTests(Analytics.Client, trials);
+            RunTests(RudderAnalytics.Client, trials);
 
-            Assert.AreEqual(trials, Analytics.Client.Statistics.Submitted);
-            Assert.AreEqual(trials, Analytics.Client.Statistics.Succeeded);
-            Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
+            Assert.AreEqual(trials, RudderAnalytics.Client.Statistics.Submitted);
+            Assert.AreEqual(trials, RudderAnalytics.Client.Statistics.Succeeded);
+            Assert.AreEqual(0, RudderAnalytics.Client.Statistics.Failed);
         }
 
         [Test()]
         public void AsynchronousFlushTestNet45()
         {
-            var client = new Client(Constants.WRITE_KEY, new Config().SetAsync(true), _mockRequestHandler.Object);
-            Analytics.Initialize(client);
+            var client = new RudderClient(Constants.WRITE_KEY, new RudderConfig().SetAsync(true), _mockRequestHandler.Object);
+            RudderAnalytics.Initialize(client);
 
-            Analytics.Client.Succeeded += Client_Succeeded;
-            Analytics.Client.Failed += Client_Failed;
+            RudderAnalytics.Client.Succeeded += Client_Succeeded;
+            RudderAnalytics.Client.Failed += Client_Failed;
 
             int trials = 10;
 
-            RunTests(Analytics.Client, trials);
+            RunTests(RudderAnalytics.Client, trials);
 
-            Analytics.Client.Flush();
+            RudderAnalytics.Client.Flush();
 
-            Assert.AreEqual(trials, Analytics.Client.Statistics.Submitted);
-            Assert.AreEqual(trials, Analytics.Client.Statistics.Succeeded);
-            Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
+            Assert.AreEqual(trials, RudderAnalytics.Client.Statistics.Submitted);
+            Assert.AreEqual(trials, RudderAnalytics.Client.Statistics.Succeeded);
+            Assert.AreEqual(0, RudderAnalytics.Client.Statistics.Failed);
         }
 
         [Test()]
         public void PerformanceTestNet45()
         {
-            var client = new Client(Constants.WRITE_KEY, new Config(), _mockRequestHandler.Object);
-            Analytics.Initialize(client);
+            var client = new RudderClient(Constants.WRITE_KEY, new RudderConfig(), _mockRequestHandler.Object);
+            RudderAnalytics.Initialize(client);
 
-            Analytics.Client.Succeeded += Client_Succeeded;
-            Analytics.Client.Failed += Client_Failed;
+            RudderAnalytics.Client.Succeeded += Client_Succeeded;
+            RudderAnalytics.Client.Failed += Client_Failed;
 
             int trials = 100;
 
             DateTime start = DateTime.Now;
 
-            RunTests(Analytics.Client, trials);
+            RunTests(RudderAnalytics.Client, trials);
 
-            Analytics.Client.Flush();
+            RudderAnalytics.Client.Flush();
 
             TimeSpan duration = DateTime.Now.Subtract(start);
 
-            Assert.AreEqual(trials, Analytics.Client.Statistics.Submitted);
-            Assert.AreEqual(trials, Analytics.Client.Statistics.Succeeded);
-            Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
+            Assert.AreEqual(trials, RudderAnalytics.Client.Statistics.Submitted);
+            Assert.AreEqual(trials, RudderAnalytics.Client.Statistics.Succeeded);
+            Assert.AreEqual(0, RudderAnalytics.Client.Statistics.Failed);
 
             Assert.IsTrue(duration.CompareTo(TimeSpan.FromSeconds(20)) < 0);
         }
 
-        private void RunTests(Client client, int trials)
+        private void RunTests(RudderClient client, int trials)
         {
             for (int i = 0; i < trials; i += 1)
             {

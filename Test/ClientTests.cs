@@ -10,12 +10,12 @@ namespace RudderStack.Test
     [TestFixture()]
     public class ClientTests
     {
-        Client client;
+        RudderClient client;
 
         [SetUp]
         public void Init()
         {
-            client = new Client("foo");
+            client = new RudderClient("foo");
         }
 
         [Test()]

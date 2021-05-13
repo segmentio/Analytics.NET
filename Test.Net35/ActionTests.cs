@@ -21,13 +21,13 @@ namespace RudderStack.Test
                 .Setup(x => x.MakeRequest(It.IsAny<Batch>()))
                 .Returns(async (Batch b) =>
                 {
-                    b.batch.ForEach(_ => Analytics.Client.Statistics.IncrementSucceeded());
+                    b.batch.ForEach(_ => RudderAnalytics.Client.Statistics.IncrementSucceeded());
                 });
 
-            Analytics.Dispose();
+            RudderAnalytics.Dispose();
             Logger.Handlers += LoggingHandler;
-            var client = new Client(Constants.WRITE_KEY, new Config().SetAsync(false), _mockRequestHandler.Object);
-            Analytics.Initialize(client);
+            var client = new RudderClient(Constants.WRITE_KEY, new RudderConfig().SetAsync(false), _mockRequestHandler.Object);
+            RudderAnalytics.Initialize(client);
         }
 
         [TearDown]
@@ -39,7 +39,7 @@ namespace RudderStack.Test
         [Test ()]
         public void IdentifyTestNet35()
         {
-            Actions.Identify(Analytics.Client);
+            Actions.Identify(RudderAnalytics.Client);
             FlushAndCheck(1);
         }
 
@@ -49,7 +49,7 @@ namespace RudderStack.Test
             var traits = new Model.Traits() {
                 { "email", "friends@rudder.com" }
             };
-            var options = new Model.Options()
+            var options = new Model.RudderOptions()
                 .SetIntegration("Vero", new Model.Dict() {
                     {
                         "tags", new Model.Dict() {
@@ -60,51 +60,51 @@ namespace RudderStack.Test
                     }
                 });
 
-            Actions.Identify(Analytics.Client, traits, options);
+            Actions.Identify(RudderAnalytics.Client, traits, options);
             FlushAndCheck(1);
         }
 
         [Test()]
         public void TrackTestNet35()
         {
-            Actions.Track(Analytics.Client);
+            Actions.Track(RudderAnalytics.Client);
             FlushAndCheck(1);
         }
 
         [Test()]
         public void AliasTestNet35()
         {
-            Actions.Alias(Analytics.Client);
+            Actions.Alias(RudderAnalytics.Client);
             FlushAndCheck(1);
         }
 
         [Test()]
         public void GroupTestNet35()
         {
-            Actions.Group(Analytics.Client);
+            Actions.Group(RudderAnalytics.Client);
             FlushAndCheck(1);
         }
 
         [Test()]
         public void PageTestNet35()
         {
-            Actions.Page(Analytics.Client);
+            Actions.Page(RudderAnalytics.Client);
             FlushAndCheck(1);
         }
 
         [Test()]
         public void ScreenTestNet35()
         {
-            Actions.Screen(Analytics.Client);
+            Actions.Screen(RudderAnalytics.Client);
             FlushAndCheck(1);
         }
 
         private void FlushAndCheck(int messages)
         {
-            Analytics.Client.Flush();
-            Assert.AreEqual(messages, Analytics.Client.Statistics.Submitted);
-            Assert.AreEqual(messages, Analytics.Client.Statistics.Succeeded);
-            Assert.AreEqual(0, Analytics.Client.Statistics.Failed);
+            RudderAnalytics.Client.Flush();
+            Assert.AreEqual(messages, RudderAnalytics.Client.Statistics.Submitted);
+            Assert.AreEqual(messages, RudderAnalytics.Client.Statistics.Succeeded);
+            Assert.AreEqual(0, RudderAnalytics.Client.Statistics.Failed);
         }
 
         static void LoggingHandler(Logger.Level level, string message, IDictionary<string, object> args)

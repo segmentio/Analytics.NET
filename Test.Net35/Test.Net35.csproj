@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <StartupObject />
     <OutputPath>bin/$(Configuration)/</OutputPath>
-    <RootNamespace>Segment.Test</RootNamespace>
+    <RootNamespace>RudderStack.Test</RootNamespace>
     <AssemblyName>Test.Net35</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -67,6 +67,7 @@
     <Compile Include="RequestHandlerTest.cs" />
     <Compile Include="Request\BlockingRequestHandlerTests.cs" />
     <Compile Include="Stats\StatisticsTests.cs" />
+    <Compile Include="WebServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -75,9 +76,9 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Analytics\Analytics.csproj">
-      <Project>{a386cf02-d902-4b22-90a8-e828093e3aa4}</Project>
-      <Name>Analytics</Name>
+    <ProjectReference Include="..\RudderAnalytics\RudderAnalytics.csproj">
+      <Project>{A386CF02-D902-4B22-90A8-E828093E3AA4}</Project>
+      <Name>RudderAnalytics</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)/Microsoft.CSharp.targets" />

@@ -61,6 +61,17 @@ jobs:
       - checkout
       - run: dotnet restore Test.NetStandard20/Test.NetStandard20.csproj
       - run: dotnet test Test.NetStandard20/Test.NetStandard20.csproj
+  test_50:
+    working_directory: /test50
+    docker:
+      - image: microsoft/dotnet:5.0-sdk
+    environment:
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_CLI_TELEMETRY_OUTPUT: 1
+    steps:
+      - checkout
+      - run: dotnet restore Test.Net50/Test.Net50.csproj
+      - run: dotnet test Test.Net50/Test.Net50.csproj
   test_35:
     working_directory: /test35
     docker:
@@ -110,6 +121,7 @@ workflows:
       - test_20
       - test_35
       - test_45
+      - test_50
       - test_e2e
       - pack:
           requires:

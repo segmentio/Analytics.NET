@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.3;netstandard2.0;net45;net35;net461</TargetFrameworks>
+    <TargetFrameworks>netstandard1.3;netstandard2.0;net45;net35;net461;net5.0</TargetFrameworks>
     <RootNamespace>Segment</RootNamespace>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageId>Analytics</PackageId>
@@ -65,6 +65,9 @@
       <_Parameter1>Test.NetStandard20</_Parameter1>
     </AssemblyAttribute>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Test.Net50</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
       <_Parameter1>Test.UniversalApp</_Parameter1>
     </AssemblyAttribute>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
@@ -91,6 +94,12 @@
     </PackageReference>
   </ItemGroup>
 
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
+      <Version>5.0.0</Version>
+    </PackageReference>
+  </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions">

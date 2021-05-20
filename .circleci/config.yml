@@ -15,15 +15,15 @@ jobs:
   build:
     working_directory: /temp
     docker:
-      - image: microsoft/dotnet:2.1-sdk
+      - image:  mcr.microsoft.com/dotnet/sdk:5.0-focal
     environment:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       DOTNET_CLI_TELEMETRY_OUTPUT: 1
     steps:
       # Checkout source code and try to build & pack
       - checkout
-      - run: msbuild Analytics/Analytics.csproj /t:restore
-      - run: msbuild Analytics/Analytics.csproj /p:Configuration=Release  
+      - run: dotnet restore Analytics/Analytics.csproj
+      - run: dotnet build Analytics/Analytics.csproj --configuration Release
   pack:
     working_directory: /pack
     executor:  
@@ -60,7 +60,7 @@ jobs:
   test_50:
     working_directory: /test50
     docker:
-      - image: microsoft/dotnet:2.1-sdk
+      - image:  mcr.microsoft.com/dotnet/sdk:5.0-focal
     environment:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       DOTNET_CLI_TELEMETRY_OUTPUT: 1

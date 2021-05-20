@@ -15,15 +15,11 @@ jobs:
   build:
     working_directory: /temp
     docker:
-      - image: microsoft/dotnet:2.1-sdk 
+      - image: microsoft/dotnet:sdk:5.0 
     environment:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
       DOTNET_CLI_TELEMETRY_OUTPUT: 1
     steps:
-      # Update mono to latest version (5.8)
-      - run: echo "deb http://download.mono-project.com/repo/ubuntu trusty main" | tee /etc/apt/sources.list.d/mono-official.list
-      - run: apt-get update
-      - run: apt-get install -y mono-devel
       # Checkout source code and try to build & pack
       - checkout
       - run: msbuild Analytics/Analytics.csproj /t:restore

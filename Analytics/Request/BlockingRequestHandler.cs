@@ -285,9 +285,29 @@ namespace Segment.Request
                         });
                         retry = true;
                     }
+                    catch (OperationCanceledException e)
+                    {
+                        Logger.Info("HTTP Post failed with exception of type OperationCanceledException", new Dict
+                        {
+                            { "batch id", batch.MessageId },
+                            { "reason", e.Message },
+                            { "duration (ms)", watch.ElapsedMilliseconds }
+                        });
+                        retry = true;
+                    }
                     catch (HttpRequestException e)
                     {
                         Logger.Info("HTTP Post failed with exception of type HttpRequestException", new Dict
+                        {
+                            { "batch id", batch.MessageId },
+                            { "reason", e.Message },
+                            { "duration (ms)", watch.ElapsedMilliseconds }
+                        });
+                        retry = true;
+                    }
+                    catch (System.Exception e) 
+                    {
+                        Logger.Info("HTTP Post failed with exception of type Exception", new Dict
                         {
                             { "batch id", batch.MessageId },
                             { "reason", e.Message },

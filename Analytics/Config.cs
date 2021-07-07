@@ -101,6 +101,16 @@ namespace Segment
         }
 
         /// <summary>
+        /// Gets the API host server address. Default server is "https://api.segment.io"
+        /// </summary>
+        /// <param name="host">Host server url</param>
+        /// <returns></returns>
+        public string GetHost()
+        {
+            return Host;
+        }
+
+        /// <summary>
         /// Set the proxy server Uri
         /// </summary>
         /// <param name="proxy">Proxy server Uri</param>
@@ -109,6 +119,15 @@ namespace Segment
         {
             this.Proxy = proxy;
             return this;
+        }
+
+        /// <summary>
+        /// Get the proxy server Uri
+        /// </summary>
+        /// <returns></returns>
+        public string GetProxy()
+        {
+            return Proxy;
         }
 
         /// <summary>
@@ -123,6 +142,15 @@ namespace Segment
         }
 
         /// <summary>
+        /// Gets the maximum amount of timeout on the HTTP request flushes to the server.
+        /// </summary>
+        /// <returns></returns>
+        public TimeSpan GetTimeout()
+        {
+            return Timeout;
+        }
+
+        /// <summary>
         /// Sets the maximum amount of retry time for request to flush to the server when Timeout or error occurs.
         /// </summary>
         /// <param name="timeout"></param>
@@ -134,6 +162,15 @@ namespace Segment
         }
 
         /// <summary>
+        /// Gets the maximum amount of retry time for request to flush to the server when Timeout or error occurs.
+        /// </summary>
+        /// <returns></returns>
+        public TimeSpan? GetMaxRetryTime()
+        {
+            return MaxRetryTime;
+        }
+
+        /// <summary>
         /// Sets the maximum amount of items that can be in the queue before no more are accepted.
         /// </summary>
         /// <param name="maxQueueSize"></param>
@@ -142,6 +179,15 @@ namespace Segment
         {
             this.MaxQueueSize = maxQueueSize;
             return this;
+        }
+
+        /// <summary>
+        /// Gets the maximum amount of items that can be in the queue before no more are accepted.
+        /// </summary>
+        /// <returns></returns>
+        public int GetMaxQueueSize()
+        {
+            return MaxQueueSize;
         }
 
         /// <summary>
@@ -167,6 +213,15 @@ namespace Segment
         }
 
         /// <summary>
+        /// Gets the maximum amount of messages to send per batch
+        /// </summary>
+        /// <returns></returns>
+        public int GetFlushAt()
+        {
+            return FlushAt;
+        }
+
+        /// <summary>
         /// Count of concurrent internal threads to post data from queue
         /// </summary>
         /// <param name="threads"></param>
@@ -175,6 +230,15 @@ namespace Segment
         {
             Threads = threads;
             return this;
+        }
+
+        /// <summary>
+        /// Gets Count of concurrent internal threads to post data from queue
+        /// </summary>
+        /// <returns></returns>
+        public int GetThreads()
+        {
+            return Threads;
         }
 
         /// <summary>
@@ -193,6 +257,15 @@ namespace Segment
         {
             this.Async = async;
             return this;
+        }
+
+        /// <summary>
+        /// Gets whether the flushing to the server is synchronous or asynchronous.
+        /// </summary>
+        /// <returns></returns>
+        public bool GetAsync()
+        {
+            return Async;
         }
 
         /// <summary>
@@ -221,14 +294,29 @@ namespace Segment
             return this;
         }
 
+        /// <summary>
+        /// Gets if the API request header uses GZip option.
+        /// If useGZip is set, it compresses request content with GZip algorithm
+        /// </summary>
+        /// <returns></returns>
+        public bool GetGzip()
+        {
+            return Gzip;
+        }
+
         public Config SetUserAgent(string userAgent)
         {
             this.UserAgent = userAgent;
             return this;
         }
 
+        public string GetUserAgent()
+        {
+            return UserAgent;
+        }
+
         /// <summary>
-        /// Don’t send data to Segment
+        /// Send data to Segment
         /// </summary>
         /// <param name="send"></param>
         /// <returns></returns>
@@ -236,6 +324,15 @@ namespace Segment
         {
             this.Send = send;
             return this;
+        }
+
+        /// <summary>
+        /// Gets if it Sends data to Segment
+        /// </summary>
+        /// <returns></returns>
+        public bool GetSend()
+        {
+            return Send;
         }
 
         /// <summary>
@@ -247,6 +344,15 @@ namespace Segment
         {
             this.FlushIntervalInMillis = (int)(interval * 1000);
             return this;
+        }
+
+        /// <summary>
+        /// Get the interval in seconds at which the client should flush events. 
+        /// </summary>
+        /// <returns></returns>
+        public int GetFlushInterval()
+        {
+            return Convert.ToInt32(FlushIntervalInMillis / 1000);
         }
     }
 }

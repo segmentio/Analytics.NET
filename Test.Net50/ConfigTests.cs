@@ -1,10 +1,15 @@
 using NUnit.Framework;
+using Segment;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Segment.Test
+namespace Test.Net50
 {
     [TestFixture]
-    class ConfigTests
+    public class ConfigTests
     {
         Config _config;
 
@@ -27,7 +32,7 @@ namespace Segment.Test
         public void SetFlushIntervalUpdateTheConfigProperty()
         {
             _config.SetFlushInterval(2);
-            Assert.AreEqual(2000,_config.FlushIntervalInMillis);
+            Assert.AreEqual(2000, _config.FlushIntervalInMillis);
         }
 
         [Test]
@@ -58,7 +63,7 @@ namespace Segment.Test
             Assert.AreEqual("UserAgent", _config.UserAgent);
         }
 
-        [Test]
+                [Test]
         public void GetGzipProperty()
         {
             _config.SetGzip(true);

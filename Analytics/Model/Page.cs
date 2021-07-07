@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,13 +9,13 @@ namespace Segment.Model
     public class Page : BaseAction
     {
         [JsonProperty(PropertyName = "name")]
-        private string Name { get; set; }
+        public string Name { get; set; }
 
         [JsonProperty(PropertyName = "category")]
-        private string Category { get; set; }
+        public string Category { get; set; }
 
         [JsonProperty(PropertyName = "properties")]
-        private IDictionary<string, object> Properties { get; set; }
+        public IDictionary<string, object> Properties { get; set; }
 
         internal Page(string userId, 
                       string name,

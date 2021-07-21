@@ -1,5 +1,6 @@
 3.8.0 / 2021-07-14
 ==================
+* [Improvement](https://github.com/segmentio/Analytics.NET/pull/181): Added catch on retry send to control other exception types
 * [Improvement](https://github.com/segmentio/Analytics.NET/pull/180): Added get functionality to properties of Config
 * [Feature](https://github.com/segmentio/Analytics.NET/pull/178): Added .NET 5.0 Compatibility with corresponding CircleCI configuration and tests
 * [Improvement](https://github.com/segmentio/Analytics.NET/pull/175): Changed field accesibility to public for concrete implementations of base action

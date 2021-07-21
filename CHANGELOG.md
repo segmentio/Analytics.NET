@@ -1,3 +1,14 @@
+3.8.0 / 2021-07-14
+==================
+* [Improvement](https://github.com/segmentio/Analytics.NET/pull/181): Added catch on retry send to control other exception types
+* [Improvement](https://github.com/segmentio/Analytics.NET/pull/180): Added get functionality to properties of Config
+* [Feature](https://github.com/segmentio/Analytics.NET/pull/178): Added .NET 5.0 Compatibility with corresponding CircleCI configuration and tests
+* [Improvement](https://github.com/segmentio/Analytics.NET/pull/175): Changed field accesibility to public for concrete implementations of base action
+* [Improvement](https://github.com/segmentio/Analytics.NET/pull/172): New circle ci configuration created
+* [Fix](https://github.com/segmentio/Analytics.NET/pull/168): Changed how backo time is reset so when new action is sent is correctly reset
+* [Feature](https://github.com/segmentio/Analytics.NET/pull/164): Added logging  and configuration for Max Retry Time around retries
+
+
 3.7.1 / 2021-04-16
 ==================
 * [Improvement](https://github.com/segmentio/Analytics.NET/pull/163): Better flexibility and logging around retries

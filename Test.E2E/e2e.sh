@@ -10,7 +10,7 @@ else
   # Hide system environment variable values
   echo "./tester -path='./analytics.sh'"
   { ./tester -path='./analytics.sh'; } 2> /dev/null
-
+  echo "Passed ./tester"
   # Run code coverage
   bash "-c" "bash <(curl -s https://codecov.io/bash)"
 

@@ -9,6 +9,7 @@ else
 
   # Hide system environment variable values
   echo "./tester -path='./analytics.sh'"
+  echo "Testing"
   { ./tester -path='./analytics.sh'; } 2> /dev/null
   echo "Passed ./tester"
   # Run code coverage

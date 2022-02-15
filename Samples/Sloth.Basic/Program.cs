@@ -23,6 +23,8 @@ namespace Sloth.Basic
             //RudderAnalytics.Initialize(writeKey);
 
             RudderAnalytics.Initialize(writeKey, new RudderConfig(dataPlaneUrl: dataPlaneUrl));
+            
+            Logger.Handlers += Utils.LoggerOnHandlers;
 
             for (var i = 0; i < UserJourneys; i++)
             {

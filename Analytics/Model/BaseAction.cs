@@ -37,7 +37,7 @@ namespace Segment.Model
             options = options ?? new Options ();
 
             this.Type = type;
-            this.MessageId = Guid.NewGuid ().ToString();
+            this.MessageId = options.MessageId;
             if (options.Timestamp.HasValue)
                 this.Timestamp = options.Timestamp.Value.ToString("o");
             else

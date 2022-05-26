@@ -10,6 +10,7 @@ namespace Segment.Model
         public Dict Integrations { get; private set; }
         public DateTime? Timestamp { get; private set; }
         public Context Context { get; private set; }
+        public string MessageId { get; private set; }
 
         /// <summary>
         /// Options object that allows the specification of a timestamp, 
@@ -19,6 +20,7 @@ namespace Segment.Model
         {
             this.Integrations = new Dict ();
             this.Context = new Context ();
+            this.MessageId = Guid.NewGuid().ToString();
         }
 
         /// <summary>
@@ -90,6 +92,39 @@ namespace Segment.Model
         public Options SetIntegration (string integration, Dict value)
         {
             this.Integrations.Add (integration, value);
+            return this;
+        }
+
+        /// <summary>
+        /// The Message ID is a unique identifier for each message. If not provided, one will be generated
+        /// for you. This ID is typically used for deduping - messages with the same IDs as previous events
+        /// may be dropped. See Common Fields: https://segment.com/docs/spec/common/
+        /// </summary> 
+        /// <param name="messageId">The Message Id to use.</param>
+        public Options SetMessageId(Guid messageId)
+        {
+            if (messageId == Guid.Empty)
+            {
+                throw new ArgumentOutOfRangeException(nameof(messageId), "Cannot be empty Guid");
+            }
+            this.MessageId = messageId.ToString();
+            return this;
+        }
+
+
+        /// <summary>
+        /// The Message ID is a unique identifier for each message. If not provided, one will be generated
+        /// for you. This ID is typically used for deduping - messages with the same IDs as previous events
+        /// may be dropped. See Common Fields: https://segment.com/docs/spec/common/
+        /// </summary> 
+        /// <param name="messageId">The Message Id to use.</param>
+        public Options SetMessageId(string messageId)
+        {
+            if (string.IsNullOrEmpty(messageId))
+            {
+                throw new ArgumentNullException(nameof(messageId), "Cannot be null or empty");
+            }
+            this.MessageId = messageId;
             return this;
         }
 

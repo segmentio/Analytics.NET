@@ -1,3 +1,12 @@
+3.8.1 / 2022-07-07
+==================
+* [Improvement](https://github.com/segmentio/Analytics.NET/pull/193): Bump Newtonsoft.Json from 12.0.3 to 13.0.1 in /Analytics 
+* [Improvement](https://github.com/segmentio/Analytics.NET/pull/192): Bump Newtonsoft.Json from 12.0.3 to 13.0.1 in /Test.E2E
+* [Improvement](https://github.com/segmentio/Analytics.NET/pull/187): Fix e2e test failing 
+* [Improvement](https://github.com/segmentio/Analytics.NET/pull/186): Changes made to e2e testing project so as to compile correctly in CircleCI 
+* [Improvement](https://github.com/segmentio/Analytics.NET/pull/184): Changed circle Ci config.yml 
+
+
 3.8.0 / 2021-07-14
 ==================
 * [Improvement](https://github.com/segmentio/Analytics.NET/pull/181): Added catch on retry send to control other exception types

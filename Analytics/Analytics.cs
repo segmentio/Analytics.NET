@@ -44,7 +44,7 @@ namespace Segment
             }
         }
 
-        internal static void Initialize(Client client)
+        public static void Initialize(Client client)
         {
             lock (padlock)
             {

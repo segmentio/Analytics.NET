@@ -44,7 +44,11 @@ namespace Segment
             }
         }
 
-        internal static void Initialize(Client client)
+        /// <summary>
+        /// Initialized the default Segment.io client with your Custom Client.
+        /// </summary>
+        /// <param name="client"></param>
+        public static void Initialize(Client client)
         {
             lock (padlock)
             {

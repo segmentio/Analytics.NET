@@ -1,3 +1,6 @@
+3.8.2 / 2022-08-11
+* [Feature](https://github.com/segmentio/Analytics.NET/pull/199): Allow a mocked Client to be used for the Analytics singleton
+
 3.8.1 / 2022-07-07
 ==================
 * [Improvement](https://github.com/segmentio/Analytics.NET/pull/193): Bump Newtonsoft.Json from 12.0.3 to 13.0.1 in /Analytics 

@@ -44,7 +44,11 @@ namespace RudderStack
             }
         }
 
-        internal static void Initialize(RudderClient client)
+        /// <summary>
+        /// Initialized the default RudderStack client with your Custom Client.
+        /// </summary>
+        /// <param name="client"></param>
+        public static void Initialize(RudderClient client)
         {
             lock (padlock)
             {

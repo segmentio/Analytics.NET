@@ -1,33 +1,38 @@
 using NUnit.Framework;
+using Segment;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace RudderStack.Test
+namespace Test.Net50
 {
     [TestFixture]
-    class ConfigTests
+    public class ConfigTests
     {
-        RudderConfig _config;
+        Config _config;
 
         [SetUp]
         public void Init()
         {
-            _config = new RudderConfig();
+            _config = new Config();
         }
 
         [Test]
         public void SetGzipUpdateTheConfigProperty()
         {
-            //_config.SetGzip(true);
-            //Assert.IsTrue(_config.Gzip);
-            //_config.SetGzip(false);
-            //Assert.IsFalse(_config.Gzip);
+            _config.SetGzip(true);
+            Assert.IsTrue(_config.Gzip);
+            _config.SetGzip(false);
+            Assert.IsFalse(_config.Gzip);
         }
 
         [Test]
         public void SetFlushIntervalUpdateTheConfigProperty()
         {
             _config.SetFlushInterval(2);
-            Assert.AreEqual(2000,_config.FlushIntervalInMillis);
+            Assert.AreEqual(2000, _config.FlushIntervalInMillis);
         }
 
         [Test]
@@ -58,7 +63,7 @@ namespace RudderStack.Test
             Assert.AreEqual("UserAgent", _config.UserAgent);
         }
 
-        [Test]
+                [Test]
         public void GetGzipProperty()
         {
             _config.SetGzip(true);

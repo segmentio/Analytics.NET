@@ -9,10 +9,10 @@ namespace RudderStack.Model
     public class Group : BaseAction
     {
         [JsonProperty(PropertyName = "groupId")]
-        private string GroupId { get; set; }
+        public string GroupId { get; set; }
 
         [JsonProperty(PropertyName = "traits")]
-        private IDictionary<string, object> Traits { get; set; }
+        public IDictionary<string, object> Traits { get; set; }
 
         internal Group(string userId,
                        string groupId,

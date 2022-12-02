@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 using Newtonsoft.Json;
 
@@ -7,10 +9,10 @@ namespace RudderStack.Model
     public class Track : BaseAction
     {
         [JsonProperty(PropertyName = "event")]
-        private string EventName { get; set; }
+        public string EventName { get; set; }
 
         [JsonProperty(PropertyName = "properties")]
-        private IDictionary<string, object> Properties { get; set; }
+        public IDictionary<string, object> Properties { get; set; }
 
         internal Track(string userId,
                        string eventName,

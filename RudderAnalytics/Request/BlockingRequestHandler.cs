@@ -152,7 +152,7 @@ namespace RudderStack.Request
         public async Task MakeRequest(Batch batch)
         {
             Stopwatch watch = new Stopwatch();
-
+            _backo.Reset();
             try
             {
                 Uri uri = new Uri(_client.Config.DataPlaneUrl + "/v1/batch");
@@ -286,9 +286,29 @@ namespace RudderStack.Request
                         });
                         retry = true;
                     }
+                    catch (OperationCanceledException e)
+                    {
+                        Logger.Info("HTTP Post failed with exception of type OperationCanceledException", new Dict
+                        {
+                            { "batch id", batch.MessageId },
+                            { "reason", e.Message },
+                            { "duration (ms)", watch.ElapsedMilliseconds }
+                        });
+                        retry = true;
+                    }
                     catch (HttpRequestException e)
                     {
                         Logger.Info("HTTP Post failed with exception of type HttpRequestException", new Dict
+                        {
+                            { "batch id", batch.MessageId },
+                            { "reason", e.Message },
+                            { "duration (ms)", watch.ElapsedMilliseconds }
+                        });
+                        retry = true;
+                    }
+                    catch (System.Exception e) 
+                    {
+                        Logger.Info("HTTP Post failed with exception of type Exception", new Dict
                         {
                             { "batch id", batch.MessageId },
                             { "reason", e.Message },
@@ -347,10 +367,6 @@ namespace RudderStack.Request
                 {
                     var message = $"Has Backoff reached max: {hasBackoReachedMax} with number of Attempts:{_backo.CurrentAttempt},\n Status Code: {statusCode}\n, response message: {responseStr}";
                     Fail(batch, new APIException(statusCode.ToString(), message), watch.ElapsedMilliseconds);
-                    if (_backo.HasReachedMax)
-                    {
-                        _backo.Reset();
-                    }
                 }
             }
             catch (System.Exception e)

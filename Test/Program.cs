@@ -11,15 +11,13 @@ namespace RudderStack.Test
     {
         static void Main_Exe(string[] args)
         {
+            Console.WriteLine("The App is running");
             Logger.Handlers += Logger_Handlers;
 
-            //Analytics.Initialize(RudderStack.Test.Constants.WRITE_KEY);
-
-            //FlushTests tests = new FlushTests();
-            //tests.PerformanceTest().Wait();
-            RudderAnalytics.Initialize("1sCR76JzHpQohjl33pi8qA5jQD2", new RudderConfig(dataPlaneUrl: "https://75652af01e6d.ngrok.io"));
+            RudderAnalytics.Initialize("", new RudderConfig(dataPlaneUrl: "https://rudderstachvf.dataplane.rudderstack.com"));
             RudderAnalytics.Client.Track("prateek", "Item Purchased");
             RudderAnalytics.Client.Flush();
+           
         }
 
         private static void Logger_Handlers(Logger.Level level, string message, IDictionary<string, object> args)

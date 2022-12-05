@@ -167,30 +167,30 @@ namespace RudderStack.Request
                 _httpClient.Headers.Set("Authorization", "Basic " + BasicAuthHeader(batch.WriteKey, string.Empty));
                 _httpClient.Headers.Set("Content-Type", "application/json; charset=utf-8");
 #else
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", BasicAuthHeader(batch.WriteKey, string.Empty));
+                //_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", BasicAuthHeader(batch.WriteKey, string.Empty));
 #endif
                 // Prepare request data;
                 var requestData = Encoding.UTF8.GetBytes(json);
 
                 // Compress request data if compression is set
-//                 if (_client.Config.Gzip)
-//                 {
-// #if NET35
-//                     _httpClient.Headers.Set(HttpRequestHeader.ContentEncoding, "gzip");
-// #else
-//                     //_httpClient.DefaultRequestHeaders.Add("Content-Encoding", "gzip");
-// #endif
-//
-//                     // Compress request data with GZip
-//                     using (MemoryStream memory = new MemoryStream())
-//                     {
-//                         using (GZipStream gzip = new GZipStream(memory, CompressionMode.Compress, true))
-//                         {
-//                             gzip.Write(requestData, 0, requestData.Length);
-//                         }
-//                         requestData = memory.ToArray();
-//                     }
-//                 }
+                if (_client.Config.Gzip)
+                {
+#if NET35
+                     _httpClient.Headers.Set(HttpRequestHeader.ContentEncoding, "gzip");
+#else
+                     _httpClient.DefaultRequestHeaders.Add("Content-Encoding", "gzip");
+#endif
+
+                    // Compress request data with GZip
+                    using (MemoryStream memory = new MemoryStream())
+                    {
+                        using (GZipStream gzip = new GZipStream(memory, CompressionMode.Compress, true))
+                        {
+                            gzip.Write(requestData, 0, requestData.Length);
+                        }
+                        requestData = memory.ToArray();
+                    }
+                }
 
                 Logger.Info("Sending analytics request to RudderStack ..", new Dict
                 {
@@ -265,10 +265,10 @@ namespace RudderStack.Request
 
                     ByteArrayContent content = new ByteArrayContent(requestData);
                     content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-//                     if (_client.Config.Gzip)
-//                     {
-//                       content.Headers.ContentEncoding.Add("gzip");
-//                     }
+                    if (_client.Config.Gzip)
+                    {
+                        content.Headers.ContentEncoding.Add("gzip");
+                    }
 
                     HttpResponseMessage response = null;
                     bool retry = false;

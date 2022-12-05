@@ -1,5 +1,5 @@
 using NUnit.Framework;
-using Segment.Stats;
+using RudderStack.Stats;
 using System;
 using System.Collections.Generic;
 using System.Linq;

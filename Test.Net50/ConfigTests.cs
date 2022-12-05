@@ -1,5 +1,5 @@
 using NUnit.Framework;
-using Segment;
+using RudderStack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +11,12 @@ namespace Test.Net50
     [TestFixture]
     public class ConfigTests
     {
-        Config _config;
+        RudderConfig _config;
 
         [SetUp]
         public void Init()
         {
-            _config = new Config();
+            _config = new RudderConfig();
         }
 
         [Test]

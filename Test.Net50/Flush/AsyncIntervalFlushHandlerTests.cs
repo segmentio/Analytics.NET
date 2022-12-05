@@ -1,9 +1,9 @@
 using Moq;
 using NUnit.Framework;
-using Segment;
-using Segment.Flush;
-using Segment.Model;
-using Segment.Request;
+using RudderStack;
+using RudderStack.Flush;
+using RudderStack.Model;
+using RudderStack.Request;
 using System;
 using System.Collections.Generic;
 using System.Linq;

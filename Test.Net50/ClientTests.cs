@@ -1,9 +1,9 @@
 using Moq;
 using NUnit.Framework;
-using Segment;
-using Segment.Flush;
-using Segment.Model;
-using Segment.Request;
+using RudderStack;
+using RudderStack.Flush;
+using RudderStack.Model;
+using RudderStack.Request;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,18 +15,18 @@ namespace Test.Net50
     [TestFixture]
     public class ClientTests
     {
-        Client _client;
+        RudderClient _client;
 
         [SetUp]
         public void Init()
         {
-            _client = new Client("foo", new Config(), Mock.Of<IRequestHandler>());
+            _client = new RudderClient("foo", new RudderConfig(), Mock.Of<IRequestHandler>());
         }
 
         [Test]
         public void InitializationThrowsInvalidOperationExceptionWhenWriteKeyIsEmpty()
         {
-            var ex = Assert.Throws<InvalidOperationException>(() => new Client(""));
+            var ex = Assert.Throws<InvalidOperationException>(() => new RudderClient(""));
             Assert.AreEqual("Please supply a valid writeKey to initialize.", ex.Message);
         }
 
@@ -102,7 +102,7 @@ namespace Test.Net50
         [Test]
         public void GroupThrowsInvalidOperationExceptionWhenGroupIdIsEmpty()
         {
-            var ex = Assert.Throws<InvalidOperationException>(() => _client.Group("userId", "", new Options()));
+            var ex = Assert.Throws<InvalidOperationException>(() => _client.Group("userId", "", new RudderOptions()));
 
             Assert.AreEqual("Please supply a valid groupId to call #Group.", ex.Message);
         }
@@ -110,7 +110,7 @@ namespace Test.Net50
         [Test]
         public void GroupThrowsInvalidOperationExceptionWhenUserIdIsEmpty()
         {
-            var ex = Assert.Throws<InvalidOperationException>(() => _client.Group("", "", (Options)null));
+            var ex = Assert.Throws<InvalidOperationException>(() => _client.Group("", "", (RudderOptions)null));
 
             Assert.AreEqual("Please supply a valid userId or anonymousId to call #Group.", ex.Message);
         }
@@ -136,7 +136,7 @@ namespace Test.Net50
         [Test]
         public void TrackThrowsInvalidOperationExceptionWhenEvenNameIsEmpty()
         {
-            var ex = Assert.Throws<InvalidOperationException>(() => _client.Track("userId", "", new Options()));
+            var ex = Assert.Throws<InvalidOperationException>(() => _client.Track("userId", "", new RudderOptions()));
 
             Assert.AreEqual("Please supply a valid event to call #Track.", ex.Message);
         }
@@ -157,7 +157,7 @@ namespace Test.Net50
         [Test]
         public void ScreenThrowsInvalidOperationExceptionWhenUserIdIsEmpty()
         {
-            var ex = Assert.Throws<InvalidOperationException>(() => _client.Screen("", "", (Options)null));
+            var ex = Assert.Throws<InvalidOperationException>(() => _client.Screen("", "", (RudderOptions)null));
 
             Assert.AreEqual("Please supply a valid userId or anonymousId to call #Screen.", ex.Message);
         }
@@ -165,7 +165,7 @@ namespace Test.Net50
         [Test]
         public void ScreenThrowsInvalidOperationExceptionWhenNameIsEmpty()
         {
-            var ex = Assert.Throws<InvalidOperationException>(() => _client.Screen("userId", "", new Options()));
+            var ex = Assert.Throws<InvalidOperationException>(() => _client.Screen("userId", "", new RudderOptions()));
 
             Assert.AreEqual("Please supply a valid name to call #Screen.", ex.Message);
         }
@@ -190,7 +190,7 @@ namespace Test.Net50
         [Test]
         public void ClientUsesFakeRequestHandlerWhenSendIsFalse()
         {
-            var client = new Client("writeKey", new Config(send: false));
+            var client = new RudderClient("writeKey", new RudderConfig(send: false));
 
             var flushHandler = GetPrivateFieldValue<AsyncIntervalFlushHandler>(client, "_flushHandler");
 
@@ -202,7 +202,7 @@ namespace Test.Net50
         [Test]
         public void ClientUsesBlockingRequestHandlerWhenSendIsTrue()
         {
-            var client = new Client("writeKey", new Config(send: true));
+            var client = new RudderClient("writeKey", new RudderConfig(send: true));
 
             var flushHandler = GetPrivateFieldValue<AsyncIntervalFlushHandler>(client, "_flushHandler");
 

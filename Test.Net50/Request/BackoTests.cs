@@ -1,5 +1,5 @@
 using NUnit.Framework;
-using Segment.Request;
+using RudderStack.Request;
 using System;
 using System.Collections.Generic;
 using System.Linq;

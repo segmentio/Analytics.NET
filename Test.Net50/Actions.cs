@@ -1,5 +1,5 @@
-using Segment;
-using Segment.Model;
+using RudderStack;
+using RudderStack.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,53 +33,53 @@ namespace Test.Net50
             };
         }
 
-        public static Options Options()
+        public static RudderOptions Options()
         {
-            return new Options()
+            return new RudderOptions()
                 .SetTimestamp(DateTime.Now)
                 .SetAnonymousId(Guid.NewGuid().ToString())
                 .SetIntegration("all", false)
                 .SetIntegration("Mixpanel", true)
                 .SetIntegration("Salesforce", true)
-                .SetContext(new Context()
+                .SetContext(new RudderContext()
                     .Add("ip", "12.212.12.49")
                     .Add("language", "en-us")
             );
         }
 
-        public static void Identify(Client client)
+        public static void Identify(RudderClient client)
         {
             client.Identify("user", Traits(), Options());
-            Analytics.Client.Flush();
+            RudderAnalytics.Client.Flush();
         }
 
-        public static void Group(Client client)
+        public static void Group(RudderClient client)
         {
             client.Group("user", "group", Traits(), Options());
-            Analytics.Client.Flush();
+            RudderAnalytics.Client.Flush();
         }
 
-        public static void Track(Client client)
+        public static void Track(RudderClient client)
         {
             client.Track("user", "Ran .NET test", Properties(), Options());
         }
 
-        public static void Alias(Client client)
+        public static void Alias(RudderClient client)
         {
             client.Alias("previousId", "to");
         }
 
-        public static void Page(Client client)
+        public static void Page(RudderClient client)
         {
             client.Page("user", "name", "category", Properties(), Options());
         }
 
-        public static void Screen(Client client)
+        public static void Screen(RudderClient client)
         {
             client.Screen("user", "name", "category", Properties(), Options());
         }
 
-        public static void Random(Client client)
+        public static void Random(RudderClient client)
         {
             switch (random.Next(0, 6))
             {

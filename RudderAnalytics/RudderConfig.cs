@@ -25,7 +25,9 @@ namespace RudderStack
         internal int FlushAt { get; set; }
 
         internal bool Async { get; set; }
-        
+
+        internal bool Gzip { get; set; }
+
         internal TimeSpan Timeout { get; set; }
 
         internal TimeSpan? MaxRetryTime { get; set; }
@@ -96,13 +98,13 @@ namespace RudderStack
         }
 
         /// <summary>
-        /// Gets the API host server address. Default server is "https://api.segment.io"
+        /// Gets the API host server address. Default server is "https://hosted.rudderlabs.com"
         /// </summary>
         /// <param name="host">Host server url</param>
         /// <returns></returns>
         public string GetHost()
         {
-            return Host;
+            return this.DataPlaneUrl;
         }
 
         /// <summary>
@@ -271,7 +273,7 @@ namespace RudderStack
         /// </summary>
         /// <param name="gzip">True to compress request header, false for no compression</param>
         /// <returns></returns>
-        public Config SetGzip(bool gzip)
+        public RudderConfig SetGzip(bool gzip)
         {
             this.Gzip = gzip;
             return this;

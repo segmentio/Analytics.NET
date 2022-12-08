@@ -11,12 +11,12 @@ namespace RudderStack.Test
 	[TestClass]
 	public class ClientTests
 	{
-		Client client;
+		RudderClient client;
 
 		[TestInitialize]
 		public void Init()
 		{
-			client = new Client("foo");
+			client = new RudderClient("foo");
 		}
 
 		[TestMethod]

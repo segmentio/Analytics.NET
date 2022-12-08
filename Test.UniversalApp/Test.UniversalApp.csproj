@@ -11,7 +11,7 @@
     <AssemblyName>Test.UniversalApp</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.18362.0</TargetPlatformVersion>
+    <TargetPlatformVersion>10.0.22000.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.18362.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
@@ -148,7 +148,7 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Analytics\Analytics.csproj">
+    <ProjectReference Include="..\RudderAnalytics\RudderAnalytics.csproj">
       <Project>{a386cf02-d902-4b22-90a8-e828093e3aa4}</Project>
       <Name>Analytics</Name>
     </ProjectReference>

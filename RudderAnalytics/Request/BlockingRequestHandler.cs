@@ -210,9 +210,16 @@ namespace RudderStack.Request
 
                     try
                     {
+                        /*
+                         Tls = 0xc0
+                         Tls11 = 0x300
+                         Tls12 = 0xc00
+                          The default security protocol on the .NET version 3.5 is Tls, but Tls12 is the established standard now, hence setting it
+                          manually using the below statement.
+                        */
+                        ServicePointManager.SecurityProtocol = (SecurityProtocolType)(0xc0 | 0x300 | 0xc00);
                         var response = Encoding.UTF8.GetString(_httpClient.UploadData(uri, "POST", requestData));
                         watch.Stop();
-
                         Succeed(batch, watch.ElapsedMilliseconds);
                         statusCode = 200;
                         break;

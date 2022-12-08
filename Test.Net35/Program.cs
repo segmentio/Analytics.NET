@@ -9,7 +9,8 @@ namespace RudderStack.Test
         {
             Logger.Handlers += Logger_Handlers;
 
-            RudderAnalytics.Initialize(RudderStack.Test.Constants.WRITE_KEY);
+            RudderAnalytics.Initialize(RudderStack.Test.Constants.WRITE_KEY, new RudderConfig(dataPlaneUrl:RudderStack.Test.Constants.DATAPLANE_WITH_GZIP, gzip:false));
+         //   RudderAnalytics.Initialize(RudderStack.Test.Constants.WRITE_KEY, new RudderConfig(dataPlaneUrl: RudderStack.Test.Constants.DATAPLANE_WITHOUT_GZIP, gzip: true));//
 
             RudderAnalytics.Client.Track("prateek", "Item Purchased (with .Net 3.5)");
             RudderAnalytics.Client.Flush();

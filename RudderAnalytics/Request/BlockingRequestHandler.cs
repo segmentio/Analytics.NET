@@ -229,8 +229,11 @@ namespace RudderStack.Request
                         watch.Stop();
 
                         var response = (HttpWebResponse)ex.Response;
+                        using (var reader = new System.IO.StreamReader(response.GetResponseStream(), ASCIIEncoding.ASCII)) {
+                            responseStr = reader.ReadToEnd(); 
+                        }
                         statusCode = (response != null) ? (int)response.StatusCode : 0;
-                        if ((statusCode >= 500 && statusCode <= 600) || statusCode == 429 || statusCode == 0)
+                      if ((statusCode >= 500 && statusCode <= 600) || statusCode == 429 || statusCode == 0)
                         {
                             // If status code is greater than 500 and less than 600, it indicates server error
                             // Error code 429 indicates rate limited.
@@ -260,8 +263,6 @@ namespace RudderStack.Request
                         {
                             //If status code is greater or equal than 400 but not 429 should indicate is client error.
                             //All other types of HTTP Status code are not errors (Between 100 and 399)
-                            responseStr = String.Format("Status Code {0}. ", statusCode);
-                            responseStr += ex.Message;
                             break;
                         }
 
@@ -282,6 +283,7 @@ namespace RudderStack.Request
                     try
                     {
                         response = await _httpClient.PostAsync(uri, content).ConfigureAwait(false);
+                        responseStr = await response.Content.ReadAsStringAsync();
                     }
                     catch (TaskCanceledException e)
                     {
@@ -369,10 +371,15 @@ namespace RudderStack.Request
 #endif
                 }
 
-                var hasBackoReachedMax = _backo.HasReachedMax;
-                if (hasBackoReachedMax || statusCode != (int)HttpStatusCode.OK)
+                if (responseStr.Contains("Invalid JSON"))
                 {
-                    var message = $"Has Backoff reached max: {hasBackoReachedMax} with number of Attempts:{_backo.CurrentAttempt},\n Status Code: {statusCode}\n, response message: {responseStr}";
+                    var message = $"Received Invalid JSON as response back from the dataPlane with status code: {statusCode}, Please verify if the current version of your dataplane supports gzip compression of the request body";
+                    Logger.Error(message);
+                    Fail(batch, new APIException(statusCode.ToString(), message), watch.ElapsedMilliseconds);
+                }
+                else if (_backo.HasReachedMax || statusCode != (int)HttpStatusCode.OK)
+                {
+                    var message = $"Has Backoff reached max: {_backo.HasReachedMax} with number of Attempts:{_backo.CurrentAttempt},\n Status Code: {statusCode}\n, response message: {responseStr}";
                     Fail(batch, new APIException(statusCode.ToString(), message), watch.ElapsedMilliseconds);
                 }
             }

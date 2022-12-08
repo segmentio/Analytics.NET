@@ -167,7 +167,7 @@ namespace RudderStack.Request
                 _httpClient.Headers.Set("Authorization", "Basic " + BasicAuthHeader(batch.WriteKey, string.Empty));
                 _httpClient.Headers.Set("Content-Type", "application/json; charset=utf-8");
 #else
-                //_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", BasicAuthHeader(batch.WriteKey, string.Empty));
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", BasicAuthHeader(batch.WriteKey, string.Empty));
 #endif
                 // Prepare request data;
                 var requestData = Encoding.UTF8.GetBytes(json);
@@ -178,7 +178,7 @@ namespace RudderStack.Request
 #if NET35
                      _httpClient.Headers.Set(HttpRequestHeader.ContentEncoding, "gzip");
 #else
-                     _httpClient.DefaultRequestHeaders.Add("Content-Encoding", "gzip");
+                    // _httpClient.DefaultRequestHeaders.Add("Content-Encoding", "gzip");
 #endif
 
                     // Compress request data with GZip

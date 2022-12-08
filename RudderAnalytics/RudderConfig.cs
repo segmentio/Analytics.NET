@@ -49,6 +49,7 @@ namespace RudderStack
         /// <param name="async">Sets whether the flushing to the server is synchronous or asynchronous</param>
         /// <param name="threads">Count of concurrent internal threads to post data from queue</param>
         /// <param name="flushInterval">The frequency, in seconds, to send data to RudderStack</param>
+        /// <param name="gzip">Compress data w/ gzip before dispatch</param>
         /// <param name="send">Send data to RudderStack</param>
         /// <param name="userAgent">Sets User Agent Header</param>
         /// <param name="maxRetryTime">Max Amount of time to retry request when server timeout occurs</param>
@@ -61,6 +62,7 @@ namespace RudderStack
             bool async = true,
             int threads = 1,
             double flushInterval = 10,
+            bool gzip = false,
             bool send = true,
             string userAgent = null,
             TimeSpan? maxRetryTime = null
@@ -73,6 +75,7 @@ namespace RudderStack
             this.FlushAt = flushAt;
             this.Async = async;
             this.FlushIntervalInMillis = (int)(flushInterval * 1000);
+            this.Gzip = gzip;
             this.Send = send;
             this.UserAgent = userAgent ?? GetDefaultUserAgent();
             this.Threads = threads;

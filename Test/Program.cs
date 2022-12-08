@@ -9,12 +9,13 @@ namespace RudderStack.Test
 {
     class Program
     {
-        static void Main_Exe(string[] args)
+        static void Main(string[] args)
         {
             Console.WriteLine("The App is running");
             Logger.Handlers += Logger_Handlers;
 
-            RudderAnalytics.Initialize("", new RudderConfig(dataPlaneUrl: "https://rudderstachvf.dataplane.rudderstack.com"));
+           RudderAnalytics.Initialize("1n0JdVPZTRUIkLXYccrWzZwdGSx", new RudderConfig(dataPlaneUrl: "https://02f1-175-101-36-100.in.ngrok.io", gzip: true));
+           //RudderAnalytics.Initialize("1n0JdVPZTRUIkLXYccrWzZwdGSx", new RudderConfig(dataPlaneUrl: "https://rudderstachvf.dataplane.rudderstack.com", gzip: true));
             RudderAnalytics.Client.Track("prateek", "Item Purchased");
             RudderAnalytics.Client.Flush();
            

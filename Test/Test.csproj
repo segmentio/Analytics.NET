@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <StartupObject></StartupObject>
+    <StartupObject>RudderStack.Test.Program</StartupObject>
     <ApplicationIcon />
     <OutputType>Library</OutputType>
     <RootNamespace>RudderStack.Test</RootNamespace>

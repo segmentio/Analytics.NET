@@ -110,7 +110,7 @@ namespace RudderStack.Test.Flush
         }
 
         [Test]
-        public void  ProcessDropsActionsThatAreBiggerThan32Kb()
+        public void ProcessDropsActionsThatAreBiggerThan32Kb()
         {
             _handler = GetFlushHandler(10, 20, 20000);
 
@@ -151,7 +151,7 @@ namespace RudderStack.Test.Flush
         }
 
         [Test]
-        public async Task IntervalFlushLimitConcurrentProcesses ()
+        public async Task IntervalFlushLimitConcurrentProcesses()
         {
             var time = 2000;
             _handler = GetFlushHandler(100, 20, 300);

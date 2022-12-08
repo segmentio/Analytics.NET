@@ -12,6 +12,9 @@ namespace RudderStack.Model
         [JsonProperty(PropertyName="messageId")]
         public string MessageId { get; private set; }
 
+        [JsonProperty(PropertyName = "channel")]
+        private const string channel = "server";
+
         [JsonProperty(PropertyName="timestamp")]
         public string Timestamp { get; private set; }
 

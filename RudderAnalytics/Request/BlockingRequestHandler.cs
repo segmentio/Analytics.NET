@@ -229,8 +229,10 @@ namespace RudderStack.Request
                         watch.Stop();
 
                         var response = (HttpWebResponse)ex.Response;
+                        if(response != null && response.GetResponseStream() != null) {
                         using (var reader = new System.IO.StreamReader(response.GetResponseStream(), ASCIIEncoding.ASCII)) {
                             responseStr = reader.ReadToEnd(); 
+                        }
                         }
                         statusCode = (response != null) ? (int)response.StatusCode : 0;
                       if ((statusCode >= 500 && statusCode <= 600) || statusCode == 429 || statusCode == 0)
@@ -283,7 +285,11 @@ namespace RudderStack.Request
                     try
                     {
                         response = await _httpClient.PostAsync(uri, content).ConfigureAwait(false);
-                        responseStr = await response.Content.ReadAsStringAsync();
+                        if(response != null && response.Content!= null)
+                        {
+                            responseStr = await response.Content.ReadAsStringAsync();
+                        } 
+                            
                     }
                     catch (TaskCanceledException e)
                     {

@@ -17,10 +17,10 @@ namespace RudderStack.Test
         [Test]
         public void SetGzipUpdateTheConfigProperty()
         {
-            //_config.SetGzip(true);
-            //Assert.IsTrue(_config.Gzip);
-            //_config.SetGzip(false);
-            //Assert.IsFalse(_config.Gzip);
+            _config.SetGzip(true);
+            Assert.IsTrue(_config.Gzip);
+            _config.SetGzip(false);
+            Assert.IsFalse(_config.Gzip);
         }
 
         [Test]

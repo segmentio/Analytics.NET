@@ -48,10 +48,10 @@ namespace RudderStack.Test.Request
         public void RequestIncludesGzipHeaderWhenCompressRequestIsTrue()
         {
             var batch = GetBatch();
-            //_client.Config.SetGzip(true);
+            _client.Config.SetGzip(true);
 
-            //_handler.MakeRequest(batch).GetAwaiter().GetResult();
-            //_mockHeaders.Verify(x => x.Set("Content-Encoding", "gzip"), Times.Once);
+            _handler.MakeRequest(batch).GetAwaiter().GetResult();
+            _mockHeaders.Verify(x => x.Set("Content-Encoding", "gzip"), Times.Once);
         }
 
         [Test]

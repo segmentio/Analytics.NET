@@ -6,6 +6,7 @@ using RudderStack.Request;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using NSubstitute;
 
 namespace RudderStack.Test.Request
 {
@@ -164,7 +165,8 @@ namespace RudderStack.Test.Request
 
         private void ClientThrowWebException(HttpStatusCode httpStatusCode)
         {
-            HttpWebResponse response = Mock.Of<HttpWebResponse>(x => x.StatusCode == httpStatusCode);
+            HttpWebResponse response = Substitute.For<HttpWebResponse>();
+            response.StatusCode.Returns(httpStatusCode);
             _mockHttpClient
                 .Setup(x => x.UploadData(It.IsAny<Uri>(), "POST", It.IsAny<byte[]>()))
                 .Throws(new WebException("", null, WebExceptionStatus.UnknownError, response));
@@ -177,7 +179,8 @@ namespace RudderStack.Test.Request
             {
                 if (r is HttpStatusCode httpStatusCode)
                 {
-                    HttpWebResponse response = Mock.Of<HttpWebResponse>(x => x.StatusCode == httpStatusCode);
+                    HttpWebResponse response = Substitute.For<HttpWebResponse>();
+                    response.StatusCode.Returns(httpStatusCode);
                     seq.Throws(new WebException("", null, WebExceptionStatus.UnknownError, response));
                 }
                 else if (r is byte[] wr)

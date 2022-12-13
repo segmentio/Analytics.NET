@@ -6,7 +6,6 @@ using RudderStack.Request;
 using System;
 using System.Collections.Generic;
 using System.Net;
-using System.IO;
 
 namespace RudderStack.Test.Request
 {
@@ -165,12 +164,10 @@ namespace RudderStack.Test.Request
 
         private void ClientThrowWebException(HttpStatusCode httpStatusCode)
         {
-            Mock<HttpWebResponse> response = new Mock<HttpWebResponse>(MockBehavior.Strict);
-            response.Setup(x => x.StatusCode).Returns(httpStatusCode);
-            response.Setup(x => x.GetResponseStream()).Returns<Stream>(null);
+            HttpWebResponse response = Mock.Of<HttpWebResponse>(x => x.StatusCode == httpStatusCode);
             _mockHttpClient
                 .Setup(x => x.UploadData(It.IsAny<Uri>(), "POST", It.IsAny<byte[]>()))
-                .Throws(new WebException("", null, WebExceptionStatus.UnknownError, response.Object));
+                .Throws(new WebException("", null, WebExceptionStatus.UnknownError, response));
         }
 
         private void MultipleHttpResponseBehavior(params object[] results)
@@ -180,10 +177,8 @@ namespace RudderStack.Test.Request
             {
                 if (r is HttpStatusCode httpStatusCode)
                 {
-                    Mock<HttpWebResponse> response = new Mock<HttpWebResponse>(MockBehavior.Strict);
-                    response.Setup(x => x.StatusCode).Returns(httpStatusCode);
-                    response.Setup(x => x.GetResponseStream()).Returns<Stream>(null);
-                    seq.Throws(new WebException("", null, WebExceptionStatus.UnknownError, response.Object));
+                    HttpWebResponse response = Mock.Of<HttpWebResponse>(x => x.StatusCode == httpStatusCode);
+                    seq.Throws(new WebException("", null, WebExceptionStatus.UnknownError, response));
                 }
                 else if (r is byte[] wr)
                     seq.Returns(wr);

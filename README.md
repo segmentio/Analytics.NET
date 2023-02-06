@@ -38,6 +38,12 @@ RudderAnalytics.Client.Track(
 );
 ```
 
+
+## Setup Husky for Pre-Commit Hooks
+
+- [Husky.Net](https://alirezanet.github.io/Husky.Net/) is used to run pre-commit hooks, which would format all the C# code in the staging section. In order to run these hooks you need to setup Husky.Net using the instructions [here](https://alirezanet.github.io/Husky.Net/guide/getting-started.html#installation)
+
+
 ## Contact Us
 
 If you come across any issues while configuring or using this integration, please feel free to start a conversation on our [Slack](https://resources.rudderstack.com/join-rudderstack-slack) channel. We will be happy to help you.

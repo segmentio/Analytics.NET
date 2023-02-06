@@ -42,7 +42,7 @@ x64/
 *.vssscc
 .builds
 .vs
-
+.env
 # Visual C++ cache files
 ipch/
 *.aps

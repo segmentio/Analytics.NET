@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using RudderStack;
+using RudderStack.Utils;
 using RudderStack.Test;
 
 namespace RudderStack.Test
@@ -14,8 +15,13 @@ namespace RudderStack.Test
             Console.WriteLine("The App is running");
             Logger.Handlers += Logger_Handlers;
 
-            RudderAnalytics.Initialize("1n0JdVPZTRUIkLXYccrWzZwdGSx", new RudderConfig(dataPlaneUrl: "https://02f1-175-101-36-100.in.ngrok.io", gzip: true));
-            //RudderAnalytics.Initialize("1n0JdVPZTRUIkLXYccrWzZwdGSx", new RudderConfig(dataPlaneUrl: "https://rudderstachvf.dataplane.rudderstack.com", gzip: true));
+            var parentPath = Utilities.getParentPath(4, System.IO.Directory.GetCurrentDirectory());
+            var filePath = parentPath + "\\.env";
+            DotEnv.Load(filePath);
+            var dataPlaneUrl = Environment.GetEnvironmentVariable("DATA_PLANE_URL");
+            var writeKey = Environment.GetEnvironmentVariable("WRITE_KEY");
+
+            RudderAnalytics.Initialize(writeKey, new RudderConfig(dataPlaneUrl: dataPlaneUrl, gzip: true));
             RudderAnalytics.Client.Track("prateek", "Item Purchased");
             RudderAnalytics.Client.Flush();
 

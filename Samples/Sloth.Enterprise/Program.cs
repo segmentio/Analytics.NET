@@ -1,5 +1,6 @@
 using System;
 using RudderStack;
+using RudderStack.Utils;
 using Sloth.Common;
 
 namespace Sloth.Enterprise
@@ -11,7 +12,10 @@ namespace Sloth.Enterprise
 
         static void Main(string[] args)
         {
-            var writeKey = Environment.GetEnvironmentVariable("writeKey");
+            var parentPath = Utilities.getParentPath(5, System.IO.Directory.GetCurrentDirectory());
+            var filePath = parentPath + "\\.env";
+            DotEnv.Load(filePath);
+            var writeKey = Environment.GetEnvironmentVariable("WRITE_KEY");
 
             if (string.IsNullOrWhiteSpace(writeKey)) throw new ArgumentException(nameof(writeKey));
 

@@ -1,5 +1,6 @@
 using System;
 using RudderStack;
+using RudderStack.Utils;
 using Sloth.Common;
 
 namespace Sloth.Basic
@@ -10,8 +11,11 @@ namespace Sloth.Basic
 
         static void Main(string[] args)
         {
-            var writeKey = "testWriteKey";
-            var dataPlaneUrl = "https://8244956a91ea.ngrok.io";
+            var parentPath = Utilities.getParentPath(5, System.IO.Directory.GetCurrentDirectory());
+            var filePath = parentPath + "\\.env";
+            DotEnv.Load(filePath);
+            var dataPlaneUrl = Environment.GetEnvironmentVariable("DATA_PLANE_URL");
+            var writeKey = Environment.GetEnvironmentVariable("WRITE_KEY");
 
             if (string.IsNullOrWhiteSpace(writeKey)) throw new ArgumentException(nameof(writeKey));
 
@@ -20,8 +24,6 @@ namespace Sloth.Basic
 
         private static void OnExecute(string writeKey, string dataPlaneUrl)
         {
-            //RudderAnalytics.Initialize(writeKey);
-
             RudderAnalytics.Initialize(writeKey, new RudderConfig(dataPlaneUrl: dataPlaneUrl));
 
             Logger.Handlers += Utils.LoggerOnHandlers;

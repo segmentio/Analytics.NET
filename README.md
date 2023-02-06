@@ -38,6 +38,10 @@ RudderAnalytics.Client.Track(
 );
 ```
 
+## Setup .env for running the sample apps
+
+- Make a copy of sample.env in the root folder and replace DUPLICATE_WRITE_KEY and DUPLICATE_DATA_PLANE with the actual values from your dashboard.
+
 
 ## Setup Husky for Pre-Commit Hooks
 

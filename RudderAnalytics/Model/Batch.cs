@@ -10,10 +10,10 @@ namespace RudderStack.Model
     {
         internal string WriteKey { get; set; }
 
-        [JsonProperty(PropertyName="messageId")]
+        [JsonProperty(PropertyName = "messageId")]
         internal string MessageId { get; private set; }
 
-        [JsonProperty(PropertyName="sentAt")]
+        [JsonProperty(PropertyName = "sentAt")]
         internal string SentAt { get; set; }
 
         [JsonProperty(PropertyName = "batch")]
@@ -21,7 +21,7 @@ namespace RudderStack.Model
 
         internal Batch()
         {
-            this.MessageId = Guid.NewGuid ().ToString ();
+            this.MessageId = Guid.NewGuid().ToString();
         }
 
         internal Batch(string writeKey, List<BaseAction> batch) : this()

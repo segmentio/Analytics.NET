@@ -20,7 +20,7 @@ namespace RudderStack.Test
                 .Setup(x => x.MakeRequest(It.IsAny<Batch>()))
                 .Returns(async (Batch b) =>
                 {
-                    b.batch.ForEach(_=>RudderAnalytics.Client.Statistics.IncrementSucceeded());
+                    b.batch.ForEach(_ => RudderAnalytics.Client.Statistics.IncrementSucceeded());
                 });
 
             RudderAnalytics.Dispose();
@@ -28,7 +28,7 @@ namespace RudderStack.Test
             RudderAnalytics.Initialize(client);
         }
 
-        [Test ()]
+        [Test()]
         public void IdentifyTest()
         {
             Actions.Identify(RudderAnalytics.Client);

@@ -7,7 +7,7 @@ namespace RudderStack.Model
     /// </summary>
     public class Providers : Dict
     {
-        public Providers ()
+        public Providers()
         {
         }
 
@@ -18,8 +18,9 @@ namespace RudderStack.Model
         /// <param name="enabled">If set to <c>false</c>, then every provider is disabled by default unless otherwise specified.
         /// True is default.</param>
         /// <returns>The Providers object for chaining.</returns>
-        public Providers SetDefault(bool enabled) {
-            this.Add ("all", enabled);
+        public Providers SetDefault(bool enabled)
+        {
+            this.Add("all", enabled);
             return this;
         }
 
@@ -30,8 +31,9 @@ namespace RudderStack.Model
         /// for context.providers for a full list of provider
         /// <param name="enabled">True for enabled, false for disabled.</param>
         /// <returns>The Providers object for chaining.</returns>
-        public Providers SetEnabled(string providerName, bool enabled) {
-            this.Add (providerName, enabled);
+        public Providers SetEnabled(string providerName, bool enabled)
+        {
+            this.Add(providerName, enabled);
             return this;
         }
 

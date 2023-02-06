@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using RudderStack;
 using Microsoft.Extensions.DependencyInjection;
 

@@ -27,7 +27,7 @@ namespace RudderStack.Test
         public void SetFlushIntervalUpdateTheConfigProperty()
         {
             _config.SetFlushInterval(2);
-            Assert.AreEqual(2000,_config.FlushIntervalInMillis);
+            Assert.AreEqual(2000, _config.FlushIntervalInMillis);
         }
 
         [Test]

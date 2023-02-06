@@ -23,7 +23,8 @@ namespace RudderStack.Stats
         internal void IncrementSucceeded() => Increment(ref _succeeded);
         internal void IncrementFailed() => Increment(ref _failed);
 
-        private void Increment(ref int value) {
+        private void Increment(ref int value)
+        {
             if (value == int.MaxValue)
                 Interlocked.Add(ref value, -value);
             else

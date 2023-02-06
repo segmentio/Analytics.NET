@@ -13,10 +13,10 @@ namespace RudderStack.Model
         /// Options object that allows the specification of a timestamp,
         /// an anonymousId, a context, or target integrations.
         /// </summary>
-        public RudderOptions ()
+        public RudderOptions()
         {
-            this.Integrations = new Dict ();
-            this.Context = new RudderContext ();
+            this.Integrations = new Dict();
+            this.Context = new RudderContext();
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace RudderStack.Model
         /// </summary>
         /// <returns>This Options object for chaining.</returns>
         /// <param name="anonymousId">The visitor's anonymousId.</param>
-        public RudderOptions SetAnonymousId (string anonymousId)
+        public RudderOptions SetAnonymousId(string anonymousId)
         {
             this.AnonymousId = anonymousId;
             return this;
@@ -38,7 +38,7 @@ namespace RudderStack.Model
         /// </summary>
         /// <returns>This Options object for chaining.</returns>
         /// <param name="timestamp">The call's timestamp.</param>
-        public RudderOptions SetTimestamp (DateTime? timestamp)
+        public RudderOptions SetTimestamp(DateTime? timestamp)
         {
             this.Timestamp = timestamp;
             return this;
@@ -50,7 +50,7 @@ namespace RudderStack.Model
         /// </summary>
         /// <returns>This Options object for chaining.</returns>
         /// <param name="context">The visitor's context.</param>
-        public RudderOptions SetContext (RudderContext context)
+        public RudderOptions SetContext(RudderContext context)
         {
             this.Context = context;
             return this;
@@ -65,9 +65,9 @@ namespace RudderStack.Model
         /// </summary>
         /// <param name="integration">The integration name.</param>
         /// <param name="enabled">If set to <c>true</c>, then the integration is enabled.</param>
-        public RudderOptions SetIntegration (string integration, bool enabled)
+        public RudderOptions SetIntegration(string integration, bool enabled)
         {
-            this.Integrations.Add (integration, enabled);
+            this.Integrations.Add(integration, enabled);
             return this;
         }
 
@@ -84,9 +84,9 @@ namespace RudderStack.Model
         /// </summary>
         /// <param name="integration">The integration name.</param>
         /// <param name="value">Dict value</param>
-        public RudderOptions SetIntegration (string integration, Dict value)
+        public RudderOptions SetIntegration(string integration, Dict value)
         {
-            this.Integrations.Add (integration, value);
+            this.Integrations.Add(integration, value);
             return this;
         }
 

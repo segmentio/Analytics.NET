@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace RudderStack.Model
 {
@@ -8,7 +8,8 @@ namespace RudderStack.Model
         /// Provides additional information about the context of an analytics call,
         /// such as the visitor's ip or language.
         /// </summary>
-        public RudderContext() {
+        public RudderContext()
+        {
             // default the context library
             this.Add("library", new Dict() {
                 { "name", "RudderAnalytics.NET" },
@@ -16,8 +17,9 @@ namespace RudderStack.Model
             });
         }
 
-        public new RudderContext Add(string key, object val) {
-            base.Add (key, val);
+        public new RudderContext Add(string key, object val)
+        {
+            base.Add(key, val);
             return this;
         }
     }

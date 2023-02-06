@@ -213,7 +213,7 @@ namespace RudderStack.Test
             var prop = type.GetField(field,
                 System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 
-            return (T) prop?.GetValue(obj);
+            return (T)prop?.GetValue(obj);
 
         }
     }

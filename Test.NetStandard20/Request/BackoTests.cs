@@ -46,7 +46,7 @@ namespace RudderStack.Test
             return time;
         }
 
-        [TestCase(3, 500,ExpectedResult = 2000)]
+        [TestCase(3, 500, ExpectedResult = 2000)]
         [TestCase(3, 250, ExpectedResult = 1000)]
         [TestCase(3, 75, ExpectedResult = 300)]
         public int TimeShouldDependOnMin(int calls, int min)

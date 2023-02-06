@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace RudderStack.Test
 {
-    class WebServer :IDisposable
+    class WebServer : IDisposable
     {
         private HttpListener listener;
         private Thread runningThread;

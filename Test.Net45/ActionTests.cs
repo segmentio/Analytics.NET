@@ -38,7 +38,7 @@ namespace RudderStack.Test
             Logger.Handlers -= LoggingHandler;
         }
 
-        [Test ()]
+        [Test()]
         public void IdentifyTestNet45()
         {
             Actions.Identify(RudderAnalytics.Client);

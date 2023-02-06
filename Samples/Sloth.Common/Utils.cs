@@ -37,15 +37,15 @@ namespace Sloth.Common
             RudderAnalytics.Client.Page(anonUserId, "Home");
 
             //identify anon user
-            RudderAnalytics.Client.Identify(anonUserId, new Dictionary<string, object> { {"subscription", "inactive"}, });
+            RudderAnalytics.Client.Identify(anonUserId, new Dictionary<string, object> { { "subscription", "inactive" }, });
 
             // track CTA click
-            RudderAnalytics.Client.Track(anonUserId, "CTA Clicked", new Dictionary<string, object> { {"plan", "premium"}, });
+            RudderAnalytics.Client.Track(anonUserId, "CTA Clicked", new Dictionary<string, object> { { "plan", "premium" }, });
         }
         private static void UserU1SignsUpForNewTrialAccount(string anonUserId, string user1Id, string accountId)
         {
             //page
-            RudderAnalytics.Client.Page(anonUserId, "Sign Up", new Dictionary<string, object> { {"url", "https://wwww.example.com/sign-up"}, });
+            RudderAnalytics.Client.Page(anonUserId, "Sign Up", new Dictionary<string, object> { { "url", "https://wwww.example.com/sign-up" }, });
 
             //new account created
             RudderAnalytics.Client.Track(anonUserId, "Account Created", new Dictionary<string, object>
@@ -69,7 +69,7 @@ namespace Sloth.Common
             RudderAnalytics.Client.Alias(anonUserId, user1Id);
 
             //add user to account (group)
-            RudderAnalytics.Client.Group(user1Id, accountId, new Dictionary<string, object> { {"role", "Owner"}, });
+            RudderAnalytics.Client.Group(user1Id, accountId, new Dictionary<string, object> { { "role", "Owner" }, });
 
             //confirm track call
             RudderAnalytics.Client.Track(user1Id, "Account Added User", new Dictionary<string, object>

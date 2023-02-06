@@ -63,7 +63,7 @@ namespace Test.Net50
             Assert.AreEqual("UserAgent", _config.UserAgent);
         }
 
-                [Test]
+        [Test]
         public void GetGzipProperty()
         {
             _config.SetGzip(true);

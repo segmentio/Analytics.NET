@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -19,7 +19,7 @@ namespace RudderStack.Model
         /// <returns>An instance of the Props for chaining</returns>
         public new Dict Add(string key, object val)
         {
-            base.Add (key, val);
+            base.Add(key, val);
             return this;
         }
     }

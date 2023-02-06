@@ -24,7 +24,7 @@ namespace Sloth.Enterprise
                 .SetMaxQueueSize(100000)
                 .SetHost("https://hosted.rudderlabs.com")
                 .SetMaxBatchSize(40);
-                //.SetRequestCompression(true);
+            //.SetRequestCompression(true);
 
             RudderAnalytics.Initialize(writeKey, config);
 

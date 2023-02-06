@@ -97,7 +97,7 @@ namespace RudderStack.Request
         internal BlockingRequestHandler(RudderClient client, TimeSpan timeout) : this(client, timeout, null, new Backo(max: 10000, jitter: 5000)) // Set maximum waiting limit to 10s and jitter to 5s
         {
         }
-        internal BlockingRequestHandler(RudderClient client, TimeSpan timeout, Backo backo) : this(client, timeout, null, backo) 
+        internal BlockingRequestHandler(RudderClient client, TimeSpan timeout, Backo backo) : this(client, timeout, null, backo)
         {
         }
 #if NET35
@@ -285,11 +285,11 @@ namespace RudderStack.Request
                     try
                     {
                         response = await _httpClient.PostAsync(uri, content).ConfigureAwait(false);
-                        if(response != null && response.Content!= null)
+                        if (response != null && response.Content != null)
                         {
                             responseStr = await response.Content.ReadAsStringAsync();
-                        } 
-                            
+                        }
+
                     }
                     catch (TaskCanceledException e)
                     {
@@ -321,7 +321,7 @@ namespace RudderStack.Request
                         });
                         retry = true;
                     }
-                    catch (System.Exception e) 
+                    catch (System.Exception e)
                     {
                         Logger.Info("HTTP Post failed with exception of type Exception", new Dict
                         {

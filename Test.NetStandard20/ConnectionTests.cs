@@ -150,7 +150,7 @@ namespace RudderStack.Test
                 foreach (var testCase in TestCases)
                 {
                     // Setup Action module which returns error code
-                    var actionModule = new ActionModule(testCase.BaseActionUrl, HttpVerbs.Any,(ctx) =>
+                    var actionModule = new ActionModule(testCase.BaseActionUrl, HttpVerbs.Any, (ctx) =>
                     {
                         return ctx.SendStandardHtmlAsync((int)testCase.ResponseCode);
                     });
@@ -159,7 +159,7 @@ namespace RudderStack.Test
 
                 DummyServer.RunAsync();
 
-                foreach (var testCase in TestCases) 
+                foreach (var testCase in TestCases)
                 {
                     RudderAnalytics.Client.Config.SetHost(DummyServerUrl + testCase.BaseActionUrl);
                     // Calculate working time for Identiy message with invalid host address
@@ -174,8 +174,8 @@ namespace RudderStack.Test
                     // That's because it retries submit when it's failed.
                     if (testCase.ShouldRetry)
                         Assert.IsTrue(watch.ElapsedMilliseconds > testCase.Timeout);
-                    else 
-                        Assert.IsFalse(watch.ElapsedMilliseconds > testCase.Timeout);     
+                    else
+                        Assert.IsFalse(watch.ElapsedMilliseconds > testCase.Timeout);
                 }
             }
         }

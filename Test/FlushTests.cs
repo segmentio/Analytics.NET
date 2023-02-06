@@ -75,7 +75,7 @@ namespace RudderStack.Test
             Assert.AreEqual(0, RudderAnalytics.Client.Statistics.Failed);
         }
 
-	[Test()]
+        [Test()]
         public async Task PerformanceTest()
         {
             var client = new RudderClient(Constants.WRITE_KEY, new RudderConfig(), _mockRequestHandler.Object);

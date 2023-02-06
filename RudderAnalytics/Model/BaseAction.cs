@@ -9,22 +9,22 @@ namespace RudderStack.Model
         [JsonProperty(PropertyName = "type")]
         public string Type { get; set; }
 
-        [JsonProperty(PropertyName="messageId")]
+        [JsonProperty(PropertyName = "messageId")]
         public string MessageId { get; private set; }
 
         [JsonProperty(PropertyName = "channel")]
         private const string channel = "server";
 
-        [JsonProperty(PropertyName="timestamp")]
+        [JsonProperty(PropertyName = "timestamp")]
         public string Timestamp { get; private set; }
 
-        [JsonProperty(PropertyName="context")]
+        [JsonProperty(PropertyName = "context")]
         public RudderContext Context { get; set; }
 
-        [JsonProperty(PropertyName="integrations")]
+        [JsonProperty(PropertyName = "integrations")]
         public Dict Integrations { get; set; }
 
-        [JsonProperty(PropertyName="anonymousId")]
+        [JsonProperty(PropertyName = "anonymousId")]
         public string AnonymousId { get; set; }
 
         [JsonProperty(PropertyName = "userId")]
@@ -35,10 +35,10 @@ namespace RudderStack.Model
 
         internal BaseAction(string type, string UserId, RudderOptions options)
         {
-            options = options ?? new RudderOptions ();
+            options = options ?? new RudderOptions();
 
             this.Type = type;
-            this.MessageId = Guid.NewGuid ().ToString();
+            this.MessageId = Guid.NewGuid().ToString();
             if (options.Timestamp.HasValue)
                 this.Timestamp = options.Timestamp.Value.ToString("o");
             else

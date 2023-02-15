@@ -16,6 +16,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/rudderlabs/rudder-sdk-.net</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <ReleaseVersion>2.0.0</ReleaseVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)'=='net35'">

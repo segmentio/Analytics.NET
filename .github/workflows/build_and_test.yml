@@ -1,0 +1,235 @@
+name: Build and Unit Test Checks
+on:
+  pull_request:
+    branches: [ master, develop ]
+    types: ['opened', 'reopened', 'synchronize']
+    paths-ignore:
+    - 'README.md'
+
+jobs:
+  build_sdk:
+    name: Build Check for the .NET SDK
+    runs-on: windows-2019
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Set up JDK 11
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.11
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    
+    - name: Install dotnet-format
+      run: dotnet tool install -g dotnet-format
+    
+    - name: Verify Code Formatting
+      run: dotnet format --check --verbosity diagnostic
+
+    - name: Install dependencies
+      run: dotnet restore RudderAnalytics/RudderAnalytics.csproj
+
+    - name: Build
+      run: dotnet build RudderAnalytics/RudderAnalytics.csproj --configuration Release --no-restore
+
+    - name: Cache SonarCloud packages
+      uses: actions/cache@v1
+      with:
+        path: ~\sonar\cache
+        key: ${{ runner.os }}-sonar
+        restore-keys: ${{ runner.os }}-sonar
+
+    - name: Cache SonarCloud scanner
+      id: cache-sonar-scanner
+      uses: actions/cache@v1
+      with:
+        path: .\.sonar\scanner
+        key: ${{ runner.os }}-sonar-scanner
+        restore-keys: ${{ runner.os }}-sonar-scanner
+
+    - name: Install SonarCloud scanner
+      if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+      shell: powershell
+      run: |
+        New-Item -Path .\.sonar\scanner -ItemType Directory
+        dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+
+    - name: Build and analyze
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      shell: powershell
+      run: |
+        .\.sonar\scanner\dotnet-sonarscanner begin /k:"rudderlabs_rudder-sdk-.net2" /o:"rudderlabs" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+        dotnet build RudderAnalytics/RudderAnalytics.csproj --configuration Release --no-restore
+        .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"        
+
+  build_and_test_netcoreapp21:
+    name: Build and Quality Check for .NetCoreApp2.1
+    runs-on: windows-2019
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 2.1.x
+
+    - name: Install dependencies
+      run: dotnet restore Test/Test.csproj
+    
+    - name: Install dotnet-format
+      run: dotnet tool install -g dotnet-format
+    
+    - name: Verify Code Formatting
+      run: dotnet format --check --verbosity diagnostic
+
+    - name: Build
+      run: dotnet build Test/Test.csproj --configuration Release --no-restore
+
+    - name: Execute Unit Test cases
+      run: dotnet test Test/Test.csproj --no-restore --verbosity normal
+
+  build_and_test_netstandard20:
+    name: Build and Quality Check for .NetStandard20
+    runs-on: windows-2019
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 2.1.x
+
+    - name: Install dependencies
+      run: dotnet restore Test.NetStandard20/Test.NetStandard20.csproj
+
+    - name: Install dotnet-format
+      run: dotnet tool install -g dotnet-format
+    
+    - name: Verify Code Formatting
+      run: dotnet format --check --verbosity diagnostic
+
+    - name: Build
+      run: dotnet build Test.NetStandard20/Test.NetStandard20.csproj --configuration Release --no-restore
+
+    - name: Execute Unit Test cases
+      run: dotnet test Test.NetStandard20/Test.NetStandard20.csproj --no-restore --verbosity normal
+
+  build_and_test_net50:
+    name: Build and Quality Check for .Net50
+    runs-on: windows-2019
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    
+    - name: Install dotnet-format
+      run: dotnet tool install -g dotnet-format
+    
+    - name: Verify Code Formatting
+      run: dotnet format --check --verbosity diagnostic
+
+    - name: Install dependencies
+      run: dotnet restore Test.Net50/Test.Net50.csproj
+
+    - name: Build
+      run: dotnet build Test.Net50/Test.Net50.csproj --configuration Release --no-restore
+
+    - name: Execute Unit Test cases and collect data for code coverage      
+      run: dotnet test Test.Net50/Test.Net50.csproj --no-restore --verbosity normal --collect:"XPlat Code Coverage" --results-directory Test.Net50/coverage
+    
+    - name: Install the Report Generator tool
+      run: dotnet tool install -g dotnet-reportgenerator-globaltool
+    
+    - name: Generate the Code Coverage Report
+      run: reportgenerator -reports:"Test.Net50/coverage/*/coverage.cobertura.xml" -targetdir:"Test.Net50/coveragereport" -reporttypes:"HtmlInline" -title:".Net50"
+    
+    - name: Archive code coverage results
+      uses: actions/upload-artifact@v3
+      with:
+        name: Code Coverage Report for Test.Net50
+        path: Test.Net50/coveragereport/
+
+  build_and_test_net35:
+    name: Build and Quality Check for .Net35
+    runs-on: windows-2019
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: setup-msbuild
+      uses: microsoft/setup-msbuild@v1.1
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.5
+
+    - name: Setup VSTest.console.exe
+      uses: darenm/Setup-VSTest@v1.2
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+
+    - name: Restore Packages
+      run: nuget restore Test.Net35/Test.Net35.csproj -SolutionDirectory ./
+
+    - name: Build
+      run: |
+        msbuild Test.Net35/Test.Net35.csproj /t:restore
+        msbuild Test.Net35/Test.Net35.csproj /p:Configuration=Release
+    - name: Test
+      run: vstest.console.exe Test.Net35/bin/Release/Test.Net35.dll
+
+  build_and_test_net45:
+    name: Build and Quality Check for .Net45
+    runs-on: windows-2019
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Setup VSTest.console.exe
+      uses: darenm/Setup-VSTest@v1.2
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    
+    - name: Install dotnet-format
+      run: dotnet tool install -g dotnet-format
+    
+    - name: Verify Code Formatting
+      run: dotnet format --check --verbosity diagnostic 
+
+    - name: Install dependencies
+      run: dotnet restore Test.Net45/Test.Net45.csproj
+
+    - name: Build
+      run: dotnet build Test.Net45/Test.Net45.csproj --configuration Release --no-restore
+
+    - name: Test
+      run: vstest.console.exe Test.Net45/bin/Release/Test.Net45.dll /TestAdapterPath:"Test.Net45/bin/Release"

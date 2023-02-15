@@ -62,7 +62,7 @@ namespace RudderStack
             bool async = true,
             int threads = 1,
             double flushInterval = 10,
-            bool gzip = false,
+            bool gzip = true,
             bool send = true,
             string userAgent = null,
             TimeSpan? maxRetryTime = null

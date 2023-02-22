@@ -8,14 +8,18 @@ Released under the MIT License.
 
 ### Latest Version
 
-`1.0.0`
+`2.0.0`
 
 ## Getting Started with .NET SDK
 
 Install `RudderAnalytics` using `NuGet`
 ```
-Install-Package RudderAnalytics -Version <version>
+Install-Package RudderAnalytics -Version 2.0.0
 ```
+
+## Migrating from v1 to v2
+
+The Gzip feature is enabled by default in the .NET SDK from version `2.0.0`. Refer to [Gzipping requests](#gzipping-requests) section for more details.
 
 ## Initialize the ```Client```
 
@@ -27,6 +31,26 @@ RudderAnalytics.Initialize(
     new RudderConfig(dataPlaneUrl: DATA_PLANE_URL)
 );
 ```
+
+## Gzipping requests
+
+
+> The Gzip feature is enabled by default in the .NET SDK from version `2.0.0`.
+
+
+The .NET SDK automatically gzips requests. However, you can disable this by setting the `gzip` parameter of `RudderConfig` to `false` while initializing the SDK, as shown:
+
+```csharp
+using RudderStack;
+
+RudderAnalytics.Initialize(
+    WRITE_KEY,
+    new RudderConfig(dataPlaneUrl: DATA_PLANE_URL, gzip: false)
+);
+```
+
+> Gzip requires <a href="https://github.com/rudderlabs/rudder-server">rudder-server</a> <strong>v1.4 or higher</strong>. Otherwise, your events might fail.
+
 
 ## Send Events
 

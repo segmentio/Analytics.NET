@@ -3,6 +3,9 @@
 [![CircleCI](https://circleci.com/gh/segmentio/Analytics.NET.svg?style=svg&circle-token=9d5be6bcbf6f5e8c6f74025a899d1a5e04bb54e0)](https://circleci.com/gh/segmentio/Analytics.NET)
 [![codecov](https://codecov.io/gh/segmentio/Analytics.NET/branch/master/graph/badge.svg)](https://codecov.io/gh/segmentio/Analytics.NET)
 
+> info "Analytics-CSharp (C#)"
+> The Analytics-CSharp library is currently in beta and is governed by Segment’s [First Access and Beta terms](https://www.twilio.com/legal/tos){:target="_blank"}. Learn more about the [Analytics-CSharp library](/docs/connections/sources/catalog/libraries/server/csharp/). If you'd like to migrate to using Analytics-CSharp, see the [Analytics-CSharp migration guide](/docs/connections/sources/catalog/libraries/server/csharp/migration-guide/).
+
 Analytics.NET is a .NET / C# / F# client for [Segment](https://segment.com).
 
 <div align="center">

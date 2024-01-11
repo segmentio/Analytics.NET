@@ -1,7 +1,10 @@
 ﻿Analytics.NET
 =============
 
-### The new [Analytics-CSharp](https://github.com/segmentio/analytics-csharp) library is now available! Learn more about the [Analytics-CSharp library](https://segment.com/docs/connections/sources/catalog/libraries/server/csharp/). If you'd like to migrate to using Analytics-CSharp, see the [Analytics-CSharp migration guide](https://segment.com/docs/connections/sources/catalog/libraries/server/csharp/migration-guide/).
+⚠️ **WARNING** ⚠️
+
+Segment will continue to accept incoming traffic from Analytics.NET. However, we have launched our new flagship library, [Analytics-CSharp](https://github.com/segmentio/Analytics-CSharp), with new functionality such as the ability to write plugins to enrich data, drop data, and/or direct the data to a different server, etc. You can also customize your storage and httpClient, write your own flush policy, as well as choose your preferred JSON library. See the [Analytics-CSharp Migration Guide](https://segment.com/docs/connections/sources/catalog/libraries/server/csharp/migration-guide/) for more details.
+
 
 Analytics.NET is a .NET / C# / F# client for [Segment](https://segment.com).
 

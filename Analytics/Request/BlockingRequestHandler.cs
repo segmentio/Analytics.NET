@@ -97,7 +97,7 @@ namespace Segment.Request
         internal BlockingRequestHandler(Client client, TimeSpan timeout) : this(client, timeout, null, new Backo(max: 10000, jitter: 5000)) // Set maximum waiting limit to 10s and jitter to 5s
         {
         }
-        internal BlockingRequestHandler(Client client, TimeSpan timeout, Backo backo) : this(client, timeout, null, backo) 
+        internal BlockingRequestHandler(Client client, TimeSpan timeout, Backo backo) : this(client, timeout, null, backo)
         {
         }
 #if NET35
@@ -155,7 +155,7 @@ namespace Segment.Request
             _backo.Reset();
             try
             {
-                Uri uri = new Uri(_client.Config.Host + "/v1/import");
+                Uri uri = new Uri(_client.Config.Host + "/v1/batch");
 
                 // set the current request time
                 batch.SentAt = DateTime.Now.ToString("o");
@@ -305,7 +305,7 @@ namespace Segment.Request
                         });
                         retry = true;
                     }
-                    catch (System.Exception e) 
+                    catch (System.Exception e)
                     {
                         Logger.Info("HTTP Post failed with exception of type Exception", new Dict
                         {
